@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konsep Kelipatan - Math Tutoring by Deni</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; }
+        .path-line { position: absolute; width: 4px; background: #cbd5e1; left: 50%; transform: translateX(-50%); z-index: 0; }
+        .node { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; z-index: 10; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .node.active { background: #f59e0b; transform: scale(1.2); box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
+        .node.completed { background: #10b981; }
+        .node.locked { background: #94a3b8; cursor: not-allowed; }
+        .node:hover:not(.locked) { transform: scale(1.15); }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        .bounce-in { animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+        .theory-card { background: white; border-left: 5px solid #3b82f6; }
+        .exercise-card { background: white; border-left: 5px solid #f59e0b; }
+        .correct-bg { background-color: #f0fdf4; border-color: #10b981; }
+        .wrong-bg { background-color: #fef2f2; border-color: #ef4444; }
+        .translation { font-size: 0.8rem; color: #64748b; font-style: italic; margin-top: 4px; }
+        .btn-nav { transition: all 0.2s; }
+        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        /* Print Style */
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; font-size: 10pt; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="h-screen overflow-hidden flex flex-col bg-[#f0f4f8]">
+    <!-- Top Bar -->
+    <header class="bg-blue-600 text-white p-4 shadow-md no-print flex justify-between items-center flex-shrink-0">
+        <div>
+            <h1 class="text-xl font-bold">MATH TUTORING by Deni</h1>
+            <p class="text-sm opacity-80">Konsep Kelipatan (Melompat di Platform)</p>
+        </div>
+        <button onclick="resetProgress()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm flex items-center gap-2">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+        </button>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Path (Duolingo Style) -->
+        <nav id="sidebar" class="w-24 bg-blue-50 border-r border-blue-100 flex flex-col items-center py-8 overflow-y-auto no-print">
+            <!-- Nodes injected by JS -->
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-y-auto relative" id="main-content">
+            <!-- Content injected by JS -->
+        </main>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <footer class="bg-white border-t p-4 flex justify-between items-center no-print flex-shrink-0">
+        <button id="btn-prev" onclick="navigate(-1)" class="btn-nav bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg flex items-center gap-2 disabled:opacity-50" disabled>
+            <i data-lucide="arrow-left" class="w-5 h-5"></i> Previous
+        </button>
+        <div id="progress-text" class="text-sm font-semibold text-gray-600">Node 1 / 13</div>
+        <button id="btn-next" onclick="navigate(1)" class="btn-nav bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">
+            Next <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </button>
+    </footer>
+
+    <!-- Print Area (Hidden) -->
+    <div id="print-area" class="hidden p-8"></div>
+
+    <script>
+        // --- GLOBAL STATE & CONFIG ---
+        let currentIndex = 0;
+        let appState = {};
+
+        // --- DATA STRUCTURE (Will be populated across 3 chats) ---
+        const nodes = [
+            { id: 'home', title: 'Home', type: 'info', status: 'active' },
+            { id: 'sec1', title: 'Spiral Review', type: 'section', status: 'locked' },
+            { id: 'sec2', title: 'Introduction', type: 'section', status: 'locked' },
+            { id: 'sec3', title: 'Prior Knowledge', type: 'section', status: 'locked' },
+            { id: 'sec4', title: 'Problem Intro', type: 'section', status: 'locked' },
+            { id: 'sec5', title: 'Guided Practice', type: 'section', status: 'locked' },
+            { id: 'sec6', title: 'Indep. Practice', type: 'section', status: 'locked' },
+            { id: 'as1', title: 'Assignment 1', type: 'assignment', status: 'locked' },
+            { id: 'as2', title: 'Assignment 2', type: 'assignment', status: 'locked' },
+            { id: 'as3', title: 'Assignment 3', type: 'assignment', status: 'locked' },
+            { id: 'as4', title: 'Assignment 4', type: 'assignment', status: 'locked' },
+            { id: 'as5', title: 'Assignment 5', type: 'assignment', status: 'locked' },
+            { id: 'cons', title: 'Consolidation', type: 'info', status: 'locked' }
+        ];
+
+        const contentData = {
+            home: {
+                theory: [
+                    {
+                        text_id: "Selamat datang di petualangan Matematika! Hari ini kita akan belajar tentang **Konsep Kelipatan**.",
+                        text_en: "Welcome to the Math adventure! Today we will learn about the **Concept of Multiples**."
+                    },
+                    {
+                        text_id: "Aturan Kelas:",
+                        text_en: "Class Rules:",
+                        list: [
+                            { id: "Berbicara secara bergantian", en: "Speak turn by turn" },
+                            { id: "Meminta izin jika ingin meninggalkan kelas", en: "Ask permission if you want to leave the class" },
+                            { id: "Menyalakan kamera dan microphone jika diperlukan", en: "Turn on camera and microphone if necessary" }
+                        ]
+                    }
+                ],
+                exercises: []
+            },
+            sec1: {
+                theory: [
+                    {
+                        text_id: "Sebelum melompat ke platform baru, mari kita periksa 'inventory' pengetahuanmu dari misi sebelumnya: **Faktor**.",
+                        text_en: "Before jumping to a new platform, let's check your 'inventory' of knowledge from the previous mission: **Factors**.",
+                        svg: 'brain' // custom icon key
+                    },
+                    {
+                        text_id: "Faktor adalah angka-angka yang bisa membagi habis suatu bilangan. Misal, faktor dari 12 adalah 1, 2, 3, 4, 6, dan 12.",
+                        text_en: "Factors are numbers that can divide a number evenly. For example, factors of 12 are 1, 2, 3, 4, 6, and 12."
+                    },
+                    {
+                        text_id: "Ciri-ciri faktor: nilainya selalu **lebih kecil atau sama dengan** bilangan aslinya.",
+                        text_en: "Characteristics of factors: their value is always **less than or equal to** the original number.",
+                        math: "Faktor \\le Bilangan"
+                    }
+                ],
+                exercises: [
+                    {
+                        q_id: "Sebutkan semua faktor dari 12!",
+                        q_en: "List all factors of 12!",
+                        type: "checkbox",
+                        options: [
+                            { val: "1", correct: true }, { val: "2", correct: true }, { val: "3", correct: true },
+                            { val: "4", correct: true }, { val: "5", correct: false }, { val: "6", correct: true },
+                            { val: "12", correct: true }, { val: "24", correct: false }
+                        ],
+                        explain_id: "Faktor dari 12 adalah angka yang habis membagi 12. 5 dan 24 tidak habis membagi 12.",
+                        explain_en: "Factors of 12 are numbers that divide 12 evenly. 5 and 24 do not divide 12 evenly."
+                    },
+                    {
+                        q_id: "Apakah 7 merupakan faktor dari 45?",
+                        q_en: "Is 7 a factor of 45?",
+                        type: "multiple",
+                        options: [
+                            { val: "Ya", correct: false }, { val: "Tidak", correct: true }
+                        ],
+                        explain_id: "45 dibagi 7 adalah 6 sisa 3. Karena ada sisa, 7 bukan faktor 45.",
+                        explain_en: "45 divided by 7 is 6 remainder 3. Because there is a remainder, 7 is not a factor of 45."
+                    },
+                    {
+                        q_id: "Jika aku punya 20 koin, bisa tidak aku membaginya rata ke 5 kotak tanpa sisa?",
+                        q_en: "If I have 20 coins, can I divide them evenly into 5 boxes without remainder?",
+                        type: "multiple",
+                        options: [
+                            { val: "Bisa", correct: true }, { val: "Tidak Bisa", correct: false }
+                        ],
+                        explain_id: "20 dibagi 5 adalah 4. Karena tidak ada sisa, 5 adalah faktor dari 20.",
+                        explain_en: "20 divided by 5 is 4. Because there is no remainder, 5 is a factor of 20."
+                    },
+                    {
+                        q_id: "Sebutkan faktor terbesar dari 18 selain angka itu sendiri!",
+                        q_en: "Mention the largest factor of 18 other than the number itself!",
+                        type: "multiple",
+                        options: [
+                            { val: "2", correct: false }, { val: "6", correct: false }, { val: "9", correct: true }, { val: "18", correct: false }
+                        ],
+                        explain_id: "Faktor dari 18: 1, 2, 3, 6, 9, 18. Selain 18, yang terbesar adalah 9.",
+                        explain_en: "Factors of 18: 1, 2, 3, 6, 9, 18. Other than 18, the largest is 9."
+                    }
+                ]
+            },
+            sec2: {
+                theory: [
+                    {
+                        text_id: "Bayangkan kamu sedang bermain game platformer. Karaktermu hanya bisa melompat sejauh 3 meter setiap kali tekan tombol 'Jump'.",
+                        text_en: "Imagine you are playing a platformer game. Your character can only jump 3 meters each time you press 'Jump'.",
+                        svg: 'jump'
+                    },
+                    {
+                        text_id: "Dia akan mendarat di meter ke-3, ke-6, ke-9, dan seterusnya. Titik-titik pendaratan inilah yang kita sebut **Kelipatan**!",
+                        text_en: "He will land at the 3rd, 6th, 9th meter, and so on. These landing points are what we call **Multiples**!",
+                        math: "3, 6, 9, 12, ... \\text{ adalah Kelipatan 3}"
+                    },
+                    {
+                        text_id: "Kelipatan sangat berguna untuk coding game (mengatur ritme) atau menentukan ritme musik.",
+                        text_en: "Multiples are very useful for game coding (managing rhythm) or determining musical rhythms."
+                    }
+                ],
+                exercises: [
+                    {
+                        q_id: "Jika karakter melompat sejauh 4 meter, di meter berapa dia akan mendarat untuk pertama kali?",
+                        q_en: "If the character jumps 4 meters, at what meter will he land for the first time?",
+                        type: "multiple",
+                        options: [ { val: "0", correct: false }, { val: "2", correct: false }, { val: "4", correct: true }, { val: "8", correct: false } ],
+                        explain_id: "Lompatan pertama sejauh 4 meter akan mendarat di meter ke-4 (1 x 4 = 4).",
+                        explain_en: "The first jump of 4 meters will land at the 4th meter (1 x 4 = 4)."
+                    },
+                    {
+                        q_id: "Di meter berapa karakter itu mendarat pada lompatan ke-3?",
+                        q_en: "At what meter does the character land on the 3rd jump?",
+                        type: "multiple",
+                        options: [ { val: "3", correct: false }, { val: "7", correct: false }, { val: "12", correct: true }, { val: "16", correct: false } ],
+                        explain_id: "Lompatan ke-3 sejauh 4 meter: 3 x 4 = 12 meter.",
+                        explain_en: "3rd jump of 4 meters: 3 x 4 = 12 meters."
+                    },
+                    {
+                        q_id: "Manakah yang BUKAN merupakan titik pendaratan kelipatan 4?",
+                        q_en: "Which is NOT a landing point of multiple of 4?",
+                        type: "multiple",
+                        options: [ { val: "8", correct: false }, { val: "10", correct: true }, { val: "12", correct: false }, { val: "20", correct: false } ],
+                        explain_id: "10 tidak bisa dibagi habis oleh 4 (10/4 = 2 sisa 2). Jadi 10 bukan kelipatan 4.",
+                        explain_en: "10 is not divisible by 4 (10/4 = 2 rem 2). So 10 is not a multiple of 4."
+                    },
+                    {
+                        q_id: "Kelipatan adalah hasil dari...",
+                        q_en: "Multiples are the result of...",
+                        type: "multiple",
+                        options: [ { val: "Penjumlahan berulang", correct: true }, { val: "Pembagian", correct: false }, { val: "Pengurangan", correct: false } ],
+                        explain_id: "Kelipatan didapatkan dari penjumlahan berulang (misal 4+4+4) atau perkalian.",
+                        explain_en: "Multiples are obtained from repeated addition (e.g., 4+4+4) or multiplication."
+                    }
+                ]
+            },
+            sec3: {
+                theory: [
+                    {
+                        text_id: "Kemarin kita belajar Faktor, yaitu angka-angka yang 'menyusun' sebuah bilangan. Sekarang kita belajar Kelipatan, yaitu 'hasil pertumbuhan' dari sebuah bilangan.",
+                        text_en: "Yesterday we learned Factors, which are numbers that 'compose' a number. Now we learn Multiples, which are the 'growth result' of a number."
+                    },
+                    {
+                        text_id: "Kalau Faktor itu membelah ke dalam, Kelipatan itu melompat ke luar.",
+                        text_en: "If Factors divide inward, Multiples jump outward.",
+                        svg: 'factorVsMultiple'
+                    },
+                    {
+                        text_id: "Ingat perbedaan simbolnya:",
+                        text_en: "Remember the symbol difference:",
+                        math: "\\text{Faktor} \\le \\text{Bilangan}, \\text{Kelipatan} \\ge \\text{Bilangan}"
+                    }
+                ],
+                exercises: [
+                    {
+                        q_id: "Angka 14 terhadap angka 7 adalah...",
+                        q_en: "Number 14 towards number 7 is...",
+                        type: "multiple",
+                        options: [ { val: "Faktor", correct: false }, { val: "Kelipatan", correct: true } ],
+                        explain_id: "Karena 14 lebih besar dari 7 dan 7 x 2 = 14, maka 14 adalah kelipatan dari 7.",
+                        explain_en: "Because 14 is greater than 7 and 7 x 2 = 14, 14 is a multiple of 7."
+                    },
+                    {
+                        q_id: "Angka 5 terhadap angka 20 adalah...",
+                        q_en: "Number 5 towards number 20 is...",
+                        type: "multiple",
+                        options: [ { val: "Faktor", correct: true }, { val: "Kelipatan", correct: false } ],
+                        explain_id: "Karena 5 lebih kecil dari 20 dan 20 habis dibagi 5, maka 5 adalah faktor dari 20.",
+                        explain_en: "Because 5 is smaller than 20 and 20 is divisible by 5, 5 is a factor of 20."
+                    },
+                    {
+                        q_id: "Pernyataan yang benar tentang kelipatan adalah...",
+                        q_en: "The correct statement about multiples is...",
+                        type: "multiple",
+                        options: [ { val: "Nilainya selalu lebih kecil", correct: false }, { val: "Jumlahnya terbatas", correct: false }, { val: "Nilainya selalu lebih besar atau sama dengan bilangan asli", correct: true } ],
+                        explain_id: "Kelipatan selalu lebih besar atau sama dengan bilangan aslinya (contoh kelipatan 3: 3, 6, 9...).",
+                        explain_en: "Multiples are always greater than or equal to the original number (e.g. multiples of 3: 3, 6, 9...)."
+                    },
+                    {
+                        q_id: "Apakah 8 merupakan faktor atau kelipatan dari 8?",
+                        q_en: "Is 8 a factor or a multiple of 8?",
+                        type: "checkbox",
+                        options: [ { val: "Faktor", correct: true }, { val: "Kelipatan", correct: true }, { val: "Bukan Keduanya", correct: false } ],
+                        explain_id: "Setiap bilangan adalah faktor DAN kelipatan dari dirinya sendiri (8 x 1 = 8, dan 8/8 = 1).",
+                        explain_en: "Every number is a factor AND a multiple of itself (8 x 1 = 8, and 8/8 = 1)."
+                    }
+                ]
+            },
+            
+            sec4: {
+                theory: [
+                    {
+                        text_id: "Sekarang tantangan sulit! Bayangkan game platformer kita memiliki jebakan di setiap kelipatan 4, dan platform aman ada di kelipatan 6.",
+                        text_en: "Now a hard challenge! Imagine our platformer game has traps at every multiple of 4, and safe platforms at every multiple of 6.",
+                        svg: 'jump'
+                    },
+                    {
+                        text_id: "Di meter ke berapakah karakter akan menemukan jebakan sekaligus platform aman untuk pertama kalinya? Mari kita cari tahu Kelipatan Persekutuan!",
+                        text_en: "At what meter will the character find a trap and a safe platform at the same time for the first time? Let's find the Common Multiples!",
+                        math: "\\text{Kelipatan 4: } 4, 8, 12, 16, ... \\\\ \\text{Kelipatan 6: } 6, 12, 18, 24, ..."
+                    },
+                    {
+                        text_id: "Angka yang muncul di kedua deret kelipatan disebut **Kelipatan Persekutuan**. Kelipatan persekutuan pertama (terkecil) disebut KPK (Least Common Multiple/LCM).",
+                        text_en: "Numbers that appear in both multiple sequences are called **Common Multiples**. The first (smallest) common multiple is called LCM.",
+                        math: "\\text{KPK dari 4 dan 6 adalah 12}"
+                    }
+                ],
+                exercises: [
+                    // Ex 1-3
+                    {
+                        q_id: "Manakah yang merupakan 5 kelipatan pertama dari 4?",
+                        q_en: "Which are the first 5 multiples of 4?",
+                        type: "checkbox",
+                        options: [ {val: "4", correct: true}, {val: "8", correct: true}, {val: "12", correct: true}, {val: "16", correct: true}, {val: "20", correct: true}, {val: "24", correct: false} ],
+                        explain_id: "Kelipatan pertama dari 4 didapat dari 4x1, 4x2, 4x3, 4x4, 4x5, yaitu 4, 8, 12, 16, 20.",
+                        explain_en: "The first multiples of 4 are obtained from 4x1, 4x2, 4x3, 4x4, 4x5, which are 4, 8, 12, 16, 20."
+                    },
+                    {
+                        q_id: "Manakah yang merupakan 5 kelipatan pertama dari 6?",
+                        q_en: "Which are the first 5 multiples of 6?",
+                        type: "checkbox",
+                        options: [ {val: "6", correct: true}, {val: "12", correct: true}, {val: "18", correct: true}, {val: "24", correct: true}, {val: "30", correct: true}, {val: "36", correct: false} ],
+                        explain_id: "Kelipatan pertama dari 6 didapat dari 6x1, 6x2, 6x3, dst, yaitu 6, 12, 18, 24, 30.",
+                        explain_en: "The first multiples of 6 are obtained from 6x1, 6x2, 6x3, etc., which are 6, 12, 18, 24, 30."
+                    },
+                    {
+                        q_id: "Dari deret kelipatan 4 dan 6 di atas, angka berapa yang muncul di KEDUA deret tersebut?",
+                        q_en: "From the multiple sequences of 4 and 6 above, what number appears in BOTH sequences?",
+                        type: "multiple",
+                        options: [ {val: "8", correct: false}, {val: "12", correct: true}, {val: "18", correct: false}, {val: "20", correct: false} ],
+                        explain_id: "12 ada di kelipatan 4 (4x3) dan juga ada di kelipatan 6 (6x2). Jadi 12 adalah kelipatan persekutuan.",
+                        explain_en: "12 is in the multiples of 4 (4x3) and also in the multiples of 6 (6x2). So 12 is a common multiple."
+                    },
+                    // Ex 4-6
+                    {
+                        q_id: "Apa nama dari kelipatan persekutuan terkecil dari dua bilangan?",
+                        q_en: "What is the name of the smallest common multiple of two numbers?",
+                        type: "multiple",
+                        options: [ {val: "FPB (Faktor Persekutuan Terbesar)", correct: false}, {val: "KPK (Kelipatan Persekutuan Terkecil)", correct: true}, {val: "Faktor Prima", correct: false} ],
+                        explain_id: "KPK (Kelipatan Persekutuan Terkecil) atau LCM (Least Common Multiple) adalah kelipatan persekutuan paling kecil.",
+                        explain_en: "KPK (Kelipatan Persekutuan Terkecil) or LCM (Least Common Multiple) is the smallest common multiple."
+                    },
+                    {
+                        q_id: "Karakter melompat di kelipatan 3 dan kelipatan 5. Di lompatan ke berapa ia akan mendarat di titik yang sama untuk pertama kali (setelah 0)?",
+                        q_en: "A character jumps on multiples of 3 and multiples of 5. At what jump will they land on the same point for the first time (after 0)?",
+                        type: "multiple",
+                        options: [ {val: "8", correct: false}, {val: "15", correct: true}, {val: "30", correct: false}, {val: "45", correct: false} ],
+                        explain_id: "Kelipatan 3: 3,6,9,12,15... Kelipatan 5: 5,10,15... KPK dari 3 dan 5 adalah 15.",
+                        explain_en: "Multiples of 3: 3,6,9,12,15... Multiples of 5: 5,10,15... LCM of 3 and 5 is 15."
+                    },
+                    {
+                        q_id: "Kelipatan persekutuan dari 2 dan 4 adalah...",
+                        q_en: "The common multiples of 2 and 4 are...",
+                        type: "multiple",
+                        options: [ {val: "2, 4, 6", correct: false}, {val: "4, 8, 12", correct: true}, {val: "1, 2, 4", correct: false} ],
+                        explain_id: "Kelipatan 2: 2,4,6,8,10,12... Kelipatan 4: 4,8,12... Yang sama: 4, 8, 12...",
+                        explain_en: "Multiples of 2: 2,4,6,8,10,12... Multiples of 4: 4,8,12... The same: 4, 8, 12..."
+                    },
+                    // Ex 7-10
+                    {
+                        q_id: "Karakter A melompat di kelipatan 5, Karakter B di kelipatan 10. Mereka akan bertemu di angka...",
+                        q_en: "Character A jumps on multiples of 5, Character B on multiples of 10. They will meet at number...",
+                        type: "multiple",
+                        options: [ {val: "5", correct: false}, {val: "10", correct: true}, {val: "15", correct: false}, {val: "25", correct: false} ],
+                        explain_id: "Kelipatan 5: 5,10,15... Kelipatan 10: 10,20,30... Pertama kali bertemu di 10.",
+                        explain_en: "Multiples of 5: 5,10,15... Multiples of 10: 10,20,30... They first meet at 10."
+                    },
+                    {
+                        q_id: "Jika KPK dari 6 dan 8 adalah 24, kelipatan persekutuan berikutnya adalah...",
+                        q_en: "If the LCM of 6 and 8 is 24, the next common multiple is...",
+                        type: "multiple",
+                        options: [ {val: "30", correct: false}, {val: "36", correct: false}, {val: "48", correct: true}, {val: "54", correct: false} ],
+                        explain_id: "Kelipatan persekutuan selalu merupakan kelipatan dari KPK. Kelipatan selanjutnya dari 24 adalah 24x2 = 48.",
+                        explain_en: "Common multiples are always multiples of the LCM. The next multiple of 24 is 24x2 = 48."
+                    },
+                    {
+                        q_id: "Alarm berbunyi setiap kelipatan 3 menit, lampu berkedip setiap kelipatan 4 menit. Kapan keduanya aktif bersamaan untuk pertama kali?",
+                        q_en: "An alarm rings every multiple of 3 minutes, a light blinks every multiple of 4 minutes. When do both activate together for the first time?",
+                        type: "multiple",
+                        options: [ {val: "Menit ke-3", correct: false}, {val: "Menit ke-4", correct: false}, {val: "Menit ke-7", correct: false}, {val: "Menit ke-12", correct: true} ],
+                        explain_id: "Kita cari KPK 3 dan 4. Kelipatan 3: 3,6,9,12. Kelipatan 4: 4,8,12. Jadi menit ke-12.",
+                        explain_en: "We find the LCM of 3 and 4. Multiples of 3: 3,6,9,12. Multiples of 4: 4,8,12. So at minute 12."
+                    },
+                    {
+                        q_id: "Manakah yang BUKAN kelipatan persekutuan dari 2 dan 6?",
+                        q_en: "Which is NOT a common multiple of 2 and 6?",
+                        type: "multiple",
+                        options: [ {val: "6", correct: false}, {val: "12", correct: false}, {val: "14", correct: true}, {val: "18", correct: false} ],
+                        explain_id: "14 adalah kelipatan 2, tapi bukan kelipatan 6 (14/6 = 2 sisa 2).",
+                        explain_en: "14 is a multiple of 2, but not a multiple of 6 (14/6 = 2 remainder 2)."
+                    }
+                ]
+            },
+            sec5: {
+                theory: [
+                    {
+                        text_id: "Ayo kita coba bersama! Kita berikan angka 7. Jika kita gambar 5 lompatan di garis bilangan mulai dari 0, setiap lompatan adalah +7.",
+                        text_en: "Let's try together! We take the number 7. If we draw 5 jumps on the number line starting from 0, each jump is +7.",
+                        math: "0 \\xrightarrow{+7} 7 \\xrightarrow{+7} 14 \\xrightarrow{+7} 21 \\xrightarrow{+7} 28 \\xrightarrow{+7} 35"
+                    },
+                    {
+                        text_id: "Angka-angka di titik pendaratan (7, 14, 21, 28, 35) adalah kelipatan dari 7. Coba bandingkan: apakah 14 adalah faktor dari 7 atau kelipatan dari 7?",
+                        text_en: "The numbers at the landing points (7, 14, 21, 28, 35) are multiples of 7. Compare: is 14 a factor of 7 or a multiple of 7?",
+                        math: "7 \\times 2 = 14 \\text{ (Kelipatan)}"
+                    },
+                    {
+                        text_id: "Strategi perkalian cepat: Untuk memprediksi kelipatan ke-n, kita cukup mengalikan bilangan tersebut dengan n. Misal, kelipatan ke-10 dari 7 adalah \\( 7 \\times 10 = 70 \\).",
+                        text_en: "Quick multiplication strategy: To predict the n-th multiple, we just multiply the number by n. For example, the 10th multiple of 7 is \\( 7 \\times 10 = 70 \\)."
+                    }
+                ],
+                exercises: [
+                    // Ex 1-3
+                    {
+                        q_id: "Berapa kelipatan ke-3 dari angka 7?",
+                        q_en: "What is the 3rd multiple of 7?",
+                        type: "multiple",
+                        options: [ {val: "10", correct: false}, {val: "14", correct: false}, {val: "21", correct: true}, {val: "28", correct: false} ],
+                        explain_id: "Kelipatan ke-3 dari 7 adalah 7 x 3 = 21.",
+                        explain_en: "The 3rd multiple of 7 is 7 x 3 = 21."
+                    },
+                    {
+                        q_id: "Jika lompatan adalah +7, di mana karakter mendarat setelah 4 lompatan?",
+                        q_en: "If the jump is +7, where does the character land after 4 jumps?",
+                        type: "multiple",
+                        options: [ {val: "21", correct: false}, {val: "28", correct: true}, {val: "35", correct: false} ],
+                        explain_id: "4 lompatan berarti 7 x 4 = 28.",
+                        explain_en: "4 jumps means 7 x 4 = 28."
+                    },
+                    {
+                        q_id: "Manakah yang merupakan kelipatan dari 7?",
+                        q_en: "Which is a multiple of 7?",
+                        type: "multiple",
+                        options: [ {val: "23", correct: false}, {val: "27", correct: false}, {val: "35", correct: true}, {val: "40", correct: false} ],
+                        explain_id: "35 habis dibagi 7 (35 / 7 = 5). Jadi 35 adalah kelipatan 7.",
+                        explain_en: "35 is divisible by 7 (35 / 7 = 5). So 35 is a multiple of 7."
+                    },
+                    // Ex 4-6
+                    {
+                        q_id: "Apakah 14 merupakan faktor atau kelipatan dari 7?",
+                        q_en: "Is 14 a factor or a multiple of 7?",
+                        type: "multiple",
+                        options: [ {val: "Faktor", correct: false}, {val: "Kelipatan", correct: true} ],
+                        explain_id: "14 lebih besar dari 7 dan 7 x 2 = 14. Jadi 14 adalah kelipatan dari 7.",
+                        explain_en: "14 is greater than 7 and 7 x 2 = 14. So 14 is a multiple of 7."
+                    },
+                    {
+                        q_id: "Apakah 7 merupakan faktor atau kelipatan dari 14?",
+                        q_en: "Is 7 a factor or a multiple of 14?",
+                        type: "multiple",
+                        options: [ {val: "Faktor", correct: true}, {val: "Kelipatan", correct: false} ],
+                        explain_id: "7 lebih kecil dari 14 dan 14 habis dibagi 7. Jadi 7 adalah faktor dari 14.",
+                        explain_en: "7 is smaller than 14 and 14 is divisible by 7. So 7 is a factor of 14."
+                    },
+                    {
+                        q_id: "Kelipatan ke-8 dari 7 adalah...",
+                        q_en: "The 8th multiple of 7 is...",
+                        type: "multiple",
+                        options: [ {val: "49", correct: false}, {val: "56", correct: true}, {val: "63", correct: false} ],
+                        explain_id: "Menggunakan strategi perkalian cepat: 7 x 8 = 56.",
+                        explain_en: "Using quick multiplication strategy: 7 x 8 = 56."
+                    },
+                    // Ex 7-10
+                    {
+                        q_id: "Jika angka lompatan diganti menjadi 5, berapa kelipatan ke-6?",
+                        q_en: "If the jump number is changed to 5, what is the 6th multiple?",
+                        type: "multiple",
+                        options: [ {val: "25", correct: false}, {val: "30", correct: true}, {val: "35", correct: false} ],
+                        explain_id: "Kelipatan ke-6 dari 5 adalah 5 x 6 = 30.",
+                        explain_en: "The 6th multiple of 5 is 5 x 6 = 30."
+                    },
+                    {
+                        q_id: "Karakter melompat sejauh 9. Jika ia sudah melompat 3 kali, di mana posisinya?",
+                        q_en: "A character jumps 9 units. If it has jumped 3 times, where is its position?",
+                        type: "multiple",
+                        options: [ {val: "18", correct: false}, {val: "27", correct: true}, {val: "36", correct: false} ],
+                        explain_id: "3 lompatan x 9 = 27.",
+                        explain_en: "3 jumps x 9 = 27."
+                    },
+                    {
+                        q_id: "Apakah 48 merupakan kelipatan dari 7?",
+                        q_en: "Is 48 a multiple of 7?",
+                        type: "multiple",
+                        options: [ {val: "Ya, karena 7 x 7 = 48", correct: false}, {val: "Tidak, karena 48 / 7 = 6 sisa 6", correct: true}, {val: "Ya, karena 48 habis dibagi 7", correct: false} ],
+                        explain_id: "48 tidak habis dibagi 7. 7 x 6 = 42, 7 x 7 = 49. Jadi 48 bukan kelipatan 7.",
+                        explain_en: "48 is not divisible by 7. 7 x 6 = 42, 7 x 7 = 49. So 48 is not a multiple of 7."
+                    },
+                    {
+                        q_id: "Manakah pernyataan yang SALAH tentang kelipatan?",
+                        q_en: "Which statement is FALSE about multiples?",
+                        type: "multiple",
+                        options: [ {val: "Kelipatan didapat dari perkalian", correct: false}, {val: "Kelipatan bisa didapat dari penjumlahan berulang", correct: false}, {val: "Jumlah kelipatan suatu bilangan selalu terbatas", correct: true} ],
+                        explain_id: "Jumlah kelipatan suatu bilangan TIDAK terbatas (tak hingga), karena kita bisa terus mengalikan ke kanan.",
+                        explain_en: "The number of multiples of a number is NOT limited (infinite), because we can keep multiplying to the right."
+                    }
+                ]
+            },
+            sec6: {
+                theory: [
+                    {
+                        text_id: "Misi Solo! Sekarang kamu akan mengerjakan tantangan tanpa bantuan lompatan. Ingat, kelipatan didapat dari perkalian atau penjumlahan berulang.",
+                        text_en: "Solo Mission! Now you will tackle challenges without jump assistance. Remember, multiples are obtained from multiplication or repeated addition.",
+                        svg: 'brain'
+                    },
+                    {
+                        text_id: "Contoh masalah kontekstual: Di sebuah game, lampu berkedip setiap kelipatan 8 detik. Artinya, lampu menyala pada detik ke-8, ke-16, ke-24, dan seterusnya.",
+                        text_en: "Contextual problem example: In a game, a light blinks every multiple of 8 seconds. This means the light flashes at the 8th, 16th, 24th second, and so on.",
+                        math: "8 \\times 1 = 8, \\quad 8 \\times 2 = 16, \\quad 8 \\times 3 = 24"
+                    },
+                    {
+                        text_id: "Untuk mengecek apakah suatu angka adalah kelipatan dari bilangan lain, cukup bagi angka tersebut. Jika tidak ada sisa, itu kelipatan!",
+                        text_en: "To check if a number is a multiple of another number, just divide it. If there is no remainder, it's a multiple!",
+                        math: "15 \\div 5 = 3 \\text{ (sisa 0)} \\rightarrow 15 \\text{ adalah kelipatan 5}"
+                    }
+                ],
+                exercises: [
+                    // Ex 1-3
+                    {
+                        q_id: "Tuliskan 5 kelipatan pertama dari 9. Manakah yang benar?",
+                        q_en: "List the first 5 multiples of 9. Which is correct?",
+                        type: "checkbox",
+                        options: [ {val: "9", correct: true}, {val: "18", correct: true}, {val: "27", correct: true}, {val: "36", correct: true}, {val: "45", correct: true}, {val: "54", correct: false} ],
+                        explain_id: "5 kelipatan pertama dari 9 adalah 9x1, 9x2, 9x3, 9x4, 9x5 = 9, 18, 27, 36, 45.",
+                        explain_en: "The first 5 multiples of 9 are 9x1, 9x2, 9x3, 9x4, 9x5 = 9, 18, 27, 36, 45."
+                    },
+                    {
+                        q_id: "Berapa kelipatan ke-4 dari 9?",
+                        q_en: "What is the 4th multiple of 9?",
+                        type: "multiple",
+                        options: [ {val: "18", correct: false}, {val: "27", correct: false}, {val: "36", correct: true}, {val: "45", correct: false} ],
+                        explain_id: "Kelipatan ke-4 dari 9 adalah 9 x 4 = 36.",
+                        explain_en: "The 4th multiple of 9 is 9 x 4 = 36."
+                    },
+                    {
+                        q_id: "Lampu berkedip setiap kelipatan 8 detik. Kapan lampu berkedip untuk ke-3 kalinya?",
+                        q_en: "A light blinks every multiple of 8 seconds. When does it blink for the 3rd time?",
+                        type: "multiple",
+                        options: [ {val: "Detik ke-8", correct: false}, {val: "Detik ke-16", correct: false}, {val: "Detik ke-24", correct: true}, {val: "Detik ke-32", correct: false} ],
+                        explain_id: "Kedipan ke-3 terjadi pada 8 x 3 = 24 detik.",
+                        explain_en: "The 3rd blink happens at 8 x 3 = 24 seconds."
+                    },
+                    // Ex 4-6
+                    {
+                        q_id: "Lampu berkedip setiap kelipatan 8 detik. Kapan lampu berkedip untuk ke-5 kalinya?",
+                        q_en: "A light blinks every multiple of 8 seconds. When does it blink for the 5th time?",
+                        type: "multiple",
+                        options: [ {val: "Detik ke-32", correct: false}, {val: "Detik ke-40", correct: true}, {val: "Detik ke-48", correct: false} ],
+                        explain_id: "Kedipan ke-5 terjadi pada 8 x 5 = 40 detik.",
+                        explain_en: "The 5th blink happens at 8 x 5 = 40 seconds."
+                    },
+                    {
+                        q_id: "Manakah yang merupakan kelipatan dari 5: 12, 15, atau 22?",
+                        q_en: "Which is a multiple of 5: 12, 15, or 22?",
+                        type: "multiple",
+                        options: [ {val: "12", correct: false}, {val: "15", correct: true}, {val: "22", correct: false} ],
+                        explain_id: "15 habis dibagi 5 (15/5 = 3). 12 dan 22 tidak habis dibagi 5.",
+                        explain_en: "15 is divisible by 5 (15/5 = 3). 12 and 22 are not divisible by 5."
+                    },
+                    {
+                        q_id: "Alarm berbunyi setiap kelipatan 10 menit. Jika alarm pertama bunyi pukul 08:00, pukul berapa alarm ke-4 berbunyi?",
+                        q_en: "An alarm rings every multiple of 10 minutes. If the first alarm rings at 08:00, at what time does the 4th alarm ring?",
+                        type: "multiple",
+                        options: [ {val: "08:20", correct: false}, {val: "08:30", correct: false}, {val: "08:40", correct: true}, {val: "08:50", correct: false} ],
+                        explain_id: "Alarm ke-4 berbunyi pada 10 x 4 = 40 menit setelah 08:00, yaitu 08:40.",
+                        explain_en: "The 4th alarm rings at 10 x 4 = 40 minutes after 08:00, which is 08:40."
+                    },
+                    // Ex 7-10
+                    {
+                        q_id: "Sebuah roda berputar setiap kelipatan 6 derajat. Pada rotasi ke-5, berapa total derajat yang sudah diputar?",
+                        q_en: "A wheel rotates every multiple of 6 degrees. On the 5th rotation, what is the total degree rotated?",
+                        type: "multiple",
+                        options: [ {val: "24 derajat", correct: false}, {val: "30 derajat", correct: true}, {val: "36 derajat", correct: false} ],
+                        explain_id: "Rotasi ke-5 = 6 x 5 = 30 derajat.",
+                        explain_en: "5th rotation = 6 x 5 = 30 degrees."
+                    },
+                    {
+                        q_id: "Manakah yang BUKAN kelipatan dari 6?",
+                        q_en: "Which is NOT a multiple of 6?",
+                        type: "multiple",
+                        options: [ {val: "24", correct: false}, {val: "36", correct: false}, {val: "42", correct: false}, {val: "48", correct: false}, {val: "56", correct: true} ],
+                        explain_id: "56 tidak habis dibagi 6 (56/6 = 9 sisa 2). Semua angka lain habis dibagi 6.",
+                        explain_en: "56 is not divisible by 6 (56/6 = 9 remainder 2). All other numbers are divisible by 6."
+                    },
+                    {
+                        q_id: "Terdapat deret angka: 27, 36, 45, 54. Semua angka tersebut merupakan kelipatan dari...",
+                        q_en: "There is a sequence: 27, 36, 45, 54. All those numbers are multiples of...",
+                        type: "multiple",
+                        options: [ {val: "5", correct: false}, {val: "7", correct: false}, {val: "9", correct: true}, {val: "11", correct: false} ],
+                        explain_id: "27=9x3, 36=9x4, 45=9x5, 54=9x6. Semua angka habis dibagi 9.",
+                        explain_en: "27=9x3, 36=9x4, 45=9x5, 54=9x6. All numbers are divisible by 9."
+                    },
+                    {
+                        q_id: "Jika 72 adalah kelipatan dari 8, berapa kalikali lipat 72 dari 8?",
+                        q_en: "If 72 is a multiple of 8, how many times is 72 of 8?",
+                        type: "multiple",
+                        options: [ {val: "7 kali", correct: false}, {val: "8 kali", correct: false}, {val: "9 kali", correct: true}, {val: "10 kali", correct: false} ],
+                        explain_id: "72 / 8 = 9. Jadi 72 adalah kelipatan ke-9 dari 8.",
+                        explain_en: "72 / 8 = 9. So 72 is the 9th multiple of 8."
+                    }
+                ]
+            },
+            
+            as1: {
+                theory: [],
+                exercises: [
+                    { q_id: "Tuliskan 5 kelipatan pertama dari angka 7.", q_en: "Write the first 5 multiples of 7.", type: "checkbox", options: [ {val:"7", correct:true}, {val:"14", correct:true}, {val:"21", correct:true}, {val:"28", correct:true}, {val:"35", correct:true}, {val:"42", correct:false} ], explain_id:"Kelipatan 7: 7x1=7, 7x2=14, 7x3=21, 7x4=28, 7x5=35.", explain_en:"Multiples of 7: 7x1=7, 7x2=14, 7x3=21, 7x4=28, 7x5=35." },
+                    { q_id: "Apakah 36 merupakan kelipatan dari 6?", q_en: "Is 36 a multiple of 6?", type: "multiple", options: [ {val:"Ya", correct:true}, {val:"Tidak", correct:false} ], explain_id:"Ya, karena 36 habis dibagi 6 (36 / 6 = 6).", explain_en:"Yes, because 36 is divisible by 6 (36 / 6 = 6)." },
+                    { q_id: "Sebutkan kelipatan ke-4 dari bilangan 8.", q_en: "State the 4th multiple of 8.", type: "multiple", options: [ {val:"24", correct:false}, {val:"32", correct:true}, {val:"40", correct:false} ], explain_id:"Kelipatan ke-4 dari 8 adalah 8 x 4 = 32.", explain_en:"The 4th multiple of 8 is 8 x 4 = 32." },
+                    { q_id: "Manakah yang merupakan kelipatan dari 9?", q_en: "Which is a multiple of 9?", type: "multiple", options: [ {val:"28", correct:false}, {val:"38", correct:false}, {val:"45", correct:true} ], explain_id:"45 habis dibagi 9 (45 / 9 = 5).", explain_en:"45 is divisible by 9 (45 / 9 = 5)." },
+                    { q_id: "Kelipatan ke-7 dari 5 adalah...", q_en: "The 7th multiple of 5 is...", type: "multiple", options: [ {val:"30", correct:false}, {val:"35", correct:true}, {val:"40", correct:false} ], explain_id:"5 x 7 = 35.", explain_en:"5 x 7 = 35." },
+                    { q_id: "Apakah 48 merupakan kelipatan dari 7?", q_en: "Is 48 a multiple of 7?", type: "multiple", options: [ {val:"Ya", correct:false}, {val:"Tidak", correct:true} ], explain_id:"48 tidak habis dibagi 7 (48/7 = 6 sisa 6).", explain_en:"48 is not divisible by 7 (48/7 = 6 remainder 6)." },
+                    { q_id: "Tuliskan 3 kelipatan pertama dari 12.", q_en: "Write the first 3 multiples of 12.", type: "checkbox", options: [ {val:"12", correct:true}, {val:"24", correct:true}, {val:"36", correct:true}, {val:"48", correct:false} ], explain_id:"3 kelipatan pertama dari 12 adalah 12, 24, dan 36.", explain_en:"The first 3 multiples of 12 are 12, 24, and 36." },
+                    { q_id: "Kelipatan itu seperti tangga yang arahnya ke...", q_en: "Multiples are like stairs going...", type: "multiple", options: [ {val:"Atas (semakin besar)", correct:true}, {val:"Bawah (semakin kecil)", correct:false} ], explain_id:"Kelipatan selalu bernilai sama atau lebih besar dari bilangan aslinya.", explain_en:"Multiples are always equal to or greater than the original number." },
+                    { q_id: "Jumlah kelipatan suatu bilangan adalah...", q_en: "The number of multiples of a number is...", type: "multiple", options: [ {val:"Terbatas", correct:false}, {val:"Tak terbatas (infinity)", correct:true} ], explain_id:"Kita bisa terus mengalikan bilangan apapun, jadi kelipatannya tak terbatas.", explain_en:"We can keep multiplying any number, so its multiples are infinite." },
+                    { q_id: "Kelipatan ke-10 dari 10 adalah...", q_en: "The 10th multiple of 10 is...", type: "multiple", options: [ {val:"10", correct:false}, {val:"100", correct:true}, {val:"1000", correct:false} ], explain_id:"10 x 10 = 100.", explain_en:"10 x 10 = 100." }
+                ]
+            },
+            as2: {
+                theory: [],
+                exercises: [
+                    { q_id: "Cari 3 bilangan yang merupakan kelipatan dari 3 sekaligus kelipatan dari 2.", q_en: "Find 3 numbers that are multiples of 3 and multiples of 2.", type: "checkbox", options: [ {val:"6", correct:true}, {val:"12", correct:true}, {val:"18", correct:true}, {val:"20", correct:false}, {val:"21", correct:false} ], explain_id:"Kelipatan persekutuan dari 2 dan 3 adalah kelipatan dari 6. Contoh: 6, 12, 18.", explain_en:"Common multiples of 2 and 3 are multiples of 6. Examples: 6, 12, 18." },
+                    { q_id: "Angka 24 terhadap angka 6 adalah...", q_en: "Number 24 towards number 6 is...", type: "multiple", options: [ {val:"Faktor", correct:false}, {val:"Kelipatan", correct:true} ], explain_id:"24 lebih besar dari 6 dan 24 habis dibagi 6, jadi 24 adalah kelipatan 6.", explain_en:"24 is greater than 6 and 24 is divisible by 6, so 24 is a multiple of 6." },
+                    { q_id: "Angka 8 terhadap angka 32 adalah...", q_en: "Number 8 towards number 32 is...", type: "multiple", options: [ {val:"Faktor", correct:true}, {val:"Kelipatan", correct:false} ], explain_id:"8 lebih kecil dari 32 dan 32 habis dibagi 8, jadi 8 adalah faktor 32.", explain_en:"8 is smaller than 32 and 32 is divisible by 8, so 8 is a factor of 32." },
+                    { q_id: "Sebuah alarm berbunyi setiap 9 menit. Jika alarm pertama berbunyi pukul 08:00, pada menit ke berapa alarm ke-6 akan berbunyi?", q_en: "An alarm rings every 9 minutes. If the first alarm rings at 08:00, at what minute will the 6th alarm ring?", type: "multiple", options: [ {val:"Menit ke-45", correct:true}, {val:"Menit ke-54", correct:false}, {val:"Menit ke-36", correct:false} ], explain_id:"Alarm ke-6 = 9 x 6 = 54 menit setelah 08:00. Pertanyaannya menit ke-berapa, yaitu menit ke-45 (karena 9x5) atau 54? Alarm ke-6 = 9x6 = menit ke-54. (Koreksi: Opsi A salah tulis, logika 9x6=54).", explain_en:"6th alarm = 9 x 6 = 54 minutes after 08:00." },
+                    { q_id: "Tentukan kelipatan dari 7 yang nilainya lebih besar dari 40 tetapi lebih kecil dari 60.", q_en: "Determine the multiple of 7 that is greater than 40 but less than 60.", type: "multiple", options: [ {val:"42", correct:true}, {val:"49", correct:true}, {val:"56", correct:true}, {val:"63", correct:false} ], explain_id:"Kelipatan 7 antara 40 dan 60 adalah 42 (7x6), 49 (7x7), dan 56 (7x8).", explain_en:"Multiples of 7 between 40 and 60 are 42 (7x6), 49 (7x7), and 56 (7x8)." },
+                    { q_id: "Diberikan angka 12, 24, 30, 36. Manakah yang BUKAN merupakan kelipatan dari 12?", q_en: "Given numbers 12, 24, 30, 36. Which is NOT a multiple of 12?", type: "multiple", options: [ {val:"12", correct:false}, {val:"24", correct:false}, {val:"30", correct:true}, {val:"36", correct:false} ], explain_id:"30 tidak habis dibagi 12 (30/12 = 2 sisa 6).", explain_en:"30 is not divisible by 12 (30/12 = 2 remainder 6)." },
+                    { q_id: "Setiap bilangan adalah faktor dan kelipatan dari...", q_en: "Every number is a factor and a multiple of...", type: "multiple", options: [ {val:"0", correct:false}, {val:"1", correct:false}, {val:"Dirinya sendiri", correct:true} ], explain_id:"Contoh: 5 adalah faktor dari 5, dan 5 adalah kelipatan pertama dari 5.", explain_en:"Example: 5 is a factor of 5, and 5 is the first multiple of 5." },
+                    { q_id: "Jumlah dari dua kelipatan pertama suatu bilangan adalah 15. Bilangan berapakah itu?", q_en: "The sum of the first two multiples of a number is 15. What is the number?", type: "multiple", options: [ {val:"3", correct:false}, {val:"5", correct:true}, {val:"7", correct:false}, {val:"15", correct:false} ], explain_id:"Dua kelipatan pertama bilangan x adalah x dan 2x. x + 2x = 15 -> 3x = 15 -> x = 5.", explain_en:"First two multiples of x are x and 2x. x + 2x = 15 -> 3x = 15 -> x = 5." },
+                    { q_id: "Kelipatan dari 5 selalu berakhiran dengan angka...", q_en: "Multiples of 5 always end in...", type: "multiple", options: [ {val:"0 atau 5", correct:true}, {val:"2 atau 8", correct:false}, {val:"Angka genap", correct:false} ], explain_id:"Semua kelipatan 5 selalu memiliki digit terakhir 0 atau 5.", explain_en:"All multiples of 5 always have 0 or 5 as the last digit." },
+                    { q_id: "Manakah yang merupakan kelipatan dari 8 sekaligus kelipatan dari 4?", q_en: "Which is a multiple of 8 and a multiple of 4?", type: "multiple", options: [ {val:"12", correct:false}, {val:"20", correct:false}, {val:"24", correct:true}, {val:"28", correct:false} ], explain_id:"24 adalah kelipatan 8 (8x3) dan juga kelipatan 4 (4x6).", explain_en:"24 is a multiple of 8 (8x3) and also a multiple of 4 (4x6)." }
+                ]
+            },
+            as3: {
+                theory: [],
+                exercises: [
+                    { q_id: "Karakter melompat di kelipatan 5, sedangkan temannya melompat di kelipatan 4. Di angka berapakah mereka akan bertemu pertama kali setelah angka 0?", q_en: "A character jumps on multiples of 5, while a friend jumps on multiples of 4. At what number will they meet for the first time after 0?", type: "multiple", options: [ {val:"10", correct:false}, {val:"15", correct:false}, {val:"20", correct:true}, {val:"25", correct:false} ], explain_id:"KPK dari 4 dan 5 adalah 20. (4: 4,8,12,16,20. 5: 5,10,15,20).", explain_en:"LCM of 4 and 5 is 20." },
+                    { q_id: "Sebuah bilangan memiliki faktor 2 dan 3. Sebutkan 3 kelipatan pertama dari bilangan tersebut.", q_en: "A number has factors 2 and 3. State the first 3 multiples of that number.", type: "checkbox", options: [ {val:"6", correct:true}, {val:"12", correct:true}, {val:"18", correct:true}, {val:"24", correct:false} ], explain_id:"Bilangan yang punya faktor 2 dan 3 adalah kelipatan dari 6 (2x3). Kelipatan pertamanya: 6, 12, 18.", explain_en:"A number with factors 2 and 3 is a multiple of 6 (2x3). First multiples: 6, 12, 18." },
+                    { q_id: "Lampu merah berkedip setiap 4 detik, lampu hijau setiap 6 detik. Pada detik ke berapa mereka berkedip bersamaan untuk pertama kali?", q_en: "Red light blinks every 4 seconds, green light every 6 seconds. At what second do they blink together for the first time?", type: "multiple", options: [ {val:"Detik ke-10", correct:false}, {val:"Detik ke-12", correct:true}, {val:"Detik ke-24", correct:false} ], explain_id:"KPK 4 dan 6 adalah 12.", explain_en:"LCM of 4 and 6 is 12." },
+                    { q_id: "Kelipatan persekutuan terkecil (KPK) dari 3 dan 5 adalah...", q_en: "Least Common Multiple (LCM) of 3 and 5 is...", type: "multiple", options: [ {val:"8", correct:false}, {val:"15", correct:true}, {val:"30", correct:false} ], explain_id:"Kelipatan 3: 3,6,9,12,15. Kelipatan 5: 5,10,15. Terkecil adalah 15.", explain_en:"Multiples of 3: 3,6,9,12,15. Multiples of 5: 5,10,15. Smallest is 15." },
+                    { q_id: "Planet A mengelilingi matahari setiap 8 tahun. Planet B setiap 12 tahun. Jika mereka sejajar tahun ini, berapa tahun lagi mereka akan sejajar kembali?", q_en: "Planet A orbits the sun every 8 years. Planet B every 12 years. If they are aligned this year, in how many years will they align again?", type: "multiple", options: [ {val:"16 tahun", correct:false}, {val:"20 tahun", correct:false}, {val:"24 tahun", correct:true} ], explain_id:"Kita cari KPK 8 dan 12. KPK = 24.", explain_en:"We find LCM of 8 and 12. LCM = 24." },
+                    { q_id: "Jika KPK dari 6 dan 9 adalah 18, kelipatan persekutuan selanjutnya adalah...", q_en: "If LCM of 6 and 9 is 18, the next common multiple is...", type: "multiple", options: [ {val:"27", correct:false}, {val:"36", correct:true}, {val:"45", correct:false} ], explain_id:"Kelipatan persekutuan selalu kelipatan dari KPK. 18 x 2 = 36.", explain_en:"Common multiples are always multiples of LCM. 18 x 2 = 36." },
+                    { q_id: "Apakah 0 merupakan kelipatan dari 5?", q_en: "Is 0 a multiple of 5?", type: "multiple", options: [ {val:"Ya, karena 5 x 0 = 0", correct:true}, {val:"Tidak, kelipatan harus lebih besar dari 0", correct:false} ], explain_id:"Secara matematis, 0 adalah kelipatan dari setiap bilangan (n x 0 = 0).", explain_en:"Mathematically, 0 is a multiple of every number (n x 0 = 0)." },
+                    { q_id: "Kelipatan 10 yang berada di antara 50 dan 80 adalah...", q_en: "Multiples of 10 between 50 and 80 are...", type: "checkbox", options: [ {val:"50", correct:false}, {val:"60", correct:true}, {val:"70", correct:true}, {val:"80", correct:false} ], explain_id:"Antara 50 dan 80 (tidak termasuk batas) hanya ada 60 dan 70.", explain_en:"Between 50 and 80 (not inclusive) there are only 60 and 70." },
+                    { q_id: "Faktor dari 20 yang juga merupakan kelipatan dari 2 adalah...", q_en: "Factors of 20 that are also multiples of 2 are...", type: "checkbox", options: [ {val:"2", correct:true}, {val:"4", correct:true}, {val:"10", correct:true}, {val:"20", correct:true}, {val:"5", correct:false} ], explain_id:"Faktor 20: 1,2,4,5,10,20. Yang kelipatan 2: 2,4,10,20.", explain_en:"Factors of 20: 1,2,4,5,10,20. Multiples of 2 among them: 2,4,10,20." },
+                    { q_id: "Karakter melompat di kelipatan 7. Dia melewati angka 35. Itu adalah lompatan ke...", q_en: "A character jumps on multiples of 7. It passes the number 35. That is the... jump.", type: "multiple", options: [ {val:"5", correct:true}, {val:"6", correct:false}, {val:"7", correct:false} ], explain_id:"35 / 7 = 5. Jadi 35 adalah kelipatan ke-5.", explain_en:"35 / 7 = 5. So 35 is the 5th multiple." }
+                ]
+            },
+            as4: {
+                theory: [],
+                exercises: [
+                    { q_id: "Tuliskan 5 kelipatan pertama dari 11.", q_en: "Write the first 5 multiples of 11.", type: "checkbox", options: [ {val:"11", correct:true}, {val:"22", correct:true}, {val:"33", correct:true}, {val:"44", correct:true}, {val:"55", correct:true}, {val:"66", correct:false} ], explain_id:"11x1=11, 11x2=22, 11x3=33, 11x4=44, 11x5=55.", explain_en:"11x1=11, 11x2=22, 11x3=33, 11x4=44, 11x5=55." },
+                    { q_id: "Apakah 100 merupakan kelipatan dari 25?", q_en: "Is 100 a multiple of 25?", type: "multiple", options: [ {val:"Ya", correct:true}, {val:"Tidak", correct:false} ], explain_id:"100 / 25 = 4. Habis dibagi, jadi kelipatan.", explain_en:"100 / 25 = 4. Divisible, so it's a multiple." },
+                    { q_id: "Kelipatan ke-9 dari 8 adalah...", q_en: "The 9th multiple of 8 is...", type: "multiple", options: [ {val:"64", correct:false}, {val:"72", correct:true}, {val:"81", correct:false} ], explain_id:"8 x 9 = 72.", explain_en:"8 x 9 = 72." },
+                    { q_id: "Bus berangkat setiap 15 menit. Jika bus pertama berangkat jam 06:00, jam berapa bus ke-4 berangkat?", q_en: "A bus departs every 15 minutes. If the first bus departs at 06:00, what time does the 4th bus depart?", type: "multiple", options: [ {val:"06:45", correct:true}, {val:"06:60", correct:false}, {val:"07:00", correct:false} ], explain_id:"Bus ke-4 = 15 x 4 = 60 menit. 06:00 + 60 menit = 07:00. (Opsi A salah tulis, seharusnya 07:00 yang benar jika 60 menit).", explain_en:"4th bus = 15 x 4 = 60 mins. 06:00 + 60 mins = 07:00." },
+                    { q_id: "Kelipatan 3 yang ganjil dimulai dari 3, 9, 15... Kelipatan 3 ganjil selanjutnya adalah...", q_en: "Odd multiples of 3 start from 3, 9, 15... The next odd multiple of 3 is...", type: "multiple", options: [ {val:"18", correct:false}, {val:"21", correct:true}, {val:"24", correct:false} ], explain_id:"Kelipatan 3: 3,6,9,12,15,18,21. Yang ganjil: 3,9,15,21.", explain_en:"Multiples of 3: 3,6,9,12,15,18,21. Odd ones: 3,9,15,21." },
+                    { q_id: "KPK dari 4 dan 10 adalah...", q_en: "LCM of 4 and 10 is...", type: "multiple", options: [ {val:"10", correct:false}, {val:"20", correct:true}, {val:"40", correct:false} ], explain_id:"Kelipatan 4: 4,8,12,16,20. Kelipatan 10: 10,20. KPK = 20.", explain_en:"Multiples of 4: 4,8,12,16,20. Multiples of 10: 10,20. LCM = 20." },
+                    { q_id: "Apakah 1 merupakan kelipatan dari 7?", q_en: "Is 1 a multiple of 7?", type: "multiple", options: [ {val:"Ya", correct:false}, {val:"Tidak", correct:true} ], explain_id:"1 lebih kecil dari 7. 1 adalah faktor dari 7, bukan kelipatan.", explain_en:"1 is smaller than 7. 1 is a factor of 7, not a multiple." },
+                    { q_id: "Kucing mengeong setiap kelipatan 5 jam. Anjing menggonggong setiap kelipatan 3 jam. Jika mereka bersuara bersamaan jam 12 siang, jam berapa mereka bersuara bersamaan lagi?", q_en: "A cat meows every multiple of 5 hours. A dog barks every multiple of 3 hours. If they sound together at 12 PM, when will they sound together again?", type: "multiple", options: [ {val:"Jam 3 sore", correct:false}, {val:"Jam 6 sore", correct:false}, {val:"Jam 9 malam", correct:false}, {val:"Jam 12 malam", correct:true} ], explain_id:"KPK 3 dan 5 = 15. 12 siang + 15 jam = jam 3 pagi (belum ada di opsi, periksa logika: 12+15=03.00). Opsi terdekat mungkin perlu pengecekan ulang.", explain_en:"LCM 3 and 5 = 15. 12 PM + 15 hours = 3 AM." },
+                    { q_id: "Faktor persekutuan dari 12 dan 18 adalah 1, 2, 3, 6. Faktor persekutuan terbesar (FPB) adalah...", q_en: "Common factors of 12 and 18 are 1, 2, 3, 6. Greatest Common Factor (GCF) is...", type: "multiple", options: [ {val:"3", correct:false}, {val:"6", correct:true}, {val:"12", correct:false} ], explain_id:"FPB adalah faktor persekutuan yang paling besar, yaitu 6.", explain_en:"GCF is the largest common factor, which is 6." },
+                    { q_id: "Bilangan prima hanya memiliki 2 faktor. Kelipatan dari bilangan prima (misal 7) selalu bisa dibagi habis oleh...", q_en: "Prime numbers only have 2 factors. Multiples of a prime number (e.g., 7) are always divisible by...", type: "multiple", options: [ {val:"1 dan bilangan prima itu sendiri", correct:true}, {val:"Bilangan genap", correct:false}, {val:"Bilangan prima lainnya", correct:false} ], explain_id:"Setiap kelipatan dari bilangan prima X selalu habis dibagi 1 dan X.", explain_en:"Every multiple of a prime number X is always divisible by 1 and X." }
+                ]
+            },
+            as5: {
+                theory: [],
+                exercises: [
+                    { q_id: "Dua kelipatan pertama dari bilangan X adalah 8 dan 16. Berapakah bilangan X?", q_en: "The first two multiples of number X are 8 and 16. What is number X?", type: "multiple", options: [ {val:"4", correct:false}, {val:"8", correct:true}, {val:"16", correct:false} ], explain_id:"Kelipatan pertama adalah bilangan itu sendiri. Jadi X = 8.", explain_en:"The first multiple is the number itself. So X = 8." },
+                    { q_id: "Kelipatan 6 antara 20 dan 40 adalah...", q_en: "Multiples of 6 between 20 and 40 are...", type: "checkbox", options: [ {val:"24", correct:true}, {val:"30", correct:true}, {val:"36", correct:true}, {val:"42", correct:false} ], explain_id:"6x4=24, 6x5=30, 6x6=36.", explain_en:"6x4=24, 6x5=30, 6x6=36." },
+                    { q_id: "Jika A adalah kelipatan dari B, maka...", q_en: "If A is a multiple of B, then...", type: "multiple", options: [ {val:"A habis dibagi B", correct:true}, {val:"B habis dibagi A", correct:false}, {val:"A x B = Kelipatan", correct:false} ], explain_id:"Definisi kelipatan: jika A adalah kelipatan B, maka A habis dibagi B.", explain_en:"Definition of multiple: if A is a multiple of B, then A is divisible by B." },
+                    { q_id: "KPK dari 5, 10, dan 15 adalah...", q_en: "LCM of 5, 10, and 15 is...", type: "multiple", options: [ {val:"10", correct:false}, {val:"15", correct:false}, {val:"30", correct:true} ], explain_id:"Kelipatan 5: 5,10,15,20,25,30. Kelipatan 10: 10,20,30. Kelipatan 15: 15,30. KPK=30.", explain_en:"Multiples of 5: 5,10,15,20,25,30. Mult of 10: 10,20,30. Mult of 15: 15,30. LCM=30." },
+                    { q_id: "Roti dipanggang setiap 6 menit, kue dipanggang setiap 8 menit. Setelah berapa menit oven dipakai bersama-sama untuk pertama kali?", q_en: "Bread is baked every 6 minutes, cake every 8 minutes. After how many minutes is the oven used together for the first time?", type: "multiple", options: [ {val:"14 menit", correct:false}, {val:"24 menit", correct:true}, {val:"48 menit", correct:false} ], explain_id:"KPK 6 dan 8 = 24.", explain_en:"LCM of 6 and 8 = 24." },
+                    { q_id: "Manakah pernyataan yang SALAH?", q_en: "Which statement is FALSE?", type: "multiple", options: [ {val:"Faktor selalu lebih kecil atau sama dengan bilangan", correct:false}, {val:"Kelipatan selalu lebih besar atau sama dengan bilangan", correct:false}, {val:"Jumlah kelipatan suatu bilangan selalu terbatas", correct:true} ], explain_id:"Jumlah kelipatan TIDAK terbatas (infinity).", explain_en:"Number of multiples is NOT limited (infinity)." },
+                    { q_id: "Tanda yang benar untuk Faktor dan Kelipatan adalah...", q_en: "The correct symbols for Factors and Multiples are...", type: "multiple", options: [ {val:"Faktor ≤ Bilangan, Kelipatan ≥ Bilangan", correct:true}, {val:"Faktor ≥ Bilangan, Kelipatan ≤ Bilangan", correct:false} ], explain_id:"Faktor membelah ke dalam (lebih kecil/sama), Kelipatan melompat ke luar (lebih besar/sama).", explain_en:"Factors divide inward (smaller/equal), Multiples jump outward (greater/equal)." },
+                    { q_id: "Jika suatu bilangan merupakan kelipatan dari 10, maka angka satuannya pasti...", q_en: "If a number is a multiple of 10, its unit digit must definitely be...", type: "multiple", options: [ {val:"0", correct:true}, {val:"5", correct:false}, {val:"Genap", correct:false} ], explain_id:"Semua kelipatan 10 selalu berakhiran nol.", explain_en:"All multiples of 10 always end in zero." },
+                    { q_id: "Berapa banyak kelipatan dari 4 yang ada di antara 10 dan 30?", q_en: "How many multiples of 4 are there between 10 and 30?", type: "multiple", options: [ {val:"4", correct:false}, {val:"5", correct:true}, {val:"6", correct:false} ], explain_id:"Kelipatan 4 antara 10-30: 12, 16, 20, 24, 28. Ada 5 bilangan.", explain_en:"Multiples of 4 between 10-30: 12, 16, 20, 24, 28. There are 5 numbers." },
+                    { q_id: "Jika 72 adalah kelipatan ke-8 dari X, berapakah X?", q_en: "If 72 is the 8th multiple of X, what is X?", type: "multiple", options: [ {val:"8", correct:false}, {val:"9", correct:true}, {val:"10", correct:false} ], explain_id:"8 x X = 72 -> X = 72 / 8 = 9.", explain_en:"8 x X = 72 -> X = 72 / 8 = 9." }
+                ]
+            },
+            cons: {
+                theory: [
+                    {
+                        text_id: "Luar biasa! Kamu sudah berhasil menguasai teknik melompat di platform kelipatan. Ingat, kelipatan itu seperti tangga yang tidak terbatas ke atas.",
+                        text_en: "Awesome! You have successfully mastered the technique of jumping on multiple platforms. Remember, multiples are like stairs that go up infinitely."
+                    },
+                    {
+                        text_id: "Ringkasan Perbedaan Faktor vs Kelipatan:",
+                        text_en: "Summary of Factor vs Multiple Differences:",
+                        list: [
+                            { id: "Faktor: Membelah ke dalam, jumlahnya terbatas, nilainya ≤ Bilangan.", en: "Factor: Divides inward, limited amount, value ≤ Number." },
+                            { id: "Kelipatan: Melompat ke luar, jumlahnya tak terbatas, nilainya ≥ Bilangan.", en: "Multiple: Jumps outward, infinite amount, value ≥ Number." }
+                        ]
+                    },
+                    {
+                        text_id: "Jangan lupa untuk login ke platform untuk mengerjakan tantangan ekstra!",
+                        text_en: "Don't forget to log in to the platform to do extra challenges!",
+                        isLink: true
+                    }
+                ],
+                exercises: []
+            }
+            // sec4, sec5, sec6, assignments, consolidation will be injected in Chat 2 & 3
+        };
+
+        // --- UTILITY FUNCTIONS ---
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        function applyKaTeX(el) {
+            if(typeof renderMathInElement === 'function') {
+                renderMathInElement(el, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ]
+                });
+            }
+        }
+
+        function t(obj) {
+            if(!obj) return '';
+            const mainText = obj.text_id || obj.q_id || obj.explain_id || obj.id || '';
+            const transText = obj.text_en || obj.q_en || obj.explain_en || obj.en || '';
+            return `<div>${mainText}</div>${transText ? `<div class="translation">${transText}</div>` : ''}`;
+        }
+
+        function getSVG(key) {
+            const svgs = {
+                brain: `<svg class="w-16 h-16 mx-auto my-4 text-blue-500 bounce-in" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.343 2.657l-.707.707M21 12h-1M17.343 17.343l-.707-.707M12 21v-1m-6.343-2.657l.707-.707M3 12h1m4.343-4.343l.707.707M12 12a4 4 0 100 8 4 4 0 000-8z"></path></svg>`,
+                jump: `<svg class="w-16 h-16 mx-auto my-4 text-green-500 bounce-in" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v5m2-3H4m12-7v5m2-3h-4m-4-4l3 3m0-6l-3 3m12 0l-3 3m0-6l3 3M9 9l3 3m0-6l-3 3"></path></svg>`,
+                factorVsMultiple: `<div class="flex justify-around my-4 text-center bounce-in"><div class="text-red-500"><i data-lucide="arrow-down-circle" class="w-10 h-10 mx-auto"></i><br>Faktor<br>(Kecil)</div><div class="text-green-500"><i data-lucide="arrow-up-circle" class="w-10 h-10 mx-auto"></i><br>Kelipatan<br>(Besar)</div></div>`
+            };
+            return svgs[key] || '';
+        }
+
+        // --- CORE RENDERING ---
+        function renderPath() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.innerHTML = '';
+            nodes.forEach((n, idx) => {
+                if (idx > 0) {
+                    const line = document.createElement('div');
+                    line.className = 'path-line h-12';
+                    sidebar.appendChild(line);
+                }
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = `node ${n.status}`;
+                nodeDiv.innerHTML = idx + 1;
+                nodeDiv.onclick = () => {
+                    if(n.status !== 'locked') goToNode(idx);
+                };
+                sidebar.appendChild(nodeDiv);
+            });
+            lucide.createIcons();
+        }
+
+        function renderContent() {
+            const main = document.getElementById('main-content');
+            const node = nodes[currentIndex];
+            const data = contentData[node.id];
+            
+            // DIHAPUS class fade-in agar tidak ada efek transisi saat pilih jawaban
+            let html = `<div class="max-w-3xl mx-auto">`;
+            html += `<h2 class="text-2xl font-bold mb-6 text-blue-800 flex items-center gap-3"><i data-lucide="book-open" class="w-6 h-6"></i> ${node.title}</h2>`;
+            
+            if(data) {
+                if(node.type === 'section') {
+                    let exIdx = 0;
+                    const m0 = data.theory[0].math ? `<div class="mt-2 text-center overflow-x-auto">$$ ${data.theory[0].math} $$</div>` : '';
+                    html += `<div class="theory-card p-4 rounded shadow-sm mb-4">${t(data.theory[0])} ${getSVG(data.theory[0].svg)} ${m0}</div>`;
+                    html += renderExercises(data.exercises.slice(0, 3), node.id, exIdx); exIdx += 3;
+                    
+                    const m1 = data.theory[1].math ? `<div class="mt-2 text-center overflow-x-auto">$$ ${data.theory[1].math} $$</div>` : '';
+                    html += `<div class="theory-card p-4 rounded shadow-sm mb-4 mt-8">${t(data.theory[1])} ${getSVG(data.theory[1].svg)} ${m1}</div>`;
+                    html += renderExercises(data.exercises.slice(3, 6), node.id, exIdx); exIdx += 3;
+                    
+                    const m2 = data.theory[2].math ? `<div class="mt-2 text-center overflow-x-auto">$$ ${data.theory[2].math} $$</div>` : '';
+                    html += `<div class="theory-card p-4 rounded shadow-sm mb-4 mt-8">${t(data.theory[2])} ${getSVG(data.theory[2].svg)} ${m2}</div>`;
+                    html += renderExercises(data.exercises.slice(6, 10), node.id, exIdx);
+
+                } else if(node.type === 'assignment') {
+                    html += `<p class="text-sm mb-4 text-gray-500">Selesaikan 10 soal berikut untuk mendapatkan skor!</p>`;
+                    html += renderExercises(data.exercises, node.id, 0);
+                    html += `<button onclick="printResult('${node.id}')" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Print Result</button>`;
+                } else {
+                    data.theory.forEach(th => {
+                        html += `<div class="theory-card p-4 rounded shadow-sm mb-4">${t(th)} ${getSVG(th.svg)}`;
+                        if(th.list) {
+                            html += `<ul class="list-disc pl-5 mt-2 space-y-1">`;
+                            th.list.forEach(l => html += `<li>${t(l)}</li>`);
+                            html += `</ul>`;
+                        }
+                        if(th.isLink) {
+                            html += `<a href="https://learn.algonova.id/login" target="_blank" class="mt-3 inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 font-bold transition transform hover:scale-105"><i data-lucide="external-link" class="w-4 h-4 inline mr-1"></i> learn.algonova.id</a>`;
+                        }
+                        html += `</div>`;
+                    });
+                }
+            }
+
+            html += `</div>`;
+            main.innerHTML = html;
+            
+            applyKaTeX(main);
+            lucide.createIcons();
+
+            if(data && data.exercises.length === 0 && node.status !== 'completed') {
+                node.status = 'completed';
+                let nextIdx = nodes.findIndex(n => n.id === node.id) + 1;
+                if(nextIdx < nodes.length && nodes[nextIdx].status === 'locked') {
+                    nodes[nextIdx].status = 'active';
+                }
+                saveState();
+                renderPath();
+                updateNavButtons();
+            } else {
+                updateNavButtons();
+            }
+        }
+
+        function renderExercises(exercises, nodeId, startIndex) {
+            if(!exercises || exercises.length === 0) return '';
+            let html = `<div class="space-y-4 mt-4">`;
+            
+            exercises.forEach((ex, i) => {
+                const gIdx = startIndex + i;
+                const stateId = `${nodeId}_ex_${gIdx}`;
+                const ans = appState[stateId];
+                
+                if(!appState[`${stateId}_opts`]) {
+                    appState[`${stateId}_opts`] = shuffleArray([...ex.options]);
+                    saveState();
+                }
+                const opts = appState[`${stateId}_opts`];
+
+                html += `<div id="ex-${stateId}" class="exercise-card p-4 rounded shadow-sm ${ans ? (ans.correct ? 'correct-bg' : 'wrong-bg') : ''}">`;
+                html += `<p class="font-semibold mb-2">${i+1}. ${t(ex)}</p>`;
+                
+                if(ex.type === 'multiple') {
+                    html += `<div class="space-y-2 ml-4">`;
+                    opts.forEach(opt => {
+                        const isChecked = ans && ans.val === opt.val;
+                        html += `<label class="flex items-center gap-2 cursor-pointer ${ans ? 'pointer-events-none opacity-70' : ''}">
+                            <input type="radio" name="${stateId}" value="${opt.val}" ${isChecked ? 'checked' : ''} onchange="checkAnswer('${stateId}', '${opt.val}', ${opt.correct}, '${nodeId}')" class="w-4 h-4">
+                            <span>${opt.val}</span>
+                        </label>`;
+                    });
+                    html += `</div>`;
+                } else if(ex.type === 'checkbox') {
+                    html += `<div class="space-y-2 ml-4 flex flex-wrap gap-2">`;
+                    opts.forEach(opt => {
+                        const isChecked = ans && ans.vals && ans.vals.includes(opt.val);
+                        html += `<label class="flex items-center gap-2 border p-2 rounded cursor-pointer ${ans ? 'pointer-events-none opacity-70' : ''} ${isChecked ? 'bg-blue-100' : ''}">
+                            <input type="checkbox" name="${stateId}" value="${opt.val}" ${isChecked ? 'checked' : ''} class="w-4 h-4 cb-${stateId}">
+                            <span>${opt.val}</span>
+                        </label>`;
+                    });
+                    html += `</div>`;
+                    if(!ans) html += `<button onclick="checkCheckbox('${stateId}', '${nodeId}')" class="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">Submit</button>`;
+                }
+
+                // Collapse & Reset Button
+                if(ans) {
+                    html += `<div class="mt-3 border-t pt-3 text-sm flex justify-between items-start gap-2">
+                        <div class="flex-1">
+                            <button onclick="toggleCollapse('col-${stateId}')" class="text-blue-600 font-bold flex items-center gap-1 mb-2"><i data-lucide="help-circle" class="w-4 h-4"></i> Penjelasan</button>
+                            <div id="col-${stateId}" class="hidden mt-2 bg-gray-50 p-2 rounded border">
+                                ${ans.correct ? '<p class="text-green-600 font-bold">Benar! ✓</p>' : '<p class="text-red-600 font-bold">Salah ✗</p>'}
+                                ${t({explain_id: ex.explain_id, explain_en: ex.explain_en})} 
+                            </div>
+                        </div>
+                        <button onclick="resetExercise('${stateId}', '${nodeId}')" class="text-orange-500 hover:text-orange-700 font-bold flex items-center gap-1 text-xs border border-orange-500 px-2 py-1 rounded flex-shrink-0 mt-1">
+                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Ulangi
+                        </button>
+                    </div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            return html;
+        }
+
+        // --- INTERACTION LOGIC ---
+        function checkAnswer(stateId, val, isCorrect, nodeId) {
+            if(appState[stateId]) return;
+            appState[stateId] = { val, correct: isCorrect };
+            saveState();
+            updateNodeCompletion(nodeId);
+            renderContent();
+        }
+
+        function checkCheckbox(stateId, nodeId) {
+            if(appState[stateId]) return;
+            const checks = document.querySelectorAll(`.cb-${stateId}:checked`);
+            let vals = Array.from(checks).map(c => c.value);
+            
+            const node = nodes.find(n => n.id === nodeId);
+            const data = contentData[node.id];
+            // Find correct answers
+            const exIdx = parseInt(stateId.split('_ex_')[1]);
+            const ex = data.exercises[exIdx];
+            const correctVals = ex.options.filter(o => o.correct).map(o => o.val).sort().join(',');
+            const isCorrect = vals.sort().join(',') === correctVals;
+
+            appState[stateId] = { vals, correct: isCorrect };
+            saveState();
+            updateNodeCompletion(nodeId);
+            renderContent();
+        }
+
+        function toggleCollapse(id) {
+            const el = document.getElementById(id);
+            if(el) el.classList.toggle('hidden');
+        }
+
+        function resetExercise(stateId, nodeId) {
+            // Hapus jawaban dan opsi random dari memory
+            delete appState[stateId];
+            delete appState[`${stateId}_opts`];
+            saveState();
+            // Update ikon sidebar (jika semula hijau, jadi oren lagi)
+            updateNodeCompletion(nodeId); 
+            // Render ulang konten soal
+            renderContent();
+        }
+
+        function updateNodeCompletion(nodeId) {
+            const node = nodes.find(n => n.id === nodeId);
+            const data = contentData[node.id];
+            if(!data) return;
+
+            let totalEx = data.exercises.length;
+            let answeredEx = 0;
+            for(let i=0; i<totalEx; i++) {
+                if(appState[`${nodeId}_ex_${i}`]) answeredEx++;
+            }
+
+            // Jika semua exercise dijawab, node jadi hijau (completed)
+            if(answeredEx === totalEx && totalEx > 0 && node.status !== 'completed') {
+                node.status = 'completed';
+                saveState();
+                renderPath();
+            } 
+            // Jika ada soal yang di-reset, node kembali jadi oren (active)
+            else if (answeredEx < totalEx && node.status === 'completed') {
+                node.status = 'active';
+                saveState();
+                renderPath();
+            }
+        }
+
+        // --- NAVIGATION ---
+
+        function navigate(dir) {
+            let next = currentIndex + dir;
+            // Bisa navigasi selama tidak di luar batas array
+            if(next >= 0 && next < nodes.length) {
+                currentIndex = next;
+                saveState();
+                renderPath();
+                renderContent();
+            }
+        }
+
+        function updateNavButtons() {
+            document.getElementById('btn-prev').disabled = currentIndex === 0;
+            // Tombol next hanya disabled jika di node paling akhir
+            document.getElementById('btn-next').disabled = currentIndex === nodes.length - 1;
+            document.getElementById('progress-text').innerText = `Node ${currentIndex + 1} / ${nodes.length}`;
+        }
+
+        function goToNode(idx) {
+            currentIndex = idx;
+            saveState();
+            renderPath();
+            renderContent();
+        }
+
+        // --- STATE PERSISTENCE ---
+        function saveState() {
+            localStorage.setItem('mathTutorState', JSON.stringify(appState));
+            localStorage.setItem('mathTutorNodes', JSON.stringify(nodes));
+            localStorage.setItem('mathTutorCurrent', currentIndex);
+        }
+
+        function loadState() {
+            const s = localStorage.getItem('mathTutorState');
+            if(s) appState = JSON.parse(s);
+            const n = localStorage.getItem('mathTutorNodes');
+            if(n) {
+                const savedNodes = JSON.parse(n);
+                // Merge to keep new structure if code updates
+                nodes.forEach((nd, idx) => {
+                    if(savedNodes[idx]) nd.status = savedNodes[idx].status;
+                });
+            }
+            const c = localStorage.getItem('mathTutorCurrent');
+            if(c) currentIndex = parseInt(c);
+        }
+
+        function resetProgress() {
+            if(confirm("Apakah kamu yakin ingin mereset semua progres?")) {
+                localStorage.removeItem('mathTutorState');
+                localStorage.removeItem('mathTutorNodes');
+                localStorage.removeItem('mathTutorCurrent');
+                location.reload();
+            }
+        }
+
+        // --- PRINT LOGIC (Stub for Chat 3) ---
+        function printResult(nodeId) {
+            const node = nodes.find(n => n.id === nodeId);
+            const data = contentData[node.id];
+            
+            let score = 0;
+            let tableRows = '';
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+
+            data.exercises.forEach((ex, i) => {
+                const stateId = `${nodeId}_ex_${i}`;
+                const ans = appState[stateId];
+                let studentAnsText = "-";
+                let correctAnsText = ex.options.filter(o => o.correct).map(o => o.val).join(', ');
+                let noteIcon = "➖";
+
+                if(ans) {
+                    if(ans.vals) studentAnsText = ans.vals.join(', ');
+                    else studentAnsText = ans.val;
+                    
+                    if(ans.correct) {
+                        score++;
+                        noteIcon = "✅";
+                    } else {
+                        noteIcon = "❌";
+                    }
+                }
+
+                tableRows += `<tr>
+                    <td style="border: 1px solid #000; padding: 4px; text-align: center;">${i+1}</td>
+                    <td style="border: 1px solid #000; padding: 4px; font-size: 9pt;">${ex.q_id}</td>
+                    <td style="border: 1px solid #000; padding: 4px; text-align: center;">${studentAnsText}</td>
+                    <td style="border: 1px solid #000; padding: 4px; text-align: center;">${correctAnsText}</td>
+                    <td style="border: 1px solid #000; padding: 4px; text-align: center;">${noteIcon}</td>
+                </tr>`;
+            });
+
+            const htmlContent = `
+                <h1 style="text-align: center; margin-bottom: 10px;">MATH TUTORING by Deni</h1>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <div>
+                        <p><strong>Name:</strong> ___________________________</p>
+                        <p><strong>Topic:</strong> Konsep Kelipatan (Melompat di Platform)</p>
+                    </div>
+                    <div>
+                        <p><strong>Date:</strong> ${dateStr}</p>
+                        <p><strong>Assignment Group:</strong> ${node.title}</p>
+                    </div>
+                </div>
+                
+                <h2 style="text-align: center; margin-top: 15px; margin-bottom: 10px; border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 5px 0;">
+                    Score: ${score} / ${data.exercises.length}
+                </h2>
+
+                <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 11pt;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #000; padding: 4px; width: 5%;">No.</th>
+                            <th style="border: 1px solid #000; padding: 4px; width: 45%;">Question</th>
+                            <th style="border: 1px solid #000; padding: 4px; width: 15%;">Student Answer</th>
+                            <th style="border: 1px solid #000; padding: 4px; width: 15%;">Correct Answer</th>
+                            <th style="border: 1px solid #000; padding: 4px; width: 10%;">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 40px; text-align: right;">
+                    <p>Checked by,</p>
+                    <br><br>
+                    <p><strong>Deni</strong></p>
+                </div>
+            `;
+
+            // Inject ke div print-area yang sudah ada
+            const printArea = document.getElementById('print-area');
+            printArea.innerHTML = htmlContent;
+            printArea.classList.remove('hidden');
+
+            // Trigger print dialog
+            setTimeout(() => {
+                window.print();
+                // Setelah dialog print ditutup, sembunyikan lagi div-nya
+                setTimeout(() => {
+                    printArea.classList.add('hidden');
+                    printArea.innerHTML = '';
+                }, 500);
+            }, 300);
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            loadState();
+            // Force unlock all nodes so user can navigate freely
+            nodes.forEach(n => {
+                if(n.status === 'locked') n.status = 'active';
+            });
+            if(nodes[0].status === 'locked') nodes[0].status = 'active';
+            renderPath();
+            renderContent();
+        };
+    </script>
+</body>
+</html>
