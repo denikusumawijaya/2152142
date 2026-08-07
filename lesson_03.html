@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring - Bilangan Prima & Pohon Faktor</title>
+    <!-- KaTeX CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #8BC34A;
+            --accent: #FFC107;
+            --danger: #F44336;
+            --light: #F9FAFB;
+            --dark: #333333;
+            --sidebar-bg: #ffffff;
+            --main-bg: #F0F4F8;
+            --card-bg: #ffffff;
+            --border: #E0E0E0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-hover: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--main-bg);
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .global-reset {
+            margin: 15px;
+            padding: 10px;
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .global-reset:hover {
+            background-color: #d32f2f;
+        }
+
+        .nav-menu {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            color: var(--dark);
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: var(--main-bg);
+        }
+
+        .nav-item.active {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-dark);
+            font-weight: 600;
+            border-left-color: var(--primary);
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item.completed {
+            color: var(--primary);
+        }
+        
+        .nav-item.completed i.fa-circle-check {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        .section-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .bilingual {
+            margin-bottom: 15px;
+        }
+
+        .id-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .en-text {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .theory-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .theory-box .id-text {
+            font-size: 1rem;
+        }
+
+        /* Exercises */
+        .exercise-box {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            background-color: #fafafa;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option {
+            padding: 10px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            background: white;
+            font-size: 0.95rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background-color: #f1f8e9;
+        }
+
+        .option.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .exercise-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .btn-check { background-color: var(--primary); color: white; }
+        .btn-check:hover { background-color: var(--primary-dark); }
+        .btn-reset { background-color: #ff9800; color: white; }
+        .btn-reset:hover { background-color: #f57c00; }
+        .btn-prev { background-color: #9e9e9e; color: white; }
+        .btn-prev:hover { background-color: #757575; }
+        .btn-next { background-color: #2196f3; color: white; }
+        .btn-next:hover { background-color: #1976d2; }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.correct { background-color: #c8e6c9; color: #2e7d32; display: block; }
+        .feedback.wrong { background-color: #ffcdd2; color: #c62828; display: block; }
+
+        .collapse-btn {
+            margin-top: 10px;
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .explanation-content {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fffde7;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* SVG & Illustrations */
+        .illustration {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .factor-tree {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Home Specifics */
+        .home-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .home-header h2 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--primary-dark);
+            font-size: 2rem;
+        }
+
+        .rules-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .rules-list li {
+            padding: 10px;
+            background: white;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .rules-list li i {
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 210mm;
+                height: 297mm;
+                padding: 20mm;
+                background: white;
+                color: black;
+                font-family: 'Poppins', sans-serif;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                font-size: 12pt;
+            }
+            .print-table th, .print-table td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+            .print-header {
+                margin-bottom: 20px;
+                border-bottom: 2px solid black;
+                padding-bottom: 10px;
+            }
+        }
+        
+        #printArea { display: none; }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); z-index: 1000; }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+            .options-container { grid-template-columns: 1fr; }
+            .mobile-menu-btn { display: block; }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1><i class="fas fa-infinity"></i> Math Tutoring</h1>
+            <p style="font-size: 0.8rem; opacity: 0.9;">by Deni</p>
+        </div>
+        <button class="global-reset" onclick="resetAllProgress()"><i class="fas fa-trash-alt"></i> Reset All Progress</button>
+        <div class="nav-menu" id="navMenu">
+            <!-- Navigation items will be injected by JS -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- HOME SECTION -->
+        <div class="section-container active" id="section-home">
+            <div class="card">
+                <div class="home-header">
+                    <h2><i class="fas fa-calculator"></i> Bilangan Prima & Pohon Faktor</h2>
+                    <p class="en-text">Prime Numbers & Factor Trees</p>
+                </div>
+                
+                <div class="bilingual">
+                    <p class="id-text">Topik: Bilangan Prima & Pohon Faktor (Menghindari Rintangan)</p>
+                    <p class="en-text">Topic: Prime Numbers & Factor Trees (Avoiding Obstacles)</p>
+                </div>
+
+                <div class="theory-box">
+                    <p class="id-text" style="margin-bottom:10px;">Aturan Kelas (Class Rules):</p>
+                    <ul class="rules-list">
+                        <li><i class="fas fa-comments"></i> Berbicara secara bergantian <span class="en-text" style="margin-left:auto;">Take turns speaking</span></li>
+                        <li><i class="fas fa-door-open"></i> Meminta izin jika ingin meninggalkan kelas <span class="en-text" style="margin-left:auto;">Ask permission to leave</span></li>
+                        <li><i class="fas fa-video"></i> Menyalakan kamera dan microphone jika diperlukan <span class="en-text" style="margin-left:auto;">Turn on cam & mic if needed</span></li>
+                    </ul>
+                </div>
+                <button class="btn btn-next" style="float:right;" onclick="navigateTo('section-warmup')">Mulai Pelajaran <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Spiral Review -->
+        <div class="section-container" id="section-warmup">
+            <!-- Content will be injected by JS -->
+        </div>
+
+        <!-- SECTION 2: Introduction -->
+        <div class="section-container" id="section-intro">
+            <!-- Content will be injected by JS -->
+        </div>
+
+        <!-- Other sections will be added in Part 2 & 3 -->
+        <div class="section-container" id="section-review"></div>
+        <div class="section-container" id="section-problem"></div>
+        <div class="section-container" id="section-guided"></div>
+        <div class="section-container" id="section-independent"></div>
+        
+        <div class="section-container" id="section-assign1"></div>
+        <div class="section-container" id="section-assign2"></div>
+        <div class="section-container" id="section-assign3"></div>
+        <div class="section-container" id="section-assign4"></div>
+        <div class="section-container" id="section-assign5"></div>
+        
+        <div class="section-container" id="section-consolidation"></div>
+
+    </div>
+
+    <!-- Print Area (Hidden) -->
+    <div id="printArea"></div>
+
+    <!-- KaTeX JS -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+    <script>
+        // --- DATA STRUCTURE & CONTENT ---
+        
+        const sectionsMeta = [
+            { id: 'section-home', title: 'Home', icon: 'fa-house' },
+            { id: 'section-warmup', title: 'Warm-up (00:00-00:10)', icon: 'fa-fire' },
+            { id: 'section-intro', title: 'Introduction (00:10-00:15)', icon: 'fa-lightbulb' },
+            { id: 'section-review', title: 'Review (00:15-00:20)', icon: 'fa-history' },
+            { id: 'section-problem', title: 'Problem (00:20-00:30)', icon: 'fa-triangle-exclamation' },
+            { id: 'section-guided', title: 'Guided (00:30-00:45)', icon: 'fa-hand-holding' },
+            { id: 'section-independent', title: 'Independent (00:50-01:00)', icon: 'fa-user-graduate' },
+            { id: 'section-assign1', title: 'Assignment 1', icon: 'fa-clipboard-list' },
+            { id: 'section-assign2', title: 'Assignment 2', icon: 'fa-clipboard-list' },
+            { id: 'section-assign3', title: 'Assignment 3', icon: 'fa-clipboard-list' },
+            { id: 'section-assign4', title: 'Assignment 4', icon: 'fa-clipboard-list' },
+            { id: 'section-assign5', title: 'Assignment 5', icon: 'fa-clipboard-list' },
+            { id: 'section-consolidation', title: 'Consolidation (01:00-01:05)', icon: 'fa-flag-checkered' }
+        ];
+
+        // --- JAVASCRIPT LOGIC ---
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function buildNav() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.innerHTML = '';
+            sectionsMeta.forEach(sec => {
+                const div = document.createElement('div');
+                div.className = 'nav-item';
+                div.id = `nav-${sec.id}`;
+                div.innerHTML = `<i class="fas ${sec.icon}"></i> ${sec.title}`;
+                div.onclick = () => navigateTo(sec.id);
+                navMenu.appendChild(div);
+            });
+        }
+
+        function navigateTo(sectionId) {
+            document.querySelectorAll('.section-container').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navItem = document.getElementById(`nav-${sectionId}`);
+            if(navItem) navItem.classList.add('active');
+
+            renderMath(sectionId);
+            window.scrollTo(0, 0);
+        }
+
+        function renderSectionContent(sectionId) {
+            if (!content[sectionId] || document.getElementById(sectionId).childElementCount > 0) return;
+            
+            const secData = content[sectionId];
+            let html = `<div class="card"><h2 style="font-family:'Fredoka'; color:var(--primary-dark); margin-bottom:20px;"><i class="fas ${secData.icon}"></i> ${secData.title}</h2>`;
+            
+            secData.blocks.forEach((block, idx) => {
+                if (block.type === 'theory') {
+                    html += `<div class="theory-box bilingual"><p class="id-text">${block.id}</p><p class="en-text">${block.en}</p></div>`;
+                } else if (block.type === 'illustration') {
+                    html += `<div class="illustration">${block.svg}</div>`;
+                } else if (block.type === 'exercise') {
+                    html += createExerciseHTML(block.data, idx, sectionId);
+                }
+            });
+            
+            // Add Next Section Button at the end
+            const currentIdx = sectionsMeta.findIndex(s => s.id === sectionId);
+            if (currentIdx < sectionsMeta.length - 1) {
+                html += `<button class="btn btn-next" style="float:right; margin-top:20px;" onclick="navigateTo('${sectionsMeta[currentIdx+1].id}')">Lanjut ke ${sectionsMeta[currentIdx+1].title} <i class="fas fa-arrow-right"></i></button>`;
+            }
+
+            html += `</div>`;
+            document.getElementById(sectionId).innerHTML = html;
+            renderMath(sectionId);
+        }
+
+        function selectOption(el, type) {
+            const container = el.parentElement;
+            if (type === 'mcq') {
+                container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                el.classList.add('selected');
+            } else if (type === 'checkbox') {
+                el.classList.toggle('selected');
+            }
+        }
+
+        function checkAnswer(sectionId, exIdx, correctAnswer) {
+            const exBox = document.getElementById(`${sectionId}-ex-${exIdx}`);
+            const fb = document.getElementById(`fb-${sectionId}-${exIdx}`);
+            let userAnswer = [];
+            let isCorrect = false;
+
+            const exData = content[sectionId].blocks[exIdx].data;
+
+            if (exData.type === 'mcq') {
+                const selected = exBox.querySelector('.option.selected');
+                if (!selected) { alert('Pilih jawaban dulu!'); return; }
+                userAnswer = selected.textContent;
+                isCorrect = userAnswer === correctAnswer;
+            } else if (exData.type === 'checkbox') {
+                const selected = exBox.querySelectorAll('.option.selected');
+                if (selected.length === 0) { alert('Pilih jawaban dulu!'); return; }
+                userAnswer = Array.from(selected).map(s => s.textContent);
+                isCorrect = JSON.stringify(userAnswer.sort()) === JSON.stringify(correctAnswer.sort());
+            } else if (exData.type === 'input') {
+                const input = exBox.querySelector('.input-answer');
+                if (!input.value.trim()) { alert('Isi jawaban dulu!'); return; }
+                userAnswer = input.value.trim();
+                // Handle array of possible answers
+                const possibleAnswers = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+                // Tambahkan pengecualian untuk jawaban '*' (pertanyaan refleksi)
+                if (possibleAnswers.includes("*")) {
+                    isCorrect = true;
+                } else {
+                    isCorrect = possibleAnswers.some(ans => userAnswer.toLowerCase() === String(ans).toLowerCase());
+                }
+            }
+
+            if (isCorrect) {
+                fb.className = 'feedback correct';
+                fb.innerHTML = `<i class="fas fa-check-circle"></i> Benar! / Correct!`;
+                markSectionCompleted(sectionId);
+            } else {
+                fb.className = 'feedback wrong';
+                fb.innerHTML = `<i class="fas fa-times-circle"></i> Kurang tepat. Coba lagi atau lihat penjelasan. / Incorrect. Try again or see explanation.`;
+            }
+        }
+
+        function resetExercise(sectionId, exIdx) {
+            const exBox = document.getElementById(`${sectionId}-ex-${exIdx}`);
+            exBox.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            const input = exBox.querySelector('.input-answer');
+            if (input) input.value = '';
+            const fb = document.getElementById(`fb-${sectionId}-${exIdx}`);
+            fb.className = 'feedback';
+            fb.innerHTML = '';
+        }
+
+        function prevExercise(sectionId, exIdx) {
+            if (exIdx > 0) {
+                document.getElementById(`${sectionId}-ex-${exIdx-1}`).scrollIntoView({behavior: 'smooth', block: 'center'});
+            } else {
+                alert('Ini adalah soal pertama di bagian ini.');
+            }
+        }
+
+        function nextExercise(sectionId, exIdx) {
+            const exData = content[sectionId].blocks;
+            // Find next exercise index
+            let nextIdx = -1;
+            for (let i = exIdx + 1; i < exData.length; i++) {
+                if (exData[i].type === 'exercise') {
+                    nextIdx = i;
+                    break;
+                }
+            }
+            if (nextIdx !== -1) {
+                document.getElementById(`${sectionId}-ex-${nextIdx}`).scrollIntoView({behavior: 'smooth', block: 'center'});
+            } else {
+                alert('Ini adalah soal terakhir di bagian ini. Lanjut ke bagian berikutnya jika sudah selesai.');
+            }
+        }
+
+        function toggleExplanation(id) {
+            const exp = document.getElementById(`exp-${id}`);
+            if (exp.style.display === 'block') {
+                exp.style.display = 'none';
+            } else {
+                exp.style.display = 'block';
+            }
+        }
+
+        function markSectionCompleted(sectionId) {
+            const navItem = document.getElementById(`nav-${sectionId}`);
+            if (navItem && !navItem.querySelector('.fa-circle-check')) {
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-circle-check';
+                icon.style.marginLeft = 'auto';
+                icon.style.color = 'var(--primary)';
+                navItem.appendChild(icon);
+                navItem.classList.add('completed');
+            }
+        }
+
+        function resetAllProgress() {
+            if (confirm('Apakah kamu yakin ingin mereset SEMUA progres jawaban?')) {
+                document.querySelectorAll('.section-container').forEach(sec => {
+                    sec.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                    sec.querySelectorAll('.input-answer').forEach(inp => inp.value = '');
+                    sec.querySelectorAll('.feedback').forEach(fb => { fb.className = 'feedback'; fb.innerHTML = ''; });
+                    sec.querySelectorAll('.explanation-content').forEach(exp => exp.style.display = 'none');
+                });
+                document.querySelectorAll('.nav-item .fa-circle-check').forEach(icon => icon.remove());
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('completed'));
+                alert('Progres berhasil direset!');
+            }
+        }
+
+	function renderMath(sectionId) {
+		const section = document.getElementById(sectionId);
+		if (section && typeof renderMathInElement === 'function') {
+			renderMathInElement(section, {
+				delimiters: [
+					{left: "$$", right: "$$", display: true},
+					{left: "$", right: "$", display: false}
+				]
+			});
+		}
+	}
+
+        // Helper to generate exercise HTML
+        function createExerciseHTML(exData, exIndex, sectionId) {
+            let optionsHTML = '';
+            if (exData.type === 'mcq' || exData.type === 'checkbox') {
+                // Randomize options
+                const shuffled = [...exData.options].sort(() => 0.5 - Math.random());
+                shuffled.forEach((opt, idx) => {
+                    optionsHTML += `<div class="option" onclick="selectOption(this, '${exData.type}')">${opt}</div>`;
+                });
+            } else if (exData.type === 'input') {
+                optionsHTML = `<input type="text" class="input-answer" placeholder="Ketik jawaban di sini...">`;
+            }
+
+            return `
+                <div class="exercise-box" id="${sectionId}-ex-${exIndex}">
+                    <div class="bilingual">
+                        <p class="id-text">${exIndex + 1}. ${exData.question_id}</p>
+                        <p class="en-text">${exData.question_en}</p>
+                    </div>
+                    <div class="options-container">${optionsHTML}</div>
+                    <div class="exercise-controls">
+                        <button class="btn btn-check" onclick="checkAnswer('${sectionId}', ${exIndex}, ${JSON.stringify(exData.answer).replace(/"/g, '&quot;')})"><i class="fas fa-check"></i> Check</button>
+                        <button class="btn btn-reset" onclick="resetExercise('${sectionId}', ${exIndex})"><i class="fas fa-rotate-left"></i> Reset</button>
+                        <button class="btn btn-prev" onclick="prevExercise('${sectionId}', ${exIndex})"><i class="fas fa-arrow-left"></i> Prev</button>
+                        <button class="btn btn-next" onclick="nextExercise('${sectionId}', ${exIndex})">Next <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="feedback" id="fb-${sectionId}-${exIndex}"></div>
+                    <button class="collapse-btn" onclick="toggleExplanation('${sectionId}-${exIndex}')">Lihat Penjelasan / Show Explanation <i class="fas fa-chevron-down"></i></button>
+                    <div class="explanation-content" id="exp-${sectionId}-${exIndex}">
+                        <p class="id-text">${exData.explanation_id}</p>
+                        <p class="en-text">${exData.explanation_en}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Content definitions for Part 1 Sections
+        const content = {
+            'section-warmup': {
+                title: "Spiral Review Warm-up",
+                icon: "fa-fire",
+                blocks: [
+                    { type: 'theory', id: "Sebelum kita masuk ke misi baru, mari kita panaskan mesin. Kita akan mengingat kembali konsep Kelipatan dan Faktor.", en: "Before we start a new mission, let's warm up the engine. We will recall the concepts of Multiples and Factors." },
+                    { type: 'exercise', data: { type: 'input', question_id: "Sebutkan 3 kelipatan pertama dari 12 yang lebih besar dari 30! (Pisahkan dengan koma)", question_en: "List the first 3 multiples of 12 greater than 30! (Separate with commas)", answer: ["36, 48, 60", "36,48,60"], explanation_id: "Kelipatan 12 adalah 12, 24, 36, 48, 60. Yang lebih besar dari 30 adalah 36, 48, dan 60.", explanation_en: "Multiples of 12 are 12, 24, 36, 48, 60. Greater than 30 are 36, 48, 60." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Apakah 84 merupakan kelipatan dari 7?", question_en: "Is 84 a multiple of 7?", options: ["Ya", "Tidak"], answer: "Ya", explanation_id: "84 : 7 = 12. Karena habis dibagi, 84 adalah kelipatan 7.", explanation_en: "84 : 7 = 12. Because it's divisible, 84 is a multiple of 7." } },
+                    { type: 'exercise', data: { type: 'input', question_id: "Tuliskan semua faktor dari bilangan 18! (Pisahkan dengan koma)", question_en: "Write all factors of 18! (Separate with commas)", answer: ["1, 2, 3, 6, 9, 18", "1,2,3,6,9,18"], explanation_id: "Faktor 18 adalah bilangan yang membagi 18 habis: 1, 2, 3, 6, 9, 18.", explanation_en: "Factors of 18 are numbers that divide 18 exactly." } },
+                    { type: 'theory', id: "Hebat! Sekarang mari kita uji pemahamanmu tentang faktor terbesar.", en: "Great! Now let's test your understanding of the greatest factor." },
+                    { type: 'exercise', data: { type: 'input', question_id: "Apa faktor terbesar dari 45 yang bukan merupakan bilangan itu sendiri?", question_en: "What is the largest factor of 45 other than the number itself?", answer: ["15"], explanation_id: "Faktor 45 adalah 1, 3, 5, 9, 15, 45. Jadi selain 45, yang terbesar adalah 15.", explanation_en: "Factors of 45 are 1, 3, 5, 9, 15, 45. So besides 45, the largest is 15." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Manakah yang BUKAN merupakan faktor dari 24?", question_en: "Which is NOT a factor of 24?", options: ["4", "6", "5", "8"], answer: "5", explanation_id: "24 tidak bisa dibagi 5 secara merata (24:5 ada sisa).", explanation_en: "24 cannot be divided by 5 evenly." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Kelipatan persekutuan terkecil (KPK) dari 4 dan 6 adalah...", question_en: "Least Common Multiple (LCM) of 4 and 6 is...", options: ["12", "24", "2", "10"], answer: "12", explanation_id: "Kelipatan 4: 4,8,12. Kelipatan 6: 6,12. Yang pertama sama adalah 12.", explanation_en: "Multiples of 4: 4,8,12. Multiples of 6: 6,12. First common is 12." } },
+                    { type: 'theory', id: "Mesin sudah panas! Konsep kelipatan dan faktor adalah kunci untuk memahami Bilangan Prima.", en: "Engine is hot! Multiples and factors are keys to understanding Prime Numbers." },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Kelipatan 8 antara 20 dan 45 adalah...", question_en: "Multiples of 8 between 20 and 45 are...", options: ["24, 32, 40", "16, 24, 32", "24, 32, 48"], answer: "24, 32, 40", explanation_id: "8x3=24, 8x4=32, 8x5=40. Semuanya di antara 20 dan 45.", explanation_en: "8x3=24, 8x4=32, 8x5=40. All between 20 and 45." } },
+                    { type: 'exercise', data: { type: 'input', question_id: "Tentukan kelipatan ke-15 dari angka 7!", question_en: "Determine the 15th multiple of 7!", answer: ["105"], explanation_id: "7 x 15 = 105.", explanation_en: "7 x 15 = 105." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan mana yang memiliki lebih banyak faktor: 12 atau 15?", question_en: "Which number has more factors: 12 or 15?", options: ["12", "15", "Jumlahnya sama", "Tidak bisa ditentukan"], answer: "12", explanation_id: "Faktor 12 (1,2,3,4,6,12)=6 faktor. Faktor 15 (1,3,5,15)=4 faktor.", explanation_en: "Factors of 12 (6 factors), Factors of 15 (4 factors)." } },
+                    { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih semua faktor persekutuan dari 12 dan 18!", question_en: "Select all common factors of 12 and 18!", options: ["1", "2", "3", "6", "9", "12"], answer: ["1", "2", "3", "6"], explanation_id: "Faktor 12: 1,2,3,4,6,12. Faktor 18: 1,2,3,6,9,18. Yang sama: 1,2,3,6.", explanation_en: "Factors of 12: 1,2,3,4,6,12. Factors of 18: 1,2,3,6,9,18. Common: 1,2,3,6." } },
+                ]
+            },
+            'section-intro': {
+                title: "Introduction & Real-World Connection",
+                icon: "fa-lightbulb",
+                blocks: [
+                    { type: 'theory', id: "Dalam dunia keamanan siber atau enkripsi data (seperti password akun game-mu), Bilangan Prima adalah 'batu bata' penyusunnya.", en: "In the world of cybersecurity or data encryption (like your game account password), Prime Numbers are the 'building blocks'." },
+                    { type: 'illustration', svg: `<svg width="200" height="150" viewBox="0 0 200 150"><rect x="50" y="20" width="100" height="40" rx="5" fill="#8BC34A"/><text x="100" y="45" text-anchor="middle" fill="white" font-size="20" font-family="Fredoka">P = 2 x 3 x 5</text><rect x="20" y="80" width="50" height="50" rx="5" fill="#4CAF50"/><text x="45" y="110" text-anchor="middle" fill="white" font-size="20" font-family="Fredoka">2</text><rect x="75" y="80" width="50" height="50" rx="5" fill="#4CAF50"/><text x="100" y="110" text-anchor="middle" fill="white" font-size="20" font-family="Fredoka">3</text><rect x="130" y="80" width="50" height="50" rx="5" fill="#4CAF50"/><text x="155" y="110" text-anchor="middle" fill="white" font-size="20" font-family="Fredoka">5</text></svg>` },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan prima hanya bisa dibagi oleh...", question_en: "Prime numbers can only be divided by...", options: ["1 dan dirinya sendiri", "Semua bilangan ganjil", "2 dan 3", "Bilangan genap"], answer: "1 dan dirinya sendiri", explanation_id: "Definisi bilangan prima adalah bilangan yang hanya memiliki 2 faktor, yaitu 1 dan dirinya sendiri.", explanation_en: "Definition of prime numbers is numbers with exactly 2 factors: 1 and itself." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Aplikasi dunia nyata dari bilangan prima sering ditemukan di bidang...", question_en: "Real-world application of prime numbers is often found in...", options: ["Memasak", "Keamanan siber (Enkripsi)", "Olahraga", "Melukis"], answer: "Keamanan siber (Enkripsi)", explanation_id: "Bilangan prima digunakan untuk mengunci data karena sulit dipecahkan jika dikalikan dengan bilangan prima lain.", explanation_en: "Prime numbers are used to lock data because they are hard to crack when multiplied." } },
+                    { type: 'exercise', data: { type: 'input', question_id: "Jika sebuah kunci rahasia terdiri dari perkalian 2 bilangan prima, sebutkan satu contoh bilangan prima yang bisa digunakan!", question_en: "If a secret key is a product of 2 primes, name one prime number that could be used!", answer: ["2", "3", "5", "7", "11", "13", "17", "19", "23"], explanation_id: "Contoh bilangan prima adalah 2, 3, 5, 7, 11, dst.", explanation_en: "Examples of prime numbers are 2, 3, 5, 7, 11, etc." } },
+                    { type: 'theory', id: "Bayangkan bilangan prima adalah rintangan yang hanya punya satu jalan masuk dan satu jalan keluar. Tidak bisa dibagi-bagi lagi!", en: "Imagine prime numbers as obstacles with only one way in and one way out. They cannot be divided further!" },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Mengapa bilangan prima disebut 'batu bata' penyusun angka?", question_en: "Why are primes called 'building blocks' of numbers?", options: ["Karena bentuknya seperti batu", "Karena semua bilangan bisa dipecah menjadi perkalian bilangan prima", "Karena bilangan prima sangat besar", "Karena bilangan prima terbuat dari batu"], answer: "Karena semua bilangan bisa dipecah menjadi perkalian bilangan prima", explanation_id: "Teori Fundamental Aritmetika menyatakan setiap bilangan bisa dipecah menjadi faktor prima.", explanation_en: "Fundamental Theorem of Arithmetic states every number can be broken into prime factors." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Manakah yang termasuk bilangan prima?", question_en: "Which of these is a prime number?", options: ["4", "6", "7", "9"], answer: "7", explanation_id: "7 hanya bisa dibagi 1 dan 7. 4, 6, 9 bisa dibagi bilangan lain.", explanation_en: "7 is only divisible by 1 and 7. 4, 6, 9 are divisible by other numbers." } },
+                    { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih semua pernyataan yang BENAR tentang bilangan prima!", question_en: "Select all TRUE statements about prime numbers!", options: ["Memiliki tepat 2 faktor", "Tidak bisa dibagi bilangan lain selain 1 dan dirinya", "Selalu bilangan genap", "Merupakan pondasi enkripsi data"], answer: ["Memiliki tepat 2 faktor", "Tidak bisa dibagi bilangan lain selain 1 dan dirinya", "Merupakan pondasi enkripsi data"], explanation_id: "Pernyataan yang benar: punya 2 faktor, tidak bisa dibagi selain 1 dan dirinya, pondasi enkripsi. (2 adalah prima genap tunggal, jadi 'selalu genap' salah).", explanation_en: "True statements: 2 factors, indivisible by others, encryption foundation." } },
+                    { type: 'exercise', data: { type: 'input', question_id: "Berapa bilangan prima terkecil di dunia?", question_en: "What is the smallest prime number in the world?", answer: ["2"], explanation_id: "2 adalah bilangan prima terkecil dan satu-satunya prima yang genap.", explanation_en: "2 is the smallest prime and the only even prime number." } },
+                    { type: 'exercise', data: { type: 'mcq', question_id: "Jika password game-mu dienkripsi dengan prima besar, itu membuatnya...", question_en: "If your game password is encrypted with large primes, it makes it...", options: ["Mudah diretas", "Sangat sulit dipecahkan oleh hacker", "Tidak bisa digunakan", "Lebih cepat untuk login"], answer: "Sangat sulit dipecahkan oleh hacker", explanation_id: "Memecahkan perkalian dua bilangan prima besar membutuhkan waktu super komputer yang sangat lama.", explanation_en: "Factoring product of two large primes takes supercomputers a very long time." } },
+                ]
+            }
+        };
+
+        // ==========================================
+        // PART 2 CONTENT ADDITION
+        // ==========================================
+        content['section-review'] = {
+            title: "Review of Prior Knowledge",
+            icon: "fa-history",
+            blocks: [
+                { type: 'theory', id: "Ingat saat kita mencari faktor? Jika sebuah angka hanya punya TEPAT dua faktor (yaitu 1 dan angka itu sendiri), kita menyebutnya Bilangan Prima. Jika punya lebih dari dua, itu Bilangan Komposit.", en: "Remember finding factors? If a number has EXACTLY two factors (1 and itself), it's a Prime Number. If it has more than two, it's a Composite Number." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apa yang dimaksud dengan bilangan prima?", question_en: "What is meant by prime numbers?", options: ["Bilangan yang hanya bisa dibagi 2", "Bilangan dengan tepat dua faktor (1 dan dirinya sendiri)", "Bilangan ganjil", "Bilangan yang tidak memiliki faktor"], answer: "Bilangan dengan tepat dua faktor (1 dan dirinya sendiri)", explanation_id: "Definisi bilangan prima adalah bilangan yang memiliki tepat 2 faktor.", explanation_en: "Prime number definition is a number with exactly 2 factors." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan 9 adalah bilangan... (Faktornya: 1, 3, 9)", question_en: "The number 9 is a... (Factors: 1, 3, 9)", options: ["Prima", "Komposit", "Genap", "Tidak pasti"], answer: "Komposit", explanation_id: "9 memiliki 3 faktor (1, 3, 9), sehingga lebih dari 2. Maka 9 adalah komposit.", explanation_en: "9 has 3 factors (1, 3, 9), which is more than 2. So 9 is composite." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih semua bilangan prima dari daftar berikut!", question_en: "Select all prime numbers from the list!", options: ["2", "4", "5", "6", "7", "9"], answer: ["2", "5", "7"], explanation_id: "2, 5, 7 hanya bisa dibagi 1 dan dirinya sendiri. 4 (1,2,4), 6 (1,2,3,6), 9 (1,3,9) adalah komposit.", explanation_en: "2, 5, 7 are only divisible by 1 and themselves. 4, 6, 9 are composite." } },
+                { type: 'theory', id: "Sekarang, mari kita lihat angka 2, 9, dan 13. Angka 2 hanya bisa dibagi 1 dan 2. Angka 13 hanya bisa dibagi 1 dan 13. Keduanya adalah Prima. Tapi 9 bisa dibagi 1, 3, dan 9. Jadi 9 adalah Komposit.", en: "Now, look at 2, 9, and 13. 2 is only divisible by 1 and 2. 13 is only divisible by 1 and 13. Both are Prime. But 9 is divisible by 1, 3, and 9. So 9 is Composite." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Berapa banyak faktor yang dimiliki bilangan prima?", question_en: "How many factors does a prime number have?", options: ["1", "2", "3", "Lebih dari 3"], answer: "2", explanation_id: "Bilangan prima selalu memiliki tepat 2 faktor.", explanation_en: "Prime numbers always have exactly 2 factors." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Sebutkan faktor-faktor dari bilangan 13! (Pisahkan dengan koma)", question_en: "List the factors of 13! (Separate with commas)", answer: ["1, 13", "1,13"], explanation_id: "13 adalah bilangan prima, jadi faktornya hanya 1 dan 13.", explanation_en: "13 is prime, so its factors are only 1 and 13." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Angka 2 termasuk bilangan apa?", question_en: "What type of number is 2?", options: ["Prima", "Komposit", "Bukan keduanya", "Ganjil"], answer: "Prima", explanation_id: "2 adalah bilangan prima terkecil dan satu-satunya prima yang genap.", explanation_en: "2 is the smallest prime and the only even prime number." } },
+                { type: 'theory', id: "Bilangan 1 adalah pengecualian. 1 BUKAN bilangan prima dan BUKAN bilangan komposit karena ia hanya punya 1 faktor (dirinya sendiri).", en: "Number 1 is an exception. 1 is NEITHER prime NOR composite because it only has 1 factor (itself)." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apakah 1 merupakan bilangan prima?", question_en: "Is 1 a prime number?", options: ["Ya, karena punya faktor", "Tidak, karena hanya punya 1 faktor", "Ya, karena bilangan pertama", "Tidak, karena terlalu kecil"], answer: "Tidak, karena hanya punya 1 faktor", explanation_id: "Prima harus punya TEPAT 2 faktor. 1 hanya punya 1 faktor.", explanation_en: "Primes must have EXACTLY 2 factors. 1 only has 1 factor." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan komposit memiliki faktor lebih dari...", question_en: "Composite numbers have more than... factors", options: ["1", "2", "3", "4"], answer: "2", explanation_id: "Komposit memiliki lebih dari 2 faktor.", explanation_en: "Composite has more than 2 factors." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih semua bilangan komposit di bawah ini!", question_en: "Select all composite numbers below!", options: ["4", "7", "10", "11", "15", "19"], answer: ["4", "10", "15"], explanation_id: "4 (1,2,4), 10 (1,2,5,10), 15 (1,3,5,15) punya lebih dari 2 faktor.", explanation_en: "4, 10, 15 have more than 2 factors." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Berapa faktor yang dimiliki bilangan 1?", question_en: "How many factors does the number 1 have?", answer: ["1", "satu"], explanation_id: "Bilangan 1 hanya memiliki 1 faktor, yaitu dirinya sendiri.", explanation_en: "Number 1 only has 1 factor, which is itself." } },
+            ]
+        };
+
+        content['section-problem'] = {
+            title: "Problem Introduction",
+            icon: "fa-triangle-exclamation",
+            blocks: [
+                { type: 'theory', id: "Tantangan beratnya adalah saat kita bertemu angka besar seperti 48. Kita harus membedahnya sampai ke akar-akarnya menggunakan 'Pohon Faktor'. Aturannya: kita terus membagi angka tersebut sampai semua ujung cabangnya adalah Bilangan Prima.", en: "The heavy challenge is when we meet large numbers like 48. We must dissect it to its roots using a 'Factor Tree'. The rule: we keep dividing until all branch tips are Prime Numbers." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apa tujuan utama dari membuat pohon faktor?", question_en: "What is the main purpose of making a factor tree?", options: ["Mencari kelipatan suatu bilangan", "Mencari faktor-faktor prima dari suatu bilangan", "Menjumlahkan bilangan besar", "Mencari bilangan genap"], answer: "Mencari faktor-faktor prima dari suatu bilangan", explanation_id: "Pohon faktor digunakan untuk memecah bilangan komposit menjadi perkalian bilangan prima.", explanation_en: "Factor tree is used to break composite numbers into prime products." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Kapan kita berhenti membagi cabang pada pohon faktor?", question_en: "When do we stop dividing branches in a factor tree?", options: ["Saat angka menjadi 1", "Saat angka menjadi genap", "Saat semua ujung cabang adalah bilangan prima", "Saat sudah dibagi 2"], answer: "Saat semua ujung cabang adalah bilangan prima", explanation_id: "Proses berhenti ketika tidak ada lagi bilangan komposit yang bisa dibagi.", explanation_en: "Process stops when no composite numbers are left to divide." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Faktorisasi prima dari 24 adalah $2 \\times 2 \\times 2 \\times 3$. Tuliskan dalam bentuk pangkat! (Contoh: 2^2 x 3)", question_en: "Prime factorization of 24 is $2 \\times 2 \\times 2 \\times 3$. Write in exponent form! (E.g., 2^2 x 3)", answer: ["2^3 x 3", "2^3 * 3"], explanation_id: "Karena ada tiga angka 2, ditulis $2^3$. Sehingga $2^3 \\times 3$.", explanation_en: "Since there are three 2s, it's written $2^3$. So $2^3 \\times 3$." } },
+                { type: 'illustration', svg: `<svg width="250" height="180" viewBox="0 0 250 180" style="font-family:'Fredoka'; font-size:16px; fill:#333;"><line x1="125" y1="40" x2="75" y2="90" stroke="#8BC34A" stroke-width="3"/><line x1="125" y1="40" x2="175" y2="90" stroke="#8BC34A" stroke-width="3"/><line x1="75" y1="110" x2="45" y2="150" stroke="#8BC34A" stroke-width="3"/><line x1="75" y1="110" x2="105" y2="150" stroke="#8BC34A" stroke-width="3"/><line x1="175" y1="110" x2="145" y2="150" stroke="#8BC34A" stroke-width="3"/><line x1="175" y1="110" x2="205" y2="150" stroke="#8BC34A" stroke-width="3"/><circle cx="125" cy="30" r="20" fill="#4CAF50"/><text x="125" y="35" text-anchor="middle" fill="white">24</text><circle cx="75" cy="100" r="20" fill="#FFC107"/><text x="75" y="105" text-anchor="middle" fill="white">4</text><circle cx="175" cy="100" r="20" fill="#FFC107"/><text x="175" y="105" text-anchor="middle" fill="white">6</text><circle cx="45" cy="160" r="15" fill="#F44336"/><text x="45" y="164" text-anchor="middle" fill="white">2</text><circle cx="105" cy="160" r="15" fill="#F44336"/><text x="105" y="164" text-anchor="middle" fill="white">2</text><circle cx="145" cy="160" r="15" fill="#F44336"/><text x="145" y="164" text-anchor="middle" fill="white">2</text><circle cx="205" cy="160" r="15" fill="#F44336"/><text x="205" y="164" text-anchor="middle" fill="white">3</text></svg><br><span class="en-text">Factor Tree of 24: $24 = 2 \\times 2 \\times 2 \\times 3$</span>` },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Pada pohon faktor 24, jika kita membaginya menjadi 4 dan 6, apa langkah selanjutnya?", question_en: "In factor tree of 24, if we split into 4 and 6, what's next?", options: ["Berhenti karena 4 dan 6 genap", "Memecah 4 menjadi 2x2 dan 6 menjadi 2x3", "Menjumlahkan 4 dan 6", "Membagi 24 dengan 4"], answer: "Memecah 4 menjadi 2x2 dan 6 menjadi 2x3", explanation_id: "4 dan 6 masih komposit, jadi harus dipecah lagi sampai dapat bilangan prima.", explanation_en: "4 and 6 are composite, must be broken down to primes." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan 4 dan 6 pada cabang pertama pohon faktor 24 termasuk bilangan...", question_en: "4 and 6 on first branch are...", options: ["Prima", "Komposit", "Ganjil", "Khusus"], answer: "Komposit", explanation_id: "4 (1,2,4) dan 6 (1,2,3,6) punya lebih dari 2 faktor.", explanation_en: "4 and 6 have more than 2 factors." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih faktor prima dari 24!", question_en: "Select prime factors of 24!", options: ["1", "2", "3", "4", "6", "8"], answer: ["2", "3"], explanation_id: "Faktor prima adalah faktor yang berupa bilangan prima. Hanya 2 dan 3.", explanation_en: "Prime factors are factors that are prime numbers. Only 2 and 3." } },
+                { type: 'theory', id: "Dalam pohon faktor, urutan pembagian tidak masalah asalkan hasil akhirnya sama. Misalnya 24 dibagi 2 dan 12, lalu 12 dibagi 2 dan 6, lalu 6 dibagi 2 dan 3. Hasilnya tetap $2 \\times 2 \\times 2 \\times 3$.", en: "In a factor tree, division order doesn't matter as long as the result is the same. E.g., 24 to 2 and 12, then 12 to 2 and 6, then 6 to 2 and 3. Result is $2 \\times 2 \\times 2 \\times 3$." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apakah urutan pembagian dalam pohon faktor mengubah hasil akhir?", question_en: "Does division order change the final result?", options: ["Ya, selalu", "Tidak, hasilnya akan sama", "Hanya jika dimulai dari 2", "Tergantung bilangannya"], answer: "Tidak, hasilnya akan sama", explanation_id: "Faktorisasi prima suatu bilangan itu unik, urutan tidak masalah.", explanation_en: "Prime factorization is unique, order doesn't matter." } },
+                { type: 'exercise', data: { type: 'input', question_id: "24 = $2 \\times 2 \\times 2 \\times 3$. Jika ditulis menggunakan pangkat, 2 pangkat berapa?", question_en: "24 = $2 \\times 2 \\times 2 \\times 3$. In exponent form, 2 to the power of what?", answer: ["3", "tiga"], explanation_id: "Ada tiga buah angka 2, jadi $2^3$.", explanation_en: "There are three 2s, so $2^3$." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Manakah yang merupakan faktorisasi prima yang benar untuk 12?", question_en: "Which is correct prime factorization for 12?", options: ["$2 \\times 6$", "$3 \\times 4$", "$2 \\times 2 \\times 3$", "$1 \\times 12$"], answer: "$2 \\times 2 \\times 3$", explanation_id: "6 dan 4 masih komposit. 1 bukan prima. Jadi $2 \\times 2 \\times 3$.", explanation_en: "6 and 4 are composite. 1 is not prime. So $2 \\times 2 \\times 3$." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Ujung pohon faktor dari bilangan 48 adalah 2, 2, 2, 2, dan 3. Berapa hasil kalinya?", question_en: "The tips of factor tree for 48 are 2, 2, 2, 2, 3. What is the product?", answer: ["48"], explanation_id: "$2 \\times 2 \\times 2 \\times 2 \\times 3 = 48$.", explanation_en: "$2 \\times 2 \\times 2 \\times 2 \\times 3 = 48$." } },
+            ]
+        };
+
+        content['section-guided'] = {
+            title: "Guided Practice",
+            icon: "fa-hand-holding",
+            blocks: [
+                { type: 'theory', id: "Sekarang giliranmu. Di layar ada rintangan besar: angka 42 dan 50. Mari kita buat pohon faktornya bersama. Untuk 42, kita bisa bagi 2 dulu. Sisanya 21. 21 itu komposit, kita pecah lagi menjadi 3 dan 7. Jadi, $42 = 2 \\times 3 \\times 7$.", en: "Now your turn. Obstacles: 42 and 50. Let's make factor trees. For 42, divide by 2. Remainder 21. 21 is composite, split to 3 and 7. So, $42 = 2 \\times 3 \\times 7$." },
+                { type: 'exercise', data: { type: 'input', question_id: "42 dibagi 2 menghasilkan hasil bagi berapa?", question_en: "42 divided by 2 results in what quotient?", answer: ["21"], explanation_id: "$42 \div 2 = 21$.", explanation_en: "$42 \div 2 = 21$." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Faktor prima dari 21 adalah...", question_en: "Prime factors of 21 are...", options: ["3 dan 7", "2 dan 7", "1 dan 21", "3 dan 5"], answer: "3 dan 7", explanation_id: "21 bisa dibagi 3 ($21 \\div 3 = 7$). 3 dan 7 keduanya prima.", explanation_en: "21 is divisible by 3 ($21 \\div 3 = 7$). Both 3 and 7 are prime." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih faktor-faktor prima dari 42!", question_en: "Select prime factors of 42!", options: ["2", "3", "6", "7", "14", "21"], answer: ["2", "3", "7"], explanation_id: "Faktorisasi 42 adalah $2 \\times 3 \\times 7$. Yang prima hanya 2, 3, 7.", explanation_en: "Factorization of 42 is $2 \\times 3 \\times 7$. Primes are 2, 3, 7." } },
+                { type: 'illustration', svg: `<svg width="200" height="150" viewBox="0 0 200 150" style="font-family:'Fredoka'; font-size:16px; fill:#333;"><line x1="100" y1="40" x2="60" y2="90" stroke="#8BC34A" stroke-width="3"/><line x1="100" y1="40" x2="140" y2="90" stroke="#8BC34A" stroke-width="3"/><line x1="140" y1="110" x2="120" y2="140" stroke="#8BC34A" stroke-width="3"/><line x1="140" y1="110" x2="160" y2="140" stroke="#8BC34A" stroke-width="3"/><circle cx="100" cy="30" r="20" fill="#4CAF50"/><text x="100" y="35" text-anchor="middle" fill="white">50</text><circle cx="60" cy="100" r="15" fill="#F44336"/><text x="60" y="104" text-anchor="middle" fill="white">2</text><circle cx="140" cy="100" r="20" fill="#FFC107"/><text x="140" y="105" text-anchor="middle" fill="white">25</text><circle cx="120" cy="150" r="15" fill="#F44336"/><text x="120" y="154" text-anchor="middle" fill="white">5</text><circle cx="160" cy="150" r="15" fill="#F44336"/><text x="160" y="154" text-anchor="middle" fill="white">5</text></svg><br><span class="en-text">Factor Tree of 50</span>` },
+                { type: 'theory', id: "Sekarang untuk angka 50. Kita bisa mulai membaginya dengan 2. Hasilnya 25. Lalu 25 kita pecah menjadi 5 dan 5. Jadi, faktorisasi primanya adalah $50 = 2 \\times 5 \\times 5$ atau $2 \\times 5^2$.", en: "Now for 50. Start dividing by 2. Result 25. Then 25 split to 5 and 5. So, $50 = 2 \\times 5 \\times 5$ or $2 \\times 5^2$." },
+                { type: 'exercise', data: { type: 'input', question_id: "50 dibagi 2 menghasilkan hasil bagi berapa?", question_en: "50 divided by 2 results in what quotient?", answer: ["25"], explanation_id: "$50 \div 2 = 25$.", explanation_en: "$50 \div 2 = 25$." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Faktorisasi prima dari 50 adalah...", question_en: "Prime factorization of 50 is...", options: ["$2 \\times 5 \\times 5$", "$2 \\times 25$", "$5 \\times 10$", "$2 \\times 2 \\times 5$"], answer: "$2 \\times 5 \\times 5$", explanation_id: "25 masih bisa dipecah menjadi $5 \\times 5$. Jadi lengkapnya $2 \\times 5 \\times 5$.", explanation_en: "25 can be split to $5 \\times 5$. So full is $2 \\times 5 \\times 5$." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Jika ditulis dalam bentuk pangkat, $50 = 2 \\times 5^?$. Isi tanda tanya.", question_en: "In exponent form, $50 = 2 \\times 5^?$. Fill the blank.", answer: ["2"], explanation_id: "Ada dua angka 5, jadi $5^2$.", explanation_en: "There are two 5s, so $5^2$." } },
+                { type: 'theory', id: "Tips penting: Selalu gunakan bilangan prima kecil (seperti 2, 3, 5) untuk memulai pembagian pohon faktor agar lebih mudah. Jika bilangan genap, bagi dengan 2. Jika jumlah angkanya kelipatan 3, bagi dengan 3.", en: "Important tip: Always use small primes (2, 3, 5) to start dividing. If even, divide by 2. If sum of digits is multiple of 3, divide by 3." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Angka 50 adalah bilangan genap. Bilangan prima apa yang sebaiknya digunakan untuk memulai pohon faktor?", question_en: "50 is even. Which prime should be used to start the tree?", options: ["3", "5", "2", "7"], answer: "2", explanation_id: "Bilangan genap selalu habis dibagi 2.", explanation_en: "Even numbers are always divisible by 2." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Berapa hasil dari $2 \\times 5^2$?", question_en: "What is $2 \\times 5^2$?", options: ["20", "25", "50", "100"], answer: "50", explanation_id: "$5^2 = 25$. Lalu $25 \\times 2 = 50$.", explanation_en: "$5^2 = 25$. Then $25 \\times 2 = 50$." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Tuliskan bilangan prima yang merupakan faktor dari 25!", question_en: "Write the prime number that is a factor of 25!", answer: ["5"], explanation_id: "25 dibagi 5 menghasilkan 5. Jadi faktor primanya adalah 5.", explanation_en: "25 divided by 5 is 5. So prime factor is 5." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Manakah yang merupakan faktor dari 50? (Bukan hanya prima)", question_en: "Which are factors of 50? (Not just primes)", options: ["1", "2", "5", "10", "25", "50", "3", "7"], answer: ["1", "2", "5", "10", "25", "50"], explanation_id: "50 bisa dibagi 1, 2, 5, 10, 25, dan 50.", explanation_en: "50 is divisible by 1, 2, 5, 10, 25, and 50." } },
+            ]
+        };
+
+        content['section-independent'] = {
+            title: "Independent Practice",
+            icon: "fa-user-graduate",
+            blocks: [
+                { type: 'theory', id: "Kamu sudah menguasai tekniknya! Sekarang, ada 3 rintangan terakhir untuk menyelesaikan misi ini. Tentukan apakah 37 itu Prima atau Komposit. Buat pohon faktor untuk 36. Tuliskan faktorisasi prima dari 45.", en: "You've mastered it! Now, 3 final obstacles. Determine if 37 is Prime or Composite. Make a factor tree for 36. Write prime factorization of 45." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apakah 37 merupakan bilangan prima?", question_en: "Is 37 a prime number?", options: ["Ya", "Tidak"], answer: "Ya", explanation_id: "37 tidak bisa dibagi 2 (ganjil), 3 (3+7=10 bukan kelipatan 3), atau 5 (tidak diakhiri 0/5). Jadi prima.", explanation_en: "37 not div by 2 (odd), 3 (3+7=10), or 5. So prime." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Apa faktor dari 37 selain 1?", question_en: "What is the factor of 37 other than 1?", answer: ["37"], explanation_id: "Karena prima, faktornya hanya 1 dan 37.", explanation_en: "Since it's prime, factors are only 1 and 37." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Mengapa 37 sulit dipecah dalam pohon faktor?", question_en: "Why is 37 hard to break in a factor tree?", options: ["Karena angkanya besar", "Karena ia hanya memiliki 2 faktor (1 dan 37)", "Karena bilangan ganjil", "Karena lebih dari 30"], answer: "Karena ia hanya memiliki 2 faktor (1 dan 37)", explanation_id: "Bilangan prima tidak bisa dipecah lagi dalam pohon faktor.", explanation_en: "Prime numbers cannot be broken down in a factor tree." } },
+                { type: 'theory', id: "Mari kita kerjakan pohon faktor untuk 36. Karena 36 genap, bagi dengan 2. Hasilnya 18. 18 dibagi 2 menjadi 9. 9 dibagi 3 menjadi 3. Jadi, $36 = 2 \\times 2 \\times 3 \\times 3$ atau $2^2 \\times 3^2$.", en: "Let's do factor tree for 36. 36 is even, divide by 2. Result 18. 18 div 2 is 9. 9 div 3 is 3. So, $36 = 2 \\times 2 \\times 3 \\times 3$ or $2^2 \\times 3^2$." },
+                { type: 'exercise', data: { type: 'input', question_id: "36 dibagi 2 menghasilkan berapa?", question_en: "36 divided by 2 results in?", answer: ["18"], explanation_id: "$36 \\div 2 = 18$.", explanation_en: "$36 \\div 2 = 18$." } },
+                { type: 'exercise', data: { type: 'checkbox', question_id: "Pilih faktor-faktor prima dari 36!", question_en: "Select prime factors of 36!", options: ["2", "3", "4", "6", "9", "12"], answer: ["2", "3"], explanation_id: "Faktorisasi primanya hanya 2 dan 3. (4,6,9,12 komposit).", explanation_en: "Its prime factors are only 2 and 3." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Faktorisasi prima 36 dalam bentuk perkalian biasa adalah... (Gunakan format: 2x2x3x3)", question_en: "Prime factorization of 36 in basic multiplication is... (Use format: 2x2x3x3)", answer: ["2x2x3x3", "2 x 2 x 3 x 3"], explanation_id: "36 terpecah menjadi empat bilangan prima: 2, 2, 3, 3.", explanation_en: "36 breaks into four primes: 2, 2, 3, 3." } },
+                { type: 'theory', id: "Terakhir, faktorisasi prima dari 45. 45 bisa dibagi 3 (karena 4+5=9, habis dibagi 3). Hasilnya 15. 15 dibagi 3 menjadi 5. Jadi, $45 = 3 \\times 3 \\times 5$ atau $3^2 \\times 5$.", en: "Finally, prime factorization of 45. 45 is div by 3 (4+5=9). Result 15. 15 div 3 is 5. So, $45 = 3 \\times 3 \\times 5$ or $3^2 \\times 5$." },
+                { type: 'exercise', data: { type: 'input', question_id: "45 dibagi 3 menghasilkan berapa?", question_en: "45 divided by 3 results in?", answer: ["15"], explanation_id: "$45 \\div 3 = 15$.", explanation_en: "$45 \\div 3 = 15$." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Faktorisasi prima dari 45 adalah...", question_en: "Prime factorization of 45 is...", options: ["$3 \\times 15$", "$5 \\times 9$", "$3 \\times 3 \\times 5$", "$1 \\times 45$"], answer: "$3 \\times 3 \\times 5$", explanation_id: "15 dan 9 masih komposit. 1 bukan prima. Benar $3 \\times 3 \\times 5$.", explanation_en: "15 and 9 are composite. 1 is not prime. Correct is $3 \\times 3 \\times 5$." } },
+                { type: 'exercise', data: { type: 'input', question_id: "45 dalam bentuk pangkat adalah $3^? \\times 5$. Isi tanda tanya.", question_en: "45 in exponent form is $3^? \\times 5$. Fill blank.", answer: ["2"], explanation_id: "Ada dua angka 3, jadi $3^2$.", explanation_en: "There are two 3s, so $3^2$." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan 36 dan 45 sama-sama memiliki faktor prima...", question_en: "36 and 45 both share prime factor...", options: ["2", "3", "5", "7"], answer: "3", explanation_id: "36 = $2^2 \\times 3^2$ dan 45 = $3^2 \\times 5$. Keduanya punya faktor 3.", explanation_en: "36 = $2^2 \\times 3^2$ and 45 = $3^2 \\times 5$. Both have factor 3." } },
+            ]
+        };
+
+        // Update window.onload to render Part 2 sections
+        const originalOnload = window.onload;
+        window.onload = () => {
+            if (originalOnload) originalOnload();
+            renderSectionContent('section-review');
+            renderSectionContent('section-problem');
+            renderSectionContent('section-guided');
+            renderSectionContent('section-independent');
+        };
+        // ==========================================
+        // END OF PART 2
+        // ==========================================
+
+        // ==========================================
+        // PART 3 CONTENT ADDITION (ASSIGNMENTS)
+        // ==========================================
+        
+        // Helper to generate 10 standard exercises for assignments
+        function generateAssignment(title, questions) {
+            return {
+                title: title,
+                icon: "fa-clipboard-list",
+                isAssignment: true,
+                blocks: questions.map(q => ({ type: 'exercise', data: q }))
+            };
+        }
+
+        content['section-assign1'] = generateAssignment("Assignment 1", [
+            { type: 'mcq', question_id: "Manakah dari bilangan berikut yang merupakan bilangan prima: 21, 23, 25, 27?", question_en: "Which is a prime number: 21, 23, 25, 27?", options: ["21", "23", "25", "27"], answer: "23", explanation_id: "23 hanya bisa dibagi 1 dan 23. Lainnya bisa dibagi bilangan lain (21:3, 25:5, 27:3).", explanation_en: "23 is only divisible by 1 and 23." },
+            { type: 'mcq', question_id: "Apa hasil akhir dari pohon faktor bilangan 28?", question_en: "What is the final result of the factor tree for 28?", options: ["2 x 14", "4 x 7", "2 x 2 x 7", "2 x 7"], answer: "2 x 2 x 7", explanation_id: "14 dan 4 masih komposit. Harus dipecah lagi sampai prima.", explanation_en: "14 and 4 are composite. Must be broken down to primes." },
+            { type: 'input', question_id: "Tuliskan faktorisasi prima dari bilangan 30! (Pisahkan dengan tanda kali 'x')", question_en: "Write the prime factorization of 30! (Separate with 'x')", answer: ["2x3x5", "2 x 3 x 5"], explanation_id: "30 dibagi 2 = 15. 15 dibagi 3 = 5. Jadi 2 x 3 x 5.", explanation_en: "30 div 2 = 15. 15 div 3 = 5. So 2 x 3 x 5." },
+            { type: 'checkbox', question_id: "Sebutkan semua bilangan prima yang terletak di antara 10 dan 20!", question_en: "List all prime numbers between 10 and 20!", options: ["11", "12", "13", "15", "17", "19"], answer: ["11", "13", "17", "19"], explanation_id: "12, 15 adalah komposit. Prima di antaranya: 11, 13, 17, 19.", explanation_en: "Primes between: 11, 13, 17, 19." },
+            { type: 'mcq', question_id: "Apakah 1 merupakan bilangan prima?", question_en: "Is 1 a prime number?", options: ["Ya", "Tidak"], answer: "Tidak", explanation_id: "1 bukan prima karena prima harus punya TEPAT 2 faktor. 1 hanya punya 1 faktor.", explanation_en: "1 is not prime because primes must have EXACTLY 2 factors." },
+            { type: 'input', question_id: "Berapa bilangan prima terkecil?", question_en: "What is the smallest prime number?", answer: ["2"], explanation_id: "2 adalah bilangan prima pertama dan terkecil.", explanation_en: "2 is the first and smallest prime." },
+            { type: 'mcq', question_id: "Bilangan komposit pertama adalah...", question_en: "The first composite number is...", options: ["1", "2", "3", "4"], answer: "4", explanation_id: "4 memiliki 3 faktor (1, 2, 4). 1, 2, 3 bukan komposit.", explanation_en: "4 has 3 factors (1, 2, 4)." },
+            { type: 'input', question_id: "Faktor dari 28 adalah 1, 2, 4, ..., 14, 28. Faktor yang hilang adalah?", question_en: "Factors of 28 are 1, 2, 4, ..., 14, 28. Missing factor?", answer: ["7"], explanation_id: "$28 \\div 4 = 7$. Jadi 7 adalah faktornya.", explanation_en: "$28 \\div 4 = 7$. So 7 is a factor." },
+            { type: 'checkbox', question_id: "Pilih bilangan komposit berikut ini!", question_en: "Select composite numbers!", options: ["2", "5", "6", "9", "11", "15"], answer: ["6", "9", "15"], explanation_id: "6, 9, 15 memiliki lebih dari 2 faktor.", explanation_en: "6, 9, 15 have more than 2 factors." },
+            { type: 'input', question_id: "Tuliskan 28 dalam bentuk pangkat! (Contoh: 2^2 x 7)", question_en: "Write 28 in exponent form! (E.g., 2^2 x 7)", answer: ["2^2 x 7", "2^2 * 7"], explanation_id: "$28 = 2 \\times 2 \\times 7 = 2^2 \\times 7$.", explanation_en: "$28 = 2^2 \\times 7$." }
+        ]);
+
+        content['section-assign2'] = generateAssignment("Assignment 2", [
+            { type: 'input', question_id: "Temukan faktorisasi prima dari 48 dan tuliskan dalam bentuk perkalian! (Gunakan tanda 'x')", question_en: "Find prime factorization of 48! (Use 'x')", answer: ["2x2x2x2x3", "2 x 2 x 2 x 2 x 3"], explanation_id: "48 -> 2x24 -> 2x2x12 -> 2x2x2x6 -> 2x2x2x2x3.", explanation_en: "48 broken down to 2x2x2x2x3." },
+            { type: 'mcq', question_id: "Apakah angka 49 merupakan bilangan prima?", question_en: "Is 49 a prime number?", options: ["Ya", "Tidak"], answer: "Tidak", explanation_id: "49 bisa dibagi 7 ($7 \\times 7 = 49$), jadi komposit.", explanation_en: "49 is divisible by 7." },
+            { type: 'input', question_id: "Sebuah kode rahasia terdiri dari perkalian tiga bilangan prima terkecil yang berbeda. Berapakah kode tersebut?", question_en: "A secret code is product of 3 smallest distinct primes. What is the code?", answer: ["30"], explanation_id: "3 prima terkecil: 2, 3, 5. $2 \\times 3 \\times 5 = 30$.", explanation_en: "3 smallest primes: 2, 3, 5. Product is 30." },
+            { type: 'mcq', question_id: "Apa hasil faktorisasi prima dari 60 menggunakan pohon faktor?", question_en: "What is prime factorization of 60?", options: ["2 x 3 x 5", "2 x 2 x 3 x 5", "2 x 2 x 15", "4 x 15"], answer: "2 x 2 x 3 x 5", explanation_id: "60 -> 2x30 -> 2x2x15 -> 2x2x3x5.", explanation_en: "60 -> 2x2x3x5." },
+            { type: 'input', question_id: "Tuliskan 48 dalam bentuk pangkat! (Contoh: 2^4 x 3)", question_en: "Write 48 in exponent form!", answer: ["2^4 x 3", "2^4 * 3"], explanation_id: "Ada empat angka 2, jadi $2^4 \\times 3$.", explanation_en: "Four 2s, so $2^4 \\times 3$." },
+            { type: 'checkbox', question_id: "Pilih semua faktor prima dari 60!", question_en: "Select all prime factors of 60!", options: ["2", "3", "4", "5", "6", "10"], answer: ["2", "3", "5"], explanation_id: "Hanya 2, 3, dan 5 yang merupakan bilangan prima dari faktor 60.", explanation_en: "Only 2, 3, 5 are prime factors." },
+            { type: 'mcq', question_id: "Jika 60 dibagi 2, menghasilkan...", question_en: "If 60 divided by 2, results in...", options: ["20", "30", "15", "12"], answer: "30", explanation_id: "$60 \\div 2 = 30$.", explanation_en: "$60 \\div 2 = 30$." },
+            { type: 'mcq', question_id: "49 dibagi 7 menghasilkan...", question_en: "49 divided by 7 results in...", options: ["6", "7", "8", "9"], answer: "7", explanation_id: "$49 \\div 7 = 7$.", explanation_en: "$49 \\div 7 = 7$." },
+            { type: 'input', question_id: "Faktorisasi prima 60 dalam bentuk pangkat adalah $2^2 \\times 3 \\times 5^?$. Isi tanda tanya.", question_en: "60 in exponent is $2^2 \\times 3 \\times 5^?$. Fill blank.", answer: ["1"], explanation_id: "Hanya ada satu angka 5, sehingga $5^1$ atau cukup ditulis 5.", explanation_en: "Only one 5, so $5^1$." },
+            { type: 'mcq', question_id: "Bilangan 48 termasuk bilangan...", question_en: "Number 48 is a...", options: ["Prima", "Komposit", "Ganjil", "Tidak tentu"], answer: "Komposit", explanation_id: "48 memiliki banyak faktor, jadi komposit.", explanation_en: "48 has many factors, so composite." }
+        ]);
+
+        content['section-assign3'] = generateAssignment("Assignment 3", [
+            { type: 'mcq', question_id: "Buktikan apakah 51 adalah bilangan prima atau komposit dengan mencoba membaginya dengan bilangan prima kecil (2, 3, 5, 7).", question_en: "Prove if 51 is prime or composite by dividing with small primes.", options: ["Prima", "Komposit"], answer: "Komposit", explanation_id: "51 bisa dibagi 3 (5+1=6, habis dibagi 3). $51 \\div 3 = 17$.", explanation_en: "51 is divisible by 3." },
+            { type: 'mcq', question_id: "Bilangan 57 habis dibagi bilangan prima...", question_en: "57 is divisible by which prime...", options: ["2", "3", "5", "7"], answer: "3", explanation_id: "5+7=12, 12 habis dibagi 3. $57 \\div 3 = 19$.", explanation_en: "5+7=12, divisible by 3." },
+            { type: 'input', question_id: "51 = 3 x ... (Isi dengan bilangan prima)", question_en: "51 = 3 x ... (Fill with prime)", answer: ["17"], explanation_id: "$51 \\div 3 = 17$. 17 juga bilangan prima.", explanation_en: "$51 \\div 3 = 17$." },
+            { type: 'checkbox', question_id: "Pilih semua bilangan prima antara 40 dan 50!", question_en: "Select all primes between 40 and 50!", options: ["41", "43", "45", "47", "49"], answer: ["41", "43", "47"], explanation_id: "45 bisa dibagi 5. 49 bisa dibagi 7. Prima: 41, 43, 47.", explanation_en: "Primes: 41, 43, 47." },
+            { type: 'mcq', question_id: "Aturan pembagian bilangan prima 5 adalah...", question_en: "Divisibility rule for prime 5 is...", options: ["Angka akhirannya genap", "Jumlah angkanya kelipatan 5", "Angka akhirannya 0 atau 5", "Bisa dibagi 2"], answer: "Angka akhirannya 0 atau 5", explanation_id: "Bilangan berakhiran 0 atau 5 selalu habis dibagi 5.", explanation_en: "Numbers ending in 0 or 5 are divisible by 5." },
+            { type: 'mcq', question_id: "Apakah 91 bilangan prima? (Coba dibagi 7)", question_en: "Is 91 prime? (Try dividing by 7)", options: ["Ya", "Tidak"], answer: "Tidak", explanation_id: "$91 \\div 7 = 13$. Jadi 91 komposit.", explanation_en: "$91 \\div 7 = 13$. So composite." },
+            { type: 'input', question_id: "Tuliskan hasil faktorisasi prima dari 57! (Gunakan tanda 'x')", question_en: "Write prime factorization of 57! (Use 'x')", answer: ["3x19", "3 x 19"], explanation_id: "57 dibagi 3 menghasilkan 19. Keduanya prima.", explanation_en: "57 div 3 = 19. Both prime." },
+            { type: 'checkbox', question_id: "Manakah yang merupakan bilangan komposit?", question_en: "Which are composite numbers?", options: ["23", "29", "51", "57", "61"], answer: ["51", "57"], explanation_id: "51 dan 57 bisa dibagi 3.", explanation_en: "51 and 57 are divisible by 3." },
+            { type: 'mcq', question_id: "Jumlah angka dari 51 adalah 5+1=6. Apa sifat dari 6 terkait bilangan prima?", question_en: "Sum of 51 is 6. What property of 6 relates to primes?", options: ["Kelipatan 2", "Kelipatan 3", "Bilangan prima", "Kelipatan 5"], answer: "Kelipatan 3", explanation_id: "Jika jumlah angka kelipatan 3, maka bilangan tersebut habis dibagi 3.", explanation_en: "If sum of digits is multiple of 3, number is divisible by 3." },
+            { type: 'mcq', question_id: "Bilangan 59 adalah bilangan...", question_en: "59 is a...", options: ["Prima", "Komposit"], answer: "Prima", explanation_id: "59 tidak bisa dibagi 2, 3, 5, atau 7.", explanation_en: "59 cannot be divided by 2, 3, 5, 7." }
+        ]);
+
+        content['section-assign4'] = generateAssignment("Assignment 4", [
+            { type: 'input', question_id: "Tuliskan bilangan 72 sebagai hasil kali faktor-faktor primanya! (Gunakan 'x')", question_en: "Write 72 as product of prime factors! (Use 'x')", answer: ["2x2x2x3x3", "2 x 2 x 2 x 3 x 3"], explanation_id: "72 -> 2x36 -> 2x2x18 -> 2x2x2x9 -> 2x2x2x3x3.", explanation_en: "72 breaks down to 2x2x2x3x3." },
+            { type: 'mcq', question_id: "Bentuk pangkat dari 72 adalah...", question_en: "Exponent form of 72 is...", options: ["2^2 x 3^3", "2^3 x 3^2", "2^4 x 3^2", "2^3 x 3^3"], answer: "2^3 x 3^2", explanation_id: "Ada tiga angka 2 ($2^3$) dan dua angka 3 ($3^2$).", explanation_en: "Three 2s and two 3s." },
+            { type: 'mcq', question_id: "Jika 72 dibagi 2, menghasilkan...", question_en: "If 72 divided by 2, results in...", options: ["32", "34", "36", "38"], answer: "36", explanation_id: "$72 \\div 2 = 36$.", explanation_en: "$72 \\div 2 = 36$." },
+            { type: 'input', question_id: "72 = $2^3 \\times ?^2$. Isi faktor prima yang hilang.", question_en: "72 = $2^3 \\times ?^2$. Fill missing prime.", answer: ["3"], explanation_id: "Faktor prima selain 2 pada 72 adalah 3.", explanation_en: "Prime factor other than 2 is 3." },
+            { type: 'checkbox', question_id: "Pilih semua faktor prima dari 72!", question_en: "Select all prime factors of 72!", options: ["2", "3", "4", "6", "8", "9"], answer: ["2", "3"], explanation_id: "Faktor primanya hanya 2 dan 3.", explanation_en: "Prime factors are only 2 and 3." },
+            { type: 'mcq', question_id: "Apa hasil faktorisasi prima dari 100?", question_en: "What is prime factorization of 100?", options: ["2 x 5^2", "2^2 x 5^2", "10 x 10", "4 x 25"], answer: "2^2 x 5^2", explanation_id: "100 -> 2x50 -> 2x2x25 -> 2x2x5x5.", explanation_en: "100 breaks down to 2x2x5x5." },
+            { type: 'input', question_id: "Tuliskan 100 dalam bentuk perkalian prima! (Gunakan 'x')", question_en: "Write 100 in prime multiplication! (Use 'x')", answer: ["2x2x5x5", "2 x 2 x 5 x 5"], explanation_id: "Sama dengan $2^2 \\times 5^2$.", explanation_en: "Same as $2^2 \\times 5^2$." },
+            { type: 'mcq', question_id: "84 = $2^2 \\times 3 \\times ?$. Faktor prima yang hilang adalah...", question_en: "84 = $2^2 \\times 3 \\times ?$. Missing prime is...", options: ["2", "3", "5", "7"], answer: "7", explanation_id: "$84 \\div 4 = 21$. $21 \\div 3 = 7$.", explanation_en: "$84 \\div 4 = 21$. $21 \\div 3 = 7$." },
+            { type: 'checkbox', question_id: "Manakah bilangan yang faktor primanya 2, 3, dan 7?", question_en: "Which has prime factors 2, 3, 7?", options: ["42", "84", "21", "12"], answer: ["42", "84"], explanation_id: "42 = 2x3x7. 84 = 2x2x3x7. Keduanya punya 2, 3, 7.", explanation_en: "42 and 84 both have 2, 3, 7." },
+            { type: 'mcq', question_id: "90 dibagi 2 menghasilkan 45. 45 dibagi 3 menghasilkan 15. 15 dibagi 3 menghasilkan...", question_en: "90 div 2 = 45. 45 div 3 = 15. 15 div 3 = ...", options: ["3", "5", "7", "10"], answer: "5", explanation_id: "$15 \\div 3 = 5$. 5 adalah prima.", explanation_en: "$15 \\div 3 = 5$." }
+        ]);
+
+        content['section-assign5'] = generateAssignment("Assignment 5", [
+            { type: 'mcq', question_id: "Semua bilangan prima adalah ganjil, kecuali...", question_en: "All primes are odd, except...", options: ["1", "2", "3", "5"], answer: "2", explanation_id: "2 adalah satu-satunya bilangan prima yang genap.", explanation_en: "2 is the only even prime number." },
+            { type: 'mcq', question_id: "Bilangan 1 termasuk dalam kategori...", question_en: "Number 1 belongs to category...", options: ["Prima", "Komposit", "Bukan keduanya", "Prima Khusus"], answer: "Bukan keduanya", explanation_id: "1 hanya memiliki 1 faktor, sehingga bukan prima maupun komposit.", explanation_en: "1 has 1 factor, neither prime nor composite." },
+            { type: 'input', question_id: "Hasil kali faktor prima 2, 3, dan 7 adalah...", question_en: "Product of primes 2, 3, 7 is...", answer: ["42"], explanation_id: "$2 \\times 3 \\times 7 = 42$.", explanation_en: "$2 \\times 3 \\times 7 = 42$." },
+            { type: 'mcq', question_id: "KPK (Kelipatan Persekutuan Terkecil) dari 4 dan 6 menggunakan faktorisasi prima adalah...", question_en: "LCM of 4 and 6 using prime factorization is...", options: ["10", "12", "24", "2"], answer: "12", explanation_id: "4 = $2^2$, 6 = $2 \\times 3$. KPK = $2^2 \\times 3 = 12$.", explanation_en: "4 = $2^2$, 6 = $2 \\times 3$. LCM = $2^2 \\times 3 = 12$." },
+            { type: 'mcq', question_id: "FPB (Faktor Persekutuan Terbesar) dari 12 dan 18 adalah...", question_en: "GCF of 12 and 18 is...", options: ["2", "3", "6", "36"], answer: "6", explanation_id: "12 = $2^2 \\times 3$, 18 = $2 \\times 3^2$. FPB = $2 \\times 3 = 6$.", explanation_en: "12 = $2^2 \\times 3$, 18 = $2 \\times 3^2$. GCF = $2 \\times 3 = 6$." },
+            { type: 'checkbox', question_id: "Pilih semua bilangan prima antara 1 dan 10!", question_en: "Select all primes between 1 and 10!", options: ["1", "2", "3", "4", "5", "6", "7", "8", "9"], answer: ["2", "3", "5", "7"], explanation_id: "Prima di bawah 10: 2, 3, 5, 7.", explanation_en: "Primes under 10: 2, 3, 5, 7." },
+            { type: 'mcq', question_id: "Manakah bilangan komposit di antara 11, 13, 15, 17?", question_en: "Which is composite among 11, 13, 15, 17?", options: ["11", "13", "15", "17"], answer: "15", explanation_id: "15 bisa dibagi 3 dan 5. Lainnya prima.", explanation_en: "15 is divisible by 3 and 5." },
+            { type: 'input', question_id: "Jika $2^3 \\times 3 = ?$, berapa hasilnya?", question_en: "If $2^3 \\times 3 = ?$, what is the result?", answer: ["24"], explanation_id: "$2^3 = 8$. $8 \\times 3 = 24$.", explanation_en: "$2^3 = 8$. $8 \\times 3 = 24$." },
+            { type: 'mcq', question_id: "Berapa nilai dari $2^4$?", question_en: "What is $2^4$?", options: ["8", "16", "24", "32"], answer: "16", explanation_id: "$2 \\times 2 \\times 2 \\times 2 = 16$.", explanation_en: "$2 \\times 2 \\times 2 \\times 2 = 16$." },
+            { type: 'checkbox', question_id: "Faktor prima dari 20 adalah...", question_en: "Prime factors of 20 are...", options: ["1", "2", "4", "5", "10", "20"], answer: ["2", "5"], explanation_id: "20 = $2^2 \\times 5$. Jadi faktor primanya 2 dan 5.", explanation_en: "20 = $2^2 \\times 5$. Prime factors are 2, 5." }
+        ]);
+
+        content['section-consolidation'] = {
+            title: "Consolidation & Reflection",
+            icon: "fa-flag-checkered",
+            blocks: [
+                { type: 'theory', id: "Luar biasa! Kamu berhasil menembus semua rintangan bilangan prima hari ini. Ingat, bilangan prima adalah pondasi dari semua angka lainnya.", en: "Excellent! You have broken through all prime number obstacles today. Remember, primes are the foundation of all other numbers." },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apa perbedaan utama antara bilangan prima dan komposit?", question_en: "What is the main difference between prime and composite numbers?", options: ["Prima genap, komposit ganjil", "Prima punya 2 faktor, komposit punya >2 faktor", "Prima besar, komposit kecil", "Prima bisa dibagi, komposit tidak"], answer: "Prima punya 2 faktor, komposit punya >2 faktor", explanation_id: "Perbedaan utama ada pada jumlah faktor. Prima tepat 2, komposit lebih dari 2.", explanation_en: "Main difference is number of factors. Prime 2, Composite >2." } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apa tujuan dari pohon faktor?", question_en: "What is the purpose of a factor tree?", options: ["Mencari kelipatan", "Membagi bilangan prima", "Memecah bilangan menjadi faktor primanya", "Menjumlahkan angka"], answer: "Memecah bilangan menjadi faktor primanya", explanation_id: "Pohon faktor adalah cara visual mencari faktorisasi prima.", explanation_en: "Factor tree is a visual way to find prime factorization." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Tuliskan satu hal yang paling menantang dari pelajaran hari ini!", question_en: "Write one thing that was most challenging today!", answer: ["*"], explanation_id: "Setiap kesulitan adalah langkah menuju pemahaman yang lebih baik!", explanation_en: "Every difficulty is a step towards better understanding!" } },
+                { type: 'theory', id: "Jangan lupa, cek tugasmu dan materi selanjutnya di platform Algonova. Sampai jumpa di misi berikutnya!", en: "Don't forget, check your assignments and next materials on the Algonova platform. See you in the next mission!" },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Apakah kamu siap melanjutkan ke platform Algonova untuk misi selanjutnya?", question_en: "Are you ready to proceed to the Algonova platform for the next mission?", options: ["Ya, saya siap!", "Belum, saya perlu review lagi"], answer: "Ya, saya siap!", explanation_id: "Klik tombol di bawah untuk menuju platform.", explanation_en: "Click the button below to go to the platform." } },
+                { type: 'exercise', data: { type: 'input', question_id: "Sebelum pergi, tuliskan rumus faktorisasi prima dari 12 sebagai perpisahan! (Gunakan 'x')", question_en: "Before leaving, write prime factorization of 12 as farewell! (Use 'x')", answer: ["2x2x3", "2 x 2 x 3"], explanation_id: "12 = $2 \\times 2 \\times 3$. Hore!", explanation_en: "12 = $2 \\times 2 \\times 3$. Yay!" } },
+                { type: 'exercise', data: { type: 'mcq', question_id: "Bilangan 1 adalah...", question_en: "Number 1 is...", options: ["Prima", "Komposit", "Bukan Prima/Komposit"], answer: "Bukan Prima/Komposit", explanation_id: "Selalu ingat pengecualian ini!", explanation_en: "Always remember this exception!" } },
+                { type: 'illustration', svg: `<svg width="150" height="150" viewBox="0 0 150 150"><circle cx="75" cy="75" r="60" fill="#4CAF50"/><path d="M45 80 L65 100 L105 55" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>` }
+            ]
+        };
+
+        // ==========================================
+        // PRINT LOGIC & FINAL RENDERING
+        // ==========================================
+
+        function printAssignment(assignId, assignTitle) {
+            let printWin = window.open('', '_blank');
+            let html = `
+            <html><head><title>Print ${assignTitle}</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+            <style>
+                @page { size: A4; margin: 15mm; }
+                body { font-family: 'Poppins', Arial, sans-serif; font-size: 12px; color: #000; }
+                h2 { text-align: center; margin-bottom: 5px; margin-top: 0; text-transform: uppercase; }
+                .info { margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                .info p { margin: 3px 0; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                th, td { border: 1px solid #000; padding: 6px; text-align: left; vertical-align: top; }
+                th { background: #eee; }
+                .note { text-align: center; font-weight: bold; font-size: 14px; }
+                .footer { margin-top: 40px; text-align: right; }
+            </style></head><body>
+            <h2>MATH TUTORING by Deni</h2>
+            <div class="info">
+                <p><strong>Name:</strong> ____________________________</p>
+                <p><strong>Date:</strong> ____________________________</p>
+                <p><strong>Topic:</strong> Bilangan Prima & Pohon Faktor</p>
+                <p><strong>Assignment Group:</strong> ${assignTitle}</p>
+                <p><strong>Score:</strong> ________ / 10</p>
+            </div>
+            <table>
+                <tr><th style="width:5%">No.</th><th style="width:45%">Question</th><th style="width:20%">Student Answer</th><th style="width:20%">Correct Answer</th><th style="width:10%">Note</th></tr>
+            `;
+            
+            const secData = content[assignId];
+            let exCount = 1;
+            let score = 0;
+            
+            secData.blocks.forEach((block, idx) => {
+                if(block.type === 'exercise') {
+                    const exBox = document.getElementById(`${assignId}-ex-${idx}`);
+                    let userAns = '(No Answer)';
+                    let isCorrect = false;
+                    let correctAnsStr = "";
+                    
+                    if(exBox) {
+                        if(block.data.type === 'mcq') {
+                            const sel = exBox.querySelector('.option.selected');
+                            if(sel) userAns = sel.textContent;
+                            isCorrect = userAns === block.data.answer;
+                            correctAnsStr = block.data.answer;
+                        } else if(block.data.type === 'checkbox') {
+                            const sels = exBox.querySelectorAll('.option.selected');
+                            if(sels.length > 0) userAns = Array.from(sels).map(s=>s.textContent).join(', ');
+                            let userArr = userAns === '(No Answer)' ? [] : userAns.split(', ');
+                            isCorrect = JSON.stringify(userArr.sort()) === JSON.stringify(block.data.answer.sort());
+                            correctAnsStr = block.data.answer.join(', ');
+                        } else if(block.data.type === 'input') {
+                            const inp = exBox.querySelector('.input-answer');
+                            if(inp.value.trim()) userAns = inp.value.trim();
+                            const possible = Array.isArray(block.data.answer) ? block.data.answer : [block.data.answer];
+                            isCorrect = possible.some(ans => userAns.toLowerCase() === String(ans).toLowerCase());
+                            correctAnsStr = possible.join(' / ');
+                        }
+                    }
+                    
+                    if(isCorrect) score++;
+                    
+                    // Clean math for plain text print (basic replacement)
+                    let qText = block.data.question_id.replace(/\$\$/g, '').replace(/\$/g, '').replace(/\\times/g, 'x').replace(/\^/g, '^');
+                    // Strip HTML tags
+                    qText = qText.replace(/<[^>]*>?/gm, '');
+                    
+                    html += `<tr>
+                        <td>${exCount}</td>
+                        <td>${qText}</td>
+                        <td>${userAns}</td>
+                        <td>${correctAnsStr}</td>
+                        <td class="note">${isCorrect ? '&#10003;' : '&#10007;'}</td>
+                    </tr>`;
+                    exCount++;
+                }
+            });
+            
+            // Update Score in HTML
+            html = html.replace('________ / 10', `${score} / 10`);
+            
+            html += `</table>
+            <div class="footer">
+                <p>Checked by,</p>
+                <br><br>
+                <p><strong>Deni</strong></p>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+            <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>
+            <script>
+                renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+                window.onload = function() { window.print(); };
+            <\/script>
+            </body></html>`;
+            
+            printWin.document.write(html);
+            printWin.document.close();
+        }
+
+        // Override renderSectionContent to include Print Button for assignments and Algonova button
+        const originalRender = renderSectionContent;
+        renderSectionContent = function(sectionId) {
+            if (!content[sectionId] || document.getElementById(sectionId).childElementCount > 0) return;
+            
+            const secData = content[sectionId];
+            let html = `<div class="card"><h2 style="font-family:'Fredoka'; color:var(--primary-dark); margin-bottom:20px;"><i class="fas ${secData.icon}"></i> ${secData.title}</h2>`;
+            
+            secData.blocks.forEach((block, idx) => {
+                if (block.type === 'theory') {
+                    html += `<div class="theory-box bilingual"><p class="id-text">${block.id}</p><p class="en-text">${block.en}</p></div>`;
+                } else if (block.type === 'illustration') {
+                    html += `<div class="illustration">${block.svg}</div>`;
+                } else if (block.type === 'exercise') {
+                    html += createExerciseHTML(block.data, idx, sectionId);
+                }
+            });
+            
+            // Add Print Button for Assignments
+            if (secData.isAssignment) {
+                html += `<div style="text-align: center; margin-top: 30px; padding: 20px; background: #e3f2fd; border-radius: 12px;">
+                            <h3 style="margin-bottom: 15px; color: #1976d2;">Selesai mengerjakan?</h3>
+                            <button class="btn btn-next" style="font-size: 1.1rem; padding: 12px 24px;" onclick="printAssignment('${sectionId}', '${secData.title}')">
+                                <i class="fas fa-print"></i> Print Hasil (A4)
+                            </button>
+                         </div>`;
+            }
+
+            // Add Algonova Button for Consolidation
+            if (sectionId === 'section-consolidation') {
+                html += `<div style="text-align: center; margin-top: 30px; padding: 20px; background: #e8f5e9; border-radius: 12px;">
+                            <h3 style="margin-bottom: 15px; color: var(--primary-dark);">Lanjut ke Misi Berikutnya!</h3>
+                            <a href="https://learn.algonova.id/login" target="_blank" class="btn btn-check" style="font-size: 1.1rem; padding: 12px 24px; text-decoration: none; display: inline-flex;">
+                                <i class="fas fa-rocket"></i> Masuk Platform Algonova
+                            </a>
+                         </div>`;
+            }
+
+            // Add Next Section Button at the end
+            const currentIdx = sectionsMeta.findIndex(s => s.id === sectionId);
+            if (currentIdx < sectionsMeta.length - 1) {
+                html += `<button class="btn btn-next" style="float:right; margin-top:20px;" onclick="navigateTo('${sectionsMeta[currentIdx+1].id}')">Lanjut ke ${sectionsMeta[currentIdx+1].title} <i class="fas fa-arrow-right"></i></button>`;
+            }
+
+            html += `</div>`;
+            document.getElementById(sectionId).innerHTML = html;
+            renderMath(sectionId);
+        }
+
+        // Final Initialization
+        const baseOnload = window.onload;
+        window.onload = () => {
+            if(baseOnload) baseOnload();
+            
+            // 1. Inisialisasi dasar (Membuat menu sidebar & merender section awal)
+            buildNav();
+            renderSectionContent('section-warmup');
+            renderSectionContent('section-intro');
+            renderMath('section-home');
+            
+            // 2. Render sisa section (Part 3)
+            ['section-assign1', 'section-assign2', 'section-assign3', 'section-assign4', 'section-assign5', 'section-consolidation'].forEach(id => {
+                renderSectionContent(id);
+            });
+        };
+
+        // ==========================================
+        // END OF PART 3 (AND SCRIPT)
+        // ==========================================
+    </script>
+</body>
+</html>
