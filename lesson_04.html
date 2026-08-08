@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quest: KPK & FPB Power-Up</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #58cc02;
+            --primary-dark: #58a700;
+            --secondary: #1cb0f6;
+            --danger: #ff4b4b;
+            --warning: #ffc800;
+            --bg-color: #fff;
+            --text-color: #3c3c3c;
+            --border-color: #e5e5e5;
+            --card-bg: #ffffff;
+            --navbar-bg: #ffffff;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f7f7f7;
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: var(--sidebar-width);
+            background-color: var(--navbar-bg);
+            border-right: 2px solid var(--border-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-header {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #afafaf;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+        }
+
+        .nav-item.active {
+            background-color: #e5f5ff;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+
+        .nav-item.completed {
+            color: var(--primary);
+        }
+        
+        .nav-item.completed::before {
+            content: '✓ ';
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid var(--border-color);
+        }
+
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2, h3 { color: var(--text-color); margin-bottom: 15px; }
+        h1 { font-size: 2rem; color: var(--primary); }
+        h2 { font-size: 1.5rem; border-bottom: 3px solid var(--primary); display: inline-block; padding-bottom: 5px; margin-bottom: 20px;}
+        
+        p { line-height: 1.6; margin-bottom: 10px; font-size: 1.1rem; }
+        small { display: block; color: #777; font-size: 0.9rem; margin-bottom: 15px; font-style: italic; }
+
+        /* THEORY & EXERCISE BOXES */
+        .theory-box {
+            background-color: #fff;
+            border: 2px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .theory-box::before {
+            content: '📖 THEORY';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--secondary);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .exercise-box {
+            background-color: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            transition: border-color 0.3s;
+        }
+        
+        .exercise-box::before {
+            content: '⚔️ EXERCISE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--warning);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .exercise-box.correct { border-color: var(--primary); background-color: #f4ffe0; }
+        .exercise-box.wrong { border-color: var(--danger); background-color: #fff0f0; }
+
+        .question-text { font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; }
+        .question-text small { font-style: italic; color: #888; }
+
+        .options { display: grid; gap: 12px; margin-bottom: 20px; }
+        
+        .option {
+            border: 2px solid var(--border-color);
+            border-bottom-width: 4px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            background: white;
+            transition: all 0.1s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .option:hover { background: #f5f5f5; transform: translateY(-2px); }
+        .option.selected { border-color: var(--secondary); background: #e5f5ff; color: var(--secondary); }
+        .option.correct-answer { border-color: var(--primary); background: #f4ffe0; color: var(--primary-dark); }
+        .option.wrong-answer { border-color: var(--danger); background: #fff0f0; color: var(--danger); }
+        .option input { width: 20px; height: 20px; accent-color: var(--secondary); }
+
+        .btn {
+            border: none;
+            border-bottom-width: 4px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.1s;
+            font-size: 1rem;
+        }
+        .btn-primary { background: var(--primary); color: white; border-color: var(--primary-dark); }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-primary:active { transform: translateY(2px); border-bottom-width: 2px; }
+        .btn-secondary { background: var(--secondary); color: white; border-color: #1899d6; }
+        .btn-danger { background: var(--danger); color: white; border-color: #cc3333; }
+        .btn-warning { background: var(--warning); color: white; border-color: #e6b800; }
+        
+        .controls { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+
+        /* COLLAPSIBLE EXPLANATION */
+        .explanation {
+            margin-top: 15px;
+            border-radius: 12px;
+            background: #f7f7f7;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .explanation.show { max-height: 500px; border: 2px solid var(--primary); padding: 15px; }
+        .explanation h4 { color: var(--primary-dark); margin-bottom: 5px; }
+
+        /* SVG ILLUSTRATIONS */
+        .svg-illustration { width: 100%; max-width: 300px; margin: 0 auto 20px; display: block; }
+        
+        /* INPUT TEXT */
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+        .text-input:focus { outline: none; border-color: var(--secondary); }
+
+        /* PRINT STYLES */
+        @media print {
+            body { background: white; }
+            .navbar, .btn, .controls, .option, .exercise-box, .theory-box, .explanation { display: none; }
+            .main-content { margin: 0; padding: 0; }
+            .content-container { box-shadow: none; border: none; padding: 0; }
+            #printArea { display: block !important; width: 100%; }
+            .print-header { text-align: center; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid black; padding: 8px; text-align: left; font-size: 12px; }
+            th { background-color: #f2f2f2; }
+            @page { size: A4; margin: 1in; }
+        }
+        #printArea { display: none; }
+        
+        /* MOBILE TOGGLE */
+        .menu-toggle { display: none; position: fixed; top: 20px; left: 20px; z-index: 200; background: var(--secondary); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        @media (max-width: 768px) {
+            .navbar { transform: translateX(-100%); }
+            .navbar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 80px 20px 20px 20px; }
+            .menu-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="menu-toggle" onclick="toggleNavbar()">☰</button>
+
+    <!-- NAVBAR -->
+    <div class="navbar" id="navbar">
+        <div class="navbar-header">Math Quest</div>
+        <div class="nav-item active" onclick="showSection('home', this)">🏠 Home</div>
+        <div class="nav-item" onclick="showSection('s1', this)">1. Spiral Review (00:00-00:10)</div>
+        <div class="nav-item" onclick="showSection('s2', this)">2. Introduction (00:10-00:15)</div>
+        <div class="nav-item" onclick="showSection('s3', this)">3. Prior Knowledge (00:15-00:20)</div>
+        <div class="nav-item" onclick="showSection('s4', this)">4. Problem Intro (00:20-00:30)</div>
+        <div class="nav-item" onclick="showSection('s5', this)">5. Guided Practice (00:30-00:45)</div>
+        <div class="nav-item" onclick="showSection('s6', this)">6. Indep. Practice (00:50-01:00)</div>
+        <div class="nav-item" onclick="showSection('a1', this)">📝 Assignment 1</div>
+        <div class="nav-item" onclick="showSection('a2', this)">📝 Assignment 2</div>
+        <div class="nav-item" onclick="showSection('a3', this)">📝 Assignment 3</div>
+        <div class="nav-item" onclick="showSection('a4', this)">📝 Assignment 4</div>
+        <div class="nav-item" onclick="showSection('a5', this)">📝 Assignment 5</div>
+        <div class="nav-item" onclick="showSection('s7', this)">🏁 Consolidation (01:00-01:05)</div>
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #eee;">
+            <button class="btn btn-danger" style="width:100%" onclick="resetAllProgress()">Reset All Progress</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="content-container">
+            
+            <!-- HOME SECTION -->
+            <div id="home" class="section active">
+                <h1>Math Tutoring by Deni</h1>
+                <small>Les Matematika by Deni</small>
+                
+                <h3>Topic: KPK & FPB (Power-Up untuk Senjata)</h3>
+                <small>Topik: KPK & FPB (Power-Up for Weapons)</small>
+
+                <div style="background: #e5f5ff; padding: 20px; border-radius: 12px; border: 2px solid var(--secondary); margin: 20px 0;">
+                    <h3 style="color: var(--secondary); margin-top: 0;">📜 Class Rules / Aturan Kelas</h3>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>Berbicara secara bergantian <small>(Speak in turns)</small></li>
+                        <li>Meminta izin jika ingin meninggalkan kelas <small>(Ask permission if you want to leave the class)</small></li>
+                        <li>Menyalakan kamera dan microphone jika diperlukan <small>(Turn on camera and microphone if needed)</small></li>
+                    </ul>
+                </div>
+
+                <svg class="svg-illustration" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20,100 Q50,20 100,100 T180,100" fill="none" stroke="#1cb0f6" stroke-width="4"/>
+                    <circle cx="50" cy="40" r="15" fill="#ffc800"/>
+                    <rect x="90" y="70" width="20" height="40" fill="#58cc02"/>
+                    <polygon points="150,90 160,80 170,90 170,110 150,110" fill="#ff4b4b"/>
+                    <text x="100" y="140" font-family="Arial" font-size="14" fill="#3c3c3c" text-anchor="middle">Math is Fun!</text>
+                </svg>
+                
+                <button class="btn btn-primary" style="width: 100%;" onclick="showSection('s1', document.querySelectorAll('.nav-item')[1])">Start Quest! 🚀</button>
+            </div>
+
+            <!-- SECTION 1: SPIRAL REVIEW -->
+            <div id="s1" class="section">
+                <h2>Spiral Review Warm-up</h2>
+                <small>Pemanasan Tinjauan Spiral (00:00 - 00:10)</small>
+                <p>Sebelum masuk ke boss battle, kita perlu kalibrasi skill dasar. Ingat misi kita sebelumnya tentang melompat di platform dan mencari kunci pintu?</p>
+                <small>Before entering the boss battle, we need to calibrate basic skills. Remember our previous mission about jumping on platforms and finding door keys?</small>
+
+                <!-- THEORY 1 -->
+                <div class="theory-box">
+                    <h3>Konsep Kelipatan (Multiples)</h3>
+                    <small>Concept of Multiples</small>
+                    <p>Kelipatan dari suatu bilangan adalah hasil perkalian bilangan tersebut dengan bilangan asli (1, 2, 3, ...).</p>
+                    <small>A multiple of a number is the result of multiplying that number by a natural number (1, 2, 3, ...).</small>
+                    <p>Contoh: Kelipatan 4 adalah \(4, 8, 12, 16, \dots\)</p>
+                </div>
+
+                <!-- JS WILL INJECT 3 EXERCISES HERE -->
+                <div id="s1_ex1_to_3"></div>
+
+                <!-- THEORY 2 -->
+                <div class="theory-box">
+                    <h3>Konsep Faktor (Factors)</h3>
+                    <small>Concept of Factors</small>
+                    <p>Faktor adalah bilangan yang dapat membagi habis suatu bilangan lain.</p>
+                    <small>A factor is a number that divides another number exactly without leaving a remainder.</small>
+                    <p>Contoh: Faktor dari 12 adalah \(1, 2, 3, 4, 6, 12\).</p>
+                </div>
+
+                <!-- JS WILL INJECT 3 EXERCISES HERE -->
+                <div id="s1_ex4_to_6"></div>
+
+                <!-- THEORY 3 -->
+                <div class="theory-box">
+                    <h3>Bilangan Prima (Prime Numbers)</h3>
+                    <small>Prime Numbers</small>
+                    <p>Bilangan prima adalah bilangan asli lebih dari 1 yang hanya memiliki dua faktor: 1 dan dirinya sendiri.</p>
+                    <small>A prime number is a natural number greater than 1 that has exactly two factors: 1 and itself.</small>
+                    <p>Contoh: \(2, 3, 5, 7, 11, \dots\)</p>
+                    <svg class="svg-illustration" style="max-width: 150px;" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="none" stroke="#58cc02" stroke-width="5"/>
+                        <text x="50" y="60" font-family="Arial" font-size="30" font-weight="bold" fill="#58cc02" text-anchor="middle">P</text>
+                    </svg>
+                </div>
+
+                <!-- JS WILL INJECT 4 EXERCISES HERE -->
+                <div id="s1_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('home', document.querySelectorAll('.nav-item')[0])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('s2', document.querySelectorAll('.nav-item')[2])">Next</button>
+                </div>
+            </div>
+
+            <!-- SECTIONS 2 TO 7 WILL BE IN PART 2, PART 3, ETC. -->
+			
+            <!-- SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION -->
+            <div id="s2" class="section">
+                <h2>Introduction & Real-World Connection</h2>
+                <small> Pengantar & Koneksi Dunia Nyata (00:10 - 00:15)</small>
+                
+                <p>Bayangkan kamu punya dua senjata Mythic. Senjata A mengeluarkan skill setiap 6 detik, dan Senjata B setiap 9 detik. Kapan keduanya akan meledak bersamaan?</p>
+                <small>Imagine you have two Mythic weapons. Weapon A releases a skill every 6 seconds, and Weapon B every 9 seconds. When will they explode together?</small>
+
+                <!-- THEORY 1: KPK Konsep Dasar -->
+                <div class="theory-box">
+                    <h3>Kelipatan Persekutuan Terkecil (KPK)</h3>
+                    <small>Least Common Multiple (LCM)</small>
+                    <p>KPK adalah kelipatan terkecil yang sama dari dua atau lebih bilangan. Dalam game, ini digunakan untuk mengetahui kapan suatu event berulang akan terjadi bersamaan.</p>
+                    <small>LCM is the smallest multiple that is the same for two or more numbers. In games, this is used to find out when recurring events will happen simultaneously.</small>
+                    <p>Contoh: Skill A (tiap 2 detik), Skill B (tiap 3 detik). KPK(2, 3) = 6. Mereka akan aktif bersama di detik ke-6.</p>
+                    <svg class="svg-illustration" style="max-width: 200px;" viewBox="0 0 200 100">
+                        <rect x="10" y="40" width="30" height="50" fill="#1cb0f6" rx="5"/>
+                        <text x="25" y="35" font-size="10" text-anchor="middle" fill="#1cb0f6">2s</text>
+                        <rect x="50" y="40" width="30" height="50" fill="#ffc800" rx="5"/>
+                        <text x="65" y="35" font-size="10" text-anchor="middle" fill="#ffc800">3s</text>
+                        <path d="M80 60 L120 60" stroke="#58cc02" stroke-width="3" marker-end="url(#arrowhead)"/>
+                        <text x="150" y="65" font-size="14" font-weight="bold" fill="#58cc02">6s 💥</text>
+                    </svg>
+                </div>
+
+                <div id="s2_ex1_to_3"></div>
+
+                <!-- THEORY 2: FPB Konsep Dasar -->
+                <div class="theory-box">
+                    <h3>Faktor Persekutuan Terbesar (FPB)</h3>
+                    <small>Greatest Common Factor (GCF)</small>
+                    <p>FPB adalah faktor pembagi terbesar dari dua atau lebih bilangan. Digunakan saat kita ingin membagi sesuatu (seperti loot box) menjadi bagian-bagian yang sama besar.</p>
+                    <small>GCF is the largest dividing factor of two or more numbers. Used when we want to divide something (like loot boxes) into equal parts.</small>
+                    <p>Contoh: 24 ramuan HP dan 36 ramuan Mana. FPB(24, 36) = 12. Bisa dibagi rata ke maksimal 12 pemain.</p>
+                </div>
+
+                <div id="s2_ex4_to_6"></div>
+
+                <!-- THEORY 3: Kata Kunci (Keywords) -->
+                <div class="theory-box">
+                    <h3>Kata Kunci Quest (Quest Keywords)</h3>
+                    <small>Quest Keywords</small>
+                    <p>🧠 <strong>KPK (Kapan Ketemu Lagi):</strong> "Setiap", "Berulang", "Bersamaan", "Tercepat".</p>
+                    <p>🧠 <strong>FPB (Bagi-bagi Rata):</strong> "Maksimal", "Sama rata", "Dibagikan", "Sebanyak mungkin".</p>
+                    <small>Memahami kata kunci sangat penting untuk menyelesaikan quest matematika!</small>
+                </div>
+
+                <div id="s2_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s1', document.querySelectorAll('.nav-item')[1])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('s3', document.querySelectorAll('.nav-item')[3])">Next</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: REVIEW OF PRIOR KNOWLEDGE -->
+            <div id="s3" class="section">
+                <h2>Review of Prior Knowledge</h2>
+                <small>Tinjauan Pengetahuan Sebelumnya (00:15 - 00:20)</small>
+                
+                <p>Kuncinya ada di 'Pohon Faktor' dan 'Bilangan Prima'. Kita akan menggunakan mereka untuk membedah angka besar menjadi komponen terkecil.</p>
+                <small>The key is in the 'Factor Tree' and 'Prime Numbers'. We will use them to break down large numbers into their smallest components.</small>
+
+                <!-- THEORY 1: Pohon Faktor -->
+                <div class="theory-box">
+                    <h3>Pohon Faktor (Factor Tree)</h3>
+                    <small>Factor Tree</small>
+                    <p>Metode visual untuk mencari faktor prima suatu bilangan dengan cara terus membaginya menjadi faktor-faktor yang lebih kecil.</p>
+                    <small>A visual method to find the prime factors of a number by continuously breaking it down into smaller factors.</small>
+                    <p>Contoh: Faktorisasi 20.</p>
+                    <svg class="svg-illustration" viewBox="0 0 200 150">
+                        <circle cx="100" cy="30" r="20" fill="#1cb0f6"/>
+                        <text x="100" y="35" font-size="14" font-weight="bold" fill="white" text-anchor="middle">20</text>
+                        
+                        <line x1="100" y1="50" x2="60" y2="80" stroke="#ccc" stroke-width="2"/>
+                        <line x1="100" y1="50" x2="140" y2="80" stroke="#ccc" stroke-width="2"/>
+                        
+                        <circle cx="60" cy="100" r="15" fill="#ffc800"/>
+                        <text x="60" y="105" font-size="12" font-weight="bold" fill="white" text-anchor="middle">4</text>
+                        
+                        <circle cx="140" cy="100" r="15" fill="#58cc02"/>
+                        <text x="140" y="105" font-size="12" font-weight="bold" fill="white" text-anchor="middle">5</text>
+                        
+                        <line x1="60" y1="115" x2="40" y2="135" stroke="#ccc" stroke-width="2"/>
+                        <line x1="60" y1="115" x2="80" y2="135" stroke="#ccc" stroke-width="2"/>
+                        
+                        <circle cx="40" cy="145" r="10" fill="#ff4b4b"/>
+                        <text x="40" y="149" font-size="10" font-weight="bold" fill="white" text-anchor="middle">2</text>
+                        
+                        <circle cx="80" cy="145" r="10" fill="#ff4b4b"/>
+                        <text x="80" y="149" font-size="10" font-weight="bold" fill="white" text-anchor="middle">2</text>
+                    </svg>
+                </div>
+
+                <div id="s3_ex1_to_3"></div>
+
+                <!-- THEORY 2: Faktorisasi Prima -->
+                <div class="theory-box">
+                    <h3>Faktorisasi Prima (Prime Factorization)</h3>
+                    <small>Prime Factorization</small>
+                    <p>Hasil akhir dari pohon faktor dituliskan dalam bentuk perkalian bilangan prima.</p>
+                    <p>Dari contoh di atas, \( 20 = 2 \times 2 \times 5 = 2^2 \times 5 \).</p>
+                    <p>Contoh lain: \( 30 = 2 \times 3 \times 5 \).</p>
+                </div>
+
+                <div id="s3_ex4_to_6"></div>
+
+                <!-- THEORY 3: Pangkat dalam Faktorisasi -->
+                <div class="theory-box">
+                    <h3>Notasi Pangkat (Exponent Notation)</h3>
+                    <small>Exponent Notation</small>
+                    <p>Jika ada faktor prima yang berulang, kita bisa menulisnya menggunakan pangkat. Misalnya, \( 8 = 2 \times 2 \times 2 = 2^3 \).</p>
+                    <small>If there are repeating prime factors, we can write them using exponents. For example, \( 8 = 2 \times 2 \times 2 = 2^3 \).</small>
+                </div>
+
+                <div id="s3_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s2', document.querySelectorAll('.nav-item')[2])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('s4', document.querySelectorAll('.nav-item')[4])">Next</button>
+                </div>
+            </div>
+
+            <!-- SECTION 4: PROBLEM INTRODUCTION -->
+            <div id="s4" class="section">
+                <h2>Problem Introduction</h2>
+                <small> Pengantar Masalah (00:20 - 00:30)</small>
+                
+                <p>Quest Level Hard! Naga Api muncul setiap 12 menit, Naga Es muncul setiap 15 menit. Kamu ingin menyerang saat keduanya muncul bersamaan agar dapat combo bonus. Menit ke berapa itu?</p>
+                <small>Hard Level Quest! Fire Dragon appears every 12 minutes, Ice Dragon every 15 minutes. You want to attack when both appear together to get a bonus combo. At what minute is that?</small>
+
+                <!-- THEORY 1: Menghitung KPK -->
+                <div class="theory-box">
+                    <h3>Cara Menghitung KPK</h3>
+                    <small>How to Calculate LCM</small>
+                    <p>Rumus rahasianya: ambil semua faktor prima, jika ada yang sama, ambil pangkat terbesar.</p>
+                    <small>Secret formula: take all prime factors, if there are similarities, take the highest exponent.</small>
+                    <p>Mari kita bedah 12 dan 15:</p>
+                    <p>\( 12 = 2^2 \times 3 \)</p>
+                    <p>\( 15 = 3 \times 5 \)</p>
+                    <p>KPK(12, 15) = \( 2^2 \times 3 \times 5 = 4 \times 3 \times 5 = 60 \). Mereka bertemu di menit ke-60!</p>
+                </div>
+
+                <div id="s4_ex1_to_3"></div>
+
+                <!-- THEORY 2: Menghitung FPB -->
+                <div class="theory-box">
+                    <h3>Cara Menghitung FPB</h3>
+                    <small>How to Calculate GCF</small>
+                    <p>Rumusnya: ambil faktor prima yang SAMA, lalu pilih pangkat yang TERKECIL.</p>
+                    <small>Formula: take the SAME prime factors, then choose the SMALLEST exponent.</small>
+                    <p>Misal: 40 dan 60.</p>
+                    <p>\( 40 = 2^3 \times 5 \)</p>
+                    <p>\( 60 = 2^2 \times 3 \times 5 \)</p>
+                    <p>FPB(40, 60) = \( 2^2 \times 5 = 4 \times 5 = 20 \).</p>
+                </div>
+
+                <div id="s4_ex4_to_6"></div>
+
+                <!-- THEORY 3: Perbedaan KPK & FPB -->
+                <div class="theory-box">
+                    <h3>Analisis Perbedaan</h3>
+                    <small>Difference Analysis</small>
+                    <p>🟢 <strong>KPK</strong>: Ambil semua faktor, pangkat terbesar. (Keppersamaan / Kelipatan).</p>
+                    <p>🔴 <strong>FPB</strong>: Ambil yang sama, pangkat terkecil. (Faktor / Pembagi).</p>
+                    <p>Pahami konsep ini agar tidak tertukar saat mengerjakan soal cerita!</p>
+                </div>
+
+                <div id="s4_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s3', document.querySelectorAll('.nav-item')[3])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('s5', document.querySelectorAll('.nav-item')[5])">Next</button>
+                </div>
+            </div>
+			
+            <!-- SECTION 5: GUIDED PRACTICE -->
+            <div id="s5" class="section">
+                <h2>Guided Practice</h2>
+                <small>Latihan Terbimbing (00:30 - 00:45)</small>
+                
+                <p>Oke, giliranmu. Ada musuh menjatuhkan 40 koin emas dan 60 koin perak. Kamu ingin memasukkannya ke dalam beberapa kantong dengan jumlah emas dan perak yang sama di setiap kantong. Berapa kantong terbanyak yang bisa kamu buat?</p>
+                <small>Okay, your turn. An enemy drops 40 gold coins and 60 silver coins. You want to put them into several bags with the same amount of gold and silver in each bag. What is the maximum number of bags you can make?</small>
+
+                <!-- THEORY 1: Panduan Mengerjakan FPB -->
+                <div class="theory-box">
+                    <h3>Langkah-langkah Mencari FPB</h3>
+                    <small>Steps to Find GCF</small>
+                    <p>1. Tentukan faktorisasi prima dari kedua bilangan.</p>
+                    <p>2. Ambil faktor prima yang SAMA.</p>
+                    <p>3. Pilih pangkat yang TERKECIL dari faktor yang sama tersebut.</p>
+                    <p>4. Kalikan faktor-faktor tersebut.</p>
+                </div>
+
+                <div id="s5_ex1_to_3"></div>
+
+                <!-- THEORY 2: Panduan Mengerjakan KPK -->
+                <div class="theory-box">
+                    <h3>Langkah-langkah Mencari KPK</h3>
+                    <small>Steps to Find LCM</small>
+                    <p>1. Tentukan faktorisasi prima dari kedua bilangan.</p>
+                    <p>2. Ambil SEMUA faktor prima yang muncul.</p>
+                    <p>3. Jika ada yang sama, ambil pangkat TERBESAR.</p>
+                    <p>4. Kalikan semua faktor tersebut.</p>
+                </div>
+
+                <div id="s5_ex4_to_6"></div>
+
+                <!-- THEORY 3: Verifikasi Jawaban -->
+                <div class="theory-box">
+                    <h3>Verifikasi Jawaban (Checking Answers)</h3>
+                    <small>Verifying Answers</small>
+                    <p>Setelah dapat jawaban, selalu cek apakah masuk akal. Jika KPK(6, 8) = 24, apakah 24 habis dibagi 6 dan 8? Ya. Jika FPB(12, 18) = 6, apakah 12 dan 18 habis dibagi 6? Ya.</p>
+                    <p>Selalu validasi hasil perhitunganmu!</p>
+                </div>
+
+                <div id="s5_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s4', document.querySelectorAll('.nav-item')[4])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('s6', document.querySelectorAll('.nav-item')[6])">Next</button>
+                </div>
+            </div>
+
+            <!-- SECTION 6: INDEPENDENT PRACTICE -->
+            <div id="s6" class="section">
+                <h2>Independent Practice</h2>
+                <small>Latihan Mandiri (00:50 - 01:00)</small>
+                
+                <p>Final Challenge! Kamu adalah ketua Guild. Ada dua misi: Misi A refresh setiap 18 jam, Misi B setiap 24 jam. Kapan mereka refresh bareng? Dan kamu punya 48 pedang serta 72 perisai untuk dibagikan ke anggota. Berapa anggota maksimal yang dapat jatah sama?</p>
+                <small>Final Challenge! You are the Guild Leader. There are two missions: Mission A refreshes every 18 hours, Mission B every 24 hours. When do they refresh together? And you have 48 swords and 72 shields to distribute to members. What is the maximum number of members that can get an equal share?</small>
+
+                <!-- THEORY 1: Analisis Soal Cerita -->
+                <div class="theory-box">
+                    <h3>Menganalisis Soal Cerita</h3>
+                    <small>Analyzing Word Problems</small>
+                    <p>Baca pelan-pelan. Cari tahu apa yang ditanya. Jika menanyakan "kapan bertemu", "setiap berapa jam", itu KPK. Jika menanyakan "berapa maksimal", "dibagi rata", itu FPB.</p>
+                    <p>Tulis angkanya, lalu tentukan metode yang akan digunakan.</p>
+                </div>
+
+                <div id="s6_ex1_to_3"></div>
+
+                <!-- THEORY 2: Optimalisasi Sumber Daya -->
+                <div class="theory-box">
+                    <h3>Optimalisasi Sumber Daya (FPB)</h3>
+                    <small>Resource Optimization (GCF)</small>
+                    <p>Untuk membagi 48 pedang dan 72 perisai ke maksimal anggota, cari FPB(48, 72).</p>
+                    <p>48 = \( 2^4 \times 3 \)</p>
+                    <p>72 = \( 2^3 \times 3^2 \)</p>
+                    <p>FPB = \( 2^3 \times 3 = 24 \). Maksimal 24 anggota dapat jatah sama persis.</p>
+                </div>
+
+                <div id="s6_ex4_to_6"></div>
+
+                <!-- THEORY 3: Durasi Waktu (KPK) -->
+                <div class="theory-box">
+                    <h3>Durasi Waktu Berulang (KPK)</h3>
+                    <small>Recurring Time Duration (LCM)</small>
+                    <p>Untuk mencari kapan Misi A (18 jam) dan Misi B (24 jam) refresh bareng, cari KPK(18, 24).</p>
+                    <p>18 = \( 2 \times 3^2 \)</p>
+                    <p>24 = \( 2^3 \times 3 \)</p>
+                    <p>KPK = \( 2^3 \times 3^2 = 8 \times 9 = 72 \). Mereka akan refresh bareng dalam 72 jam.</p>
+                </div>
+
+                <div id="s6_ex7_to_10"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s5', document.querySelectorAll('.nav-item')[5])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('a1', document.querySelectorAll('.nav-item')[7])">Next</button>
+                </div>
+            </div>
+
+            <!-- ASSIGNMENTS 1 to 5 -->
+            <div id="a1" class="section">
+                <h2>📝 Assignment 1</h2>
+                <p>Kerjakan 10 soal berikut. Jika sudah selesai, klik tombol "Print Result" untuk mencetak hasil kerjamu.</p>
+                <small>Answer the 10 questions below. When finished, click the "Print Result" button to print your results.</small>
+                <div id="a1_ex_container"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('s6', document.querySelectorAll('.nav-item')[6])">Previous</button>
+                    <button class="btn btn-warning" onclick="printAssignment(1)">🖨️ Print Result</button>
+                    <button class="btn btn-primary" onclick="showSection('a2', document.querySelectorAll('.nav-item')[8])">Next</button>
+                </div>
+            </div>
+
+            <div id="a2" class="section">
+                <h2>📝 Assignment 2</h2>
+                <p>Kerjakan 10 soal berikut.</p>
+                <div id="a2_ex_container"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('a1', document.querySelectorAll('.nav-item')[7])">Previous</button>
+                    <button class="btn btn-warning" onclick="printAssignment(2)">🖨️ Print Result</button>
+                    <button class="btn btn-primary" onclick="showSection('a3', document.querySelectorAll('.nav-item')[9])">Next</button>
+                </div>
+            </div>
+
+            <div id="a3" class="section">
+                <h2>📝 Assignment 3</h2>
+                <p>Kerjakan 10 soal berikut.</p>
+                <div id="a3_ex_container"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('a2', document.querySelectorAll('.nav-item')[8])">Previous</button>
+                    <button class="btn btn-warning" onclick="printAssignment(3)">🖨️ Print Result</button>
+                    <button class="btn btn-primary" onclick="showSection('a4', document.querySelectorAll('.nav-item')[10])">Next</button>
+                </div>
+            </div>
+
+            <div id="a4" class="section">
+                <h2>📝 Assignment 4</h2>
+                <p>Kerjakan 10 soal berikut.</p>
+                <div id="a4_ex_container"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('a3', document.querySelectorAll('.nav-item')[9])">Previous</button>
+                    <button class="btn btn-warning" onclick="printAssignment(4)">🖨️ Print Result</button>
+                    <button class="btn btn-primary" onclick="showSection('a5', document.querySelectorAll('.nav-item')[11])">Next</button>
+                </div>
+            </div>
+
+            <div id="a5" class="section">
+                <h2>📝 Assignment 5</h2>
+                <p>Kerjakan 10 soal berikut.</p>
+                <div id="a5_ex_container"></div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('a4', document.querySelectorAll('.nav-item')[10])">Previous</button>
+                    <button class="btn btn-warning" onclick="printAssignment(5)">🖨️ Print Result</button>
+                    <button class="btn btn-primary" onclick="showSection('s7', document.querySelectorAll('.nav-item')[12])">Next</button>
+                </div>
+            </div>
+
+            <!-- SECTION 7: CONSOLIDATION & REFLECTION -->
+            <div id="s7" class="section">
+                <h2>Consolidation & Reflection</h2>
+                <small>Konsolidasi & Refleksi (01:00 - 01:05)</small>
+                
+                <p>Luar biasa! Kamu sudah resmi memiliki skill KPK & FPB. KPK itu untuk "Kapan Ketemu Lagi", FPB itu untuk "Bagi-bagi Rata".</p>
+                <small>Awesome! You officially have the LCM & GCF skills. LCM is for "When to Meet Again", GCF is for "Dividing Equally".</small>
+
+                <!-- THEORY 1: Rangkuman KPK -->
+                <div class="theory-box">
+                    <h3>Rangkuman KPK</h3>
+                    <small>LCM Summary</small>
+                    <p>Kelipatan Persekutuan Terkecil. Digunakan untuk mencari waktu bertemu, interval berulang. Ambil semua faktor prima, pangkat terbesar.</p>
+                </div>
+
+                <!-- THEORY 2: Rangkuman FPB -->
+                <div class="theory-box">
+                    <h3>Rangkuman FPB</h3>
+                    <small>GCF Summary</small>
+                    <p>Faktor Persekutuan Terbesar. Digunakan untuk membagi barang sama rata, mencari pembagi maksimal. Ambil faktor yang sama, pangkat terkecil.</p>
+                </div>
+
+                <!-- THEORY 3: Refleksi Diri -->
+                <div class="theory-box">
+                    <h3>Refleksi (Self-Reflection)</h3>
+                    <small>Reflection</small>
+                    <p>Bagian mana yang paling menantang? Apakah pohon faktor, atau membedakan KPK dan FPB di soal cerita?</p>
+                    <p>Ingat: Latihan adalah kunci untuk menguasai "Power-Up" ini!</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px; padding: 20px; background: #e5f5ff; border-radius: 12px;">
+                    <h3>Claim Your Reward! 🎁</h3>
+                    <p>Jangan lupa login untuk klaim reward dan cek tugasmu ya. Sampai jumpa di petualangan berikutnya!</p>
+                    <small>Don't forget to log in to claim rewards and check your tasks. See you in the next adventure!</small>
+                    <br><br>
+                    <a href="https://learn.algonova.id/login" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block;">🚀 Go to Algonova</a>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="showSection('a5', document.querySelectorAll('.nav-item')[11])">Previous</button>
+                    <button class="btn btn-primary" onclick="showSection('home', document.querySelectorAll('.nav-item')[0])">Finish Quest! 🏁</button>
+                </div>
+            </div>
+
+            <!-- HIDDEN PRINT AREA TEMPLATE -->
+            <div id="printArea" style="display: none;">
+                <div class="print-header">
+                    <h2>MATH TUTORING by Deni</h2>
+                    <p>Name: ..............................</p>
+                    <p>Date: ..............................</p>
+                    <p>Topic: KPK & FPB</p>
+                    <p>Assignment Group: <span id="printGroupName"></span></p>
+                    <p>Score: <span id="printScore"></span> / 10</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Question</th>
+                            <th>Student Answer</th>
+                            <th>Correct Answer</th>
+                            <th>Note (✓/✗)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="printTableBody">
+                    </tbody>
+                </table>
+                <p style="margin-top: 40px; text-align: right;">Checked by,</p>
+                <p style="margin-top: 60px; text-align: right; font-weight: bold;">Deni</p>
+            </div>
+
+        </div>
+    </div>
+	
+    <script>
+        // ==========================================
+        // 1. NAVIGATION & UI CONTROL
+        // ==========================================
+        function showSection(id, navElement) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            // Show target section
+            document.getElementById(id).classList.add('active');
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            if (navElement) {
+                navElement.classList.add('active');
+            }
+            
+            // Close navbar on mobile after click
+            if (window.innerWidth <= 768) {
+                document.getElementById('navbar').classList.remove('open');
+            }
+            
+            // Render math for the newly shown section
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.getElementById(id), {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "\\(", right: "\\)", display: false}
+                    ]
+                });
+            }
+        }
+
+        function toggleNavbar() {
+            document.getElementById('navbar').classList.toggle('open');
+        }
+
+        function resetAllProgress() {
+            if (confirm("Apakah Anda yakin ingin mereset semua progress dan jawaban?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // ==========================================
+        // 2. EXERCISE DATA (110 QUESTIONS)
+        // ==========================================
+        const exerciseData = {
+            // SECTION 1
+            s1: [
+                { type: 'mcq', q: 'Sebutkan 3 kelipatan pertama dari platform angka 12.', en: 'State the first 3 multiples of platform number 12.', opts: ['12, 24, 36', '12, 22, 32', '12, 14, 16', '1, 2, 3'], ans: '12, 24, 36', exp: 'Kelipatan 12 didapat dari 12x1, 12x2, 12x3, yaitu 12, 24, 36.' },
+                { type: 'mcq', q: 'Jika hero melompat setiap 8 langkah, apakah dia akan mendarat di angka 36?', en: 'If a hero jumps every 8 steps, will he land on number 36?', opts: ['Tidak', 'Ya', 'Hanya di angka 36', 'Tidak bisa ditentukan'], ans: 'Tidak', exp: '36 tidak habis dibagi 8 (36/8 = 4 sisa 4).' },
+                { type: 'mcq', q: 'Pilih faktor prima dari 18.', en: 'Select the prime factors of 18.', opts: ['2 dan 3', '3 dan 6', '2 dan 9', '1 dan 18'], ans: '2 dan 3', exp: '18 = 2 x 3 x 3. Faktor primanya adalah 2 dan 3.' },
+                { type: 'mcq', q: 'Apakah angka 5 merupakan faktor dari pintu nomor 25?', en: 'Is number 5 a factor of door number 25?', opts: ['Ya', 'Tidak', 'Hanya jika 25 genap', 'Tidak ada hubungannya'], ans: 'Ya', exp: '25 habis dibagi 5 (25/5 = 5).' },
+                { type: 'mcq', q: 'Kelipatan 7 antara 20 dan 40 adalah...', en: 'Multiples of 7 between 20 and 40 are...', opts: ['21, 28, 35', '14, 21, 28', '28, 35, 42', '21, 28, 35, 42'], ans: '21, 28, 35', exp: '7x3=21, 7x4=28, 7x5=35. Daftar ini berada di antara 20 dan 40.' },
+                { type: 'mcq', q: 'Kelipatan persekutuan 4 dan 6 yang kurang dari 30 adalah...', en: 'Common multiples of 4 and 6 less than 30 are...', opts: ['12, 24', '24, 48', '12, 18', '6, 12, 18'], ans: '12, 24', exp: 'KPK(4,6)=12. Kelipatan 12 yang < 30 adalah 12 dan 24.' },
+                { type: 'mcq', q: 'Faktor dari 42 adalah...', en: 'Factors of 42 are...', opts: ['1, 2, 3, 6, 7, 14, 21, 42', '1, 2, 3, 6, 7, 14, 42', '1, 42, 2, 21', '6, 7, 42'], ans: '1, 2, 3, 6, 7, 14, 21, 42', exp: '42 habis dibagi 1, 2, 3, 6, 7, 14, 21, dan 42.' },
+                { type: 'mcq', q: 'Faktor prima dari 90 adalah...', en: 'Prime factors of 90 are...', opts: ['2, 3, 5', '2, 3, 15', '2, 5, 9', '3, 5, 6'], ans: '2, 3, 5', exp: '90 = 2 x 3^2 x 5. Faktor primanya adalah 2, 3, dan 5.' },
+                { type: 'mcq', q: 'Berapa banyak faktor dari angka 64?', en: 'How many factors does number 64 have?', opts: ['7 faktor', '6 faktor', '8 faktor', '5 faktor'], ans: '7 faktor', exp: '64 = 2^6. Faktornya ada 6+1 = 7 (yaitu 1, 2, 4, 8, 16, 32, 64).' },
+                { type: 'mcq', q: 'Faktor persekutuan dari 24 dan 36 adalah...', en: 'Common factors of 24 and 36 are...', opts: ['1, 2, 3, 4, 6, 12', '1, 2, 3, 4, 6', '2, 3, 4, 6, 12', '1, 12, 24, 36'], ans: '1, 2, 3, 4, 6, 12', exp: 'Faktor 24: 1,2,3,4,6,8,12,24. Faktor 36: 1,2,3,4,6,9,12,18,36. Irisannya: 1,2,3,4,6,12.' }
+            ],
+            // SECTION 2
+            s2: [
+                { type: 'mcq', q: 'Skill A keluar setiap 4 detik, Skill B setiap 6 detik. Kapan mereka aktif bersamaan pertama kali?', en: 'Skill A activates every 4s, Skill B every 6s. When do they activate together for the first time?', opts: ['Detik ke-12', 'Detik ke-10', 'Detik ke-24', 'Detik ke-8'], ans: 'Detik ke-12', exp: 'KPK(4, 6) = 12. Mereka akan aktif bersama di detik ke-12.' },
+                { type: 'mcq', q: 'Kata kunci "Bersamaan" atau "Berulang" identik dengan mencari...', en: 'The keywords "Together" or "Recurring" are identical to finding...', opts: ['KPK', 'FPB', 'Faktor Prima', 'Kelipatan'], ans: 'KPK', exp: 'KPK digunakan untuk mencari peristiwa yang terjadi bersamaan secara berulang.' },
+                { type: 'mcq', q: 'Jika lompatan A adalah 5 dan B adalah 7, di angka berapa mereka pertama kali bertemu?', en: 'If jump A is 5 and B is 7, at what number do they first meet?', opts: ['35', '12', '70', '25'], ans: '35', exp: 'KPK(5, 7) = 35. Karena 5 dan 7 prima, KPK-nya adalah hasil kalinya.' },
+                { type: 'mcq', q: 'Punya 24 ramuan HP dan 36 Mana, dibagi rata ke teman. Konsep apa yang dipakai?', en: 'Have 24 HP potions and 36 Mana potions, divided equally to friends. What concept is used?', opts: ['FPB', 'KPK', 'Pohon Faktor', 'Prima'], ans: 'FPB', exp: 'Membagi barang sama rata ke jumlah maksimal orang adalah penggunaan FPB.' },
+                { type: 'mcq', q: 'Kata kunci "Maksimal" atau "Sama rata" identik dengan...', en: 'Keywords "Maximum" or "Equally" are identical to...', opts: ['FPB', 'KPK', 'Kelipatan', 'Faktorisasi'], ans: 'FPB', exp: 'FPB mencari pembagi terbesar untuk membagi sesuatu sama rata.' },
+                { type: 'mcq', q: 'Pilih KPK dari 4 dan 6.', en: 'Choose LCM of 4 and 6.', opts: ['12', '24', '2', '48'], ans: '12', exp: 'Kelipatan 4: 4,8,12. Kelipatan 6: 6,12. Yang pertama sama adalah 12.' },
+                { type: 'mcq', q: 'Pilih FPB dari 24 dan 36.', en: 'Choose GCF of 24 and 36.', opts: ['12', '6', '4', '72'], ans: '12', exp: 'Faktor 24: 1,2,3,4,6,8,12. Faktor 36: 1,2,3,4,6,9,12. Terbesar adalah 12.' },
+                { type: 'mcq', q: 'Bus berangkat tiap 15 menit, kereta tiap 20 menit. Kapan berangkat bareng?', en: 'Bus leaves every 15 mins, train every 20 mins. When do they leave together?', opts: ['Menit ke-60', 'Menit ke-30', 'Menit ke-45', 'Menit ke-90'], ans: 'Menit ke-60', exp: 'KPK(15, 20) = 60. Mereka berangkat bareng di menit ke-60.' },
+                { type: 'mcq', q: 'Ada 20 apel dan 30 jeruk. Berapa plastik maksimal untuk bungkus sama rata?', en: 'Have 20 apples and 30 oranges. Max plastic bags for equal packing?', opts: ['10', '5', '20', '30'], ans: '10', exp: 'FPB(20, 30) = 10. Jadi 10 plastik, tiap plastik berisi 2 apel dan 3 jeruk.' },
+                { type: 'mcq', q: 'Dua alarm berbunyi setiap 10 dan 12 menit. Kapan berbunyi bareng lagi?', en: 'Two alarms ring every 10 and 12 mins. When ring together again?', opts: ['Menit ke-60', 'Menit ke-120', 'Menit ke-30', 'Menit ke-22'], ans: 'Menit ke-60', exp: 'KPK(10, 12) = 60. Alarm akan berbunyi bersama di menit ke-60.' }
+            ],
+            // SECTION 3
+            s3: [
+                { type: 'mcq', q: 'Faktorisasi prima dari 20 adalah...', en: 'Prime factorization of 20 is...', opts: ['\\(2^2 \\times 5\\)', '\\(2 \\times 5^2\\)', '\\(2 \\times 10\\)', '\\(4 \\times 5\\)'], ans: '\\(2^2 \\times 5\\)', exp: '20 = 2 x 2 x 5 = 2^2 x 5.' },
+                { type: 'mcq', q: 'Faktorisasi prima dari 30 adalah...', en: 'Prime factorization of 30 is...', opts: ['\\(2 \\times 3 \\times 5\\)', '\\(2 \\times 15\\)', '\\(3 \\times 10\\)', '\\(2^2 \\times 3 \\times 5\\)'], ans: '\\(2 \\times 3 \\times 5\\)', exp: '30 = 2 x 3 x 5.' },
+                { type: 'mcq', q: 'Hasil dari pohon faktor 12 adalah...', en: 'Result of factor tree for 12 is...', opts: ['\\(2^2 \\times 3\\)', '\\(2 \\times 3^2\\)', '\\(2 \\times 6\\)', '\\(3 \\times 4\\)'], ans: '\\(2^2 \\times 3\\)', exp: '12 dibagi 2 = 6, dibagi 2 = 3. Jadi 2 x 2 x 3 = 2^2 x 3.' },
+                { type: 'mcq', q: 'Bilangan 8 dalam notasi pangkat prima adalah...', en: 'Number 8 in prime exponent notation is...', opts: ['\\(2^3\\)', '\\(2^2 \\times 2\\)', '\\(3^2\\)', '\\(8^1\\)'], ans: '\\(2^3\\)', exp: '8 = 2 x 2 x 2 = 2^3.' },
+                { type: 'mcq', q: 'Apa faktor primanya jika 18 dipecah?', en: 'What are the prime factors if 18 is broken down?', opts: ['2 dan 3', '3 dan 6', '2 dan 9', '1 dan 18'], ans: '2 dan 3', exp: '18 = 2 x 3 x 3. Faktor primanya 2 dan 3.' },
+                { type: 'mcq', q: 'Tentukan nilai dari \\( 2^3 \\times 3^2 \\).', en: 'Determine the value of...', opts: ['72', '36', '24', '64'], ans: '72', exp: '2^3=8, 3^2=9. 8 x 9 = 72.' },
+                { type: 'mcq', q: 'Notasi \\( 2^4 \\times 5 \\) sama dengan bilangan...', en: 'Notation... equals to number...', opts: ['80', '40', '20', '16'], ans: '80', exp: '2^4 = 16. 16 x 5 = 80.' },
+                { type: 'mcq', q: 'Bilangan prima pertama adalah...', en: 'The first prime number is...', opts: ['2', '1', '3', '0'], ans: '2', exp: '1 bukan bilangan prima. Prima pertama adalah 2.' },
+                { type: 'mcq', q: 'Pohon faktor dari 36 menghasilkan...', en: 'Factor tree of 36 results in...', opts: ['\\(2^2 \\times 3^2\\)', '\\(2 \\times 3^3\\)', '\\(6^2\\)', '\\(2^3 \\times 3^2\\)'], ans: '\\(2^2 \\times 3^2\\)', exp: '36 = 2 x 2 x 3 x 3 = 2^2 x 3^2.' },
+                { type: 'mcq', q: 'Manakah yang BUKAN bilangan prima?', en: 'Which is NOT a prime number?', opts: ['9', '7', '5', '3'], ans: '9', exp: '9 bisa dibagi 3 (9 = 3x3), jadi bukan prima.' }
+            ],
+            // SECTION 4
+            s4: [
+                { type: 'mcq', q: 'Hitung KPK dari 12 dan 15 (Naga Api & Es).', en: 'Calculate LCM of 12 and 15.', opts: ['60', '30', '120', '3'], ans: '60', exp: '12=2^2x3, 15=3x5. KPK = 2^2 x 3 x 5 = 60.' },
+                { type: 'mcq', q: 'Naga Api (12m) dan Naga Es (15m) bertemu di menit ke...', en: 'Fire & Ice Dragons meet at minute...', opts: ['60', '30', '45', '90'], ans: '60', exp: 'Ini adalah aplikasi KPK dari 12 dan 15.' },
+                { type: 'mcq', q: 'Hitung FPB dari 40 dan 60.', en: 'Calculate GCF of 40 and 60.', opts: ['20', '10', '40', '120'], ans: '20', exp: '40=2^3x5, 60=2^2x3x5. FPB = 2^2 x 5 = 20.' },
+                { type: 'mcq', q: 'KPK(12,15) dihitung dengan mengambil pangkat...', en: 'LCM(12,15) is calculated by taking exponent...', opts: ['Terbesar', 'Terkecil', 'Sama saja', 'Dijumlah'], ans: 'Terbesar', exp: 'Aturan KPK: ambil semua faktor, pilih pangkat TERBESAR.' },
+                { type: 'mcq', q: 'FPB(40,60) dihitung dengan mengambil pangkat...', en: 'GCF(40,60) is calculated by taking exponent...', opts: ['Terkecil', 'Terbesar', 'Dikurangi', 'Genap saja'], ans: 'Terkecil', exp: 'Aturan FPB: ambil faktor yang SAMA, pilih pangkat TERKECIL.' },
+                { type: 'mcq', q: 'Apa KPK dari 6 dan 9?', en: 'What is LCM of 6 and 9?', opts: ['18', '36', '3', '54'], ans: '18', exp: '6=2x3, 9=3^2. KPK = 2 x 3^2 = 18.' },
+                { type: 'mcq', q: 'Apa FPB dari 8 dan 12?', en: 'What is GCF of 8 and 12?', opts: ['4', '2', '24', '8'], ans: '4', exp: '8=2^3, 12=2^2x3. FPB = 2^2 = 4.' },
+                { type: 'mcq', q: 'KPK digunakan saat kita ingin mencari...', en: 'LCM is used when we want to find...', opts: ['Peristiwa bersamaan', 'Pembagian rata', 'Faktor terbesar', 'Akar pangkat'], ans: 'Peristiwa bersamaan', exp: 'KPK = Kapan Ketemu (Peristiwa berulang bersamaan).' },
+                { type: 'mcq', q: 'FPB digunakan saat kita ingin mencari...', en: 'GCF is used when we want to find...', opts: ['Pembagian rata maksimal', 'Kelipatan terkecil', 'Waktu bertemu', 'Bilangan prima'], ans: 'Pembagian rata maksimal', exp: 'FPB = Faktor Pembagi (Bagi-bagi rata maksimal).' },
+                { type: 'mcq', q: 'Tentukan KPK dari 8 dan 12.', en: 'Determine LCM of 8 and 12.', opts: ['24', '48', '4', '96'], ans: '24', exp: '8=2^3, 12=2^2x3. KPK = 2^3 x 3 = 24.' }
+            ],
+            // SECTION 5
+            s5: [
+                { type: 'mcq', q: '40 koin emas dan 60 perak. Berapa kantong maksimal bisa dibuat?', en: '40 gold, 60 silver. Max bags?', opts: ['20', '10', '40', '60'], ans: '20', exp: 'Mencari pembagi maksimal sama rata = FPB(40, 60) = 20.' },
+                { type: 'mcq', q: 'Pada soal 40 dan 60, setiap kantong berisi berapa emas dan perak?', en: 'In Q1, how many gold and silver per bag?', opts: ['2 Emas, 3 Perak', '4 Emas, 6 Perak', '1 Emas, 2 Perak', '5 Emas, 5 Perak'], ans: '2 Emas, 3 Perak', exp: 'Jika 20 kantong, 40/20=2 Emas. 60/20=3 Perak.' },
+                { type: 'mcq', q: 'Langkah pertama mencari FPB dengan pohon faktor adalah...', en: 'First step to find GCF using factor tree...', opts: ['Faktorkan kedua bilangan', 'Kalikan kedua bilangan', 'Bagi kedua bilangan', 'Kurangkan bilangan'], ans: 'Faktorkan kedua bilangan', exp: 'Kita harus tahu faktor primanya dulu sebelum mencari yang sama.' },
+                { type: 'mcq', q: 'Apa faktorisasi prima dari 40?', en: 'Prime factorization of 40?', opts: ['\\(2^3 \\times 5\\)', '\\(2^2 \\times 10\\)', '\\(2 \\times 5^3\\)', '\\(4 \\times 10\\)'], ans: '\\(2^3 \\times 5\\)', exp: '40 = 2 x 2 x 2 x 5 = 2^3 x 5.' },
+                { type: 'mcq', q: 'Apa faktorisasi prima dari 60?', en: 'Prime factorization of 60?', opts: ['\\(2^2 \\times 3 \\times 5\\)', '\\(2 \\times 3 \\times 5^2\\)', '\\(2^3 \\times 3 \\times 5\\)', '\\(6 \\times 10\\)'], ans: '\\(2^2 \\times 3 \\times 5\\)', exp: '60 = 2 x 2 x 3 x 5 = 2^2 x 3 x 5.' },
+                { type: 'mcq', q: 'Faktor yang sama dari 40 dan 60 adalah...', en: 'Common factors of 40 and 60 are...', opts: ['2 dan 5', '2 dan 3', '3 dan 5', '2, 3, dan 5'], ans: '2 dan 5', exp: '40 punya 2,5. 60 punya 2,3,5. Yang sama adalah 2 dan 5.' },
+                { type: 'mcq', q: 'Pangkat terkecil dari 2 pada 40(\\(2^3\\)) dan 60(\\(2^2\\)) adalah...', en: 'Smallest exponent of 2 in 40 and 60 is...', opts: ['2', '3', '5', '6'], ans: '2', exp: 'Antara 2^3 dan 2^2, pangkat terkecil adalah 2.' },
+                { type: 'mcq', q: 'Hasil FPB(40, 60) adalah...', en: 'Result of GCF(40, 60) is...', opts: ['20', '120', '10', '40'], ans: '20', exp: '2^2 x 5 = 4 x 5 = 20.' },
+                { type: 'mcq', q: 'Jika FPB(a, b) = 10, maka a dan b bisa dibagi rata oleh...', en: 'If GCF(a, b) = 10, then a and b can be equally divided by...', opts: ['10', '20', '5', '100'], ans: '10', exp: 'FPB adalah pembagi terbesar, jadi pasti habis dibagi FPB-nya.' },
+                { type: 'mcq', q: 'Verifikasi: 40 / 20 = 2. Berapa 60 / 20?', en: 'Verify: 40 / 20 = 2. What is 60 / 20?', opts: ['3', '2', '4', '5'], ans: '3', exp: '60 dibagi 20 sama dengan 3. Berarti 20 adalah FPB yang benar.' }
+            ],
+            // SECTION 6
+            s6: [
+                { type: 'mcq', q: 'Misi A (18 jam) dan Misi B (24 jam) refresh bareng pada jam ke...', en: 'Mission A (18h) and B (24h) refresh together at hour...', opts: ['72', '36', '48', '24'], ans: '72', exp: 'KPK(18, 24) = 72.' },
+                { type: 'mcq', q: '48 pedang dan 72 perisai dibagi ke maksimal anggota. Berapa anggotanya?', en: '48 swords and 72 shields divided to max members. How many members?', opts: ['24', '12', '48', '72'], ans: '24', exp: 'FPB(48, 72) = 24.' },
+                { type: 'mcq', q: 'Pada soal guild, setiap anggota dapat berapa pedang?', en: 'In guild question, how many swords per member?', opts: ['2', '3', '4', '6'], ans: '2', exp: '48 pedang / 24 anggota = 2 pedang.' },
+                { type: 'mcq', q: 'Pada soal guild, setiap anggota dapat berapa perisai?', en: 'In guild question, how many shields per member?', opts: ['3', '2', '4', '6'], ans: '3', exp: '72 perisai / 24 anggota = 3 perisai.' },
+                { type: 'mcq', q: 'Faktorisasi prima dari 18 adalah...', en: 'Prime factorization of 18 is...', opts: ['\\(2 \\times 3^2\\)', '\\(2^2 \\times 3\\)', '\\(2 \\times 9\\)', '\\(3^2 \\times 2^2\\)'], ans: '\\(2 \\times 3^2\\)', exp: '18 = 2 x 3 x 3 = 2 x 3^2.' },
+                { type: 'mcq', q: 'Faktorisasi prima dari 24 adalah...', en: 'Prime factorization of 24 is...', opts: ['\\(2^3 \\times 3\\)', '\\(2^2 \\times 3^2\\)', '\\(2 \\times 3^3\\)', '\\(2^4 \\times 3\\)'], ans: '\\(2^3 \\times 3\\)', exp: '24 = 2 x 2 x 2 x 3 = 2^3 x 3.' },
+                { type: 'mcq', q: 'KPK(18, 24) dihitung dengan: 2^3 x 3^2. Berapa hasilnya?', en: 'LCM(18, 24) calculated as 2^3 x 3^2. What is the result?', opts: ['72', '36', '144', '48'], ans: '72', exp: '2^3=8, 3^2=9. 8 x 9 = 72.' },
+                { type: 'mcq', q: 'FPB(48, 72). Faktor 48: 2^4 x 3. Faktor 72: 2^3 x 3^2. Ambil pangkat terkecil.', en: 'GCF(48, 72). Take smallest exponents.', opts: ['\\(2^3 \\times 3 = 24\\)', '\\(2^4 \\times 3^2 = 144\\)', '\\(2^3 \\times 3^2 = 72\\)', '\\(2^4 \\times 3 = 48\\)'], ans: '\\(2^3 \\times 3 = 24\\)', exp: 'Pangkat terkecil 2 adalah 3, pangkat terkecil 3 adalah 1. 2^3 x 3 = 8 x 3 = 24.' },
+                { type: 'mcq', q: 'Jika soal meminta "Waktu bertemu", kita cari...', en: 'If question asks "Time to meet", we find...', opts: ['KPK', 'FPB', 'KPK+FPB', 'Pengurangan'], ans: 'KPK', exp: 'KPK = Kelipatan Persekutuan Terkecil (Kapan Ketemu).' },
+                { type: 'mcq', q: 'Jika soal meminta "Jumlah maksimal pembagi rata", kita cari...', en: 'If question asks "Max equal divisor", we find...', opts: ['FPB', 'KPK', 'Hasil Kali', 'Pertambahan'], ans: 'FPB', exp: 'FPB = Faktor Persekutuan Terbesar (Bagi Rata).' }
+            ],
+            // ASSIGNMENTS 1-5
+            a1: [
+                { type: 'mcq', q: 'KPK dari 15 dan 25 adalah?', opts: ['75', '50', '5', '100'], ans: '75', exp: '15=3x5, 25=5^2. KPK = 3 x 5^2 = 75.' },
+                { type: 'mcq', q: 'FPB dari 32 dan 48 adalah?', opts: ['16', '8', '4', '96'], ans: '16', exp: '32=2^5, 48=2^4x3. FPB = 2^4 = 16.' },
+                { type: 'mcq', q: 'Alarm berbunyi tiap 10 dan 12 menit. Berbunyi bareng di menit ke?', opts: ['60', '120', '30', '22'], ans: '60', exp: 'KPK(10, 12) = 60.' },
+                { type: 'mcq', q: '20 apel, 30 jeruk. Plastik maksimal sama rata?', opts: ['10', '5', '20', '30'], ans: '10', exp: 'FPB(20, 30) = 10.' },
+                { type: 'mcq', q: 'KPK dari 36, 54, dan 72 adalah?', opts: ['216', '108', '72', '432'], ans: '216', exp: 'KPK(36,54,72) = 2^3 x 3^3 = 8 x 27 = 216.' },
+                { type: 'mcq', q: 'FPB dari 36, 54, dan 72 adalah?', opts: ['18', '9', '6', '36'], ans: '18', exp: 'FPB = 2 x 3^2 = 18.' },
+                { type: 'mcq', q: '75 diamond, 105 ruby. Berapa teman maksimal dapat jatah sama?', opts: ['15', '5', '25', '35'], ans: '15', exp: 'FPB(75, 105) = 15.' },
+                { type: 'mcq', q: 'Lampu LED 8s, 12s, 15s. Berkedip bareng pertama kali di detik ke?', opts: ['120', '60', '240', '30'], ans: '120', exp: 'KPK(8, 12, 15) = 120.' },
+                { type: 'mcq', q: 'Bus A (45m), Bus B (60m). Berangkat bareng, ketemu lagi di menit ke?', opts: ['180', '90', '120', '60'], ans: '180', exp: 'KPK(45, 60) = 180 menit.' },
+                { type: 'mcq', q: 'Bus A & B berangkat 08:00. Ketemu lagi jam berapa?', opts: ['11:00', '10:00', '09:30', '12:00'], ans: '11:00', exp: '180 menit = 3 jam. 08:00 + 3 jam = 11:00.' }
+            ],
+            a2: [
+                { type: 'mcq', q: 'Angka terkecil yang dibagi 12 dan 18 bersisa 2 adalah?', opts: ['38', '36', '74', '2'], ans: '38', exp: 'KPK(12, 18)=36. 36 + 2 = 38.' },
+                { type: 'mcq', q: 'Taman 96m x 120m, jarak pohon sama maksimal?', opts: ['24m', '12m', '48m', '8m'], ans: '24m', exp: 'FPB(96, 120) = 24.' },
+                { type: 'mcq', q: 'Kelipatan ke-12 dari angka 13 adalah?', opts: ['156', '143', '169', '130'], ans: '156', exp: '13 x 12 = 156.' },
+                { type: 'mcq', q: 'KPK dari 8 dan 15 adalah?', opts: ['120', '60', '30', '1'], ans: '120', exp: '8=2^3, 15=3x5. KPK = 2^3 x 3 x 5 = 120.' },
+                { type: 'mcq', q: 'FPB dari 21 dan 28 adalah?', opts: ['7', '14', '3', '4'], ans: '7', exp: '21=3x7, 28=4x7. FPB = 7.' },
+                { type: 'mcq', q: 'KPK dari 4, 5, dan 6 adalah?', opts: ['60', '120', '30', '20'], ans: '60', exp: 'KPK = 2^2 x 3 x 5 = 60.' },
+                { type: 'mcq', q: 'FPB dari 27 dan 45 adalah?', opts: ['9', '3', '15', '27'], ans: '9', exp: '27=3^3, 45=3^2x5. FPB = 3^2 = 9.' },
+                { type: 'mcq', q: 'Air isi ulang tiap 5 menit,isi galon tiap 6 menit. Bareng di menit ke?', opts: ['30', '11', '60', '15'], ans: '30', exp: 'KPK(5, 6) = 30.' },
+                { type: 'mcq', q: '24 permen, 32 coklat. Kantong maksimal sama rata?', opts: ['8', '4', '6', '12'], ans: '8', exp: 'FPB(24, 32) = 8.' },
+                { type: 'mcq', q: 'KPK dari 10, 15, dan 20 adalah?', opts: ['60', '30', '120', '10'], ans: '60', exp: 'KPK = 2^2 x 3 x 5 = 60.' }
+            ],
+            a3: [
+                { type: 'mcq', q: 'FPB dari 100 dan 150 adalah?', opts: ['50', '10', '25', '100'], ans: '50', exp: 'FPB = 2 x 5^2 = 50.' },
+                { type: 'mcq', q: 'KPK dari 9 dan 12 adalah?', opts: ['36', '18', '72', '3'], ans: '36', exp: 'KPK = 2^2 x 3^2 = 36.' },
+                { type: 'mcq', q: 'Detak jantung 60x/menit, napas 12x/menit. Bareng kapan?', opts: ['60 detik', '12 detik', '30 detik', '72 detik'], ans: '60 detik', exp: 'KPK(60, 12) = 60.' },
+                { type: 'mcq', q: '15 mawar, 20 melati. Ikat rata maksimal berapa ikatan?', opts: ['5', '10', '15', '20'], ans: '5', exp: 'FPB(15, 20) = 5.' },
+                { type: 'mcq', q: 'KPK dari 14 dan 21 adalah?', opts: ['42', '21', '84', '7'], ans: '42', exp: 'KPK = 2 x 3 x 7 = 42.' },
+                { type: 'mcq', q: 'FPB dari 16 dan 24 adalah?', opts: ['8', '4', '16', '48'], ans: '8', exp: 'FPB = 2^3 = 8.' },
+                { type: 'mcq', q: '3 planet orbit 4th, 6th, 8th. Sejajar di tahun ke?', opts: ['24', '12', '48', '8'], ans: '24', exp: 'KPK(4, 6, 8) = 24.' },
+                { type: 'mcq', q: '45 laki, 60 perempuan. Kelompok maksimal sama rata?', opts: ['15', '5', '10', '20'], ans: '15', exp: 'FPB(45, 60) = 15.' },
+                { type: 'mcq', q: 'KPK dari 11 dan 13 adalah?', opts: ['143', '11', '13', '26'], ans: '143', exp: 'KPK bilangan prima = hasil kalinya. 11x13=143.' },
+                { type: 'mcq', q: 'FPB dari 81 dan 27 adalah?', opts: ['27', '9', '3', '81'], ans: '27', exp: '81=3^4, 27=3^3. FPB = 3^3 = 27.' }
+            ],
+            a4: [
+                { type: 'mcq', q: 'KPK dari 16 dan 24 adalah?', opts: ['48', '24', '96', '8'], ans: '48', exp: 'KPK = 2^4 x 3 = 48.' },
+                { type: 'mcq', q: 'FPB dari 35 dan 50 adalah?', opts: ['5', '10', '7', '25'], ans: '5', exp: '35=5x7, 50=2x5^2. FPB = 5.' },
+                { type: 'mcq', q: 'Kereta A tiap 20m, B tiap 30m. Berangkat bareng, ketemu di menit ke?', opts: ['60', '50', '90', '120'], ans: '60', exp: 'KPK(20, 30) = 60.' },
+                { type: 'mcq', q: '36 kue, 48 permen. Toples maksimal sama rata?', opts: ['12', '6', '4', '24'], ans: '12', exp: 'FPB(36, 48) = 12.' },
+                { type: 'mcq', q: 'KPK dari 6, 8, 12 adalah?', opts: ['24', '48', '12', '72'], ans: '24', exp: 'KPK = 2^3 x 3 = 24.' },
+                { type: 'mcq', q: 'FPB dari 18, 27, 36 adalah?', opts: ['9', '3', '18', '6'], ans: '9', exp: 'FPB = 3^2 = 9.' },
+                { type: 'mcq', q: 'Bel sekolah tiap 45m, istirahat tiap 60m. Bareng di menit ke?', opts: ['180', '90', '120', '15'], ans: '180', exp: 'KPK(45, 60) = 180.' },
+                { type: 'mcq', q: '90 buku, 120 pensil. Dibagi rata ke kelas maksimal?', opts: ['30', '10', '15', '60'], ans: '30', exp: 'FPB(90, 120) = 30.' },
+                { type: 'mcq', q: 'KPK dari 1 dan 100 adalah?', opts: ['100', '1', '50', '101'], ans: '100', exp: 'FPB bilangan dengan 1 adalah dirinya sendiri.' },
+                { type: 'mcq', q: 'FPB dari 100 dan 1 adalah?', opts: ['1', '100', '10', '0'], ans: '1', exp: 'FPB bilangan dengan 1 selalu 1.' }
+            ],
+            a5: [
+                { type: 'mcq', q: 'KPK dari 22 dan 33 adalah?', opts: ['66', '33', '11', '132'], ans: '66', exp: 'KPK = 2 x 3 x 11 = 66.' },
+                { type: 'mcq', q: 'FPB dari 42 dan 56 adalah?', opts: ['14', '7', '2', '21'], ans: '14', exp: 'FPB = 2 x 7 = 14.' },
+                { type: 'mcq', q: 'Lampu merah 90s, lampu kuning 120s. Bareng menyala di detik ke?', opts: ['360', '120', '180', '240'], ans: '360', exp: 'KPK(90, 120) = 360.' },
+                { type: 'mcq', q: '54 kartu, 72 dadu. Kantong maksimal sama rata?', opts: ['18', '9', '6', '36'], ans: '18', exp: 'FPB(54, 72) = 18.' },
+                { type: 'mcq', q: 'KPK dari 5, 10, 15 adalah?', opts: ['30', '15', '10', '60'], ans: '30', exp: 'KPK = 2 x 3 x 5 = 30.' },
+                { type: 'mcq', q: 'FPB dari 24, 36, 48 adalah?', opts: ['12', '6', '4', '24'], ans: '12', exp: 'FPB = 2^2 x 3 = 12.' },
+                { type: 'mcq', q: 'KPK dari 7 dan 8 adalah?', opts: ['56', '1', '15', '64'], ans: '56', exp: '7x8 = 56.' },
+                { type: 'mcq', q: 'FPB dari 49 dan 14 adalah?', opts: ['7', '14', '2', '49'], ans: '7', exp: '49=7^2, 14=2x7. FPB = 7.' },
+                { type: 'mcq', q: 'KPK dari 25 dan 40 adalah?', opts: ['200', '100', '40', '50'], ans: '200', exp: 'KPK = 2^3 x 5^2 = 8 x 25 = 200.' },
+                { type: 'mcq', q: 'Angka terkecil dibagi 4 dan 6 bersisa 3?', opts: ['15', '12', '27', '9'], ans: '15', exp: 'KPK(4,6)=12. 12 + 3 = 15.' }
+            ]
+        };
+
+        // ==========================================
+        // 3. EXERCISE RENDERING & LOGIC
+        // ==========================================
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createExercise(sectionId, index, data) {
+            const exId = `${sectionId}_ex_${index}`;
+            let optionsHtml = '';
+            
+            // Clone and shuffle options
+            let opts = [...data.opts];
+            if (data.type === 'mcq') {
+                opts = shuffleArray(opts);
+            }
+
+            opts.forEach(opt => {
+                optionsHtml += `
+                    <label class="option" onclick="selectOption(this, '${exId}')">
+                        <input type="radio" name="${exId}" value="${opt}">
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            return `
+                <div class="exercise-box" id="box_${exId}">
+                    <div class="question-text">
+                        ${index+1}. ${data.q}
+                        <br><small>${data.en}</small>
+                    </div>
+                    <div class="options" id="opts_${exId}">
+                        ${optionsHtml}
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer('${sectionId}', '${exId}', ${index})">Check</button>
+                    <div class="explanation" id="exp_${exId}">
+                        <h4>💡 Penjelasan:</h4>
+                        <p id="exp_text_${exId}"></p>
+                    </div>
+                    <div class="controls" style="margin-top: 15px;">
+                        <button class="btn btn-danger" style="font-size: 0.8rem; padding: 8px 12px;" onclick="resetExercise('${exId}')">Reset</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(element, exId) {
+            // Remove selected from siblings
+            const parent = element.parentNode;
+            parent.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            // Set radio checked
+            element.querySelector('input').checked = true;
+        }
+
+        function checkAnswer(sectionId, exId, index) {
+            const selected = document.querySelector(`input[name="${exId}"]:checked`);
+            const box = document.getElementById(`box_${exId}`);
+            const explanation = document.getElementById(`exp_${exId}`);
+            const expText = document.getElementById(`exp_text_${exId}`);
+            const data = exerciseData[sectionId][index];
+
+            if (!selected) {
+                alert("Pilih jawaban dulu ya! / Please select an answer first!");
+                return;
+            }
+
+            // Disable options after check
+            document.querySelectorAll(`#opts_${exId} .option`).forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.style.opacity = '0.8';
+                const radio = opt.querySelector('input');
+                if (radio.value === data.ans) {
+                    opt.classList.add('correct-answer');
+                } else if (radio.checked) {
+                    opt.classList.add('wrong-answer');
+                }
+            });
+
+            // Show explanation
+            expText.innerText = data.exp;
+            explanation.classList.add('show');
+
+            // Update box style
+            if (selected.value === data.ans) {
+                box.classList.add('correct');
+                box.classList.remove('wrong');
+            } else {
+                box.classList.add('wrong');
+                box.classList.remove('correct');
+            }
+
+            // Save to local storage
+            localStorage.setItem(exId, selected.value);
+
+            // Re-render math in explanation
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(box, {
+                    delimiters: [{left: "\\(", right: "\\)", display: false}]
+                });
+            }
+        }
+
+        function resetExercise(exId) {
+            const box = document.getElementById(`box_${exId}`);
+            box.classList.remove('correct', 'wrong');
+            const options = box.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+                opt.style.pointerEvents = 'auto';
+                opt.style.opacity = '1';
+                opt.querySelector('input').checked = false;
+            });
+            const explanation = document.getElementById(`exp_${exId}`);
+            explanation.classList.remove('show');
+            localStorage.removeItem(exId);
+        }
+
+        function initSection(sectionId) {
+            const containers = [
+                document.getElementById(`${sectionId}_ex1_to_3`),
+                document.getElementById(`${sectionId}_ex4_to_6`),
+                document.getElementById(`${sectionId}_ex7_to_10`)
+            ];
+            
+            if (exerciseData[sectionId]) {
+                exerciseData[sectionId].forEach((data, index) => {
+                    let containerIndex = 0;
+                    if (index >= 3 && index <= 5) containerIndex = 1;
+                    else if (index >= 6) containerIndex = 2;
+                    
+                    if (containers[containerIndex]) {
+                        containers[containerIndex].innerHTML += createExercise(sectionId, index, data);
+                    }
+                });
+            }
+        }
+
+        function initAssignment(assId) {
+            const container = document.getElementById(`${assId}_ex_container`);
+            if (exerciseData[assId]) {
+                exerciseData[assId].forEach((data, index) => {
+                    container.innerHTML += createExercise(assId, index, data);
+                });
+            }
+        }
+
+        // ==========================================
+        // 4. PRINT LOGIC
+        // ==========================================
+        function printAssignment(assNum) {
+            const assId = `a${assNum}`;
+            const questions = exerciseData[assId];
+            let score = 0;
+            let tableRows = '';
+
+            questions.forEach((q, i) => {
+                const exId = `${assId}_ex_${i}`;
+                const savedAns = localStorage.getItem(exId);
+                const isCorrect = savedAns === q.ans;
+                if (isCorrect) score++;
+
+                // Clean math notation for print
+                const cleanQ = q.q.replace(/\\\(/g, '').replace(/\\\)/g, '');
+                const cleanAns = q.ans.replace(/\\\(/g, '').replace(/\\\)/g, '');
+
+                tableRows += `
+                    <tr>
+                        <td style="text-align: center;">${i + 1}</td>
+                        <td>${cleanQ}</td>
+                        <td>${savedAns || '(Kosong)'}</td>
+                        <td>${cleanAns}</td>
+                        <td style="text-align: center;">${isCorrect ? '✓' : '✗'}</td>
+                    </tr>
+                `;
+            });
+
+            const printContent = `
+                <!DOCTYPE html>
+                <html lang="id">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Print Assignment ${assNum}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 12px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        @page { size: A4; margin: 1in; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>MATH TUTORING by Deni</h2>
+                        <p><strong>Name:</strong> ..............................</p>
+                        <p><strong>Date:</strong> ..............................</p>
+                        <p><strong>Topic:</strong> KPK & FPB</p>
+                        <p><strong>Assignment Group:</strong> Assignment ${assNum}</p>
+                        <p><strong>Score:</strong> ${score} / 10</p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">No.</th>
+                                <th style="width: 40%;">Question</th>
+                                <th style="width: 20%;">Student Answer</th>
+                                <th style="width: 20%;">Correct Answer</th>
+                                <th style="width: 15%;">Note (✓/✗)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 40px; text-align: right;">Checked by,</p>
+                    <p style="margin-top: 60px; text-align: right; font-weight: bold;">Deni</p>
+                </body>
+                </html>
+            `;
+
+            const win = window.open('', '_blank');
+            win.document.write(printContent);
+            win.document.close();
+            setTimeout(() => {
+                win.focus();
+                win.print();
+            }, 500);
+        }
+
+        // ==========================================
+        // 5. INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Init Sections 1-6
+            ['s1', 's2', 's3', 's4', 's5', 's6'].forEach(initSection);
+            // Init Assignments 1-5
+            ['a1', 'a2', 'a3', 'a4', 'a5'].forEach(initAssignment);
+
+            // Render KaTeX for the initial visible section
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "\\(", right: "\\)", display: false}
+                    ]
+                });
+            } else {
+                // If KaTeX is slow to load, wait a bit and try again
+                setTimeout(() => {
+                    if (typeof renderMathInElement !== 'undefined') {
+                        renderMathInElement(document.body, {
+                            delimiters: [
+                                {left: "$$", right: "$$", display: true},
+                                {left: "\\(", right: "\\)", display: false}
+                            ]
+                        });
+                    }
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
