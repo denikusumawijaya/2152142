@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH TUTORING - Pecahan Senilai (Kloning Item)</title>
+    
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #58cc02; /* Duolingo Green */
+            --primary-dark: #46a302;
+            --wrong: #ff4b4b;
+            --wrong-dark: #ea2b2b;
+            --bg: #131f24;
+            --nav-bg: #1b2b32;
+            --card-bg: #ffffff;
+            --text-dark: #3c3c3c;
+            --text-light: #ffffff;
+            --border-color: #e5e5e5;
+            --blue: #1cb0f6;
+            --purple: #ce82ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
+
+        body { background-color: var(--bg); color: var(--text-light); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Navbar Left */
+        #sidebar { width: 280px; background-color: var(--nav-bg); padding: 20px 0; display: flex; flex-direction: column; border-right: 1px solid #2b3d45; z-index: 10; overflow-y: auto; }
+        .nav-header { padding: 0 20px 20px; border-bottom: 1px solid #2b3d45; margin-bottom: 10px; }
+        .nav-header h2 { color: var(--blue); font-size: 1.1rem; margin-bottom: 5px; }
+        .nav-header p { font-size: 0.8rem; color: #8b9ea8; }
+        
+        .nav-list { flex: 1; padding: 10px 0; overflow-y: auto; }
+        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; border-left: 4px solid transparent; font-size: 0.9rem; }
+        .nav-item:hover { background: #243840; }
+        .nav-item.active { background: #243840; border-left: 4px solid var(--blue); font-weight: 700; }
+        .nav-item.completed { color: var(--primary); }
+        .nav-item .check-icon { color: var(--primary); font-size: 1.2rem; }
+        
+        .nav-footer { padding: 20px; border-top: 1px solid #2b3d45; }
+        .btn-reset { width: 100%; padding: 10px; background: var(--wrong); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; border-bottom: 3px solid var(--wrong-dark); transition: filter 0.2s; }
+        .btn-reset:hover { filter: brightness(1.1); }
+
+        /* Main Content */
+        #main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        
+        /* Progress Bar Top */
+        #progress-bar-container { height: 10px; background: #243840; padding: 0; }
+        #progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease-out; }
+
+        /* Step Container */
+        #step-container { flex: 1; overflow-y: auto; padding: 30px 40px; display: flex; flex-direction: column; align-items: center; }
+        
+        .card { background: var(--card-bg); color: var(--text-dark); border-radius: 16px; padding: 30px; width: 100%; max-width: 700px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; animation: slideIn 0.4s ease-out; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .card-type-theory { border-top: 5px solid var(--blue); }
+        .card-type-exercise { border-top: 5px solid var(--purple); }
+        
+        .step-icon { font-size: 2rem; margin-bottom: 15px; }
+        .theory-icon { color: var(--blue); }
+        .exercise-icon { color: var(--purple); }
+
+        .card h2 { font-size: 1.5rem; margin-bottom: 15px; }
+        .card p { line-height: 1.6; margin-bottom: 15px; font-size: 1rem; }
+        .card .katex-display { margin: 10px 0; }
+        
+        /* SVG Illustrations */
+        .illustration-box { background: #f7f7f7; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; border: 1px dashed var(--border-color); }
+        svg { max-width: 100%; height: auto; }
+
+        /* Exercises */
+        .option-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .option-btn, .option-label { background: white; border: 2px solid var(--border-color); border-radius: 12px; padding: 12px 15px; cursor: pointer; transition: all 0.2s; font-size: 1rem; text-align: left; display: flex; align-items: center; }
+        .option-btn:hover, .option-label:hover { border-color: var(--blue); background: #e5f5ff; }
+        .option-btn.selected, .option-label.selected { border-color: var(--blue); background: #ddf4ff; color: #0080ff; font-weight: 700; }
+        .option-btn.correct { border-color: var(--primary); background: #e5ffd4; color: var(--primary-dark); }
+        .option-btn.wrong { border-color: var(--wrong); background: #ffe5e5; color: var(--wrong-dark); animation: shake 0.3s; }
+        
+        .input-answer { width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 1.2rem; text-align: center; outline: none; }
+        .input-answer:focus { border-color: var(--blue); }
+
+        /* Feedback Collapse */
+        .feedback-collapse { margin-top: 20px; background: #f0f0f0; border-radius: 12px; overflow: hidden; max-height: 0; transition: max-height 0.3s ease-out, padding 0.3s; padding: 0 15px; }
+        .feedback-collapse.show { max-height: 300px; padding: 15px; border-left: 4px solid var(--primary); }
+        .feedback-collapse.wrong-feedback.show { border-left-color: var(--wrong); }
+        .feedback-title { font-weight: 700; margin-bottom: 5px; }
+
+        /* Bottom Navigation */
+        #nav-bottom { background: var(--nav-bg); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #2b3d45; }
+        .btn-nav { padding: 12px 24px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; font-size: 1rem; transition: filter 0.2s; }
+        .btn-prev { background: #3a4f57; color: white; border-bottom: 3px solid #2b3d32; }
+        .btn-next { background: var(--primary); color: white; border-bottom: 3px solid var(--primary-dark); }
+        .btn-check { background: var(--blue); color: white; border-bottom: 3px solid #0080cc; }
+        .btn-nav:disabled { 
+			background: #3a4f57; 
+			color: #5a6f77; 
+			border-bottom: 3px solid #2b3d32; 
+			cursor: not-allowed; 
+			opacity: 0.5; /* Tambahkan ini agar lebih redup */
+			filter: grayscale(100%); /* Buat warna hilang sepenuhnya */
+		}
+        .btn-nav:hover:not(:disabled) { filter: brightness(1.1); }
+
+        /* Print Format CSS */
+        @media print {
+            body { background: white; color: black; display: block; height: auto; overflow: visible; }
+            #sidebar, #nav-bottom, #progress-bar-container, .btn-nav, .illustration-box, .feedback-collapse, .step-icon { display: none !important; }
+            #main-content { flex: none; overflow: visible; }
+            #step-container { padding: 0; overflow: visible; }
+            .card { box-shadow: none; border: 1px solid black; animation: none; page-break-inside: avoid; margin-bottom: 10px; width: 100%; }
+            .print-table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+            .print-table th, .print-table td { border: 1px solid black; padding: 4px; text-align: left; }
+            .print-header { text-align: center; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar">
+        <div class="nav-header">
+            <h2><i class="fas fa-graduation-cap"></i> MATH TUTORING</h2>
+            <p>by Deni</p>
+        </div>
+        <div class="nav-list" id="nav-list">
+            <!-- JS will populate items here -->
+        </div>
+        <div class="nav-footer">
+            <button class="btn-reset" onclick="resetProgress()"><i class="fas fa-redo"></i> Reset Semua Progres</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        
+        <div id="step-container">
+            <!-- Dynamic Card Content Rendered Here by JS -->
+        </div>
+
+        <div id="nav-bottom">
+            <button class="btn-nav btn-prev" id="btn-prev" onclick="prevStep()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <button class="btn-nav btn-check" id="btn-check" onclick="checkAnswer()" style="display:none;">Cek Jawaban</button>
+            <button class="btn-nav btn-next" id="btn-next" onclick="nextStep()">Lanjut <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </main>
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+
+    <!-- App Logic & Data will be placed here in subsequent parts -->
+<script>
+    // ==========================================
+    // STATE & DATA MANAGEMENT
+    // ==========================================
+    let appData = []; // Akan diisi dari Part 3, 4, 5
+    let currentSectionIdx = 0;
+    let currentStepIdx = 0;
+    let userProgress = JSON.parse(localStorage.getItem('mathTutorProgress')) || {};
+    let selectedAnswer = null;
+
+    // ==========================================
+    // UTILITY FUNCTIONS
+
+    // Acak array (untuk pilihan ganda)
+    function shuffleArray(array) {
+        let curId = array.length;
+        while (0 !== curId) {
+            let randId = Math.floor(Math.random() * curId);
+            curId -= 1;
+            let tmp = array[curId];
+            array[curId] = array[randId];
+            array[randId] = tmp;
+        }
+        return array;
+    }
+
+    // Save progress to local storage
+    function saveProgress() {
+        localStorage.setItem('mathTutorProgress', JSON.stringify(userProgress));
+    }
+
+    // Reset all progress
+    function resetProgress() {
+        if(confirm('Apakah kamu yakin ingin mereset semua progres belajar?')) {
+            localStorage.removeItem('mathTutorProgress');
+            userProgress = {};
+            currentSectionIdx = 0;
+            currentStepIdx = 0;
+            selectedAnswer = null;
+            renderApp();
+        }
+    }
+
+    // ==========================================
+    // NAVIGATION LOGIC
+    // ==========================================
+    function jumpToSection(secIdx) {
+        currentSectionIdx = secIdx;
+        currentStepIdx = 0;
+        selectedAnswer = null;
+        renderApp();
+    }
+
+    function nextStep() {
+        const section = appData[currentSectionIdx];
+        if (currentStepIdx < section.steps.length - 1) {
+            currentStepIdx++;
+        } else {
+            // Move to next section if exists
+            if (currentSectionIdx < appData.length - 1) {
+                currentSectionIdx++;
+                currentStepIdx = 0;
+            } else {
+                return; // End of app
+            }
+        }
+        selectedAnswer = null;
+        renderApp();
+    }
+
+    function prevStep() {
+        if (currentStepIdx > 0) {
+            currentStepIdx--;
+        } else {
+            // Move to previous section if exists
+            if (currentSectionIdx > 0) {
+                currentSectionIdx--;
+                currentStepIdx = appData[currentSectionIdx].steps.length - 1;
+            } else {
+                return; // Start of app
+            }
+        }
+        selectedAnswer = null;
+        renderApp();
+    }
+
+    // ==========================================
+    // RENDERING ENGINE
+    // ==========================================
+    function renderApp() {
+        if(appData.length === 0) {
+            document.getElementById('step-container').innerHTML = `<div class="card"><h2>Memuat data...</h2><p>Data pelajaran belum dimuat. Harap gabungkan semua bagian JavaScript.</p></div>`;
+            return;
+        }
+
+        renderSidebar();
+        renderStepCard();
+        updateProgressBar();
+        updateNavButtons();
+        
+		// Render KaTeX after HTML injection
+		if (typeof renderMathInElement !== 'undefined') {
+			renderMathInElement(document.getElementById('step-container'), {
+				delimiters: [
+					{left: '$$', right: '$$', display: true},
+					{left: '$', right: '$', display: false}
+				]
+			});
+		}
+    }
+
+    function renderSidebar() {
+        const navList = document.getElementById('nav-list');
+        navList.innerHTML = '';
+        
+        appData.forEach((section, secIdx) => {
+            const item = document.createElement('div');
+            item.className = 'nav-item';
+            if (secIdx === currentSectionIdx) item.classList.add('active');
+            
+            // Check if section is completed
+            const isCompleted = section.steps.every(step => userProgress[step.id] === true);
+            if (isCompleted) item.classList.add('completed');
+
+            item.innerHTML = `
+                <span><i class="${section.icon}" style="margin-right: 8px;"></i> ${section.title}</span>
+                ${isCompleted ? '<i class="fas fa-check-circle check-icon"></i>' : ''}
+            `;
+            item.onclick = () => jumpToSection(secIdx);
+            navList.appendChild(item);
+        });
+    }
+
+    function renderStepCard() {
+        const container = document.getElementById('step-container');
+        const step = appData[currentSectionIdx].steps[currentStepIdx];
+        const isAnswered = userProgress[step.id] !== undefined;
+        
+        let html = `<div class="card card-type-${step.type}">`;
+        
+        if(step.type === 'theory') {
+            html += `
+                <div class="step-icon theory-icon"><i class="fas fa-book-open"></i></div>
+                <h2>${step.title}</h2>
+                <div class="theory-content">${step.content}</div>
+            `;
+            if(step.illustration) html += `<div class="illustration-box">${step.illustration}</div>`;
+        } 
+        else if (step.type === 'exercise') {
+            html += `
+                <div class="step-icon exercise-icon"><i class="fas fa-flask"></i></div>
+                <h2>${step.title}</h2>
+                <p><strong>Soal:</strong> ${step.question}</p>
+            `;
+
+            // Render Input based on answerType
+            if (step.answerType === 'options') {
+                html += `<div class="option-group">`;
+                // We use a stored shuffled order if exists, else shuffle now
+                if(!step.shuffledOptions) step.shuffledOptions = shuffleArray([...step.options]);
+                
+                step.shuffledOptions.forEach((opt, idx) => {
+                    let isSelected = selectedAnswer === opt;
+					if(isAnswered && userProgress[step.id + '_attempt'] === opt) {
+						isSelected = true; // Paksa opsi yang salah tetap menyala jika di-review
+					}
+                    let stateClass = isSelected ? 'selected' : '';
+                    
+                    if(isAnswered) {
+                        const isCorrect = opt === step.answer;
+                        const wasSelectedAndWrong = isSelected && !isCorrect;
+                        if(isCorrect) stateClass = 'correct';
+                        if(wasSelectedAndWrong) stateClass = 'wrong';
+                    }
+
+                    html += `<button class="option-btn ${stateClass}" onclick="selectOption(this, '${opt.replace(/'/g, "\\'")}')" ${isAnswered ? 'disabled' : ''}>${opt}</button>`;
+                });
+                html += `</div>`;
+            } 
+            else if (step.answerType === 'text') {
+                const val = isAnswered ? (userProgress[step.id] === true ? step.answer : selectedAnswer || '') : (selectedAnswer || '');
+                html += `<input type="text" class="input-answer" id="text-answer" value="${val}" placeholder="Ketik jawaban..." oninput="selectedAnswer = this.value" ${isAnswered ? 'disabled' : ''}>`;
+            }
+
+            // Feedback Collapse
+            if(isAnswered) {
+                const isCorrect = userProgress[step.id] === true;
+                html += `
+                    <div class="feedback-collapse show ${isCorrect ? '' : 'wrong-feedback'}">
+                        <div class="feedback-title" style="color: ${isCorrect ? 'var(--primary-dark)' : 'var(--wrong-dark)'}">
+                            ${isCorrect ? '<i class="fas fa-check-circle"></i> Benar Sekali!' : '<i class="fas fa-times-circle"></i> Belum Tepat'}
+                        </div>
+                        <div>${step.explanation}</div>
+                    </div>
+                `;
+            }
+        }
+        
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    function updateProgressBar() {
+        let totalSteps = 0;
+        let completedSteps = 0;
+        appData.forEach(sec => {
+            totalSteps += sec.steps.length;
+            sec.steps.forEach(step => {
+                if(userProgress[step.id] === true) completedSteps++;
+            });
+        });
+        const percent = totalSteps === 0 ? 0 : (completedSteps / totalSteps) * 100;
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function updateNavButtons() {
+        const step = appData[currentSectionIdx].steps[currentStepIdx];
+        const isAnswered = userProgress[step.id] !== undefined;
+        
+        document.getElementById('btn-prev').disabled = (currentSectionIdx === 0 && currentStepIdx === 0);
+        
+        const isLastStep = (currentSectionIdx === appData.length - 1 && currentStepIdx === appData[currentSectionIdx].steps.length - 1);
+        document.getElementById('btn-next').disabled = !isAnswered; // Must answer before next (or view theory)
+        
+        if(step.type === 'theory') {
+            document.getElementById('btn-next').disabled = false; // Can skip theory
+        }
+
+        document.getElementById('btn-next').style.display = isLastStep ? 'none' : 'inline-block';
+        document.getElementById('btn-check').style.display = (step.type === 'exercise' && !isAnswered) ? 'inline-block' : 'none';
+    }
+
+    // ==========================================
+    // EXERCISE INTERACTION LOGIC
+    // ==========================================
+    function selectOption(btn, optValue) {
+        if(userProgress[appData[currentSectionIdx].steps[currentStepIdx].id]) return; // Already answered
+        selectedAnswer = optValue;
+        
+        // Update UI selection
+        const siblings = btn.parentElement.querySelectorAll('.option-btn');
+        siblings.forEach(s => s.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function checkAnswer() {
+        const step = appData[currentSectionIdx].steps[currentStepIdx];
+        if(selectedAnswer === null && step.answerType === 'options') return alert('Pilih satu jawaban dulu!');
+        if(selectedAnswer === '' && step.answerType === 'text') return alert('Ketik jawaban dulu!');
+
+        let isCorrect = false;
+        if(step.answerType === 'options') {
+            isCorrect = selectedAnswer === step.answer;
+        } else if(step.answerType === 'text') {
+            // Allow for flexible math answers (e.g. "2/3" or "2/3 ")
+            isCorrect = selectedAnswer.trim().replace(/\s/g, '') === step.answer.trim().replace(/\s/g, '');
+        }
+
+        userProgress[step.id] = isCorrect;
+        if(!isCorrect) userProgress[step.id + '_attempt'] = selectedAnswer; // save wrong attempt if needed
+        saveProgress();
+        
+        // Animation on card
+        const card = document.querySelector('.card');
+        card.style.animation = 'none';
+        card.offsetHeight; // trigger reflow
+        card.style.animation = isCorrect ? 'bounce 0.4s' : 'shake 0.4s';
+
+        renderStepCard();
+        updateNavButtons();
+        updateProgressBar();
+        renderSidebar(); // Update checkmarks
+    }
+
+    // ==========================================
+    // DATA CONTENT: PART 3 (Sections 1-4)
+    // ==========================================
+    
+    // SECTION: HOME
+    appData.push({
+        id: "sec-home",
+        title: "Home",
+        icon: "fas fa-home",
+        steps: [
+            {
+                id: "home-1",
+                type: "theory",
+                title: "MATH TUTORING by Deni",
+                content: `
+                    <p><strong>Topic:</strong> Pecahan Senilai (Kloning Item)</p>
+                    <p><strong>Goal:</strong> Mengejar kesenjangan (Closing the Gap)</p>
+                    <hr style="margin: 15px 0; border-color: #eee;">
+                    <p><i class="fas fa-comments" style="color:var(--blue)"></i> <strong>Aturan Kelas:</strong></p>
+                    <ol>
+                        <li>Berbicara secara bergantian.</li>
+                        <li>Meminta izin jika ingin meninggalkan kelas.</li>
+                        <li>Menyalakan kamera dan microphone jika diperlukan.</li>
+                    </ol>
+                `,
+                illustration: `
+                    <svg viewBox="0 0 100 50" width="120">
+                        <circle cx="25" cy="25" r="20" fill="#58cc02" opacity="0.8"/>
+                        <circle cx="75" cy="25" r="20" fill="#1cb0f6" opacity="0.8"/>
+                        <path d="M25,25 L75,25" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M65,15 L75,25 L65,35" fill="white"/>
+                    </svg>
+                `
+            }
+        ]
+    });
+
+    // SECTION: SPIRAL REVIEW WARM-UP
+    appData.push({
+        id: "sec-spiral",
+        title: "Spiral Review (00:00-00:10)",
+        icon: "fas fa-fire",
+        steps: [
+            // Theory 1: Kelipatan
+            {
+                id: "spiral-t1", type: "theory",
+                title: "Pemanasan: Kelipatan",
+                content: `<p>Sebelum masuk ke misi utama 'Kloning Item', kita perlu memanaskan mesin pencari faktor dan kelipatan. Ingat petualangan kita sebelumnya?</p><p><strong>Kelipatan</strong> adalah hasil perkalian suatu bilangan dengan bilangan bulat (1, 2, 3, ...). Contoh: Kelipatan 3 adalah 3, 6, 9, 12, ...</p>`,
+                illustration: `<svg viewBox="0 0 100 40" width="150"><rect x="5" y="15" width="15" height="15" rx="3" fill="#ce82ff"/><rect x="25" y="15" width="15" height="15" rx="3" fill="#ce82ff"/><rect x="45" y="15" width="15" height="15" rx="3" fill="#ce82ff"/><path d="M12,22 L32,22 M52,22 L65,15 M52,22 L65,29" stroke="white" stroke-width="2" fill="none"/><text x="10" y="28" font-size="8" fill="white" font-weight="bold">3</text><text x="30" y="28" font-size="8" fill="white" font-weight="bold">6</text><text x="48" y="28" font-size="8" fill="white" font-weight="bold">9</text></svg>`
+            },
+            // Ex 1-3: Kelipatan
+            { id: "spiral-e1", type: "exercise", title: "Tantangan Kelipatan 1", question: "Jika karaktermu melompat sejauh 8 unit, di titik mana saja ia akan mendarat dalam 3 lompatan pertama? (Pilih yang benar)", answerType: "options", options: ["8, 16, 24", "8, 15, 22", "1, 2, 3"], answer: "8, 16, 24", explanation: "Kelipatan 8 didapat dari $8 \\times 1 = 8$, $8 \\times 2 = 16$, $8 \\times 3 = 24$." },
+            { id: "spiral-e2", type: "exercise", title: "Tantangan Kelipatan 2", question: "Sebutkan Kelipatan Persekutuan Terkecil (KPK) dari 4 dan 6.", answerType: "options", options: ["2", "12", "24"], answer: "12", explanation: "Kelipatan 4: 4, 8, <b>12</b>, 16... Kelipatan 6: 6, <b>12</b>, 18... Yang pertama sama adalah 12." },
+            { id: "spiral-e3", type: "exercise", title: "Tantangan Kelipatan 3", question: "Kelipatan persekutuan dari 3 dan 5 yang kurang dari 20 adalah...", answerType: "options", options: ["15", "10", "30"], answer: "15", explanation: "Kelipatan 3: 3,6,9,12,<b>15</b>,18. Kelipatan 5: 5,10,<b>15</b>. Maka 15 adalah kelipatan persekutuan di bawah 20." },
+            
+            // Theory 2: Faktor
+            {
+                id: "spiral-t2", type: "theory",
+                title: "Pemanasan: Faktor",
+                content: `<p><strong>Faktor</strong> adalah bilangan yang dapat membagi habis bilangan lain. Contoh: Faktor dari 6 adalah 1, 2, 3, dan 6 (karena $6 \\div 2 = 3$ sisa 0).</p>`,
+                illustration: `<svg viewBox="0 0 100 40" width="120"><rect x="20" y="5" width="60" height="30" rx="5" fill="#ff4b4b" stroke="#ea2b2b" stroke-width="2"/><circle cx="35" cy="20" r="8" fill="#ff9600"/><line x1="55" y1="10" x2="55" y2="30" stroke="white" stroke-width="2" stroke-dasharray="2"/><text x="67" y="24" font-size="10" fill="white" font-weight="bold">18</text></svg>`
+            },
+            // Ex 4-6: Faktor
+            { id: "spiral-e4", type: "exercise", title: "Tantangan Faktor 1", question: "Pintu terkunci dengan kode 'Faktor dari 18'. Manakah di bawah ini yang BUKAN faktor dari 18?", answerType: "options", options: ["2", "6", "4", "9"], answer: "4", explanation: "18 dibagi 4 adalah 4 sisa 2 (tidak habis dibagi). Jadi 4 bukan faktor 18." },
+            { id: "spiral-e5", type: "exercise", title: "Tantangan Faktor 2", question: "Berapa jumlah faktor dari bilangan 12?", answerType: "options", options: ["4", "5", "6"], answer: "6", explanation: "Faktor dari 12 adalah 1, 2, 3, 4, 6, dan 12. Jumlahnya ada 6." },
+            { id: "spiral-e6", type: "exercise", title: "Tantangan Faktor 3", question: "Manakah yang merupakan Faktor Persekutuan dari 8 dan 12?", answerType: "options", options: ["8", "6", "4"], answer: "4", explanation: "Faktor 8: 1, 2, <b>4</b>, 8. Faktor 12: 1, 2, 3, <b>4</b>, 6, 12. Angka yang sama adalah 1, 2, dan 4. Pilihan yang tersedia hanya 4." },
+
+            // Theory 3: FPB
+            {
+                id: "spiral-t3", type: "theory",
+                title: "Senjata Rahasia: FPB",
+                content: `<p><strong>Faktor Persekutuan Terbesar (FPB)</strong> adalah faktor persekutuan terbesar dari dua bilangan. Ini akan menjadi senjata utama kita nanti untuk menyederhanakan pecahan!</p><p>Cara cepat: cari faktor keduanya, lalu ambil yang terbesar dan sama.</p>`,
+                illustration: `<svg viewBox="0 0 100 50" width="120"><circle cx="35" cy="25" r="20" fill="none" stroke="#1cb0f6" stroke-width="2"/><circle cx="65" cy="25" r="20" fill="none" stroke="#ce82ff" stroke-width="2"/><text x="25" y="28" font-size="10" fill="#1cb0f6">12</text><text x="70" y="28" font-size="10" fill="#ce82ff">18</text><text x="47" y="28" font-size="12" fill="var(--primary-dark)" font-weight="bold">6</text></svg>`
+            },
+            // Ex 7-10: FPB
+            { id: "spiral-e7", type: "exercise", title: "Tantangan FPB 1", question: "Berapa Faktor Persekutuan Terbesar (FPB) dari 12 dan 20?", answerType: "options", options: ["2", "4", "60"], answer: "4", explanation: "Faktor 12: 1, 2, 3, <b>4</b>, 6, 12. Faktor 20: 1, 2, <b>4</b>, 5, 10, 20. FPB-nya adalah 4." },
+            { id: "spiral-e8", type: "exercise", title: "Tantangan FPB 2", question: "Berapa FPB dari 15 dan 30?", answerType: "options", options: ["5", "10", "15"], answer: "15", explanation: "Karena 15 adalah faktor dari 30, maka FPB keduanya pasti 15." },
+            { id: "spiral-e9", type: "exercise", title: "Tantangan FPB 3", question: "Berapa FPB dari 7 dan 11? (Keduanya bilangan prima)", answerType: "options", options: ["1", "7", "77"], answer: "1", explanation: "Bilangan prima hanya memiliki faktor 1 dan dirinya sendiri. Faktor persekutuan satu-satunya adalah 1." },
+            { id: "spiral-e10", type: "exercise", title: "Tantangan FPB 4", question: "Berapa FPB dari 24 dan 36?", answerType: "text", answer: "12", explanation: "Faktor 24: 1, 2, 3, 4, 6, 8, <b>12</b>, 24. Faktor 36: 1, 2, 3, 4, 6, 9, <b>12</b>, 18, 36. FPB-nya adalah 12." }
+        ]
+    });
+
+    // SECTION: INTRO & REAL-WORLD CONNECTION
+    appData.push({
+        id: "sec-intro",
+        title: "Intro & Real-World (00:10-00:15)",
+        icon: "fas fa-gamepad",
+        steps: [
+            // Theory 1: Kloning Item
+            {
+                id: "intro-t1", type: "theory",
+                title: "Kloning Item di Game RPG",
+                content: `<p>Bayangkan kamu sedang bermain game RPG. Kamu punya $\\frac{1}{2}$ botol ramuan 'Mana'. Tapi sistem game memintamu membaginya menjadi 4 bagian kecil agar bisa digunakan 4 kali.</p><p>Apakah nilai ramuannya berubah? <strong>Tidak!</strong> Hanya tampilannya saja. Inilah yang disebut <strong>'Kloning Item'</strong> atau <strong>Pecahan Senilai</strong>.</p>`,
+                illustration: `<svg viewBox="0 0 120 60" width="180"><path d="M20,10 L20,45 Q20,55 30,55 L50,55 Q60,55 60,45 L60,10 Z" fill="#1cb0f6" opacity="0.8"/><rect x="20" y="10" width="40" height="8" fill="#ddd"/><path d="M70,20 L70,45 Q70,55 80,55 L100,55 Q110,55 110,45 L110,20 Z" fill="#1cb0f6" opacity="0.4"/><rect x="70" y="20" width="40" height="6" fill="#ddd"/><path d="M20,30 L60,30" stroke="white" stroke-width="2" stroke-dasharray="3"/><text x="33" y="45" font-size="8" fill="white">1/2</text><text x="82" y="45" font-size="8" fill="#1cb0f6">2/4</text></svg>`
+            },
+            // Ex 1-3
+            { id: "intro-e1", type: "exercise", title: "Kloning Ramuan 1", question: "Pecahan senilai dengan $\\frac{1}{2}$ adalah...", answerType: "options", options: ["$\\frac{2}{4}$", "$\\frac{1}{4}$", "$\\frac{3}{4}$"], answer: "$\\frac{2}{4}$", explanation: "Setengah botol ramuan yang dibagi jadi 2 bagian sama besar akan menghasilkan $\\frac{2}{4}$." },
+            { id: "intro-e2", type: "exercise", title: "Kloning Ramuan 2", question: "Jika $\\frac{1}{3}$ ramuan dibagi lagi menjadi 2 bagian kecil, bentuk barunya adalah...", answerType: "options", options: ["$\\frac{2}{6}$", "$\\frac{2}{3}$", "$\\frac{1}{6}$"], answer: "$\\frac{2}{6}$", explanation: "Pembilang dan penyebut dikali 2. $1 \\times 2 = 2$, $3 \\times 2 = 6$. Jadi $\\frac{1}{3} = \\frac{2}{6}$." },
+            { id: "intro-e3", type: "exercise", title: "Kloning Ramuan 3", question: "Mana yang nilainya sama dengan $\\frac{2}{5}$?", answerType: "options", options: ["$\\frac{4}{10}$", "$\\frac{6}{10}$", "$\\frac{2}{10}$"], answer: "$\\frac{4}{10}$", explanation: "Kloning dengan mengalikan 2. Pembilang: $2 \\times 2 = 4$, Penyebut: $5 \\times 2 = 10$." },
+
+            // Theory 2: Konsep Dasar
+            {
+                id: "intro-t2", type: "theory",
+                title: "Mengubah Wajah, Nilai Tetap",
+                content: `<p>Kita akan belajar cara mengubah bentuk pecahan <strong>tanpa mengubah nilainya</strong> sedikitpun! Pecahan Senilai artinya kedua pecahan tersebut merepresentasikan bagian yang sama besar dari suatu keseluruhan.</p>`,
+                illustration: `<svg viewBox="0 0 100 50" width="150"><circle cx="25" cy="25" r="20" fill="#eee" stroke="#333" stroke-width="2"/><path d="M25,5 A20,20 0 0,1 25,45 Z" fill="#ce82ff"/><circle cx="75" cy="25" r="20" fill="#eee" stroke="#333" stroke-width="2"/><path d="M75,5 A20,20 0 0,1 55,25 Z" fill="#ce82ff"/><path d="M75,5 A20,20 0 0,1 95,25 Z" fill="#ce82ff"/><text x="25" y="55" font-size="8" text-anchor="middle" fill="#333">1/2</text><text x="75" y="55" font-size="8" text-anchor="middle" fill="#333">2/4</text></svg>`
+            },
+            // Ex 4-6
+            { id: "intro-e4", type: "exercise", title: "Cek Kloning 1", question: "Apakah $\\frac{3}{6}$ senilai dengan $\\frac{1}{2}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "Benar, $\\frac{3}{6}$ jika disederhanakan (dibagi 3) menjadi $\\frac{1}{2}$." },
+            { id: "intro-e5", type: "exercise", title: "Cek Kloning 2", question: "Apakah $\\frac{2}{8}$ senilai dengan $\\frac{1}{4}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "Benar, $\\frac{2}{8}$ jika dibagi 2 atas dan bawah, hasilnya $\\frac{1}{4}$." },
+            { id: "intro-e6", type: "exercise", title: "Cek Kloning 3", question: "Apakah $\\frac{4}{9}$ senilai dengan $\\frac{2}{3}$?", answerType: "options", options: ["Tidak", "Ya"], answer: "Tidak", explanation: "$\\frac{2}{3}$ jika dikali 2 menjadi $\\frac{4}{6}$, bukan $\\frac{4}{9}$. Jadi nilainya berbeda." },
+
+            // Theory 3: Mengapa Berhasil?
+            {
+                id: "intro-t3", type: "theory",
+                title: "Rahasia Mesin: Angka 1",
+                content: `<p>Aturannya sederhana: <strong>Apa yang kamu lakukan pada angka di atas (pembilang), HARUS kamu lakukan pada angka di bawah (penyebut).</strong></p><p>Mengapa ini bisa berhasil? Karena misalnya kita mengalikan dengan $\\frac{2}{2}$, itu sama saja mengalikan dengan <strong>1</strong>. Dan angka apapun dikali 1 hasilnya tetap!</p><p>$\\frac{1}{2} \\times \\frac{2}{2} = \\frac{2}{4}$</p>`,
+                illustration: ``
+            },
+            // Ex 7-10
+            { id: "intro-e7", type: "exercise", title: "Latihan Mesin 1", question: "Berapa hasil dari $\\frac{2}{3} \\times \\frac{2}{2}$?", answerType: "text", answer: "4/6", explanation: "Pembilang: $2 \\times 2 = 4$. Penyebut: $3 \\times 2 = 6$. Hasilnya $\\frac{4}{6}$." },
+            { id: "intro-e8", type: "exercise", title: "Latihan Mesin 2", question: "Berapa hasil dari $\\frac{1}{4} \\times \\frac{3}{3}$?", answerType: "text", answer: "3/12", explanation: "Pembilang: $1 \\times 3 = 3$. Penyebut: $4 \\times 3 = 12$. Hasilnya $\\frac{3}{12}$." },
+            { id: "intro-e9", type: "exercise", title: "Latihan Mesin 3", question: "Berapa hasil dari $\\frac{5}{7} \\times \\frac{4}{4}$?", answerType: "text", answer: "20/28", explanation: "Pembilang: $5 \\times 4 = 20$. Penyebut: $7 \\times 4 = 28$. Hasilnya $\\frac{20}{28}$." },
+            { id: "intro-e10", type: "exercise", title: "Latihan Mesin 4", question: "Jika $\\frac{3}{8}$ dikali angka 2 di pembilang dan penyebut, pecahan barunya adalah...", answerType: "text", answer: "6/16", explanation: "Pembilang: $3 \\times 2 = 6$. Penyebut: $8 \\times 2 = 16$. Hasilnya $\\frac{6}{16}$." }
+        ]
+    });
+
+    // SECTION: REVIEW OF PRIOR KNOWLEDGE
+    appData.push({
+        id: "sec-review",
+        title: "Review Prior Knowledge (00:15-00:20)",
+        icon: "fas fa-cogs",
+        steps: [
+            // Theory 1: Mesin Pengali
+            {
+                id: "review-t1", type: "theory",
+                title: "Mesin Pengali (Kloning)",
+                content: `<p>Untuk melakukan kloning pecahan ke bentuk yang lebih besar, kita menggunakan <strong>Mesin Pengali</strong>.</p><p>Caranya, tentukan angka pengali, lalu kalikan pembilang dan penyebut dengan angka tersebut.</p><p>Contoh: Cari pecahan senilai dari $\\frac{3}{4}$ yang penyebutnya 12.<br>Karena $4 \\times 3 = 12$, maka pengali kita adalah 3.<br>$\\frac{3 \\times 3}{4 \\times 3} = \\frac{9}{12}$</p>`,
+                illustration: `<svg viewBox="0 0 120 50" width="150"><rect x="10" y="10" width="40" height="30" rx="5" fill="#eee" stroke="#333"/><text x="30" y="30" font-size="12" text-anchor="middle" fill="#333">3/4</text><path d="M55,25 L70,15 M55,25 L70,35" stroke="var(--primary)" stroke-width="3"/><rect x="75" y="10" width="40" height="30" rx="5" fill="var(--primary)" stroke="var(--primary-dark)"/><text x="95" y="30" font-size="12" text-anchor="middle" fill="white">9/12</text></svg>`
+            },
+            // Ex 1-3
+            { id: "review-e1", type: "exercise", title: "Mesin Pengali 1", question: "Lengkapi titik-titik: $\\frac{1}{5} = \\frac{...}{10}$", answerType: "text", answer: "2", explanation: "Penyebut 5 dikali 2 menjadi 10. Maka pembilang 1 juga dikali 2 menjadi 2." },
+            { id: "review-e2", type: "exercise", title: "Mesin Pengali 2", question: "Lengkapi titik-titik: $\\frac{3}{4} = \\frac{9}{...}$", answerType: "text", answer: "12", explanation: "Pembilang 3 dikali 3 menjadi 9. Maka penyebut 4 juga dikali 3 menjadi 12." },
+            { id: "review-e3", type: "exercise", title: "Mesin Pengali 3", question: "Lengkapi titik-titik: $\\frac{2}{7} = \\frac{...}{21}$", answerType: "text", answer: "6", explanation: "Penyebut 7 dikali 3 menjadi 21. Maka pembilang 2 dikali 3 menjadi 6." },
+
+            // Theory 2: Mesin Pembagi
+            {
+                id: "review-t2", type: "theory",
+                title: "Mesin Pembagi (Simplifikasi)",
+                content: `<p>Kebalikan dari kloning adalah menyederhanakan. Kita menggunakan <strong>Mesin Pembagi</strong>.</p><p>Jika pembilang dan penyebut memiliki faktor persekutuan, kita bisa membagi keduanya dengan angka tersebut.</p><p>Contoh: $\\frac{4}{8}$. Keduanya habis dibagi 4.<br>$\\frac{4 \\div 4}{8 \\div 4} = \\frac{1}{2}$</p>`,
+                illustration: ``
+            },
+            // Ex 4-6
+            { id: "review-e4", type: "exercise", title: "Mesin Pembagi 1", question: "Lengkapi titik-titik: $\\frac{4}{8} = \\frac{...}{2}$", answerType: "text", answer: "1", explanation: "Penyebut 8 dibagi 4 menjadi 2. Maka pembilang 4 juga dibagi 4 menjadi 1." },
+            { id: "review-e5", type: "exercise", title: "Mesin Pembagi 2", question: "Lengkapi titik-titik: $\\frac{10}{15} = \\frac{2}{...}$", answerType: "text", answer: "3", explanation: "Pembilang 10 dibagi 5 menjadi 2. Maka penyebut 15 juga dibagi 5 menjadi 3." },
+            { id: "review-e6", type: "exercise", title: "Mesin Pembagi 3", question: "Lengkapi titik-titik: $\\frac{12}{20} = \\frac{3}{...}$", answerType: "text", answer: "5", explanation: "Pembilang 12 dibagi 4 menjadi 3. Maka penyebut 20 juga dibagi 4 menjadi 5." },
+
+            // Theory 3: Perkalian Silang
+            {
+                id: "review-t3", type: "theory",
+                title: "Verifikasi: Perkalian Silang",
+                content: `<p>Bagaimana cara membuktikan dua pecahan itu senilai tanpa menggambar? Gunakan <strong>Perkalian Silang</strong>!</p><p>Aturan: Jika $\\frac{a}{b} = \\frac{c}{d}$, maka $a \\times d = b \\times c$.</p><p>Contoh: Apakah $\\frac{2}{3} = \\frac{6}{9}$?<br>Silang: $2 \\times 9 = 18$ dan $3 \\times 6 = 18$. Karena $18 = 18$, maka pecahan tersebut <strong>senilai</strong>!</p>`,
+                illustration: `<svg viewBox="0 0 80 50" width="100"><text x="15" y="20" font-size="14" fill="#1cb0f6">2</text><text x="15" y="40" font-size="14" fill="#ce82ff">3</text><text x="8" y="30" font-size="14">-</text><text x="55" y="20" font-size="14" fill="#1cb0f6">6</text><text x="55" y="40" font-size="14" fill="#ce82ff">9</text><text x="48" y="30" font-size="14">-</text><path d="M18,22 L52,38" stroke="#1cb0f6" stroke-width="2"/><path d="M18,38 L52,22" stroke="#ce82ff" stroke-width="2"/></svg>`
+            },
+            // Ex 7-10
+            { id: "review-e7", type: "exercise", title: "Cek Silang 1", question: "Apakah $\\frac{2}{3}$ senilai dengan $\\frac{6}{9}$? (Cek: $2 \\times 9 = 18$, $3 \\times 6 = 18$)", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "Hasil perkalian silangnya sama (18 = 18), jadi keduanya senilai." },
+            { id: "review-e8", type: "exercise", title: "Cek Silang 2", question: "Apakah $\\frac{3}{5}$ senilai dengan $\\frac{9}{16}$?", answerType: "options", options: ["Tidak", "Ya"], answer: "Tidak", explanation: "Perkalian silang: $3 \\times 16 = 48$, sedangkan $5 \\times 9 = 45$. Karena $48 \\neq 45$, tidak senilai." },
+            { id: "review-e9", type: "exercise", title: "Cari X 1", question: "Cari nilai $x$ jika $\\frac{4}{7} = \\frac{x}{21}$. (Petunjuk: $7 \\times 3 = 21$)", answerType: "text", answer: "12", explanation: "Jika penyebut dikali 3, pembilang juga dikali 3. $4 \\times 3 = 12$." },
+            { id: "review-e10", type: "exercise", title: "Cari Y 2", question: "Cari nilai $y$ jika $\\frac{5}{y} = \\frac{15}{24}$. (Gunakan perkalian silang: $5 \\times 24 = 15 \\times y$)", answerType: "text", answer: "8", explanation: "$120 = 15 \\times y$. Maka $y = 120 \\div 15 = 8$." }
+        ]
+    });
+
+    // ==========================================
+    // DATA CONTENT: PART 4 (Sections 5-7)
+    // ==========================================
+
+    // SECTION: PROBLEM INTRODUCTION
+    appData.push({
+        id: "sec-problem",
+        title: "Problem Introduction (00:20-00:30)",
+        icon: "fas fa-bomb",
+        steps: [
+            // Theory 1: Bentuk Terkecil
+            {
+                id: "prob-t1", type: "theory",
+                title: "Item Terlalu Berat!",
+                content: `<p>Tantangan level Hard! Kita punya pecahan besar, misalnya $\\frac{24}{60}$. Ini terlalu berat untuk dibawa di tas item game kita.</p><p>Kita harus menyederhanakannya ke <strong>Bentuk Paling Sederhana</strong> (Bentuk Terkecil). Caranya? Kita bisa membagi pembilang dan penyebut berulang kali sampai tidak bisa dibagi lagi.</p><p>Misal: $\\frac{24}{60} \\div 2 = \\frac{12}{30} \\div 2 = \\frac{6}{15} \\div 3 = \\frac{2}{5}$</p>`,
+                illustration: `<svg viewBox="0 0 100 60" width="120"><rect x="10" y="10" width="80" height="40" rx="5" fill="#ff9600" stroke="#cc7a00" stroke-width="2"/><path d="M20,30 L80,30" stroke="white" stroke-width="2"/><text x="50" y="25" font-size="14" fill="white" text-anchor="middle" font-weight="bold">24</text><text x="50" y="45" font-size="14" fill="white" text-anchor="middle" font-weight="bold">60</text><path d="M95,30 L110,15 M95,30 L110,45" stroke="var(--primary)" stroke-width="3"/><rect x="115" y="15" width="40" height="30" rx="5" fill="var(--primary)" stroke="var(--primary-dark)" stroke-width="2"/><text x="135" y="30" font-size="14" fill="white" text-anchor="middle" font-weight="bold">2</text><text x="135" y="40" font-size="8" fill="white" text-anchor="middle">5</text></svg>`
+            },
+            // Ex 1-3
+            { id: "prob-e1", type: "exercise", title: "Langkah Penyederhanaan 1", question: "Hasil dari $\\frac{24}{60} \\div 2$ adalah...", answerType: "options", options: ["$\\frac{12}{30}$", "$\\frac{12}{60}$", "$\\frac{24}{30}$"], answer: "$\\frac{12}{30}$", explanation: "Pembilang $24 \\div 2 = 12$. Penyebut $60 \\div 2 = 30$. Hasilnya $\\frac{12}{30}$." },
+            { id: "prob-e2", type: "exercise", title: "Langkah Penyederhanaan 2", question: "Hasil dari $\\frac{12}{30} \\div 2$ adalah...", answerType: "options", options: ["$\\frac{6}{15}$", "$\\frac{6}{30}$", "$\\frac{12}{15}$"], answer: "$\\frac{6}{15}$", explanation: "Pembilang $12 \\div 2 = 6$. Penyebut $30 \\div 2 = 15$. Hasilnya $\\frac{6}{15}$." },
+            { id: "prob-e3", type: "exercise", title: "Langkah Penyederhanaan 3", question: "Hasil dari $\\frac{6}{15} \\div 3$ adalah...", answerType: "text", answer: "2/5", explanation: "Pembilang $6 \\div 3 = 2$. Penyebut $15 \\div 3 = 5$. Hasilnya $\\frac{2}{5}$." },
+
+            // Theory 2: Senjata FPB (1 Langkah)
+            {
+                id: "prob-t2", type: "theory",
+                title: "Senjata Rahasia: FPB untuk 1 Langkah",
+                content: `<p>Membagi bertahap itu terlalu lama! Kita bisa menggunakan <strong>FPB (Faktor Persekutuan Terbesar)</strong> untuk menyederhanakan pecahan dalam <strong>satu langkah</strong> saja!</p><p>Contoh: $\\frac{24}{60}$. FPB dari 24 dan 60 adalah 12. Langsung bagi keduanya dengan 12!<br>$\\frac{24 \\div 12}{60 \\div 12} = \\frac{2}{5}$</p><p>Jauh lebih cepat, bukan?</p>`,
+                illustration: ``
+            },
+            // Ex 4-6
+            { id: "prob-e4", type: "exercise", title: "FPB 1 Langkah 1", question: "Sederhanakan $\\frac{16}{24}$ menggunakan FPB dalam 1 langkah. (FPB dari 16 dan 24 adalah 8)", answerType: "text", answer: "2/3", explanation: "$16 \\div 8 = 2$ dan $24 \\div 8 = 3$. Hasilnya $\\frac{2}{3}$." },
+            { id: "prob-e5", type: "exercise", title: "FPB 1 Langkah 2", question: "Sederhanakan $\\frac{25}{35}$ menggunakan FPB. (FPB dari 25 dan 35 adalah 5)", answerType: "text", answer: "5/7", explanation: "$25 \\div 5 = 5$ dan $35 \\div 5 = 7$. Hasilnya $\\frac{5}{7}$." },
+            { id: "prob-e6", type: "exercise", title: "FPB 1 Langkah 3", question: "Sederhanakan $\\frac{18}{27}$ menggunakan FPB.", answerType: "text", answer: "2/3", explanation: "FPB dari 18 dan 27 adalah 9. $18 \\div 9 = 2$ dan $27 \\div 9 = 3$. Hasilnya $\\frac{2}{3}$." },
+
+            // Theory 3: Kapan Berhenti?
+            {
+                id: "prob-t3", type: "theory",
+                title: "Bentuk Paling Sederhana",
+                content: `<p>Pecahan berada dalam bentuk paling sederhana JIKA DAN HANYA JIKA <strong>FPB dari pembilang dan penyebutnya adalah 1</strong>.</p><p>Artinya, tidak ada angka selain 1 yang bisa membagi habis pembilang dan penyebut bersamaan. Contoh: $\\frac{3}{8}$ (FPB 3 dan 8 adalah 1).</p>`,
+                illustration: `<svg viewBox="0 0 80 40" width="100"><circle cx="40" cy="20" r="15" fill="none" stroke="var(--primary)" stroke-width="2"/><path d="M40,5 L40,35 M25,20 L55,20" stroke="var(--primary)" stroke-width="2"/><circle cx="40" cy="20" r="3" fill="var(--primary)"/><text x="40" y="45" font-size="8" text-anchor="middle" fill="#333">Irreducible</text></svg>`
+            },
+            // Ex 7-10
+            { id: "prob-e7", type: "exercise", title: "Cek Bentuk Sederhana 1", question: "Apakah $\\frac{3}{8}$ sudah dalam bentuk paling sederhana?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "FPB dari 3 dan 8 adalah 1. Jadi sudah paling sederhana." },
+            { id: "prob-e8", type: "exercise", title: "Cek Bentuk Sederhana 2", question: "Apakah $\\frac{12}{18}$ sudah dalam bentuk paling sederhana?", answerType: "options", options: ["Tidak", "Ya"], answer: "Tidak", explanation: "FPB dari 12 dan 18 adalah 6. Masih bisa dibagi 6, jadi belum sederhana." },
+            { id: "prob-e9", type: "exercise", title: "Sederhanakan Kompleks 1", question: "Bentuk paling sederhana dari $\\frac{45}{105}$ adalah... (Petunjuk: FPB-nya 15)", answerType: "text", answer: "3/7", explanation: "$45 \\div 15 = 3$ dan $105 \\div 15 = 7$. Hasilnya $\\frac{3}{7}$." },
+            { id: "prob-e10", type: "exercise", title: "Sederhanakan Kompleks 2", question: "Bentuk paling sederhana dari $\\frac{28}{42}$ adalah... (Petunjuk: FPB-nya 14)", answerType: "text", answer: "2/3", explanation: "$28 \\div 14 = 2$ dan $42 \\div 14 = 3$. Hasilnya $\\frac{2}{3}$." }
+        ]
+    });
+
+    // SECTION: GUIDED PRACTICE
+    appData.push({
+        id: "sec-guided",
+        title: "Guided Practice (00:30-00:45)",
+        icon: "fas fa-hands-helping",
+        steps: [
+            // Theory 1: Membandingkan Pecahan
+            {
+                id: "guide-t1", type: "theory",
+                title: "Boss Level: Mana yang Lebih Besar?",
+                content: `<p>Ada dua item: Ramuan A ($\\frac{3}{5}$ bagian) dan Ramuan B ($\\frac{7}{10}$ bagian). Mana yang lebih banyak?</p><p>Kita tidak bisa membandingkannya langsung karena <strong>penyebutnya beda</strong> (seperti membandingkan apel dan jeruk). Kita harus "mengkloning" salah satinya agar penyebutnya sama!</p>`,
+                illustration: `<svg viewBox="0 0 120 60" width="160"><rect x="5" y="5" width="50" height="50" rx="5" fill="#ce82ff" opacity="0.2"/><rect x="5" y="25" width="50" height="30" rx="5" fill="#ce82ff"/><text x="30" y="45" font-size="12" fill="white" text-anchor="middle">3/5</text><rect x="65" y="5" width="50" height="50" rx="5" fill="#1cb0f6" opacity="0.2"/><rect x="65" y="20" width="50" height="35" rx="5" fill="#1cb0f6"/><text x="90" y="45" font-size="12" fill="white" text-anchor="middle">7/10</text></svg>`
+            },
+            // Ex 1-3
+            { id: "guide-e1", type: "exercise", title: "KPK Penyebut 1", question: "Untuk menyamakan penyebut $\\frac{3}{5}$ dan $\\frac{7}{10}$, kita cari KPK dari 5 dan 10. Berapa KPK-nya?", answerType: "text", answer: "10", explanation: "Kelipatan 5: 5, 10. Kelipatan 10: 10. KPK-nya adalah 10." },
+            { id: "guide-e2", type: "exercise", title: "KPK Penyebut 2", question: "Untuk menyamakan penyebut $\\frac{1}{4}$ dan $\\frac{2}{5}$, berapa KPK dari 4 dan 5?", answerType: "text", answer: "20", explanation: "Kelipatan 4: 4, 8, 12, 16, 20. Kelipatan 5: 5, 10, 15, 20. KPK-nya adalah 20." },
+            { id: "guide-e3", type: "exercise", title: "KPK Penyebut 3", question: "Untuk menyamakan penyebut $\\frac{1}{2}$ dan $\\frac{3}{7}$, berapa KPK dari 2 dan 7?", answerType: "text", answer: "14", explanation: "2 dan 7 prima, KPK-nya $2 \\times 7 = 14$." },
+
+            // Theory 2: Proses Kloning untuk Banding
+            {
+                id: "guide-t2", type: "theory",
+                title: "Kloning Ramuan A",
+                content: `<p>Kembali ke Ramuan A ($\\frac{3}{5}$) dan B ($\\frac{7}{10}$). KPK penyebutnya adalah 10.</p><p>Kita kloning Ramuan A agar penyebutnya jadi 10. Menurutmu, 5 harus dikali berapa agar jadi 10? Tepat, dikali 2!</p><p>Jadi, $\\frac{3}{5} = \\frac{3 \\times 2}{5 \\times 2} = \\frac{6}{10}$.</p><p>Sekarang bandingkan: $\\frac{6}{10}$ (Ramuan A) vs $\\frac{7}{10}$ (Ramuan B). Jelas Ramuan B lebih banyak!</p>`,
+                illustration: ``
+            },
+            // Ex 4-6
+            { id: "guide-e4", type: "exercise", title: "Bandingkan 1", question: "Manakah yang lebih besar: $\\frac{2}{3}$ atau $\\frac{5}{6}$? (Ubah $\\frac{2}{3}$ menjadi penyebut 6)", answerType: "options", options: ["$\\frac{5}{6}$", "$\\frac{2}{3}$"], answer: "$\\frac{5}{6}$", explanation: "$\\frac{2}{3} = \\frac{4}{6}$. Karena $\\frac{4}{6} < \\frac{5}{6}$, maka $\\frac{5}{6}$ lebih besar." },
+            { id: "guide-e5", type: "exercise", title: "Bandingkan 2", question: "Manakah yang lebih besar: $\\frac{1}{2}$ atau $\\frac{3}{8}$? (Ubah $\\frac{1}{2}$ menjadi penyebut 8)", answerType: "options", options: ["$\\frac{1}{2}$", "$\\frac{3}{8}$"], answer: "$\\frac{1}{2}$", explanation: "$\\frac{1}{2} = \\frac{4}{8}$. Karena $\\frac{4}{8} > \\frac{3}{8}$, maka $\\frac{1}{2}$ lebih besar." },
+            { id: "guide-e6", type: "exercise", title: "Bandingkan 3", question: "Manakah yang lebih besar: $\\frac{3}{4}$ atau $\\frac{5}{8}$?", answerType: "options", options: ["$\\frac{3}{4}$", "$\\frac{5}{8}$"], answer: "$\\frac{3}{4}$", explanation: "$\\frac{3}{4} = \\frac{6}{8}$. Karena $\\frac{6}{8} > \\frac{5}{8}$, maka $\\frac{3}{4}$ lebih besar." },
+
+            // Theory 3: Mengurutkan Pecahan
+            {
+                id: "guide-t3", type: "theory",
+                title: "Mengurutkan Item",
+                content: `<p>Kita juga bisa mengurutkan lebih dari dua pecahan! Caranya sama: samakan semua penyebutnya menggunakan KPK, lalu urutkan pembilangnya dari yang terkecil/terbesar.</p><p>Contoh: Urutkan $\\frac{1}{2}$, $\\frac{3}{4}$, $\\frac{5}{8}$.<br>KPK dari 2, 4, 8 adalah 8.<br>$\\frac{1}{2} = \\frac{4}{8}$, $\\frac{3}{4} = \\frac{6}{8}$, $\\frac{5}{8} = \\frac{5}{8}$.<br>Urutan: $\\frac{4}{8}$, $\\frac{5}{8}$, $\\frac{6}{8}$ atau $\\frac{1}{2}$, $\\frac{5}{8}$, $\\frac{3}{4}$.</p>`,
+                illustration: ``
+            },
+            // Ex 7-10
+            { id: "guide-e7", type: "exercise", title: "Urutkan 1", question: "Urutkan dari terkecil: $\\frac{1}{2}$, $\\frac{1}{4}$, $\\frac{3}{4}$", answerType: "options", options: ["$\\frac{1}{4}, \\frac{1}{2}, \\frac{3}{4}$", "$\\frac{1}{2}, \\frac{1}{4}, \\frac{3}{4}$", "$\\frac{3}{4}, \\frac{1}{2}, \\frac{1}{4}$"], answer: "$\\frac{1}{4}, \\frac{1}{2}, \\frac{3}{4}$", explanation: "Jika penyebut 4: $\\frac{2}{4}, \\frac{1}{4}, \\frac{3}{4}$. Urutan terkecil ke terbesar adalah $\\frac{1}{4}, \\frac{2}{4}, \\frac{3}{4}$." },
+            { id: "guide-e8", type: "exercise", title: "Urutkan 2", question: "Urutkan dari terkecil: $\\frac{2}{3}$, $\\frac{1}{6}$, $\\frac{1}{2}$", answerType: "options", options: ["$\\frac{1}{6}, \\frac{1}{2}, \\frac{2}{3}$", "$\\frac{1}{2}, \\frac{1}{6}, \\frac{2}{3}$", "$\\frac{2}{3}, \\frac{1}{2}, \\frac{1}{6}$"], answer: "$\\frac{1}{6}, \\frac{1}{2}, \\frac{2}{3}$", explanation: "KPK 6. Pecahan: $\\frac{4}{6}, \\frac{1}{6}, \\frac{3}{6}$. Urutan: $\\frac{1}{6}, \\frac{3}{6}, \\frac{4}{6}$." },
+            { id: "guide-e9", type: "exercise", title: "Urutkan 3", question: "Manakah pecahan yang paling kecil di antara $\\frac{5}{6}$, $\\frac{7}{12}$, $\\frac{3}{4}$?", answerType: "options", options: ["$\\frac{7}{12}$", "$\\frac{5}{6}$", "$\\frac{3}{4}$"], answer: "$\\frac{7}{12}$", explanation: "KPK 12. Pecahan: $\\frac{10}{12}, \\frac{7}{12}, \\frac{9}{12}$. Pembilang terkecil adalah 7." },
+            { id: "guide-e10", type: "exercise", title: "Urutkan 4", question: "Manakah pecahan yang paling besar di antara $\\frac{2}{5}$, $\\frac{1}{3}$, $\\frac{3}{10}$?", answerType: "options", options: ["$\\frac{2}{5}$", "$\\frac{1}{3}$", "$\\frac{3}{10}$"], answer: "$\\frac{2}{5}$", explanation: "KPK 30. Pecahan: $\\frac{12}{30}, \\frac{10}{30}, \\frac{9}{30}$. Pembilang terbesar adalah 12 ($\\frac{2}{5}$)." }
+        ]
+    });
+
+    // SECTION: INDEPENDENT PRACTICE
+    appData.push({
+        id: "sec-independent",
+        title: "Independent Practice (00:50-01:00)",
+        icon: "fas fa-user-astronaut",
+        steps: [
+            // Theory 1: Ujian Lisensi
+            {
+                id: "indep-t1", type: "theory",
+                title: "Ujian Lisensi Master Kloning",
+                content: `<p>Ini adalah ujian lisensi 'Master Kloning' untukmu. Selesaikan sendiri, dan teliti dalam menghitung perkalian dan pembagiannya!</p><p>Kamu akan menghadapi berbagai jenis masalah pecahan senilai. Siap?</p>`,
+                illustration: `<svg viewBox="0 0 80 50" width="120"><rect x="10" y="5" width="60" height="40" rx="5" fill="#fff9c4" stroke="#fbc02d" stroke-width="2"/><path d="M15,15 L65,15" stroke="#fbc02d" stroke-width="2"/><text x="40" y="35" font-size="10" text-anchor="middle" fill="#333" font-weight="bold">LICENSE</text><circle cx="55" cy="10" r="5" fill="#fbc02d"/></svg>`
+            },
+            // Ex 1-3
+            { id: "indep-e1", type: "exercise", title: "Master Soal 1", question: "Manakah pecahan yang senilai dengan $\\frac{2}{7}$?", answerType: "options", options: ["$\\frac{4}{14}$", "$\\frac{4}{7}$", "$\\frac{3}{7}$"], answer: "$\\frac{4}{14}$", explanation: "Pembilang dan penyebut dikali 2: $2 \\times 2 = 4$, $7 \\times 2 = 14$." },
+            { id: "indep-e2", type: "exercise", title: "Master Soal 2", question: "Manakah pecahan yang senilai dengan $\\frac{5}{9}$?", answerType: "options", options: ["$\\frac{10}{19}$", "$\\frac{10}{18}$", "$\\frac{15}{18}$"], answer: "$\\frac{10}{18}$", explanation: "Pembilang dan penyebut dikali 2: $5 \\times 2 = 10$, $9 \\times 2 = 18$." },
+            { id: "indep-e3", type: "exercise", title: "Master Soal 3", question: "Manakah pecahan yang senilai dengan $\\frac{3}{8}$?", answerType: "options", options: ["$\\frac{6}{14}$", "$\\frac{9}{16}$", "$\\frac{6}{16}$"], answer: "$\\frac{6}{16}$", explanation: "Pembilang dan penyebut dikali 2: $3 \\times 2 = 6$, $8 \\times 2 = 16$." },
+
+            // Theory 2: Pemadatan Item Besar
+            {
+                id: "indep-t2", type: "theory",
+                title: "Pemadatan Item Besar",
+                content: `<p>Item langka di game sering memiliki angka pecahan yang sangat besar. Kamu harus mampu menyederhanakannya dengan cepat menggunakan FPB agar tas itemmu tidak penuh!</p>`,
+                illustration: ``
+            },
+            // Ex 4-6
+            { id: "indep-e4", type: "exercise", title: "Padatkan 1", question: "Sederhanakan $\\frac{48}{72}$ ke bentuk paling sederhana. (FPB adalah 24)", answerType: "text", answer: "2/3", explanation: "$48 \\div 24 = 2$ dan $72 \\div 24 = 3$. Hasilnya $\\frac{2}{3}$." },
+            { id: "indep-e5", type: "exercise", title: "Padatkan 2", question: "Sederhanakan $\\frac{120}{180}$ ke bentuk paling sederhana. (FPB adalah 60)", answerType: "text", answer: "2/3", explanation: "$120 \\div 60 = 2$ dan $180 \\div 60 = 3$. Hasilnya $\\frac{2}{3}$." },
+            { id: "indep-e6", type: "exercise", title: "Padatkan 3", question: "Sebuah kristal energi berkekuatan $\\frac{36}{96}$ harus disederhanakan. Berapa bentuk paling sederhananya? (FPB adalah 12)", answerType: "text", answer: "3/8", explanation: "$36 \\div 12 = 3$ dan $96 \\div 12 = 8$. Hasilnya $\\frac{3}{8}$." },
+
+            // Theory 3: Simulasi Pembagian Sumber Daya
+            {
+                id: "indep-t3", type: "theory",
+                title: "Simulasi Sumber Daya",
+                content: `<p>Kadang, sistem game memberikan sumber daya dalam format yang rumit. Kamu harus memecahkan masalah nyata menggunakan konsep pecahan senilai dan perbandingan!</p>`,
+                illustration: ``
+            },
+            // Ex 7-10
+            { id: "indep-e7", type: "exercise", title: "Simulasi 1", question: "Kamu punya $\\frac{2}{3}$ kue. Kue itu dipotong lagi jadi 12 bagian sama rata. Berapa potong kue yang kamu punya sekarang?", answerType: "text", answer: "8/12", explanation: "Ubah $\\frac{2}{3}$ ke penyebut 12. $3 \\times 4 = 12$, maka $2 \\times 4 = 8$. Kamu punya $\\frac{8}{12}$ potong." },
+            { id: "indep-e8", type: "exercise", title: "Simulasi 2", question: "Senjata membutuhkan energi tepat $\\frac{3}{8}$. Kristal yang kamu punya menghasilkan $\\frac{6}{16}$. Apakah energi kristal pas dengan senjata?", answerType: "options", options: ["Tepat pas (Ya)", "Tidak pas (Tidak)"], answer: "Tepat pas (Ya)", explanation: "$\\frac{6}{16}$ disederhanakan (dibagi 2) menjadi $\\frac{3}{8}$. Jadi nilainya sama persis!" },
+            { id: "indep-e9", type: "exercise", title: "Simulasi 3", question: "Ramuan A kekuatannya $\\frac{5}{6}$ liter, Ramuan B $\\frac{7}{12}$ liter. Berapa selisih kekuatan mereka dalam penyebut 12?", answerType: "text", answer: "3/12", explanation: "Ramuan A: $\\frac{10}{12}$. Ramuan B: $\\frac{7}{12}$. Selisih $\\frac{10}{12} - \\frac{7}{12} = \\frac{3}{12}$." },
+            { id: "indep-e10", type: "exercise", title: "Simulasi 4", question: "Jika $\\frac{a}{b}$ senilai dengan $\\frac{3}{5}$ dan nilai $a + b = 32$. Berapakah nilai $a$? (Petunjuk: $a=3k, b=5k$)", answerType: "text", answer: "12", explanation: "$3k + 5k = 32 \\rightarrow 8k = 32 \\rightarrow k = 4$. Maka $a = 3 \\times 4 = 12$." }
+        ]
+    });
+	
+    // ==========================================
+    // DATA CONTENT: PART 5 (Assignments & Consolidation)
+    // ==========================================
+
+    // Reusable Print Button HTML
+    const printBtnHTML = (secIdx) => `<button class="btn-nav btn-next" style="margin-top: 15px; width: 100%;" onclick="printAssignment(${secIdx})"><i class="fas fa-print"></i> Print Result</button>`;
+
+    // ASSIGNMENT 1
+    appData.push({
+        id: "sec-assign1", title: "Assignment 1", icon: "fas fa-file-alt",
+        steps: [
+            { id: "a1-e1", type: "exercise", title: "Soal 1", question: "Lengkapi: $\\frac{2}{3} = \\frac{...}{9}$", answerType: "text", answer: "6", explanation: "$3 \\times 3 = 9$, maka $2 \\times 3 = 6$." },
+            { id: "a1-e2", type: "exercise", title: "Soal 2", question: "Lengkapi: $\\frac{1}{4} = \\frac{3}{...}$", answerType: "text", answer: "12", explanation: "$1 \\times 3 = 3$, maka $4 \\times 3 = 12$." },
+            { id: "a1-e3", type: "exercise", title: "Soal 3", question: "Lengkapi: $\\frac{5}{6} = \\frac{10}{...}$", answerType: "text", answer: "12", explanation: "$5 \\times 2 = 10$, maka $6 \\times 2 = 12$." },
+            { id: "a1-e4", type: "exercise", title: "Soal 4", question: "Lengkapi: $\\frac{3}{7} = \\frac{...}{21}$", answerType: "text", answer: "9", explanation: "$7 \\times 3 = 21$, maka $3 \\times 3 = 9$." },
+            { id: "a1-e5", type: "exercise", title: "Soal 5", question: "Lengkapi: $\\frac{4}{5} = \\frac{...}{15}$", answerType: "text", answer: "12", explanation: "$5 \\times 3 = 15$, maka $4 \\times 3 = 12$." },
+            { id: "a1-e6", type: "exercise", title: "Soal 6", question: "Lengkapi: $\\frac{7}{8} = \\frac{14}{...}$", answerType: "text", answer: "16", explanation: "$7 \\times 2 = 14$, maka $8 \\times 2 = 16$." },
+            { id: "a1-e7", type: "exercise", title: "Soal 7", question: "Lengkapi: $\\frac{2}{9} = \\frac{...}{18}$", answerType: "text", answer: "4", explanation: "$9 \\times 2 = 18$, maka $2 \\times 2 = 4$." },
+            { id: "a1-e8", type: "exercise", title: "Soal 8", question: "Lengkapi: $\\frac{1}{6} = \\frac{5}{...}$", answerType: "text", answer: "30", explanation: "$1 \\times 5 = 5$, maka $6 \\times 5 = 30$." },
+            { id: "a1-e9", type: "exercise", title: "Soal 9", question: "Lengkapi: $\\frac{5}{9} = \\frac{...}{27}$", answerType: "text", answer: "15", explanation: "$9 \\times 3 = 27$, maka $5 \\times 3 = 15$." },
+            { id: "a1-e10", type: "exercise", title: "Soal 10", question: "Lengkapi: $\\frac{3}{10} = \\frac{9}{...}$", answerType: "text", answer: "30", explanation: "$3 \\times 3 = 9$, maka $10 \\times 3 = 30$." },
+            { id: "a1-print", type: "theory", title: "Hasil Assignment 1", content: `<p>Kamu telah menyelesaikan Assignment 1! Tekan tombol di bawah untuk mencetak hasil latihanmu.</p>${printBtnHTML(7)}` } // Index 7 is Assignment 1
+        ]
+    });
+
+    // ASSIGNMENT 2
+    appData.push({
+        id: "sec-assign2", title: "Assignment 2", icon: "fas fa-file-alt",
+        steps: [
+            { id: "a2-e1", type: "exercise", title: "Soal 1", question: "Sederhanakan: $\\frac{4}{8}$", answerType: "text", answer: "1/2", explanation: "FPB 4 dan 8 adalah 4. $4\\div4=1, 8\\div4=2$." },
+            { id: "a2-e2", type: "exercise", title: "Soal 2", question: "Sederhanakan: $\\frac{6}{9}$", answerType: "text", answer: "2/3", explanation: "FPB 6 dan 9 adalah 3. $6\\div3=2, 9\\div3=3$." },
+            { id: "a2-e3", type: "exercise", title: "Soal 3", question: "Sederhanakan: $\\frac{10}{15}$", answerType: "text", answer: "2/3", explanation: "FPB 10 dan 15 adalah 5." },
+            { id: "a2-e4", type: "exercise", title: "Soal 4", question: "Sederhanakan: $\\frac{14}{21}$", answerType: "text", answer: "2/3", explanation: "FPB 14 dan 21 adalah 7." },
+            { id: "a2-e5", type: "exercise", title: "Soal 5", question: "Sederhanakan: $\\frac{12}{16}$", answerType: "text", answer: "3/4", explanation: "FPB 12 dan 16 adalah 4." },
+            { id: "a2-e6", type: "exercise", title: "Soal 6", question: "Sederhanakan: $\\frac{18}{27}$", answerType: "text", answer: "2/3", explanation: "FPB 18 dan 27 adalah 9." },
+            { id: "a2-e7", type: "exercise", title: "Soal 7", question: "Sederhanakan: $\\frac{25}{35}$", answerType: "text", answer: "5/7", explanation: "FPB 25 dan 35 adalah 5." },
+            { id: "a2-e8", type: "exercise", title: "Soal 8", question: "Sederhanakan: $\\frac{16}{24}$", answerType: "text", answer: "2/3", explanation: "FPB 16 dan 24 adalah 8." },
+            { id: "a2-e9", type: "exercise", title: "Soal 9", question: "Sederhanakan: $\\frac{36}{48}$", answerType: "text", answer: "3/4", explanation: "FPB 36 dan 48 adalah 12." },
+            { id: "a2-e10", type: "exercise", title: "Soal 10", question: "Sederhanakan: $\\frac{40}{60}$", answerType: "text", answer: "2/3", explanation: "FPB 40 dan 60 adalah 20." },
+            { id: "a2-print", type: "theory", title: "Hasil Assignment 2", content: `<p>Kamu telah menyelesaikan Assignment 2! Tekan tombol di bawah untuk mencetak hasil latihanmu.</p>${printBtnHTML(8)}` }
+        ]
+    });
+
+    // ASSIGNMENT 3
+    appData.push({
+        id: "sec-assign3", title: "Assignment 3", icon: "fas fa-file-alt",
+        steps: [
+            { id: "a3-e1", type: "exercise", title: "Soal 1", question: "Manakah yang lebih besar: $\\frac{2}{3}$ atau $\\frac{5}{6}$?", answerType: "options", options: ["$\\frac{2}{3}$", "$\\frac{5}{6}$"], answer: "$\\frac{5}{6}$", explanation: "$\\frac{2}{3}=\\frac{4}{6}$. $\\frac{5}{6}$ lebih besar." },
+            { id: "a3-e2", type: "exercise", title: "Soal 2", question: "Manakah yang lebih besar: $\\frac{1}{2}$ atau $\\frac{3}{8}$?", answerType: "options", options: ["$\\frac{1}{2}$", "$\\frac{3}{8}$"], answer: "$\\frac{1}{2}$", explanation: "$\\frac{1}{2}=\\frac{4}{8}$. $\\frac{4}{8}$ lebih besar." },
+            { id: "a3-e3", type: "exercise", title: "Soal 3", question: "Manakah yang lebih besar: $\\frac{3}{4}$ atau $\\frac{7}{10}$?", answerType: "options", options: ["$\\frac{3}{4}$", "$\\frac{7}{10}$"], answer: "$\\frac{3}{4}$", explanation: "$\\frac{3}{4}=\\frac{15}{20}, \\frac{7}{10}=\\frac{14}{20}$." },
+            { id: "a3-e4", type: "exercise", title: "Soal 4", question: "Manakah yang lebih besar: $\\frac{4}{5}$ atau $\\frac{7}{9}$?", answerType: "options", options: ["$\\frac{4}{5}$", "$\\frac{7}{9}$"], answer: "$\\frac{4}{5}$", explanation: "$\\frac{4}{5}=\\frac{36}{45}, \\frac{7}{9}=\\frac{35}{45}$." },
+            { id: "a3-e5", type: "exercise", title: "Soal 5", question: "Manakah yang lebih kecil: $\\frac{5}{8}$ atau $\\frac{3}{5}$?", answerType: "options", options: ["$\\frac{5}{8}$", "$\\frac{3}{5}$"], answer: "$\\frac{5}{8}$", explanation: "$\\frac{5}{8}=\\frac{25}{40}, \\frac{3}{5}=\\frac{24}{40}$. $\\frac{5}{8}$ lebih kecil." },
+            { id: "a3-e6", type: "exercise", title: "Soal 6", question: "Manakah yang lebih kecil: $\\frac{2}{7}$ atau $\\frac{1}{3}$?", answerType: "options", options: ["$\\frac{2}{7}$", "$\\frac{1}{3}$"], answer: "$\\frac{2}{7}$", explanation: "$\\frac{2}{7}=\\frac{6}{21}, \\frac{1}{3}=\\frac{7}{21}$." },
+            { id: "a3-e7", type: "exercise", title: "Soal 7", question: "Manakah yang lebih besar: $\\frac{5}{6}$ atau $\\frac{7}{8}$?", answerType: "options", options: ["$\\frac{5}{6}$", "$\\frac{7}{8}$"], answer: "$\\frac{7}{8}$", explanation: "$\\frac{5}{6}=\\frac{20}{24}, \\frac{7}{8}=\\frac{21}{24}$." },
+            { id: "a3-e8", type: "exercise", title: "Soal 8", question: "Manakah yang lebih besar: $\\frac{3}{10}$ atau $\\frac{2}{7}$?", answerType: "options", options: ["$\\frac{3}{10}$", "$\\frac{2}{7}$"], answer: "$\\frac{3}{10}$", explanation: "$\\frac{3}{10}=\\frac{21}{70}, \\frac{2}{7}=\\frac{20}{70}$." },
+            { id: "a3-e9", type: "exercise", title: "Soal 9", question: "Manakah yang lebih besar: $\\frac{4}{9}$ atau $\\frac{5}{11}$?", answerType: "options", options: ["$\\frac{4}{9}$", "$\\frac{5}{11}$"], answer: "$\\frac{5}{11}$", explanation: "$\\frac{4}{9}=\\frac{44}{99}, \\frac{5}{11}=\\frac{45}{99}$. Karena 45 lebih besar, maka $\\frac{5}{11}$ lebih besar." },
+            { id: "a3-e10", type: "exercise", title: "Soal 10", question: "Manakah yang lebih besar: $\\frac{7}{12}$ atau $\\frac{5}{9}$?", answerType: "options", options: ["$\\frac{7}{12}$", "$\\frac{5}{9}$"], answer: "$\\frac{7}{12}$", explanation: "$\\frac{7}{12}=\\frac{21}{36}, \\frac{5}{9}=\\frac{20}{36}$. Karena 21 lebih besar, maka $\\frac{7}{12}$ lebih besar." },
+            { id: "a3-print", type: "theory", title: "Hasil Assignment 3", content: `<p>Kamu telah menyelesaikan Assignment 3! Tekan tombol di bawah untuk mencetak hasil latihanmu.</p>${printBtnHTML(9)}` }
+        ]
+    });
+
+    // ASSIGNMENT 4
+    appData.push({
+        id: "sec-assign4", title: "Assignment 4", icon: "fas fa-file-alt",
+        steps: [
+            { id: "a4-e1", type: "exercise", title: "Soal 1", question: "Urutkan dari terkecil: $\\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}$", answerType: "options", options: ["$\\frac{1}{4}, \\frac{1}{3}, \\frac{1}{2}$", "$\\frac{1}{2}, \\frac{1}{3}, \\frac{1}{4}$"], answer: "$\\frac{1}{4}, \\frac{1}{3}, \\frac{1}{2}$", explanation: "Jika pembilang sama, penyebut terbesar nilainya paling kecil." },
+            { id: "a4-e2", type: "exercise", title: "Soal 2", question: "Urutkan dari terkecil: $\\frac{2}{3}, \\frac{1}{2}, \\frac{5}{6}$", answerType: "options", options: ["$\\frac{1}{2}, \\frac{2}{3}, \\frac{5}{6}$", "$\\frac{2}{3}, \\frac{1}{2}, \\frac{5}{6}$"], answer: "$\\frac{1}{2}, \\frac{2}{3}, \\frac{5}{6}$", explanation: "KPK 6: $\\frac{3}{6}, \\frac{4}{6}, \\frac{5}{6}$." },
+            { id: "a4-e3", type: "exercise", title: "Soal 3", question: "Apakah $\\frac{14}{21}$ senilai dengan $\\frac{20}{30}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "Keduanya disederhanakan menjadi $\\frac{2}{3}$." },
+            { id: "a4-e4", type: "exercise", title: "Soal 4", question: "Apakah $\\frac{15}{24}$ senilai dengan $\\frac{5}{9}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Tidak", explanation: "$15\\div3=5$, tapi $24\\div3=8$ (bukan 9)." },
+            { id: "a4-e5", type: "exercise", title: "Soal 5", question: "Cari $x$ jika $\\frac{7}{x} = \\frac{49}{63}$", answerType: "text", answer: "9", explanation: "$7 \\times 7 = 49$, maka $x \\times 7 = 63 \\rightarrow x = 9$." },
+            { id: "a4-e6", type: "exercise", title: "Soal 6", question: "Cari $y$ jika $\\frac{y}{8} = \\frac{9}{24}$", answerType: "text", answer: "3", explanation: "$8 \\times 3 = 24$, maka $y \\times 3 = 9 \\rightarrow y = 3$." },
+            { id: "a4-e7", type: "exercise", title: "Soal 7", question: "Urutkan dari terbesar: $\\frac{3}{4}, \\frac{5}{6}, \\frac{7}{12}$", answerType: "options", options: ["$\\frac{5}{6}, \\frac{3}{4}, \\frac{7}{12}$", "$\\frac{7}{12}, \\frac{3}{4}, \\frac{5}{6}$"], answer: "$\\frac{5}{6}, \\frac{3}{4}, \\frac{7}{12}$", explanation: "KPK 12: $\\frac{9}{12}, \\frac{10}{12}, \\frac{7}{12}$." },
+            { id: "a4-e8", type: "exercise", title: "Soal 8", question: "Sederhanakan $\\frac{120}{180}$ dalam 1 langkah (FPB).", answerType: "text", answer: "2/3", explanation: "FPB 120 dan 180 adalah 60." },
+            { id: "a4-e9", type: "exercise", title: "Soal 9", question: "Apakah $\\frac{18}{45}$ senilai dengan $\\frac{2}{5}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "$18 \\div 9 = 2$, $45 \\div 9 = 5$." },
+            { id: "a4-e10", type: "exercise", title: "Soal 10", question: "Cari $z$ jika $\\frac{5}{z} = \\frac{15}{51}$", answerType: "text", answer: "17", explanation: "$5 \\times 3 = 15$, maka $z \\times 3 = 51 \\rightarrow z = 17$." },
+            { id: "a4-print", type: "theory", title: "Hasil Assignment 4", content: `<p>Kamu telah menyelesaikan Assignment 4! Tekan tombol di bawah untuk mencetak hasil latihanmu.</p>${printBtnHTML(10)}` }
+        ]
+    });
+
+    // ASSIGNMENT 5
+    appData.push({
+        id: "sec-assign5", title: "Assignment 5", icon: "fas fa-file-alt",
+        steps: [
+            { id: "a5-e1", type: "exercise", title: "Soal 1", question: "Sederhanakan pecahan $\\frac{120}{180}$ menggunakan FPB dalam satu langkah.", answerType: "text", answer: "2/3", explanation: "FPB adalah 60." },
+            { id: "a5-e2", type: "exercise", title: "Soal 2", question: "Urutkan dari terbesar ke terkecil: $\\frac{3}{4}, \\frac{5}{6}, \\frac{7}{12}$", answerType: "options", options: ["$\\frac{5}{6}, \\frac{3}{4}, \\frac{7}{12}$", "$\\frac{7}{12}, \\frac{3}{4}, \\frac{5}{6}$"], answer: "$\\frac{5}{6}, \\frac{3}{4}, \\frac{7}{12}$", explanation: "KPK 12: $\\frac{9}{12}, \\frac{10}{12}, \\frac{7}{12}$." },
+            { id: "a5-e3", type: "exercise", title: "Soal 3", question: "Sebuah kristal energi berkekuatan $\\frac{36}{96}$ harus disederhanakan. Berapakah bentuk paling sederhananya?", answerType: "text", answer: "3/8", explanation: "FPB 36 dan 96 adalah 12." },
+            { id: "a5-e4", type: "exercise", title: "Soal 4", question: "Jika $\\frac{a}{b}$ senilai dengan $\\frac{3}{5}$ dan nilai $a + b = 32$, berapakah nilai $a$?", answerType: "text", answer: "12", explanation: "$3k + 5k = 32 \\rightarrow 8k=32 \\rightarrow k=4$. Maka $a = 3 \\times 4 = 12$." },
+            { id: "a5-e5", type: "exercise", title: "Soal 5", question: "Buktikan: Apakah $\\frac{14}{21}$ senilai dengan $\\frac{20}{30}$?", answerType: "options", options: ["Ya, keduanya $\\frac{2}{3}$", "Tidak, nilainya beda"], answer: "Ya, keduanya $\\frac{2}{3}$", explanation: "14/21 dibagi 7 = 2/3. 20/30 dibagi 10 = 2/3." },
+            { id: "a5-e6", type: "exercise", title: "Soal 6", question: "Tentukan nilai $x$ jika $\\frac{7}{x}$ senilai dengan $\\frac{49}{63}$.", answerType: "text", answer: "9", explanation: "$49 \\div 7 = 7$, maka $63 \\div 7 = 9$." },
+            { id: "a5-e7", type: "exercise", title: "Soal 7", question: "Jika ramuan $\\frac{1}{2}$ dibagi lagi menjadi 8 bagian, pecahan barunya adalah...", answerType: "text", answer: "4/8", explanation: "Penyebut dikali 4, pembilang juga dikali 4." },
+            { id: "a5-e8", type: "exercise", title: "Soal 8", question: "Apakah $\\frac{3}{4}$ senilai dengan $\\frac{75}{100}$?", answerType: "options", options: ["Ya", "Tidak"], answer: "Ya", explanation: "$75 \\div 25 = 3$, $100 \\div 25 = 4$." },
+            { id: "a5-e9", type: "exercise", title: "Soal 9", question: "Jika $\\frac{a}{b}$ senilai dengan $\\frac{2}{7}$ dan $a+b=36$, berapakah $b$?", answerType: "text", answer: "28", explanation: "$2k + 7k = 36 \\rightarrow 9k=36 \\rightarrow k=4$. Maka $b = 7 \\times 4 = 28$." },
+            { id: "a5-e10", type: "exercise", title: "Soal 10", question: "Sederhanakan $\\frac{42}{56}$", answerType: "text", answer: "3/4", explanation: "FPB 42 dan 56 adalah 14." },
+            { id: "a5-print", type: "theory", title: "Hasil Assignment 5", content: `<p>Kamu telah menyelesaikan Assignment 5! Tekan tombol di bawah untuk mencetak hasil latihanmu.</p>${printBtnHTML(11)}` }
+        ]
+    });
+
+    // SECTION: CONSOLIDATION & REFLECTION
+    appData.push({
+        id: "sec-consolidation",
+        title: "Consolidation (01:00-01:05)",
+        icon: "fas fa-flag-checkered",
+        steps: [
+            {
+                id: "cons-1", type: "theory",
+                title: "Luar biasa!",
+                content: `
+                    <p>Kamu sudah berhasil menguasai teknik <strong>Kloning Item</strong> hari ini! Kita belajar bahwa pecahan bisa berubah wajah (dikalikan/dibagi angka yang sama) tapi nilainya tetap sama.</p>
+                    <p>Kita juga belajar menyederhanakan item menggunakan <strong>FPB</strong>, dan membandingkan item menggunakan <strong>KPK</strong>.</p>
+                    <hr style="margin: 15px 0; border-color: #eee;">
+                    <p><strong>Refleksi:</strong> Apa satu hal yang menurutmu paling menantang hari ini?</p>
+                    <br>
+                    <a href="https://learn.algonova.id/login" target="_blank" class="btn-nav btn-next" style="display: inline-block; text-decoration: none;">
+                        <i class="fas fa-rocket"></i> Lanjut ke Misi Algonova
+                    </a>
+                `,
+                illustration: `<svg viewBox="0 0 100 60" width="150"><circle cx="50" cy="30" r="25" fill="#58cc02" opacity="0.2"/><path d="M40,30 L50,40 L65,20" stroke="var(--primary)" stroke-width="5" fill="none" stroke-linecap="round"/></svg>`
+            }
+        ]
+    });
+
+
+    // ==========================================
+    // PRINT LOGIC FUNCTION
+    // ==========================================
+    function printAssignment(secIdx) {
+        const section = appData[secIdx];
+        const exerciseSteps = section.steps.filter(s => s.type === 'exercise');
+        
+        let score = 0;
+        exerciseSteps.forEach(step => {
+            if(userProgress[step.id] === true) score++;
+        });
+
+        let tableRows = '';
+        exerciseSteps.forEach((step, idx) => {
+            const isCorrect = userProgress[step.id] === true;
+            const userAns = isCorrect ? step.answer : (userProgress[step.id + '_attempt'] || '-');
+            const noteIcon = isCorrect ? '✔️' : '❌';
+            
+            tableRows += `
+                <tr>
+                    <td style="text-align:center;">${idx + 1}</td>
+                    <td>${step.question}</td>
+                    <td style="text-align:center;">${userAns}</td>
+                    <td style="text-align:center;">${step.answer}</td>
+                    <td style="text-align:center;">${noteIcon}</td>
+                </tr>
+            `;
+        });
+
+        const printHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Print Assignment - ${section.title}</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                <style>
+                    body { font-family: Arial, sans-serif; font-size: 11pt; margin: 20px; }
+                    h2, h3 { margin: 0 0 5px 0; }
+                    .print-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
+                    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid black; padding: 6px; font-size: 10pt; }
+                    th { background-color: #f0f0f0; }
+                    .signature { margin-top: 40px; text-align: right; }
+                    @page { size: A4; margin: 10mm; }
+                </style>
+            </head>
+            <body>
+                <div class="print-header">
+                    <h2>MATH TUTORING by Deni</h2>
+                </div>
+                
+                <div class="info-grid">
+                    <div><strong>Name:</strong> ............................................</div>
+                    <div><strong>Date:</strong> ............................................</div>
+                    <div><strong>Topic:</strong> Pecahan Senilai (Kloning Item)</div>
+                    <div><strong>Assignment Group:</strong> ${section.title}</div>
+                </div>
+
+                <h3>Score: ${score} / ${exerciseSteps.length}</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:5%;">No.</th>
+                            <th style="width:40%;">Question</th>
+                            <th style="width:20%;">Student Answer</th>
+                            <th style="width:20%;">Correct Answer</th>
+                            <th style="width:15%;">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+
+                <div class="signature">
+                    <p>Checked by,</p>
+                    <br><br>
+                    <p><strong>Deni</strong></p>
+                </div>
+
+                <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>
+                <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"><\/script>
+            </body>
+            </html>
+        `;
+
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(printHTML);
+        printWindow.document.close();
+        
+        // Auto print after a slight delay to allow KaTeX to render
+        setTimeout(() => {
+            printWindow.print();
+        }, 1500);
+    }
+
+    // Init render on load
+    window.onload = () => {
+        // The appData array will be populated by subsequent parts (3, 4, 5)
+        // Before calling renderApp, those parts must execute.
+        // For now, we just call renderApp, if appData is empty it shows message.
+        renderApp();
+    };
+</script>
+</body>
+</html>
