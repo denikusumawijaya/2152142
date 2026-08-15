@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH TUTORING by Deni - Pecahan & Harta Karun</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        :root {
+            --primary: #58cc02;
+            --primary-dark: #46a302;
+            --primary-light: #e7f6d8;
+            --secondary: #1cb0f6;
+            --error: #ff4b4b;
+            --error-light: #ffeded;
+            --bg-color: #f7f7f7;
+            --text-color: #3c3c3c;
+            --border-color: #e5e5e5;
+            --shadow: 0 4px 0 rgba(0,0,0,0.1);
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Navbar Left */
+        .navbar {
+            width: 280px;
+            background: #fff;
+            border-right: 2px solid var(--border-color);
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .navbar-header {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #afafaf;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-color: var(--primary);
+        }
+
+        .nav-item.completed {
+            color: var(--primary);
+        }
+        
+        .nav-item.completed::before {
+            content: '✓';
+            color: #fff;
+            background: var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #c0c0c0;
+            margin: 20px 0 10px 5px;
+            letter-spacing: 1px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            width: calc(100% - 280px);
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 700px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border-color);
+            padding: 30px;
+            position: relative;
+            min-height: 500px;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .theory-box {
+            background: #f0faff;
+            border: 2px solid #b9eaff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .theory-box h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-box {
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            background: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-color);
+            text-align: left;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--secondary);
+            background: #f0faff;
+        }
+
+        .option-btn.selected {
+            border-color: var(--secondary);
+            background: #e7f6d8;
+            color: var(--primary-dark);
+        }
+
+        .option-btn.correct {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--error);
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 0 var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 0 var(--border-color);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: #fff;
+            color: var(--error);
+            border: 2px solid var(--error);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .feedback-collapse {
+            margin-top: 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #fff9f0;
+            border-left: 4px solid #ffc800;
+            padding: 0 15px;
+            border-radius: 4px;
+        }
+
+        .feedback-collapse.show {
+            max-height: 500px;
+            padding: 15px;
+        }
+
+        .feedback-title {
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #e69500;
+        }
+
+        /* SVG Illustrations */
+        .illustration {
+            display: block;
+            margin: 20px auto;
+            max-width: 150px;
+        }
+
+        /* Home Page Specifics */
+        .home-rules {
+            list-style: none;
+            margin-top: 15px;
+        }
+        .home-rules li {
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20mm;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 12px;
+            }
+            .print-table th, .print-table td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+            @page { size: A4; margin: 10mm; }
+        }
+
+        /* Mobile Hamburger */
+        .hamburger {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 101;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                transform: translateX(-100%);
+            }
+            .navbar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 80px 20px 20px;
+            }
+            .hamburger { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hamburger" onclick="toggleNav()">☰</div>
+    
+    <!-- Left Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-header">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            MATH TUTORING
+        </div>
+        <div id="nav-menu"></div>
+        
+        <button class="btn btn-danger" style="margin-top: auto;" onclick="resetAllProgress()">
+            🔄 Reset All Progress
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="card-container" id="content-area">
+            <!-- Konten akan dirender disini -->
+        </div>
+    </main>
+
+    <!-- Print Area (Hidden) -->
+    <div id="printArea" style="display:none;"></div>
+
+    <script>
+        // ==========================================
+        // DATA STRUCTURE (Will be expanded in next parts)
+        // ==========================================
+        const lessonData = [
+            // HOME SECTION
+            {
+                id: 'home',
+                title: 'Home',
+                type: 'home',
+                content: {
+                    topic: "Konsep Pecahan & Jenisnya (Membagi Harta Karun)",
+                    rules: [
+                        "Berbicara secara bergantian",
+                        "Meminta izin jika ingin meninggalkan kelas",
+                        "Menyalakan kamera dan microphone jika diperlukan"
+                    ]
+                }
+            },
+            // SECTION 1: Spiral Review Warm-up
+            {
+                id: 'sec1',
+                title: 'Spiral Review',
+                time: '00:00-00:10',
+                type: 'section',
+                cards: [
+                    // Theory 1
+                    {
+                        type: 'theory',
+                        title: 'Asah Pedang Matematika',
+                        html: `
+                            <p>Sebelum masuk ke misi rahasia membagi harta karun, mari kita asah kemampuan dasar kita! Kita akan mengingat kembali tentang <strong>Kelipatan</strong>, <strong>Faktor</strong>, <strong>KPK</strong> (Kelipatan Persekutuan Terkecil), dan <strong>FPB</strong> (Faktor Persekutuan Terbesar).</p>
+                            <br>
+                            <p><strong>Kelipatan</strong> adalah hasil perkalian suatu bilangan dengan bilangan asli (1, 2, 3, ...).<br>
+                            Contoh: Kelipatan 3 adalah 3, 6, 9, 12, 15, ...</p>
+                            <br>
+                            <p><strong>Faktor</strong> adalah bilangan yang dapat membagi habis suatu bilangan lain.<br>
+                            Contoh: Faktor dari 12 adalah 1, 2, 3, 4, 6, dan 12.</p>
+                            <svg class="illustration" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="50" y="80" width="100" height="50" rx="5" fill="#f4a261" stroke="#333" stroke-width="2"/>
+                                <path d="M50 80 L100 40 L150 80" fill="#e76f51" stroke="#333" stroke-width="2"/>
+                                <text x="100" y="110" font-size="20" text-anchor="middle" fill="#fff">x ?</text>
+                                <circle cx="20" cy="20" r="10" fill="#ffc300"/>
+                            </svg>
+                        `
+                    },
+                    // Exercise 1.1
+                    {
+                        type: 'exercise',
+                        question: "Tantangan Kelipatan 'Platform Melompat': Jika kamu melompat setiap 7 langkah, sebutkan kelipatan ke-4 dari 7!",
+                        inputType: 'text',
+                        answer: "28",
+                        explanation: "Kelipatan ke-4 dari 7 didapatkan dari 7 x 4 = 28."
+                    },
+                    // Exercise 1.2
+                    {
+                        type: 'exercise',
+                        question: "Tantangan Kelipatan 'Platform Melompat': Sebutkan kelipatan ke-6 dari 7!",
+                        inputType: 'text',
+                        answer: "42",
+                        explanation: "Kelipatan ke-6 dari 7 didapatkan dari 7 x 6 = 42."
+                    },
+                    // Exercise 1.3
+                    {
+                        type: 'exercise',
+                        question: "Tantangan Faktor 'Kunci Pintu': Manakah di bawah ini yang BUKAN merupakan faktor dari 36?",
+                        inputType: 'mcq',
+                        options: ["4", "6", "8", "9"],
+                        answer: "8",
+                        explanation: "36 dibagi 8 adalah 4 sisa 4. Karena tidak habis dibagi, maka 8 bukan faktor dari 36. Faktor 36 adalah 1, 2, 3, 4, 6, 9, 12, 18, 36."
+                    },
+                    // Theory 2
+                    {
+                        type: 'theory',
+                        title: 'Kunci Emas: KPK dan FPB',
+                        html: `
+                            <p>Untuk membuka peti harta karun, kita butuh <strong>KPK</strong> dan <strong>FPB</strong>.</p>
+                            <br>
+                            <p><strong>KPK (Kelipatan Persekutuan Terkecil)</strong>: Kelipatan terkecil yang sama dari dua atau lebih bilangan. Biasanya digunakan untuk men同步isasi (menyamakan) waktu atau kelipatan.</p>
+                            <p>Contoh: KPK 6 dan 8.<br>
+                            Kelipatan 6: 6, 12, 18, <strong>24</strong>, 30...<br>
+                            Kelipatan 8: 8, 16, <strong>24</strong>, 32...<br>
+                            Jadi, KPK-nya adalah 24.</p>
+                            <br>
+                            <p><strong>FPB (Faktor Persekutuan Terbesar)</strong>: Faktor terbesar yang sama dari dua atau lebih bilangan. Biasanya digunakan untuk menyederhanakan pecahan.</p>
+                            <p>Contoh: FPB 24 dan 60.<br>
+                            Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24<br>
+                            Faktor 60: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60<br>
+                            Faktor persekutuannya: 1, 2, 3, 4, 6, 12. Yang terbesar adalah <strong>12</strong>.</p>
+                        `
+                    },
+                    // Exercise 1.4
+                    {
+                        type: 'exercise',
+                        question: "Tantangan 'Sinkronisasi Platform': Cari Kelipatan Persekutuan Terkecil (KPK) dari 6 dan 8!",
+                        inputType: 'text',
+                        answer: "24",
+                        explanation: "Kelipatan 6: 6, 12, 18, 24. Kelipatan 8: 8, 16, 24. Yang pertama kali sama adalah 24."
+                    },
+                    // Exercise 1.5
+                    {
+                        type: 'exercise',
+                        question: "Tantangan 'Kunci Emas': Cari Faktor Persekutuan Terbesar (FPB) dari 24 dan 60!",
+                        inputType: 'text',
+                        answer: "12",
+                        explanation: "Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24. Faktor 60: 1, 2, 3, 4, 5, 6, 10, 12... Faktor terbesar yang sama adalah 12."
+                    },
+                    // Exercise 1.6
+                    {
+                        type: 'exercise',
+                        question: "Cari KPK dari 4 dan 5!",
+                        inputType: 'text',
+                        answer: "20",
+                        explanation: "Karena 4 dan 5 relatif prima (tidak punya faktor persekutuan selain 1), KPK-nya adalah perkalian keduanya: 4 x 5 = 20."
+                    },
+                    // Theory 3
+                    {
+                        type: 'theory',
+                        title: 'Mengapa Kita Butuh FPB dan KPK di Pecahan?',
+                        html: `
+                            <p>Di laut lepas, harta karun tidak selalu berbentuk bilangan bulat yang sempurna. Kadang kita harus dibagi menjadi pecahan.</p>
+                            <br>
+                            <p><strong>FPB</strong> sangat berguna untuk <strong>menyederhanakan pecahan</strong>. Misalnya, kita dapat harta $\\frac{24}{60}$ emas. Dengan membagi pembilang dan penyebut dengan FPB (yaitu 12), kita dapat pecahan paling sederhana: $\\frac{2}{5}$.</p>
+                            <br>
+                            <p><strong>KPK</strong> sangat berguna untuk <strong>menyamakan penyebut</strong> ketika kita ingin menjumlahkan atau mengurangkan pecahan.</p>
+                            <svg class="illustration" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="40" fill="#ffc300" stroke="#333" stroke-width="2"/>
+                                <path d="M50 10 V90 M10 50 H90" stroke="#333" stroke-width="2"/>
+                                <text x="50" y="55" font-size="12" text-anchor="middle" fill="#333">1/2</text>
+                                
+                                <circle cx="150" cy="50" r="40" fill="#1cb0f6" stroke="#333" stroke-width="2"/>
+                                <path d="M150 10 V90 M110 50 H190" stroke="#333" stroke-width="2"/>
+                                <text x="150" y="55" font-size="12" text-anchor="middle" fill="#fff">1/2</text>
+                            </svg>
+                        `
+                    },
+                    // Exercise 1.7
+                    {
+                        type: 'exercise',
+                        question: "Sederhanakan pecahan $\\frac{18}{42}$ ke bentuk paling sederhana menggunakan FPB!",
+                        inputType: 'text',
+                        answer: "3/7",
+                        explanation: "Faktor dari 18 (1,2,3,6,9,18) dan 42 (1,2,3,6,7,14,21,42). FPB-nya adalah 6. Bagi 18 dan 42 dengan 6, maka $\\frac{18}{42}$ = $\\frac{3}{7}$."
+                    },
+                    // Exercise 1.8
+                    {
+                        type: 'exercise',
+                        question: "Samakan penyebut dari $\\frac{1}{4}$ dan $\\frac{1}{5}$ menggunakan KPK. Berapa penyebut persekutuannya?",
+                        inputType: 'text',
+                        answer: "20",
+                        explanation: "KPK dari 4 dan 5 adalah 20. Maka $\\frac{1}{4}$ menjadi $\\frac{5}{20}$ dan $\\frac{1}{5}$ menjadi $\\frac{4}{20}$."
+                    },
+                    // Exercise 1.9
+                    {
+                        type: 'exercise',
+                        question: "Sebutkan semua faktor dari 36 (Pisahkan dengan koma tanpa spasi, urut dari kecil ke besar)!",
+                        inputType: 'text',
+                        answer: "1,2,3,4,6,9,12,18,36",
+                        explanation: "Faktor 36 adalah bilangan yang habis membagi 36. 36:1=36, 36:2=18, 36:3=12, 36:4=9, 36:6=6. Jadi faktornya 1,2,3,4,6,9,12,18,36."
+                    },
+                    // Exercise 1.10
+                    {
+                        type: 'exercise',
+                        question: "Sederhanakan pecahan $\\frac{24}{60}$ ke bentuk paling sederhana!",
+                        inputType: 'text',
+                        answer: "2/5",
+                        explanation: "FPB dari 24 dan 60 adalah 12. 24/12 = 2. 60/12 = 5. Hasilnya $\\frac{2}{5}$."
+                    }
+                ]
+            },
+			
+            // --- SECTION 2: Introduction & Real-World Connection ---
+            {
+                id: 'sec2',
+                title: 'Introduction',
+                time: '00:10-00:15',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Senjata Rahasia Bajak Laut: Pecahan',
+                        html: `
+                            <p>Bayangkan kamu adalah kapten kapal bajak laut yang baru saja menemukan 10 batang emas. Tapi masalahnya, kamu punya 4 anggota kru yang harus mendapat bagian sama adil. Tidak mungkin memberi mereka masing-masing 2 batang lalu membuang sisanya, kan?</p>
+                            <br>
+                            <p>Di sinilah <strong>Pecahan</strong> menjadi senjata rahasia kita untuk membagi harta secara presisi hingga potongan terkecil!</p>
+                            <br>
+                            <p>Pecahan terdiri dari 2 bagian utama:</p>
+                            <ul>
+                                <li><strong>Pembilang</strong> (angka di atas): Menyatakan berapa banyak bagian yang kita punya/ambil.</li>
+                                <li><strong>Penyebut</strong> (angka di bawah): Menyatakan berapa banyak total bagian dalam satu kesatuan utuh.</li>
+                            </ul>
+                            <svg class="illustration" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="20" y="40" width="160" height="80" rx="10" fill="#ffd700" stroke="#b8860b" stroke-width="3"/>
+                                <rect x="20" y="40" width="40" height="80" fill="#ffe34a" stroke="#b8860b" stroke-width="3"/>
+                                <text x="100" y="30" font-size="16" text-anchor="middle" fill="#333">1/4 bagian emas</text>
+                                <path d="M60 40 V120" stroke="#b8860b" stroke-width="2"/>
+                                <path d="M100 40 V120" stroke="#b8860b" stroke-width="2"/>
+                                <path d="M140 40 V120" stroke="#b8860b" stroke-width="2"/>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Jika 3 pizza dibagi rata untuk 4 orang, pecahan yang mewakili bagian pizza yang diterima SATU orang adalah...",
+                        inputType: 'mcq',
+                        options: ["$\\frac{4}{3}$", "$\\frac{3}{4}$", "$\\frac{1}{3}$", "$\\frac{1}{4}$"],
+                        answer: "$\\frac{3}{4}$",
+                        explanation: "Total pizza (3) menjadi pembilang, dan jumlah orang (4) menjadi penyebut. Jadi satu orang mendapat $\\frac{3}{4}$ bagian pizza."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pada pecahan $\\frac{5}{8}$, angka 8 di bagian bawah disebut...",
+                        inputType: 'mcq',
+                        options: ["Pembilang", "Penyebut", "Bilangan Campuran", "Desimal"],
+                        answer: "Penyebut",
+                        explanation: "Angka di bawah garis pecahan menyatakan total jumlah bagian utuh, disebut penyebut."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Kapten punya 1 batang cokelat dibagi menjadi 6 potong sama besar. Jika 2 potong dimakan, pecahan yang menunjukkan sisa cokelat adalah...",
+                        inputType: 'text',
+                        answer: "4/6",
+                        explanation: "Total potong awal 6 (penyebut). Dimakan 2, sisa 4 (pembilang). Sisa cokelat adalah $\\frac{4}{6}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Jenis-Jenis Pecahan Berdasarkan Nilainya',
+                        html: `
+                            <p>Tidak semua harta karun berbentuk utuh. Ada pecahan yang kurang dari 1, dan ada yang lebih dari 1.</p>
+                            <br>
+                            <p>1. <strong>Pecahan Biasa (Sejati)</strong>: Pembilang lebih kecil dari penyebut. Nilainya kurang dari 1 utuh.<br>
+                            Contoh: $\\frac{2}{5}$ atau $\\frac{3}{4}$.</p>
+                            <br>
+                            <p>2. <strong>Pecahan Tidak Murni</strong>: Pembilang lebih besar atau sama dengan penyebut. Nilainya 1 utuh atau lebih.<br>
+                            Contoh: $\\frac{7}{3}$ atau $\\frac{5}{5}$.</p>
+                            <svg class="illustration" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="40" fill="#fff" stroke="#333" stroke-width="2"/>
+                                <path d="M50 10 V50 H90 A40 40 0 0 0 50 10 Z" fill="#58cc02"/>
+                                <text x="50" y="95" font-size="12" text-anchor="middle">1/4 (Biasa)</text>
+                                
+                                <circle cx="150" cy="50" r="40" fill="#58cc02" stroke="#333" stroke-width="2"/>
+                                <circle cx="150" cy="50" r="40" fill="#58cc02" stroke="#333" stroke-width="2" stroke-dasharray="5,5"/>
+                                <text x="150" y="95" font-size="12" text-anchor="middle">5/4 (Tidak Murni)</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Manakah dari berikut yang merupakan pecahan biasa (sejati)?",
+                        inputType: 'mcq',
+                        options: ["$\\frac{7}{3}$", "$\\frac{5}{2}$", "$\\frac{4}{9}$", "$\\frac{6}{6}$"],
+                        answer: "$\\frac{4}{9}$",
+                        explanation: "Pecahan biasa memiliki pembilang lebih kecil dari penyebut. Hanya $\\frac{4}{9}$ yang memenuhi syarat (4 < 9)."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pecahan $\\frac{9}{4}$ termasuk ke dalam jenis...",
+                        inputType: 'mcq',
+                        options: ["Pecahan Biasa", "Pecahan Tidak Murni", "Pecahan Campuran", "Pecahan Desimal"],
+                        answer: "Pecahan Tidak Murni",
+                        explanation: "Karena pembilang (9) lebih besar dari penyebut (4), ini disebut pecahan tidak murni."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Tulis pecahan tidak murni untuk 'tiga per dua'!",
+                        inputType: 'text',
+                        answer: "3/2",
+                        explanation: "Tiga per dua ditulis sebagai $\\frac{3}{2}$. Karena 3 > 2, ini adalah pecahan tidak murni."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Pecahan Campuran & Desimal',
+                        html: `
+                            <p>Karena pecahan tidak murni berarti lebih dari 1 utuh, kita bisa menuliskannya dalam bentuk yang lebih mudah dibaca, yaitu <strong>Pecahan Campuran</strong>.</p>
+                            <br>
+                            <p><strong>Pecahan Campuran</strong> terdiri dari bilangan bulat dan pecahan biasa. Misalnya $\\frac{7}{3}$ artinya ada 2 angka 3 utuh (6) dan sisa 1. Jadi ditulis $2\\frac{1}{3}$.</p>
+                            <br>
+                            <p>Selain bentuk pecahan, kita juga bisa menyatakannya sebagai <strong>Desimal</strong>. Desimal menggunakan tanda koma (,) untuk bagian kurang dari 1 utuh. $\\frac{1}{2}$ sama dengan 0,5.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pecahan $\\frac{5}{5}$ jika diubah ke bentuk desimal adalah...",
+                        inputType: 'mcq',
+                        options: ["0,5", "1,5", "1,0", "0,1"],
+                        answer: "1,0",
+                        explanation: "$\\frac{5}{5}$ berarti 5 dibagi 5, yang hasilnya adalah 1 utuh. Dalam desimal, ditulis 1,0."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Peti harta berisi 2 emas utuh dan setengah emas lagi. Tulis dalam bentuk pecahan campuran!",
+                        inputType: 'text',
+                        answer: "2 1/2",
+                        explanation: "Bilangan bulat ditulis di depan (2), diikuti pecahan biasanya ($\\frac{1}{2}$). Tanpa tanda kali, ditulis 2 1/2."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Manakah yang merupakan pecahan campuran?",
+                        inputType: 'mcq',
+                        options: ["$\\frac{7}{4}$", "1,75", "$3\\frac{1}{2}$", "$\\frac{2}{5}$"],
+                        answer: "$3\\frac{1}{2}$",
+                        explanation: "Pecahan campuran memiliki bilangan bulat di depan pecahan biasa. $\\frac{7}{4}$ adalah pecahan tidak murni, 1,75 adalah desimal."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Bilangan desimal 0,25 ekuivalen dengan pecahan biasa...",
+                        inputType: 'mcq',
+                        options: ["$\\frac{1}{4}$", "$\\frac{1}{5}$", "$\\frac{25}{10}$", "$\\frac{1}{25}$"],
+                        answer: "$\\frac{1}{4}$",
+                        explanation: "0,25 berarti 25 per 100. Jika disederhanakan (dibagi 25), maka menjadi $\\frac{1}{4}$."
+                    }
+                ]
+            },
+            // --- SECTION 3: Review of Prior Knowledge ---
+            {
+                id: 'sec3',
+                title: 'Prior Knowledge',
+                time: '00:15-00:20',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Mengenal Bilangan Desimal',
+                        html: `
+                            <p>Sebelum pecahan campuran, kita review dulu <strong>Desimal</strong>. Desimal adalah cara lain menulis pecahan yang penyebutnya kelipatan 10 (persepuluh, perseratus, dst).</p>
+                            <br>
+                            <p>Contoh:</p>
+                            <ul>
+                                <li>$\\frac{1}{10} = 0,1$ (nol koma satu)</li>
+                                <li>$\\frac{1}{100} = 0,01$ (nol koma nol satu)</li>
+                                <li>$\\frac{3}{10} = 0,3$</li>
+                            </ul>
+                            <svg class="illustration" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="20" width="180" height="40" fill="#e5e5e5" stroke="#333"/>
+                                <rect x="10" y="20" width="18" height="40" fill="#1cb0f6"/>
+                                <text x="100" y="70" font-size="14" text-anchor="middle">0,1 dari 10 kotak</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Tuliskan $\\frac{7}{10}$ dalam bentuk desimal!",
+                        inputType: 'text',
+                        answer: "0,7",
+                        explanation: "Pecahan persepuluh (penyebut 10) langsung ditulis di belakang koma, yaitu 0,7."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Tuliskan 0,9 dalam bentuk pecahan biasa paling sederhana!",
+                        inputType: 'text',
+                        answer: "9/10",
+                        explanation: "0,9 berarti 9 per 10. Karena 9 dan 10 tidak punya FPB selain 1, bentuk sederhananya adalah $\\frac{9}{10}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pecahan $\\frac{45}{100}$ jika diubah ke desimal menjadi...",
+                        inputType: 'mcq',
+                        options: ["0,45", "4,5", "0,045", "45,0"],
+                        answer: "0,45",
+                        explanation: "Penyebut 100 berarti dua angka di belakang koma. Jadi $\\frac{45}{100} = 0,45$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Pecahan Ekuivalen (Pecahan Senilai)',
+                        html: `
+                            <p>Pecahan ekuivalen adalah pecahan yang bernilai sama walau angkanya berbeda. Caranya adalah mengalikan atau membagi pembilang dan penyebut dengan bilangan yang sama.</p>
+                            <br>
+                            <p>Contoh: $\\frac{1}{2}$ sama dengan $\\frac{2}{4}$ sama dengan $\\frac{4}{8}$.<br>
+                            Kita kalikan atas dan bawah dengan 2: $\\frac{1 \\times 2}{2 \\times 2} = \\frac{2}{4}$.</p>
+                            <br>
+                            <p>Kebalikannya adalah <strong>Menyederhanakan Pecahan</strong>. Jika kita punya $\\frac{6}{8}$, kita bisa membagi atas dan bawah dengan FPB-nya (yaitu 2) menjadi $\\frac{3}{4}$.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Cari pecahan ekuivalen dari $\\frac{2}{5}$ jika penyebutnya diubah menjadi 15!",
+                        inputType: 'text',
+                        answer: "6/15",
+                        explanation: "Agar penyebut 5 menjadi 15, kita kalikan 3. Maka pembilang 2 juga dikali 3. $\\frac{2 \\times 3}{5 \\times 3} = \\frac{6}{15}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Sederhanakan pecahan $\\frac{9}{12}$ ke bentuk paling sederhana!",
+                        inputType: 'text',
+                        answer: "3/4",
+                        explanation: "FPB dari 9 dan 12 adalah 3. Bagi keduanya dengan 3. $\\frac{9 \\div 3}{12 \\div 3} = \\frac{3}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Manakah pecahan yang senilai dengan $\\frac{1}{3}$?",
+                        inputType: 'mcq',
+                        options: ["$\\frac{2}{6}$", "$\\frac{2}{3}$", "$\\frac{3}{4}$", "$\\frac{1}{6}$"],
+                        answer: "$\\frac{2}{6}$",
+                        explanation: "$\\frac{1}{3}$ jika dikali 2 atas dan bawah menjadi $\\frac{2}{6}$. $\\frac{2}{6}$ disederhanakan kembali menjadi $\\frac{1}{3}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Mengurutkan Pecahan',
+                        html: `
+                            <p>Untuk membandingkan pecahan, samakan terlebih dahulu penyebutnya menggunakan KPK, atau ubah semuanya ke bentuk desimal.</p>
+                            <br>
+                            <p>Contoh: Mana yang lebih besar, $\\frac{1}{4}$ atau $\\frac{2}{5}$?</p>
+                            <p>Ubah ke desimal: $\\frac{1}{4} = 0,25$ dan $\\frac{2}{5} = 0,4$. Karena 0,4 > 0,25, maka $\\frac{2}{5}$ lebih besar.</p>
+                            <br>
+                            <p>Atau samakan penyebut: KPK 4 dan 5 adalah 20.<br>
+                            $\\frac{1}{4} = \\frac{5}{20}$<br>
+                            $\\frac{2}{5} = \\frac{8}{20}$<br>
+                            Karena 8 > 5, maka $\\frac{2}{5}$ lebih besar.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah pecahan $\\frac{3}{4}$ ke bentuk desimal!",
+                        inputType: 'text',
+                        answer: "0,75",
+                        explanation: "$\\frac{3}{4}$ bisa diubah penyebutnya menjadi 100 (dikali 25). $\\frac{75}{100} = 0,75$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Manakah yang lebih kecil?",
+                        inputType: 'mcq',
+                        options: ["$\\frac{1}{2}$", "$\\frac{3}{8}$", "$\\frac{5}{8}$", "$\\frac{2}{5}$"],
+                        answer: "$\\frac{2}{5}$",
+                        explanation: "Ubah ke desimal: 1/2=0,5; 3/8=0,375; 5/8=0,625; 2/5=0,4. Nilai desimal terkecil adalah 0,375 ($\\frac{3}{8}$). Tunggu, 0,375 lebih kecil dari 0,4! Jadi jawabannya $\\frac{3}{8}$." 
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Urutkan pecahan berikut dari yang terkecil ke terbesar: $\\frac{1}{2}$, $\\frac{1}{4}$, $\\frac{3}{4}$! (Pisahkan dengan koma)",
+                        inputType: 'text',
+                        answer: "1/4, 1/2, 3/4",
+                        explanation: "Samakan penyebut menjadi 4. $\\frac{1}{2} = \\frac{2}{4}$. Urutannya: $\\frac{1}{4}$, $\\frac{2}{4}$, $\\frac{3}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Tanda yang tepat untuk membandingkan $\\frac{2}{3}$ dan $0,5$ adalah...",
+                        inputType: 'mcq',
+                        options: [">", "<", "=", "$\\le$"],
+                        answer: ">",
+                        explanation: "$\\frac{2}{3}$ kira-kira 0,67. Karena 0,67 lebih besar dari 0,5, maka tandanya adalah >."
+                    }
+                ]
+            },
+            // --- SECTION 4: Problem Introduction ---
+            {
+                id: 'sec4',
+                title: 'Problem Intro',
+                time: '00:20-00:30',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Memvisualisasikan Pecahan Tidak Murni',
+                        html: `
+                            <p>Lihat di layar. Kita punya <strong>7 peti harta karun</strong> yang akan dibagikan kepada <strong>3 kapal aliansi</strong>. Secara matematis, kita menulisnya $\\frac{7}{3}$.</p>
+                            <br>
+                            <p>Inilah <strong>pecahan tidak murni</strong> karena pembilang (7) lebih besar dari penyebut (3). Ini berarti harta yang kita bagi lebih dari 1 utuh!</p>
+                            <br>
+                            <p>Mari kita gambar! Jika 3 peti membentuk 1 set utuh, berapa set utuh yang kita punya dan berapa sisanya?</p>
+                            <svg class="illustration" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="50" height="50" fill="#f4a261" stroke="#333"/>
+                                <rect x="60" y="10" width="50" height="50" fill="#f4a261" stroke="#333"/>
+                                <rect x="110" y="10" width="50" height="50" fill="#f4a261" stroke="#333"/>
+                                <text x="85" y="80" font-size="14" text-anchor="middle">Set 1 (3 peti)</text>
+                                
+                                <rect x="10" y="90" width="50" height="20" fill="#e76f51" stroke="#333"/>
+                                <rect x="60" y="90" width="50" height="20" fill="#e76f51" stroke="#333"/>
+                                <rect x="110" y="90" width="50" height="20" fill="#e76f51" stroke="#333"/>
+                                <rect x="160" y="90" width="20" height="20" fill="#e76f51" stroke="#333"/>
+                                <text x="100" y="115" font-size="12" text-anchor="middle">Sisa 1 peti dari 7</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pada pecahan $\\frac{7}{3}$, berapa banyak 'set utuh' (kelompok berisi 3) yang bisa dibentuk?",
+                        inputType: 'text',
+                        answer: "2",
+                        explanation: "Jika 7 dibagi 3, kita bisa membuat 2 kelompok berisi 3 (2 x 3 = 6). Jadi ada 2 set utuh."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pada pecahan $\\frac{7}{3}$, setelah membentuk set utuh, berapa sisa petinya?",
+                        inputType: 'text',
+                        answer: "1",
+                        explanation: "Total 7, dipakai untuk 2 set utuh (2x3=6). Sisa dari 7 - 6 adalah 1 peti."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Berdasarkan dua soal sebelumnya, pecahan $\\frac{7}{3}$ jika ditulis sebagai pecahan campuran adalah...",
+                        inputType: 'text',
+                        answer: "2 1/3",
+                        explanation: "2 set utuh dan sisa 1 per 3. Ditulis sebagai pecahan campuran: $2\\frac{1}{3}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Rumus Putar: Pecahan Campuran ke Biasa',
+                        html: `
+                            <p>Sekarang kita pelajari cara mengubah pecahan campuran menjadi pecahan biasa (tidak murni) menggunakan <strong>Rumus Putar</strong>.</p>
+                            <br>
+                            <p>Contoh: $3\\frac{2}{5}$.</p>
+                            <ol>
+                                <li>Kalikan penyebut dengan bilangan bulat: $5 \\times 3 = 15$.</li>
+                                <li>Tambahkan pembilang: $15 + 2 = 17$.</li>
+                                <li>Hasilnya ditaruh di atas penyebut awal (5). Jadi, $\\frac{17}{5}$.</li>
+                            </ol>
+                            <svg class="illustration" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="#58cc02" stroke-width="4" stroke-dasharray="10 5"/>
+                                <text x="50" y="55" font-size="20" text-anchor="middle" fill="#333">5 x 3 + 2</text>
+                                <path d="M100 50 L150 50" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+                                <text x="125" y="40" font-size="14" text-anchor="middle">= 17</text>
+                                <text x="170" y="55" font-size="20" text-anchor="middle" fill="#333">/5</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $2\\frac{1}{4}$ ke pecahan biasa!",
+                        inputType: 'text',
+                        answer: "9/4",
+                        explanation: "Kalikan 4 x 2 = 8. Tambah 1 = 9. Taruh di atas 4. Hasilnya $\\frac{9}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $3\\frac{2}{5}$ ke pecahan biasa!",
+                        inputType: 'text',
+                        answer: "17/5",
+                        explanation: "Kalikan 5 x 3 = 15. Tambah 2 = 17. Taruh di atas 5. Hasilnya $\\frac{17}{5}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $4\\frac{3}{7}$ ke pecahan biasa!",
+                        inputType: 'text',
+                        answer: "31/7",
+                        explanation: "Kalikan 7 x 4 = 28. Tambah 3 = 31. Taruh di atas 7. Hasilnya $\\frac{31}{7}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Pembagian Bersusun: Biasa ke Campuran',
+                        html: `
+                            <p>Untuk mengubah pecahan biasa (tidak murni) menjadi pecahan campuran, kita gunakan <strong>pembagian bersusun (porogapit)</strong>.</p>
+                            <br>
+                            <p>Contoh: $\\frac{17}{5}$.</p>
+                            <ul>
+                                <li>Bagi 17 dengan 5.</li>
+                                <li>17 : 5 = 3 (sisa 2).</li>
+                                <li>Hasil bagi (3) menjadi bilangan bulat.</li>
+                                <li>Sisa (2) menjadi pembilang baru, penyebut tetap 5.</li>
+                                <li>Jadi, $\\frac{17}{5} = 3\\frac{2}{5}$.</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $\\frac{9}{4}$ ke pecahan campuran menggunakan pembagian!",
+                        inputType: 'text',
+                        answer: "2 1/4",
+                        explanation: "9 : 4 = 2 sisa 1. Bilangan bulat 2, pembilang sisa 1, penyebut 4. Hasilnya $2\\frac{1}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $\\frac{22}{7}$ ke pecahan campuran!",
+                        inputType: 'text',
+                        answer: "3 1/7",
+                        explanation: "22 : 7 = 3 sisa 1. Hasilnya $3\\frac{1}{7}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pecahan $\\frac{25}{6}$ jika diubah ke pecahan campuran menjadi...",
+                        inputType: 'mcq',
+                        options: ["$4\\frac{1}{6}$", "$3\\frac{7}{6}$", "$4\\frac{5}{6}$", "$5\\frac{1}{6}$"],
+                        answer: "$4\\frac{1}{6}$",
+                        explanation: "25 : 6 = 4 sisa 1. Hasilnya $4\\frac{1}{6}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Sebuah pecahan biasa jika dibagi menghasilkan 3 sisa 4 dengan penyebut 7. Tulis pecahan campurannya!",
+                        inputType: 'text',
+                        answer: "3 4/7",
+                        explanation: "Bilangan bulat 3, pembilang sisa 4, penyebut 7. Hasilnya $3\\frac{4}{7}$."
+                    }
+                ]
+
+            },
+            // --- SECTION 5: Guided Practice ---
+            {
+                id: 'sec5',
+                title: 'Guided Practice',
+                time: '00:30-00:45',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Rumus Putar: Praktik Bersama',
+                        html: `
+                            <p>Sekarang waktunya kita mempraktikkan 'Rumus Putar' untuk mengubah pecahan campuran menjadi pecahan biasa. Ingat langkahnya: Kalikan penyebut dengan bilangan bulat, lalu tambahkan pembilang. Hasilnya menjadi pembilang baru, penyebut tetap.</p>
+                            <br>
+                            <p>Mari kita coba bersama untuk $4\\frac{3}{7}$!</p>
+                            <ul>
+                                <li>Penyebut $\\times$ Bulat: $7 \\times 4 = 28$</li>
+                                <li>Tambah Pembilang: $28 + 3 = 31$</li>
+                                <li>Hasil akhir: $\\frac{31}{7}$</li>
+                            </ul>
+                            <svg class="illustration" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="100" cy="50" r="40" fill="none" stroke="#58cc02" stroke-width="4" stroke-dasharray="10 5"/>
+                                <text x="100" y="45" font-size="14" text-anchor="middle" fill="#333">(7 × 4) + 3</text>
+                                <text x="100" y="65" font-size="12" text-anchor="middle" fill="#777">= 31 / 7</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $5\\frac{2}{9}$ menjadi pecahan biasa!",
+                        inputType: 'text',
+                        answer: "47/9",
+                        explanation: "$(9 \\times 5) + 2 = 45 + 2 = 47$. Penyebut tetap 9. Hasilnya $\\frac{47}{9}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $2\\frac{3}{8}$ menjadi pecahan biasa!",
+                        inputType: 'text',
+                        answer: "19/8",
+                        explanation: "$(8 \\times 2) + 3 = 16 + 3 = 19$. Penyebut tetap 8. Hasilnya $\\frac{19}{8}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Sebuah peti berisi 6 emas utuh dan $\\frac{1}{5}$ emas pecahan. Tulis dalam pecahan biasa!",
+                        inputType: 'text',
+                        answer: "31/5",
+                        explanation: "Pecahan campurannya $6\\frac{1}{5}$. $(5 \\times 6) + 1 = 31$. Hasilnya $\\frac{31}{5}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Pembagian Bersusun & Desimal',
+                        html: `
+                            <p>Selanjutnya, kita coba sebaliknya: mengubah pecahan biasa (tidak murni) menjadi pecahan campuran menggunakan <strong>pembagian bersusun (porogapit)</strong>.</p>
+                            <br>
+                            <p>Kita juga akan mengubah pecahan persepuluh menjadi desimal. Pecahan dengan penyebut 10, 100, atau 1000 sangat mudah diubah ke desimal hanya dengan meletakkan angkanya setelah koma sesuai jumlah nolnya.</p>
+                            <br>
+                            <p>Contoh: $\\frac{3}{10} = 0,3$ dan $\\frac{45}{100} = 0,45$.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah pecahan biasa $\\frac{23}{5}$ menjadi pecahan campuran!",
+                        inputType: 'text',
+                        answer: "4 3/5",
+                        explanation: "23 dibagi 5 adalah 4 sisa 3. Jadi pecahan campurannya adalah $4\\frac{3}{5}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah pecahan biasa $\\frac{38}{7}$ menjadi pecahan campuran!",
+                        inputType: 'text',
+                        answer: "5 3/7",
+                        explanation: "38 dibagi 7 adalah 5 sisa 3. Jadi pecahan campurannya adalah $5\\frac{3}{7}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah pecahan $\\frac{7}{10}$ ke dalam bentuk desimal!",
+                        inputType: 'text',
+                        answer: "0,7",
+                        explanation: "Penyebut 10 berarti satu angka di belakang koma. $\\frac{7}{10} = 0,7$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Visualisasi Pecahan Campuran',
+                        html: `
+                            <p>Memahami pecahan tidak hanya soal angka, tapi juga soal gambar. Misalnya, kita ingin menggambar $1\\frac{3}{4}$.</p>
+                            <br>
+                            <p>Artinya, kita menggambar 1 bentuk utuh penuh, dan bentuk kedua yang dibagi menjadi 4 bagian, di mana 3 bagian diarsir.</p>
+                            <svg class="illustration" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="40" fill="#58cc02" stroke="#333" stroke-width="2"/>
+                                <text x="50" y="55" font-size="14" text-anchor="middle" fill="#fff">1 Utuh</text>
+                                
+                                <circle cx="150" cy="50" r="40" fill="#fff" stroke="#333" stroke-width="2"/>
+                                <path d="M150 50 L150 10 A40 40 0 0 1 186 65 Z" fill="#58cc02"/>
+                                <path d="M150 50 L186 65 A40 40 0 0 1 128 78 Z" fill="#58cc02"/>
+                                <path d="M150 50 L128 78 A40 40 0 0 1 128 21 Z" fill="#58cc02"/>
+                                <text x="150" y="55" font-size="14" text-anchor="middle" fill="#333">3/4</text>
+                            </svg>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Jika kita menggambar $2\\frac{1}{3}$, berapa banyak bentuk lingkaran utuh penuh yang kita gambar?",
+                        inputType: 'text',
+                        answer: "2",
+                        explanation: "Angka bulat di depan pecahan campuran menunjukkan jumlah bentuk utuh. Jadi kita menggambar 2 lingkaran penuh."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pada pecahan $1\\frac{3}{4}$, sebuah lingkaran dibagi menjadi berapa bagian sama besar?",
+                        inputType: 'text',
+                        answer: "4",
+                        explanation: "Penyebut menentukan jumlah pembagian. Karena penyebutnya 4, maka lingkaran dibagi menjadi 4 bagian."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $0,8$ ke dalam bentuk pecahan biasa paling sederhana!",
+                        inputType: 'text',
+                        answer: "4/5",
+                        explanation: "0,8 = $\\frac{8}{10}$. Faktor persekutuan terbesar dari 8 dan 10 adalah 2. Dibagi 2 menjadi $\\frac{4}{5}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Manakah desimal yang ekuivalen dengan $\\frac{1}{4}$?",
+                        inputType: 'mcq',
+                        options: ["0,25", "0,50", "0,14", "0,4"],
+                        answer: "0,25",
+                        explanation: "$\\frac{1}{4}$ diubah ke desimal dengan menyamakan penyebut menjadi 100 ($\\frac{25}{100}$), yang sama dengan 0,25."
+                    }
+                ]
+            },
+            // --- SECTION 6: Independent Practice ---
+            {
+                id: 'sec6',
+                title: 'Independent Practice',
+                time: '00:50-01:00',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Misi Kapten: Navigasi Sendiri',
+                        html: `
+                            <p>Kapten, ini adalah peta harta karunmu! Sekarang kamu harus menyelesaikan 5 tantangan di layar tanpa bantuan kru. Kamu harus mengubah koordinat pecahan ini agar kapal kita tidak menabrak karang. Fokus pada ketelitian ya!</p>
+                            <br>
+                            <p>Gunakan semua ilmu yang sudah dipelajari: konversi pecahan, desimal, dan penyederhanaan pecahan.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Soal 1: Ubah $\\frac{17}{4}$ menjadi pecahan campuran!",
+                        inputType: 'text',
+                        answer: "4 1/4",
+                        explanation: "17 dibagi 4 adalah 4 sisa 1. Hasilnya $4\\frac{1}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Soal 2: Ubah $5\\frac{2}{9}$ menjadi pecahan biasa!",
+                        inputType: 'text',
+                        answer: "47/9",
+                        explanation: "$(9 \\times 5) + 2 = 45 + 2 = 47$. Hasilnya $\\frac{47}{9}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Soal 3: Gambarkan secara visual pecahan $1\\frac{3}{4}$. Berapa banyak bagian yang tidak diarsir pada lingkaran ke-2?",
+                        inputType: 'text',
+                        answer: "1",
+                        explanation: "Lingkaran ke-2 dibagi 4 bagian, 3 bagian diarsir. Berarti ada 4 - 3 = 1 bagian yang tidak diarsir."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Strategi Perbandingan',
+                        html: `
+                            <p>Untuk membandingkan pecahan dan desimal, seperti mana yang lebih besar antara $2,5$ atau $\\frac{7}{3}$, strategi terbaik adalah mengubah semuanya ke bentuk desimal.</p>
+                            <br>
+                            <p>Kita tahu $2,5$ sudah dalam desimal. <br>
+                            Untuk $\\frac{7}{3}$, ubah ke pecahan campuran: $2\\frac{1}{3}$. <br>
+                            $\\frac{1}{3}$ dalam desimal kira-kira $0,33$. Jadi $\\frac{7}{3} = 2,33$.<br>
+                            Karena $2,5 > 2,33$, maka $2,5$ lebih besar!</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Soal 4: Manakah yang lebih besar, $2,5$ atau $\\frac{7}{3}$?",
+                        inputType: 'mcq',
+                        options: ["2,5", "$\\frac{7}{3}$", "Sama besar", "Tidak bisa dibandingkan"],
+                        answer: "2,5",
+                        explanation: "$\\frac{7}{3} = 2\\frac{1}{3} = 2,333...$ Sedangkan 2,5 lebih besar dari 2,33."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $\\frac{7}{3}$ ke bentuk pecahan campuran terlebih dahulu!",
+                        inputType: 'text',
+                        answer: "2 1/3",
+                        explanation: "7 dibagi 3 sama dengan 2 sisa 1. Hasilnya $2\\frac{1}{3}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $2,5$ ke bentuk pecahan campuran!",
+                        inputType: 'text',
+                        answer: "2 1/2",
+                        explanation: "0,5 sama dengan $\\frac{1}{2}$. Jadi 2,5 sama dengan $2\\frac{1}{2}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Menyederhanakan Pecahan dengan FPB',
+                        html: `
+                            <p>Soal 5: Sederhanakan pecahan $\\frac{24}{60}$ menggunakan ilmu FPB-mu tadi!</p>
+                            <br>
+                            <p>Langkah 1: Cari FPB dari 24 dan 60.<br>
+                            Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24<br>
+                            Faktor 60: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60<br>
+                            FPB terbesarnya adalah 12.</p>
+                            <br>
+                            <p>Langkah 2: Bagi pembilang dan penyebut dengan 12.<br>
+                            $\\frac{24 \\div 12}{60 \\div 12} = \\frac{2}{5}$.</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Apa Faktor Persekutuan Terbesar (FPB) dari 24 dan 60?",
+                        inputType: 'text',
+                        answer: "12",
+                        explanation: "12 adalah angka terbesar yang bisa membagi habis baik 24 maupun 60."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Bagi 24 dengan 12. Berapa hasilnya?",
+                        inputType: 'text',
+                        answer: "2",
+                        explanation: "24 dibagi 12 adalah 2. Ini menjadi pembilang baru."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Bagi 60 dengan 12. Berapa hasilnya?",
+                        inputType: 'text',
+                        answer: "5",
+                        explanation: "60 dibagi 12 adalah 5. Ini menjadi penyebut baru."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Berdasarkan perhitungan sebelumnya, bentuk paling sederhana dari $\\frac{24}{60}$ adalah...",
+                        inputType: 'text',
+                        answer: "2/5",
+                        explanation: "Pembilang baru 2, penyebut baru 5. Jadi $\\frac{24}{60} = \\frac{2}{5}$."
+                    }
+                ]
+            },
+            // --- SECTION 7: Consolidation & Reflection ---
+            {
+                id: 'sec7',
+                title: 'Consolidation',
+                time: '01:00-01:05',
+                type: 'section',
+                cards: [
+                    {
+                        type: 'theory',
+                        title: 'Ringkasan Misi Hari Ini',
+                        html: `
+                            <p>Luar biasa, Kapten! Hari ini kamu berhasil menguasai cara membagi harta karun dengan pecahan. Ingat, pecahan bukan hanya angka, tapi cara kita berbagi secara adil.</p>
+                            <br>
+                            <p><strong>Yang sudah kita pelajari:</strong></p>
+                            <ul>
+                                <li>Pecahan Biasa (pembilang < penyebut) dan Pecahan Tidak Murni (pembilang $\\ge$ penyebut).</li>
+                                <li>Pecahan Campuran: campuran bilangan bulat dan pecahan.</li>
+                                <li>Cara mengubah pecahan campuran $\\rightarrow$ pecahan biasa (Rumus Putar).</li>
+                                <li>Cara mengubah pecahan biasa $\\rightarrow$ pecahan campuran (Pembagian Bersusun).</li>
+                                <li>Menyederhanakan pecahan menggunakan FPB.</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Apa nama pecahan yang terdiri dari bilangan bulat dan pecahan biasa?",
+                        inputType: 'mcq',
+                        options: ["Pecahan Desimal", "Pecahan Tidak Murni", "Pecahan Campuran", "Pecahan Senilai"],
+                        answer: "Pecahan Campuran",
+                        explanation: "Pecahan campuran menggabungkan bilangan bulat (seperti 2) dengan pecahan biasa (seperti 1/3) menjadi $2\\frac{1}{3}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Untuk menyederhanakan pecahan $\\frac{18}{42}$, kita membagi atas dan bawah dengan...",
+                        inputType: 'text',
+                        answer: "6",
+                        explanation: "FPB dari 18 dan 42 adalah 6. Membagi keduanya dengan 6 menghasilkan $\\frac{3}{7}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Ubah $2\\frac{1}{3}$ ke pecahan biasa!",
+                        inputType: 'text',
+                        answer: "7/3",
+                        explanation: "$(3 \\times 2) + 1 = 7$. Penyebut 3. Hasilnya $\\frac{7}{3}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Refleksi Diri',
+                        html: `
+                            <p>Setiap petualang hebat selalu mengevaluasi kemampuannya. Sebelum kita tutup misi hari ini, mari kita lihat kembali perjalanan kita.</p>
+                            <br>
+                            <p>Apa satu hal yang paling menantang hari ini? Apakah itu Rumus Putar, Pembagian Bersusun, atau mengubah desimal ke pecahan?</p>
+                            <br>
+                            <p>Jangan lupa untuk mengerjakan tugas rumah (Assignment) di platform untuk memperkuat ingatanmu!</p>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Bagian mana yang menurutmu paling sulit dipahami hari ini? (Pilih salah satu untuk dievaluasi)",
+                        inputType: 'mcq',
+                        options: ["Konversi Campuran ke Biasa", "Konversi Biasa ke Campuran", "Desimal ke Pecahan", "Menyederhanakan Pecahan"],
+                        answer: "Konversi Campuran ke Biasa",
+                        explanation: "Tidak ada jawaban salah atau benar di refleksi ini. Yang penting kamu tahu bagian mana yang perlu lebih banyak dilatih di Assignment nanti!"
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Pecahan $0,75$ jika diubah ke pecahan biasa paling sederhana adalah...",
+                        inputType: 'text',
+                        answer: "3/4",
+                        explanation: "0,75 = $\\frac{75}{100}$. FPB 75 dan 100 adalah 25. Dibagi 25 menghasilkan $\\frac{3}{4}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Tiga lingkaran utuh dan 1 lingkaran terarsir 3 dari 8 bagian. Tulis dalam pecahan campuran!",
+                        inputType: 'text',
+                        answer: "3 3/8",
+                        explanation: "3 utuh ditambah pecahan $\\frac{3}{8}$. Ditulis sebagai $3\\frac{3}{8}$."
+                    },
+                    {
+                        type: 'theory',
+                        title: 'Penutup Misi & Lanjut ke Assignment',
+                        html: `
+                            <p>Kamu telah melakukan pekerjaan yang luar biasa hari ini! Sekarang saatnya mengambil hadiah tugasmu dan menguji sejauh mana pemahamanmu.</p>
+                            <br>
+                            <p>Klik tombol di bawah untuk masuk ke platform belajar dan mengambil tantangan Assignment.</p>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <a href="https://learn.algonova.id/login" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                                    🏆 Ambil Hadiah Tugas
+                                </a>
+                            </div>
+                        `
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Sebagai pemanasan sebelum Assignment, Ubah $3\\frac{4}{7}$ menjadi pecahan biasa!",
+                        inputType: 'text',
+                        answer: "25/7",
+                        explanation: "$(7 \\times 3) + 4 = 21 + 4 = 25$. Penyebut 7. Hasilnya $\\frac{25}{7}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Sederhanakan pecahan $\\frac{18}{42}$ ke bentuk paling sederhana!",
+                        inputType: 'text',
+                        answer: "3/7",
+                        explanation: "FPB 18 dan 42 adalah 6. $\\frac{18 \\div 6}{42 \\div 6} = \\frac{3}{7}$."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Urutkan dari terkecil ke terbesar: $\\frac{6}{5}$, $1,25$, $1\\frac{1}{3}$. (Pisahkan dengan koma)",
+                        inputType: 'text',
+                        answer: "6/5, 1.25, 1 1/3",
+                        explanation: "Ubah ke desimal: $\\frac{6}{5} = 1,2$; $1,25$; $1\\frac{1}{3} \\approx 1,33$. Urutan: 1,2 ; 1,25 ; 1,33."
+                    },
+                    {
+                        type: 'exercise',
+                        question: "Jika $\\frac{x}{8}$ ekuivalen dengan $0,625$, berapakah nilai $x$?",
+                        inputType: 'text',
+                        answer: "5",
+                        explanation: "0,625 = $\\frac{625}{1000}$. Jika disederhanakan (dibagi 125), menjadi $\\frac{5}{8}$. Maka $x = 5$."
+                    }
+                ]
+
+            },
+            // --- ASSIGNMENT 1 ---
+            {
+                id: 'assign1',
+                title: 'Assignment 1',
+                type: 'assignment',
+                groupName: 'Assignment 1: Konversi Dasar',
+                questions: [
+                    { q: "Ubah pecahan campuran $3\\frac{4}{7}$ menjadi pecahan biasa.", type: 'text', ans: "25/7", exp: "$(7 \\times 3) + 4 = 25$. Jawaban: $\\frac{25}{7}$." },
+                    { q: "Ubah pecahan campuran $5\\frac{2}{9}$ menjadi pecahan biasa.", type: 'text', ans: "47/9", exp: "$(9 \\times 5) + 2 = 47$. Jawaban: $\\frac{47}{9}$." },
+                    { q: "Ubah $\\frac{17}{4}$ menjadi pecahan campuran.", type: 'text', ans: "4 1/4", exp: "$17 : 4 = 4$ sisa $1$. Jawaban: $4\\frac{1}{4}$." },
+                    { q: "Ubah $\\frac{38}{7}$ menjadi pecahan campuran.", type: 'text', ans: "5 3/7", exp: "$38 : 7 = 5$ sisa $3$. Jawaban: $5\\frac{3}{7}$." },
+                    { q: "Manakah yang merupakan pecahan tidak murni?", type: 'mcq', opts: ["$\\frac{3}{4}$", "$\\frac{7}{8}$", "$\\frac{9}{5}$", "$\\frac{1}{2}$"], ans: "$\\frac{9}{5}$", exp: "Pembilang (9) > Penyebut (5)." },
+                    { q: "Ubah $\\frac{7}{10}$ ke bentuk desimal.", type: 'text', ans: "0,7", exp: "Penyebut 10 berarti 1 angka di belakang koma." },
+                    { q: "Ubah $0,75$ ke pecahan biasa paling sederhana.", type: 'text', ans: "3/4", exp: "$0,75 = \\frac{75}{100}$. Dibagi 25 menjadi $\\frac{3}{4}$." },
+                    { q: "Sederhanakan pecahan $\\frac{18}{42}$.", type: 'text', ans: "3/7", exp: "FPB 18 dan 42 adalah 6. $\\frac{18\\div6}{42\\div6} = \\frac{3}{7}$." },
+                    { q: "Cari pecahan senilai dari $\\frac{2}{5}$ jika penyebutnya menjadi 15.", type: 'text', ans: "6/15", exp: "Penyebut dikali 3, pembilang dikali 3. $\\frac{6}{15}$." },
+                    { q: "Tuliskan $2\\frac{1}{3}$ dalam bentuk pecahan biasa.", type: 'text', ans: "7/3", exp: "$(3 \\times 2) + 1 = 7$. Jawaban: $\\frac{7}{3}$." }
+                ]
+            },
+            // --- ASSIGNMENT 2 ---
+            {
+                id: 'assign2',
+                title: 'Assignment 2',
+                type: 'assignment',
+                groupName: 'Assignment 2: Visualisasi & FPB',
+                questions: [
+                    { q: "Nyatakan bagian yang diarsir dari 3 lingkaran (2 penuh, 1 terarsir 3 dari 8) dalam pecahan campuran.", type: 'text', ans: "2 3/8", exp: "2 utuh dan $\\frac{3}{8}$. Jawaban: $2\\frac{3}{8}$." },
+                    { q: "Pada pecahan $1\\frac{3}{4}$, sebuah lingkaran dibagi menjadi berapa bagian?", type: 'text', ans: "4", exp: "Penyebut menentukan jumlah pembagian, yaitu 4." },
+                    { q: "Apa FPB dari 24 dan 60?", type: 'text', ans: "12", exp: "Faktor terbesar yang sama adalah 12." },
+                    { q: "Sederhanakan pecahan $\\frac{24}{60}$.", type: 'text', ans: "2/5", exp: "Dibagi FPB (12). $\\frac{24\\div12}{60\\div12} = \\frac{2}{5}$." },
+                    { q: "Apa FPB dari 18 dan 42?", type: 'text', ans: "6", exp: "Faktor terbesar yang sama adalah 6." },
+                    { q: "Sederhanakan pecahan $\\frac{18}{42}$.", type: 'text', ans: "3/7", exp: "Dibagi FPB (6). $\\frac{18\\div6}{42\\div6} = \\frac{3}{7}$." },
+                    { q: "Gambarkan $2\\frac{1}{3}$. Berapa bentuk utuh yang digambar?", type: 'text', ans: "2", exp: "Angka bulat di depan menunjukkan bentuk utuh, yaitu 2." },
+                    { q: "Pada $\\frac{5}{8}$, berapa bagian yang TIDAK diarsir jika 5 bagian diarsir?", type: 'text', ans: "3", exp: "Total 8, diarsir 5. Sisa 8 - 5 = 3." },
+                    { q: "Manakah pecahan yang paling sederhana?", type: 'mcq', opts: ["$\\frac{12}{18}$", "$\\frac{24}{36}$", "$\\frac{2}{3}$", "$\\frac{6}{9}$"], ans: "$\\frac{2}{3}$", exp: "$\\frac{2}{3}$ tidak bisa dibagi lagi karena FPB 2 dan 3 adalah 1." },
+                    { q: "Sederhanakan $\\frac{50}{100}$.", type: 'text', ans: "1/2", exp: "Dibagi 50 menjadi $\\frac{1}{2}$." }
+                ]
+            },
+            // --- ASSIGNMENT 3 ---
+            {
+                id: 'assign3',
+                title: 'Assignment 3',
+                type: 'assignment',
+                groupName: 'Assignment 3: Desimal & Pecahan',
+                questions: [
+                    { q: "Ubah $0,625$ ke pecahan biasa.", type: 'text', ans: "5/8", exp: "$\\frac{625}{1000}$ dibagi 125 menjadi $\\frac{5}{8}$." },
+                    { q: "Jika $\\frac{x}{8}$ ekuivalen dengan $0,625$, berapakah $x$?", type: 'text', ans: "5", exp: "$0,625 = \\frac{5}{8}$, maka $x=5$." },
+                    { q: "Ubah $\\frac{3}{4}$ ke desimal.", type: 'text', ans: "0,75", exp: "$\\frac{3}{4} = \\frac{75}{100} = 0,75$." },
+                    { q: "Ubah $2,5$ ke pecahan campuran.", type: 'text', ans: "2 1/2", exp: "0,5 = $\\frac{1}{2}$. Jawab: $2\\frac{1}{2}$." },
+                    { q: "Ubah $1,25$ ke pecahan biasa.", type: 'text', ans: "5/4", exp: "$1,25 = \\frac{125}{100} = \\frac{5}{4}$." },
+                    { q: "Manakah yang lebih besar: $2,5$ atau $\\frac{7}{3}$?", type: 'mcq', opts: ["2,5", "$\\frac{7}{3}$", "Sama", "Tidak tahu"], ans: "2,5", exp: "$\\frac{7}{3} = 2,33$. 2,5 lebih besar dari 2,33." },
+                    { q: "Ubah $\\frac{7}{3}$ ke pecahan campuran.", type: 'text', ans: "2 1/3", exp: "$7 : 3 = 2$ sisa $1$." },
+                    { q: "Ubah $0,8$ ke pecahan paling sederhana.", type: 'text', ans: "4/5", exp: "$\\frac{8}{10}$ dibagi 2 menjadi $\\frac{4}{5}$." },
+                    { q: "Urutkan dari terkecil: $1,2$ ; $1\\frac{1}{4}$ ; $1,15$ (Pisahkan dengan koma).", type: 'text', ans: "1.15, 1.2, 1 1/4", exp: "1,15 < 1,2 < 1,25." },
+                    { q: "Ubah $1\\frac{1}{3}$ ke desimal (2 angka).", type: 'text', ans: "1.33", exp: "$\\frac{1}{3} \\approx 0,33$. Jadi $1,33$." }
+                ]
+            },
+            // --- ASSIGNMENT 4 ---
+            {
+                id: 'assign4',
+                title: 'Assignment 4',
+                type: 'assignment',
+                groupName: 'Assignment 4: Operasi Pecahan',
+                questions: [
+                    { q: "Kapten punya $\\frac{25}{6}$ kg emas. Jika dimasukkan ke kotak berisi $1\\frac{1}{2}$ kg, berapa kotak penuh didapat? (Dalam pecahan)", type: 'text', ans: "25/9", exp: "$\\frac{25}{6} : \\frac{3}{2} = \\frac{25}{6} \\times \\frac{2}{3} = \\frac{50}{18} = \\frac{25}{9}$." },
+                    { q: "Berdasarkan soal sebelumnya, berapa kotak penuh (bilangan bulat) yang didapat?", type: 'text', ans: "2", exp: "$\\frac{25}{9} = 2\\frac{7}{9}$. Jadi 2 kotak penuh." },
+                    { q: "Berapa sisa emas yang tidak muat di kotak penuh? (Dalam pecahan biasa)", type: 'text', ans: "7/9", exp: "Sisa dari $\\frac{25}{9}$ adalah $\\frac{7}{9}$." },
+                    { q: "Sebuah botol berisi $2\\frac{1}{4}$ liter air. Diminum $0,8$ liter. Berapa sisa air dalam pecahan biasa? (Penyebut 20)", type: 'text', ans: "29/20", exp: "$\\frac{9}{4} - \\frac{4}{5} = \\frac{45}{20} - \\frac{16}{20} = \\frac{29}{20}$." },
+                    { q: "Ubah $7\\frac{5}{12}$ ke pecahan biasa.", type: 'text', ans: "89/12", exp: "$(12 \\times 7) + 5 = 89$." },
+                    { q: "Kurangi pecahan sebelumnya ($\\frac{89}{12}$) dengan $\\frac{2}{3}$. (Penyebut 12)", type: 'text', ans: "81/12", exp: "$\\frac{89}{12} - \\frac{8}{12} = \\frac{81}{12}$." },
+                    { q: "Ubah hasil sebelumnya ($\\frac{81}{12}$) ke pecahan campuran paling sederhana.", type: 'text', ans: "6 3/4", exp: "$\\frac{81}{12} = \\frac{27}{4} = 6\\frac{3}{4}$." },
+                    { q: "Jika $4\\frac{2}{x} = \\frac{22}{5}$, berapakah $x$?", type: 'text', ans: "5", exp: "$\\frac{22}{5} = 4\\frac{2}{5}$. Maka $x=5$." },
+                    { q: "Jumlahkan $\\frac{1}{4}$ dan $\\frac{2}{5}$ (Bentuk pecahan biasa).", type: 'text', ans: "13/20", exp: "$\\frac{5}{20} + \\frac{8}{20} = \\frac{13}{20}$." },
+                    { q: "Kurangi $1$ utuh dengan $\\frac{3}{8}$.", type: 'text', ans: "5/8", exp: "$\\frac{8}{8} - \\frac{3}{8} = \\frac{5}{8}$." }
+                ]
+            },
+            // --- ASSIGNMENT 5 ---
+            {
+                id: 'assign5',
+                title: 'Assignment 5',
+                type: 'assignment',
+                groupName: 'Assignment 5: Misi Harta Karun',
+                questions: [
+                    { q: "7 peti dibagi rata ke 3 kapal. Tulis pecahan tidak murninya.", type: 'text', ans: "7/3", exp: "Total 7 bagi 3. $\\frac{7}{3}$." },
+                    { q: "Ubah pecahan di atas ke pecahan campuran.", type: 'text', ans: "2 1/3", exp: "$7 : 3 = 2$ sisa $1$." },
+                    { q: "Jika 10 batang emas dibagi 4 kru, berapa batang yang didapat 1 kru? (Desimal)", type: 'text', ans: "2.5", exp: "$10 : 4 = 2,5$." },
+                    { q: "Ubah jawaban desimal di atas ke pecahan campuran.", type: 'text', ans: "2 1/2", exp: "$2,5 = 2\\frac{1}{2}$." },
+                    { q: "Kapten memberi $\\frac{1}{3}$ harta ke Kru A, dan $\\frac{1}{4}$ ke Kru B. Siapa yang dapat lebih banyak?", type: 'mcq', opts: ["Kru A", "Kru B", "Sama", "Tidak tahu"], ans: "Kru A", exp: "$\\frac{1}{3} \\approx 0,33$ dan $\\frac{1}{4} = 0,25$. 0,33 > 0,25." },
+                    { q: "Berapa total bagian yang diberikan Kapten ke Kru A dan B? (Pecahan biasa penyebut 12)", type: 'text', ans: "7/12", exp: "$\\frac{4}{12} + \\frac{3}{12} = \\frac{7}{12}$." },
+                    { q: "Sisa harta untuk Kapten adalah... (Pecahan biasa penyebut 12)", type: 'text', ans: "5/12", exp: "$\\frac{12}{12} - \\frac{7}{12} = \\frac{5}{12}$." },
+                    { q: "Jika harta awalnya 60 koin, berapa koin yang didapat Kapten?", type: 'text', ans: "25", exp: "$\\frac{5}{12} \\times 60 = 25$." },
+                    { q: "Kru A mendapat bagian $\\frac{1}{3}$ dari 60 koin. Berapa koin yang didapat Kru A?", type: 'text', ans: "20", exp: "$\\frac{1}{3} \\times 60 = 20$." },
+                    { q: "Kru B mendapat bagian $\\frac{1}{4}$ dari 60 koin. Berapa koin yang didapat Kru B?", type: 'text', ans: "15", exp: "$\\frac{1}{4} \\times 60 = 15$." }
+                ]
+            }
+        ];
+			
+            // NOTE: Data for Section 2, 3, 4, 5, 6, and Assignments will be injected here in the next parts.
+
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let currentSectionIndex = 0;
+        let currentCardIndex = 0;
+        let progress = {}; // Menyimpan status selesai card { 'sec1-0': true, ... }
+
+        // ==========================================
+        // RENDER FUNCTIONS
+        // ==========================================
+        function renderNav() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.innerHTML = '';
+            
+            lessonData.forEach((section, sIndex) => {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                if (sIndex === currentSectionIndex) navItem.classList.add('active');
+                
+                navItem.innerHTML = `${section.title} ${section.time ? `<span style="font-size:0.8rem; opacity:0.6">(${section.time})</span>` : ''}`;
+                navItem.onclick = () => {
+                    currentSectionIndex = sIndex;
+                    currentCardIndex = 0;
+                    renderNav();
+                    renderContent();
+                    if (window.innerWidth <= 768) toggleNav();
+                };
+                navMenu.appendChild(navItem);
+            });
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('content-area');
+            const section = lessonData[currentSectionIndex];
+            contentArea.innerHTML = '';
+
+            if (section.type === 'home') {
+                renderHome(section);
+                return;
+            }
+
+            if (section.type === 'assignment') {
+                renderAssignment(section);
+                return;
+            }
+
+            // Standard Section
+            const card = section.cards[currentCardIndex];
+            const totalCards = section.cards.length;
+            const progressPercent = ((currentCardIndex + 1) / totalCards) * 100;
+
+            let cardHTML = `
+                <div class="card-header">
+                    <div class="card-title">${section.title}</div>
+                    <div>${currentCardIndex + 1} / ${totalCards}</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                </div>
+            `;
+
+            if (card.type === 'theory') {
+                cardHTML += `
+                    <div class="theory-box">
+                        <h3>📖 ${card.title}</h3>
+                        <div>${card.html}</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="prevCard()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+                    </div>
+                `;
+            } else if (card.type === 'exercise') {
+                cardHTML += `<div class="exercise-box"><div class="question-text">${card.question}</div><div id="options-container"></div></div>`;
+                
+                cardHTML += `
+                    <div class="feedback-collapse" id="feedback-box">
+                        <div class="feedback-title" id="feedback-title"></div>
+                        <div id="feedback-text"></div>
+                    </div>
+                `;
+
+                cardHTML += `
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="prevCard()">← Previous</button>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn btn-secondary" onclick="resetCurrentCard()">Reset</button>
+                            <button class="btn btn-primary" id="check-btn" onclick="checkAnswer()">Check</button>
+                            <button class="btn btn-primary" id="next-btn" onclick="nextCard()">Next →</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            contentArea.innerHTML = cardHTML;
+
+            if (card.type === 'exercise') {
+                renderExerciseOptions(card);
+            }
+
+            // Render Math
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(contentArea, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+        }
+
+        function renderHome(section) {
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = `
+                <div class="card-header">
+                    <div class="card-title">MATH TUTORING by Deni</div>
+                </div>
+                <h2 style="margin-bottom:10px;">Topic:</h2>
+                <p style="font-size:1.2rem; font-weight:700; color:var(--secondary); margin-bottom:20px;">${section.content.topic}</p>
+                
+                <h3>Aturan Kelas:</h3>
+                <ul class="home-rules">
+                    ${section.content.rules.map(rule => `<li>✅ ${rule}</li>`).join('')}
+                </ul>
+
+                <div style="margin-top:30px; text-align:center;">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#58cc02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" style="margin-left:auto;" onclick="nextCard()">Mulai →</button>
+                </div>
+            `;
+        }
+
+        function renderExerciseOptions(card) {
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            if (card.inputType === 'mcq') {
+                // Randomisasi opsi
+                const shuffled = [...card.options].sort(() => 0.5 - Math.random());
+                shuffled.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = opt;
+                    btn.onclick = () => {
+                        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        btn.dataset.value = opt;
+                    };
+                    container.appendChild(btn);
+                });
+            } else {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'input-answer';
+                input.id = 'text-answer';
+                input.placeholder = "Ketik jawabanmu di sini...";
+                container.appendChild(input);
+            }
+        }
+
+        // ==========================================
+        // NAVIGATION LOGIC
+        // ==========================================
+        function nextCard() {
+            const section = lessonData[currentSectionIndex];
+            if (section.type === 'home') {
+                currentSectionIndex++;
+                currentCardIndex = 0;
+            } else {
+                // Tandai card saat ini sebagai selesai
+                progress[`${currentSectionIndex}-${currentCardIndex}`] = true;
+                if (currentCardIndex < section.cards.length - 1) {
+                    currentCardIndex++;
+                } else {
+                    // Lanjut ke section berikutnya
+                    if (currentSectionIndex < lessonData.length - 1) {
+                        currentSectionIndex++;
+                        currentCardIndex = 0;
+                    }
+                }
+            }
+            updateNavStatus();
+            renderNav();
+            renderContent();
+            window.scrollTo(0, 0);
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+            } else if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                const prevSection = lessonData[currentSectionIndex];
+                if (prevSection.type === 'section') {
+                    currentCardIndex = prevSection.cards.length - 1;
+                } else {
+                    currentCardIndex = 0;
+                }
+            }
+            renderNav();
+            renderContent();
+            window.scrollTo(0, 0);
+        }
+
+        function resetCurrentCard() {
+            renderContent();
+        }
+
+        function resetAllProgress() {
+            if(confirm("Apakah kamu yakin ingin mereset SEMUA progress belajar?")) {
+                progress = {};
+                currentSectionIndex = 0;
+                currentCardIndex = 0;
+                renderNav();
+                renderContent();
+            }
+        }
+
+        function updateNavStatus() {
+            // Logic untuk menambahkan checkmark di navbar jika section sudah selesai
+        }
+
+        function toggleNav() {
+            document.getElementById('navbar').classList.toggle('open');
+        }
+
+        // ==========================================
+        // CHECK ANSWER LOGIC
+        // ==========================================
+        function checkAnswer() {
+            const card = lessonData[currentSectionIndex].cards[currentCardIndex];
+            let userAnswer = '';
+            let isCorrect = false;
+
+            if (card.inputType === 'mcq') {
+                const selected = document.querySelector('.option-btn.selected');
+                if (!selected) {
+                    alert("Pilih salah satu jawaban dulu!");
+                    return;
+                }
+                userAnswer = selected.dataset.value;
+                isCorrect = (userAnswer === card.answer);
+                
+                // Highlight correct/incorrect
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.dataset.value === card.answer) btn.classList.add('correct');
+                    else if (btn.classList.contains('selected')) btn.classList.add('incorrect');
+                    btn.disabled = true;
+                });
+
+            } else {
+                userAnswer = document.getElementById('text-answer').value.trim().toLowerCase().replace(/\s/g, '');
+                const correctAnswer = card.answer.toLowerCase().replace(/\s/g, '');
+                
+                // Normalisasi pecahan sederhana (misal 3/7)
+                isCorrect = (userAnswer === correctAnswer);
+                
+                const inputField = document.getElementById('text-answer');
+                if (isCorrect) {
+                    inputField.style.borderColor = 'var(--primary)';
+                    inputField.style.background = 'var(--primary-light)';
+                } else {
+                    inputField.style.borderColor = 'var(--error)';
+                    inputField.style.background = 'var(--error-light)';
+                }
+            }
+
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            if (isCorrect) {
+                feedbackTitle.innerText = "✅ Benar!";
+                feedbackTitle.style.color = 'var(--primary-dark)';
+            } else {
+                feedbackTitle.innerText = "❌ Belum Tepat. Kunci Jawaban: " + card.answer;
+                feedbackTitle.style.color = 'var(--error)';
+            }
+            
+            feedbackText.innerHTML = card.explanation;
+            feedbackBox.classList.add('show');
+
+            // Render math inside feedback
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(feedbackBox, {
+                    delimiters: [{left: '$', right: '$', display: false}]
+                });
+            }
+
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'flex';
+        }
+
+        // ==========================================
+        // ASSIGNMENT & PRINT LOGIC (Placeholder for Part 4)
+        // ==========================================
+        function renderAssignment(section) {
+            const contentArea = document.getElementById('content-area');
+            let html = `
+                <div class="card-header">
+                    <div class="card-title">${section.title}</div>
+                    <div>${section.groupName}</div>
+                </div>
+                <div class="theory-box">
+                    <h3>🏆 Petualangan Akhir</h3>
+                    <p>Selesaikan 10 tantangan di bawah ini. Setelah selesai, klik "Check All Answers" untuk melihat skormu, lalu klik "Print Result" untuk mencetak hasil laporan misimu dalam 1 halaman A4!</p>
+                </div>
+                <form id="assignment-form" onsubmit="return false;">
+            `;
+
+            section.questions.forEach((q, i) => {
+                html += `<div class="exercise-box" id="q-box-${i}"><div class="question-text">${i + 1}. ${q.q}</div><div id="q-opts-${i}"></div></div>`;
+            });
+
+            html += `
+                </form>
+                <div class="feedback-collapse" id="assignment-feedback" style="background: #e7f6d8; border-left: 4px solid var(--primary);">
+                    <div class="feedback-title" id="assign-feedback-title">Skor: 0 / 10</div>
+                    <div id="assign-feedback-text">Klik check untuk melihat hasilnya.</div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="prevCard()">← Previous</button>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-primary" onclick="checkAssignment('${section.id}')">Check All Answers</button>
+                        <button class="btn btn-secondary" id="print-btn" style="display:none;" onclick="printResult('${section.id}')">🖨️ Print Result</button>
+                        <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+                    </div>
+                </div>
+            `;
+
+            contentArea.innerHTML = html;
+
+            // Render inputs
+            section.questions.forEach((q, i) => {
+                const container = document.getElementById(`q-opts-${i}`);
+                if (q.type === 'mcq') {
+                    const shuffled = [...q.opts].sort(() => 0.5 - Math.random());
+                    shuffled.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'option-btn';
+                        btn.innerHTML = opt;
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            const box = container.querySelectorAll('.option-btn');
+                            box.forEach(b => b.classList.remove('selected'));
+                            btn.classList.add('selected');
+                            btn.dataset.value = opt;
+                        };
+                        container.appendChild(btn);
+                    });
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'input-answer';
+                    input.id = `ans-${i}`;
+                    input.placeholder = "Jawaban...";
+                    container.appendChild(input);
+                }
+            });
+
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(contentArea, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ]
+                });
+            }
+        }
+
+        function checkAssignment(sectionId) {
+            const section = lessonData.find(s => s.id === sectionId);
+            let score = 0;
+            let resultsHTML = '';
+            let studentData = [];
+
+            section.questions.forEach((q, i) => {
+                let userAnswer = '';
+                let isCorrect = false;
+
+                if (q.type === 'mcq') {
+                    const selected = document.querySelector(`#q-opts-${i} .option-btn.selected`);
+                    userAnswer = selected ? selected.dataset.value : "(Kosong)";
+                    isCorrect = (userAnswer === q.ans);
+                    
+                    document.querySelectorAll(`#q-opts-${i} .option-btn`).forEach(btn => {
+                        if (btn.dataset.value === q.ans) btn.classList.add('correct');
+                        else if (btn.classList.contains('selected')) btn.classList.add('incorrect');
+                        btn.disabled = true;
+                    });
+                } else {
+                    const input = document.getElementById(`ans-${i}`);
+                    userAnswer = input.value.trim().toLowerCase().replace(/\s/g, '');
+                    const correctAnswer = q.ans.toLowerCase().replace(/\s/g, '');
+                    isCorrect = (userAnswer === correctAnswer);
+                    
+                    if (isCorrect) {
+                        input.style.borderColor = 'var(--primary)';
+                        input.style.background = 'var(--primary-light)';
+                    } else {
+                        input.style.borderColor = 'var(--error)';
+                        input.style.background = 'var(--error-light)';
+                    }
+                }
+
+                if (isCorrect) score++;
+                
+                studentData.push({
+                    q: q.q,
+                    userAns: userAnswer,
+                    correctAns: q.ans,
+                    isCorrect: isCorrect
+                });
+
+                resultsHTML += `<p><strong>${i+1}.</strong> ${isCorrect ? '✅ Benar' : '❌ Salah'}. ${q.exp}</p>`;
+            });
+
+            const feedbackBox = document.getElementById('assignment-feedback');
+            const feedbackTitle = document.getElementById('assign-feedback-title');
+            const feedbackText = document.getElementById('assign-feedback-text');
+            
+            feedbackTitle.innerText = `Skor: ${score} / 10`;
+            feedbackText.innerHTML = resultsHTML;
+            feedbackBox.classList.add('show');
+
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(feedbackBox, {
+                    delimiters: [{left: '$', right: '$', display: false}]
+                });
+            }
+
+            document.getElementById('print-btn').style.display = 'flex';
+            
+            // Simpan data sementara untuk print
+            window.currentPrintData = { section, score, studentData };
+        }
+
+        function printResult(sectionId) {
+            if (!window.currentPrintData) {
+                alert("Klik 'Check All Answers' dulu sebelum print!");
+                return;
+            }
+
+            const { section, score, studentData } = window.currentPrintData;
+            const topic = "Konsep Pecahan & Jenisnya (Membagi Harta Karun)";
+            const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+
+            let tableRows = '';
+            studentData.forEach((data, i) => {
+                // Hapus tag math latex untuk tampilan print plain text agar rapi
+                const cleanQ = data.q.replace(/\$\$/g, '').replace(/\$/g, '').replace(/\\frac\{(.*?)\}\{(.*?)\}/g, "($1)/($2)");
+                const cleanUser = (data.userAns === '(Kosong)' ? '-' : data.userAns).replace(/\$\$/g, '').replace(/\$/g, '');
+                const cleanCorrect = data.correctAns.replace(/\$\$/g, '').replace(/\$/g, '').replace(/\\frac\{(.*?)\}\{(.*?)\}/g, "($1)/($2)");
+                
+                tableRows += `
+                    <tr>
+                        <td style="text-align:center">${i + 1}</td>
+                        <td>${cleanQ}</td>
+                        <td>${cleanUser}</td>
+                        <td>${cleanCorrect}</td>
+                        <td style="text-align:center">${data.isCorrect ? '✔' : '✘'}</td>
+                    </tr>
+                `;
+            });
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Hasil ${section.title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 12px; color: #000; }
+                        h2 { margin: 0 0 10px 0; }
+                        .header-info { margin-bottom: 20px; line-height: 1.5; }
+                        .header-info p { margin: 2px 0; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #000; padding: 6px; vertical-align: top; }
+                        th { background-color: #f0f0f0; text-align: left; }
+                        .sign { margin-top: 40px; text-align: right; }
+                        @page { size: A4; margin: 15mm; }
+                    </style>
+                </head>
+                <body>
+                    <h2>MATH TUTORING by Deni</h2>
+                    <div class="header-info">
+                        <p><strong>Name:</strong> _____________________________</p>
+                        <p><strong>Date:</strong> ${dateStr}</p>
+                        <p><strong>Topic:</strong> ${topic}</p>
+                        <p><strong>Assignment Group:</strong> ${section.groupName}</p>
+                        <p><strong>Score:</strong> <span style="font-weight:bold; color:blue;">${score} / 10</span></p>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:5%">No.</th>
+                                <th style="width:45%">Question</th>
+                                <th style="width:15%">Student Answer</th>
+                                <th style="width:15%">Correct Answer</th>
+                                <th style="width:10%">Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                    <div class="sign">
+                        <p>Checked by,</p>
+                        <br>
+                        <p><strong>Deni</strong></p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+        }
+
+        // ==========================================
+        // INITIALIZE
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", function() {
+            renderNav();
+            renderContent();
+        });
+    </script>
+</body>
+</html>
