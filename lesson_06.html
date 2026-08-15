@@ -264,15 +264,15 @@
         updateProgressBar();
         updateNavButtons();
         
-		// Render KaTeX after HTML injection
-		if (typeof renderMathInElement !== 'undefined') {
-			renderMathInElement(document.getElementById('step-container'), {
-				delimiters: [
-					{left: '$$', right: '$$', display: true},
-					{left: '$', right: '$', display: false}
-				]
-			});
-		}
+        // Render KaTeX after HTML injection
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.getElementById('step-container'), {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
     }
 
     function renderSidebar() {
