@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membandingkan & Mengurutkan Pecahan</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* === GLOBAL RESET & DESIGN SYSTEM === */
+        :root {
+            --primary: #58cc02;
+            --primary-dark: #46a302;
+            --blue: #1cb0f6;
+            --blue-dark: #0a8cd2;
+            --red: #ff4b4b;
+            --yellow: #ffc800;
+            --bg-color: #f7f7f7;
+            --text-main: #3c3c3c;
+            --text-muted: #777777;
+            --border-color: #e5e5e5;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: block !important;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* === NAVBAR KIRI === */
+        .sidebar {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 2px solid var(--border-color);
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover {
+            background-color: #f2f2f2;
+            color: var(--text-main);
+        }
+
+        .nav-item.active {
+            background-color: #e8f7e8;
+            color: var(--primary-dark);
+            border-left-color: var(--primary);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 260px !important;
+            padding: 40px !important;
+            flex: none !important;
+            display: flex !important;
+            justify-content: center !important;
+            width: calc(100% - 260px) !important;
+        }
+
+        .main-content > .section {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-header h1 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .section-header .time-badge {
+            background-color: var(--yellow);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* === CARDS & THEORY === */
+        .card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .theory-card {
+            background: #e8f7ff;
+            border-color: #b8e6ff;
+        }
+
+        .theory-card h3 {
+            color: var(--blue-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theory-card p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .illustration-box {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            border: 1px dashed var(--blue);
+        }
+
+        /* === EXERCISES === */
+        .exercise-block {
+            margin-top: 20px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            border-color: var(--blue);
+            background: #e8f7ff;
+            color: var(--blue-dark);
+        }
+
+        .option-btn.correct {
+            border-color: var(--primary);
+            background: #e8f7e8;
+            color: var(--primary-dark);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--red);
+            background: #ffe8e8;
+            color: var(--red);
+        }
+
+        .option-btn.disabled {
+            cursor: default !important;
+            opacity: 0.8 !important;
+        }
+
+        /* === NAV BUTTONS === */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 0 var(--primary-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--primary-dark);
+        }
+
+        .btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-muted);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 0 var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #f2f2f2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+            box-shadow: 0 4px 0 #cc3838;
+        }
+
+        .btn-blue {
+            background: var(--blue);
+            color: white;
+            box-shadow: 0 4px 0 var(--blue-dark);
+        }
+
+        /* === COLLAPSE === */
+        .collapse {
+            margin-top: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .collapse.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 500px; }
+        }
+
+        .collapse-header {
+            background: #f7f7f7;
+            padding: 12px 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapse-body {
+            padding: 15px 20px;
+            background: white;
+            line-height: 1.6;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .success-text { color: var(--primary-dark); font-weight: 700; }
+        .error-text { color: var(--red); font-weight: 700; }
+
+        /* === HOME === */
+        .rules-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .rules-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        .rule-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .reset-top {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            padding: 10px 20px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* HILANGKAN TOMBOL RESET, PREV, NEXT (TAPI TETAP SIMPAN PRINT) */
+        .reset-top { display: none !important; }
+        button[onclick*="prevSection()"], 
+        button[onclick*="nextSection()"], 
+        button[onclick*="resetAllProgress()"] {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="reset-top" onclick="resetAllProgress()">Reset Semua</button>
+
+    <!-- NAVBAR KIRI -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>MATH TUTORING by Deni</h2>
+            <p>Pecahan: Ranking Board</p>
+        </div>
+        <ul class="nav-list" id="navList">
+            <li class="nav-item active" onclick="showSection('home', this)">
+                <span class="nav-icon">🏠</span> Home
+            </li>
+            <li class="nav-item" onclick="showSection('sec1', this)">
+                <span class="nav-icon">🔥</span> Spiral Review (00:00-00:10)
+            </li>
+            <li class="nav-item" onclick="showSection('sec2', this)">
+                <span class="nav-icon">🎮</span> Intro & Real-World (00:10-00:15)
+            </li>
+            <li class="nav-item" onclick="showSection('sec3', this)">
+                <span class="nav-icon">📖</span> Review Prior Knowledge (00:15-00:20)
+            </li>
+            <li class="nav-item" onclick="showSection('sec4', this)">
+                <span class="nav-icon">🚀</span> Problem Introduction (00:20-00:30)
+            </li>
+            <li class="nav-item" onclick="showSection('sec5', this)">
+                <span class="nav-icon">🧑‍🏫</span> Guided Practice (00:30-00:45)
+            </li>
+            <li class="nav-item" onclick="showSection('sec6', this)">
+                <span class="nav-icon">🛡️</span> Independent Practice (00:50-01:00)
+            </li>
+            <li class="nav-item" onclick="showSection('assign1', this)">
+                <span class="nav-icon">📝</span> Assignment 1
+            </li>
+            <li class="nav-item" onclick="showSection('assign2', this)">
+                <span class="nav-icon">📝</span> Assignment 2
+            </li>
+            <li class="nav-item" onclick="showSection('assign3', this)">
+                <span class="nav-icon">📝</span> Assignment 3
+            </li>
+            <li class="nav-item" onclick="showSection('assign4', this)">
+                <span class="nav-icon">📝</span> Assignment 4
+            </li>
+            <li class="nav-item" onclick="showSection('assign5', this)">
+                <span class="nav-icon">📝</span> Assignment 5
+            </li>
+            <li class="nav-item" onclick="showSection('sec7', this)">
+                <span class="nav-icon">🎉</span> Consolidation (01:00-01:05)
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- HOME -->
+        <section id="home" class="section active">
+            <div class="section-header">
+                <h1>MATH TUTORING by Deni</h1>
+                <span class="time-badge">Selamat Datang</span>
+            </div>
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">Topic: Membandingkan & Mengurutkan Pecahan</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">Halo! Di kelas ini, kita akan belajar matematika dengan cara yang santai dan mudah dipahami. Bahasa kita pakai Bahasa Indonesia saja, tidak ada istilah asing yang bikin pusing. Yuk, ikuti aturan mainnya!</p>
+                <ul class="rules-list">
+                    <li>
+                        <div class="rule-icon">🗣️</div>
+                        <div>Berbicara secara bergantian. Jika guru sedang menjelaskan, dengarkan dulu.</div>
+                    </li>
+                    <li>
+                        <div class="rule-icon">✋</div>
+                        <div>Meminta izin jika ingin meninggalkan kelas atau pergi ke toilet.</div>
+                    </li>
+                    <li>
+                        <div class="rule-icon">📷</div>
+                        <div>Menyalakan kamera dan microphone jika diperlukan saat berdiskusi.</div>
+                    </li>
+                    <li>
+                        <div class="rule-icon">💡</div>
+                        <div>Jangan takut salah! Kita belajar dari kesalahan. Teori dan latihan dibuat pelan-pelan.</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="resetAllProgress()">Reset Progress</button>
+                <button class="btn btn-primary" onclick="nextSection()">Mulai Belajar →</button>
+            </div>
+        </section>
+
+        <!-- SECTION 1: SPIRAL REVIEW -->
+        <section id="sec1" class="section">
+            <div class="section-header">
+                <h1>Spiral Review Warm-up</h1>
+                <span class="time-badge">00:00 - 00:10</span>
+            </div>
+            
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Kenapa Kita Perlu Angka Dasar?</h3>
+                <p>Sebelum masuk ke pecahan, kita harus ingat dua hal: <strong>Kelipatan</strong> dan <strong>Faktor</strong>.</p>
+                <p>Bayangkan kamu naik tangga. <strong>Kelipatan</strong> itu seperti melompat anak tangga. Kelipatan 2 berarti lompat 2-4-6-8 dst.</p>
+                <p>Sementara <strong>Faktor</strong> itu seperti memecah kue jadi bagian yang sama. Faktor dari 6 berarti angka apa saja yang jika dikalikan hasilnya 6 (1x6, 2x3). Jadi faktornya 1, 2, 3, 6.</p>
+                <div class="illustration-box">
+                    <svg width="150" height="100" viewBox="0 0 150 100">
+                        <rect x="20" y="60" width="30" height="30" fill="#ffc800"/>
+                        <rect x="50" y="40" width="30" height="50" fill="#58cc02"/>
+                        <rect x="80" y="20" width="30" height="70" fill="#1cb0f6"/>
+                        <rect x="110" y="0" width="30" height="90" fill="#ff4b4b"/>
+                        <text x="35" y="80" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle">1</text>
+                        <text x="65" y="60" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle">2</text>
+                        <text x="95" y="40" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle">3</text>
+                        <text x="125" y="20" font-family="sans-serif" font-size="14" fill="white" text-anchor="middle">4</text>
+                    </svg>
+                    <p>Visualisasi anak tangga (Kelipatan)</p>
+                </div>
+                <p>Kita harus paham ini karena ini adalah "kunci" untuk membuka pintu pecahan nanti!</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Kelipatan dari 4 yang kurang dari 20 adalah...</div>
+                    <div class="options-grid" id="sec1_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex1')">2, 4, 6, 8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex1')">4, 8, 12, 16</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex1')">1, 2, 4, 8</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kelipatan 4 didapat dari perkalian 4x1, 4x2, 4x3, 4x4. Hasilnya 4, 8, 12, 16.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Faktor dari 24 adalah...</div>
+                    <div class="options-grid" id="sec1_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex2')">2, 4, 6, 8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex2')">1, 2, 3, 4, 6, 8, 12, 24</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex2')">1, 2, 3, 4, 6, 8, 12, 24 (Pilih yang paling lengkap)</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Faktor itu semua angka yang bisa membagi habis 24. 24 dibagi 1, 2, 3, 4, 6, 8, 12, dan 24 tidak ada sisa. Semuanya benar!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Kelipatan persekutuan dari 3 dan 4 yang pertama adalah...</div>
+                    <div class="options-grid" id="sec1_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex3')">12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex3')">7</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex3')">1</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Cari kelipatan 3 (3, 6, <strong>12</strong>, 15) dan kelipatan 4 (4, 8, <strong>12</strong>, 16). Angka yang sama pertama kali adalah 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Kelipatan Persekutuan Terkecil (KPK)</h3>
+                <p>Nah, di latihan sebelumnya kamu baru saja menemukan KPK!</p>
+                <p><strong>KPK</strong> itu singkatan dari <strong>K</strong>elipatan <strong>P</strong>ersekutuan <strong>T</strong>erkecil. Artinya, kita cari angka kelipatan yang SAMA dan PALING KECIL dari dua angka.</p>
+                <div class="illustration-box">
+					<svg width="100%" height="150" viewBox="0 0 300 150" style="max-width: 300px;">
+						<circle cx="110" cy="75" r="60" fill="#ffc800" opacity="0.7"/>
+						<circle cx="190" cy="75" r="60" fill="#1cb0f6" opacity="0.7"/>
+						<text x="60" y="80" font-size="16" fill="black" text-anchor="middle">3, 6, 9</text>
+						<text x="150" y="80" font-size="20" fill="white" text-anchor="middle" font-weight="bold">12</text>
+						<text x="240" y="80" font-size="16" fill="black" text-anchor="middle">4, 8</text>
+					</svg>
+                    <p>Perpotongan lingkaran adalah KPK (12).</p>
+                </div>
+                <p>Kenapa KPK penting? Karena nanti untuk membandingkan pecahan, kita harus bikin penyebutnya jadi SAMA. Caranya adalah mencari KPK dari penyebutnya.</p>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. Berapakah KPK dari 5 dan 10?</div>
+                    <div class="options-grid" id="sec1_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex4')">50</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex4')">10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex4')">5</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kelipatan 5: 5, <strong>10</strong>. Kelipatan 10: <strong>10</strong>. Karena 10 sudah ada di keduanya, maka KPK-nya 10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. Berapakah KPK dari 2 dan 7?</div>
+                    <div class="options-grid" id="sec1_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex5')">14</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex5')">9</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex5')">7</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kelipatan 2 (2, 4, 6, 8, 10, 12, <strong>14</strong>). Kelipatan 7 (7, <strong>14</strong>). Ketemunya di angka 14.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. Faktor persekutuan (FPB) dari 6 dan 9 adalah... (Bonus!)</div>
+                    <div class="options-grid" id="sec1_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex6')">18</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex6')">3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex6')">2</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Faktor 6: 1, 2, 3, 6. Faktor 9: 1, 3, 9. Yang sama dan TERBESAR adalah 3.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Faktor Prima</h3>
+                <p>Pernah dengar bilangan prima? Bilangan prima itu angka yang hanya bisa dibagi 1 dan dirinya sendiri. Contohnya: 2, 3, 5, 7, 11. (Ingat: 1 BUKAN prima).</p>
+                <p>Faktor prima sangat berguna untuk mencari KPK kalau angkanya besar. Caranya dengan membuat "pohon faktor".</p>
+                <div class="illustration-box">
+                    <svg width="150" height="120" viewBox="0 0 150 120">
+                        <line x1="75" y1="20" x2="45" y2="60" stroke="black" stroke-width="2"/>
+                        <line x1="75" y1="20" x2="105" y2="60" stroke="black" stroke-width="2"/>
+                        <line x1="45" y1="60" x2="15" y2="100" stroke="black" stroke-width="2"/>
+                        <line x1="45" y1="60" x2="75" y2="100" stroke="black" stroke-width="2"/>
+                        <circle cx="75" cy="20" r="15" fill="#ffc800"/><text x="75" y="25" text-anchor="middle" font-size="12" fill="black">12</text>
+                        <circle cx="45" cy="60" r="12" fill="#1cb0f6"/><text x="45" y="64" text-anchor="middle" font-size="12" fill="white">4</text>
+                        <circle cx="105" cy="60" r="12" fill="#1cb0f6"/><text x="105" y="64" text-anchor="middle" font-size="12" fill="white">3</text>
+                        <circle cx="15" cy="100" r="10" fill="#58cc02"/><text x="15" y="104" text-anchor="middle" font-size="10" fill="white">2</text>
+                        <circle cx="75" cy="100" r="10" fill="#58cc02"/><text x="75" y="104" text-anchor="middle" font-size="10" fill="white">2</text>
+                    </svg>
+                    <p>Pohon faktor dari 12. Hasilnya: 2 x 2 x 3.</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Manakah yang termasuk bilangan prima?</div>
+                    <div class="options-grid" id="sec1_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex7')">9</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex7')">15</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex7')">11</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 11 hanya bisa dibagi 1 dan 11. 9 bisa dibagi 3 (3x3), 15 bisa dibagi 3 dan 5.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Faktor prima dari 10 adalah...</div>
+                    <div class="options-grid" id="sec1_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex8')">1 dan 10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex8')">2 dan 5</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex8')">2 dan 10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 10 dibagi 2 dapat 5. Karena 2 dan 5 tidak bisa dibagi lagi kecuali angka 1 dan dirinya sendiri, maka 2 dan 5 adalah faktor prima.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. KPK dari 4, 6, dan 8 adalah...</div>
+                    <div class="options-grid" id="sec1_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex9')">18</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex9')">24</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex9')">48</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kelipatan 4: 4, 8, 12, 16, 20, <strong>24</strong>. Kelipatan 6: 6, 12, 18, <strong>24</strong>. Kelipatan 8: 8, 16, <strong>24</strong>. Yang sama dan terkecil adalah 24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. Jika KPK dari 3 dan 4 adalah 12. Maka kelipatan persekutuan BERIKUTNYA setelah 12 adalah...</div>
+                    <div class="options-grid" id="sec1_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex10')">15</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec1_ex10')">16</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec1_ex10')">24</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec1_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Tinggal kali 12 dengan 2. Hasilnya 24. (12, 24, 36, 48 dst).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INTRO & REAL-WORLD -->
+        <section id="sec2" class="section">
+            <div class="section-header">
+                <h1>Introduction & Real-World Connection</h1>
+                <span class="time-badge">00:10 - 00:15</span>
+            </div>
+
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Papan Peringkat (Leaderboard) di Game</h3>
+                <p>Pernah main game dan lihat papan peringkat (leaderboard)? Di sana kita sering lihat rasio kemenangan. Misalnya, kamu menang 3 dari 4 kali main (skor: \(\frac{3}{4}\)). Temanmu menang 5 dari 6 kali main (skor: \(\frac{5}{6}\)).</p>
+                <p>Siapa yang sebenarnya lebih jago? Kamu atau temanmu?</p>
+                <div class="illustration-box">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <rect x="50" y="20" width="100" height="100" rx="10" fill="#f7f7f7" stroke="#ccc"/>
+                        <text x="100" y="50" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">RANK</text>
+                        <rect x="60" y="60" width="80" height="25" fill="#ffc800" rx="5"/>
+                        <text x="100" y="77" text-anchor="middle" font-size="12" fill="black">Kamu: 3/4</text>
+                        <rect x="60" y="90" width="80" height="25" fill="#777" rx="5"/>
+                        <text x="100" y="107" text-anchor="middle" font-size="12" fill="white">Teman: 5/6</text>
+                    </svg>
+                    <p>Papan peringkat skor pecahan.</p>
+                </div>
+                <p>Nah, untuk tahu siapa yang di peringkat atas, kita harus paham cara membandingkan pecahan. Ini bukan soal menghafal, tapi soal logika "ukuran potongan".</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Di game, skor kemenanganmu 2/5. Artinya kamu menang 2 kali dari berapa kali bermain?</div>
+                    <div class="options-grid" id="sec2_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex1')">5 kali</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex1')">2 kali</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex1')">10 kali</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Angka di bawah (penyebut) menunjukkan total bagian/total permainan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Lawanmu menang 4/5, kamu menang 3/5. Siapa yang menang lebih banyak?</div>
+                    <div class="options-grid" id="sec2_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex2')">Sama</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex2')">Lawan (4/5)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex2')">Kamu (3/5)</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Karena total permainannya sama (5), tinggal lihat angka atasnya (pembilang). 4 lebih besar dari 3.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Kenapa kita tidak bisa langsung membandingkan 1/2 dan 1/3 hanya dengan lihat angka 1-nya?</div>
+                    <div class="options-grid" id="sec2_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex3')">Karena "ukuran potongan" (penyebutnya) berbeda</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex3')">Karena 1 itu angka kecil</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex3')">Karena matematika itu sulit</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Potongan 1/2 itu belah dua, jadi potongannya besar. 1/3 belah tiga, jadi potongannya lebih kecil. Jadi 1/2 lebih besar dari 1/3!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Skor Pecahan di Dunia Nyata</h3>
+                <p>Pecahan tidak cuma ada di matematika. Di basket, tembak bebas (free throw) masuk 3 dari 4 itu \(\frac{3}{4}\). Di ujian, benar 7 dari 10 itu \(\frac{7}{10}\).</p>
+                <p>Kalau kita ingin tahu siapa pemain basket terbaik, kita harus samakan dulu total percobaannya (penyebutnya) baru kita bisa adil membandingkan siapa yang masuk lebih banyak.</p>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. Pemain A masuk 2 dari 3 tembakan. Pemain B masuk 3 dari 4 tembakan. Siapa yang terlihat lebih bagus secara mentah?</div>
+                    <div class="options-grid" id="sec2_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex4')">Pemain A karena 2+3=5</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex4')">Pemain B karena angka 3 dan 4 lebih besar</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex4')">Belum bisa ditentukan karena penyebutnya beda</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kita tidak bisa langsung membandingkan kalau "ukuran potongannya" (penyebut) beda. Harus disamakan dulu!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. Di game Mobile Legends, win rate kamu 4/10. Win rate musuh 1/2. Siapa yang sebenarnya lebih besar?</div>
+                    <div class="options-grid" id="sec2_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex5')">Musuh (1/2)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex5')">Kamu (4/10)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex5')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 1/2 itu 50%. 4/10 itu 40%. Jadi musuhmu lebih besar win rate-nya!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. Rasio kemenangan kamu 3/4. Jika kamu main 8 kali, berapa kali kamu menang?</div>
+                    <div class="options-grid" id="sec2_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex6')">3 kali</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex6')">6 kali</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex6')">8 kali</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kalau main 4 kali menang 3. Kalau main 8 kali (4x2), maka menangnya 3x2 = 6 kali.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Visualisasi Skor Pecahan</h3>
+                <p>Untuk membandingkan pecahan, kita harus membayangkan "kue" atau "batang" yang dipotong.</p>
+                <p>\(\frac{1}{2}\) itu potongan besar. \(\frac{1}{4}\) itu potongan kecil. Jadi kalau penyebutnya makin besar, ukuran satu potongannya makin kecil (kalau pembilangnya 1).</p>
+                <div class="illustration-box">
+                    <svg width="200" height="100" viewBox="0 0 200 100">
+                        <rect x="10" y="20" width="80" height="30" fill="#58cc02" stroke="black"/>
+                        <line x1="50" y1="20" x2="50" y2="50" stroke="black" stroke-width="2"/>
+                        <text x="50" y="70" text-anchor="middle">1/2 (Besar)</text>
+                        
+                        <rect x="110" y="20" width="80" height="30" fill="#ff4b4b" stroke="black"/>
+                        <line x1="130" y1="20" x2="130" y2="50" stroke="black" stroke-width="2"/>
+                        <line x1="150" y1="20" x2="150" y2="50" stroke="black" stroke-width="2"/>
+                        <line x1="170" y1="20" x2="170" y2="50" stroke="black" stroke-width="2"/>
+                        <text x="150" y="70" text-anchor="middle">1/4 (Kecil)</text>
+                    </svg>
+                    <p>Ukuran potongan kue.</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Mana potongan kue yang lebih besar?</div>
+                    <div class="options-grid" id="sec2_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex7')">1/8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex7')">1/3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex7')">1/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 1/3 belah 3, potongannya besar. 1/8 belah 8, potongannya kecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Mana yang lebih kecil?</div>
+                    <div class="options-grid" id="sec2_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex8')">1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex8')">1/4</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex8')">1/12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Belah 12 bikin potongannya paling kecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. Kamu makan 1/2 pizza, temanmu makan 3/4 pizza. Siapa yang makan lebih banyak?</div>
+                    <div class="options-grid" id="sec2_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex9')">Kamu (1/2)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex9')">Temanmu (3/4)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex9')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3/4 hampir habis 1 pizza utuh. 1/2 cuma setengah.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. Di papan peringkat, posisi pertama pasti diisi oleh pecahan yang...?</div>
+                    <div class="options-grid" id="sec2_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec2_ex10')">Terbesar nilainya</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex10')">Terkecil nilainya</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec2_ex10')">Pecahan dengan penyebut 100</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec2_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Papan peringkat selalu mengurutkan dari nilai terbesar ke terkecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: REVIEW OF PRIOR KNOWLEDGE -->
+        <section id="sec3" class="section">
+            <div class="section-header">
+                <h1>Review of Prior Knowledge</h1>
+                <span class="time-badge">00:15 - 00:20</span>
+            </div>
+
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Pecahan Senilai</h3>
+                <p>Di kelas sebelumnya, kita belajar bahwa pecahan bisa berubah-ubah bentuknya tapi nilainya tetap sama. Namanya <strong>Pecahan Senilai</strong>.</p>
+                <p>Bayangkan kue yang dipotong 2 dan kamu ambil 1 (\(\frac{1}{2}\)). Kuenya sama. Kalau dipotong 4, kamu harus ambil 2 (\(\frac{2}{4}\)) biar adil. Jadi \(\frac{1}{2} = \frac{2}{4}\).</p>
+                <div class="illustration-box">
+                    <svg width="200" height="100" viewBox="0 0 200 100">
+                        <circle cx="50" cy="50" r="40" fill="#ffc800" stroke="black"/>
+                        <line x1="50" y1="10" x2="50" y2="90" stroke="black" stroke-width="2"/>
+                        <text x="50" y="115" text-anchor="middle">1/2</text>
+                        
+                        <circle cx="150" cy="50" r="40" fill="#1cb0f6" stroke="black"/>
+                        <line x1="150" y1="10" x2="150" y2="90" stroke="black" stroke-width="2"/>
+                        <line x1="110" y1="50" x2="190" y2="50" stroke="black" stroke-width="2"/>
+                        <text x="150" y="115" text-anchor="middle">2/4</text>
+                    </svg>
+                    <p>1/2 sama dengan 2/4.</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Pecahan senilai dari \(\frac{1}{3}\) adalah...</div>
+                    <div class="options-grid" id="sec3_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex1')">2/3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex1')">2/6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex1')">3/1</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 1/3 dikali 2/2 jadi 2/6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Pecahan senilai dari \(\frac{3}{5}\) jika penyebutnya diubah jadi 10 adalah...</div>
+                    <div class="options-grid" id="sec3_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex2')">6/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex2')">3/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex2')">5/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Penyebut 5 jadi 10 dikali 2. Berarti pembilang 3 dikali 2 jadi 6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Isi titik-titik: \(\frac{2}{4} = \frac{...}{8}\)</div>
+                    <div class="options-grid" id="sec3_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex3')">2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex3')">4</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex3')">6</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 2/4 dikali 2/2 jadi 4/8.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Cara Mengubah Penyebut</h3>
+                <p>Untuk menyamakan penyebut, kita butuh <strong>KPK</strong> yang kita pelajari tadi!</p>
+                <p>Misal: Kita mau ubah \(\frac{1}{2}\) dan \(\frac{1}{3}\) ke penyebut yang sama. Kita cari KPK dari 2 dan 3. KPK-nya adalah 6.</p>
+                <p>1. \(\frac{1}{2}\) = dikali \(\frac{3}{3}\) = \(\frac{3}{6}\)</p>
+                <p>2. \(\frac{1}{3}\) = dikali \(\frac{2}{2}\) = \(\frac{2}{6}\)</p>
+                <p>Sekarang penyebutnya sama-sama 6! Ini yang disebut "bahasa yang sama" agar bisa dibandingkan secara adil.</p>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. KPK dari 4 dan 6 adalah 12. Jika \(\frac{3}{4}\) diubah ke penyebut 12, pembilangnya menjadi...?</div>
+                    <div class="options-grid" id="sec3_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex4')">6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex4')">9</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex4')">12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12/4 = 3. Berarti 3/4 dikali 3/3 = 9/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. Ubah \(\frac{2}{5}\) ke penyebut 15!</div>
+                    <div class="options-grid" id="sec3_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex5')">6/15</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex5')">3/15</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex5')">2/15</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 15/5 = 3. 2x3 = 6. Jadi 6/15.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. \(\frac{3}{7}\) diubah menjadi penyebut 21 menjadi \(\frac{9}{21}\). Apakah ini benar?</div>
+                    <div class="options-grid" id="sec3_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex6')">Benar, karena dikali 3/3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex6')">Salah, seharusnya pembilangnya 3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex6')">Salah, seharusnya 21/3 = 7</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 21/7 = 3. 3x3 = 9. Jadi 9/21 itu nilai yang sama dengan 3/7.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Mengapa KPK Penting?</h3>
+                <p>Kalau penyebutnya sama, kita tinggal lihat pembilangnya. Angka atas mana yang lebih besar, dia pemenangnya.</p>
+                <p>Tanpa KPK, kita tidak bisa menyamakan "ukuran potongan". KPK menjamin setiap potongan sama besarnya, sehingga perbandingan kita ADIL dan BENAR.</p>
+                <div class="illustration-box">
+                    <svg width="200" height="100" viewBox="0 0 200 100">
+                        <rect x="10" y="20" width="80" height="30" fill="#58cc02" stroke="black"/>
+                        <line x1="30" y1="20" x2="30" y2="50" stroke="black"/>
+                        <line x1="50" y1="20" x2="50" y2="50" stroke="black"/>
+                        <line x1="70" y1="20" x2="70" y2="50" stroke="black"/>
+                        <text x="20" y="35" text-anchor="middle" fill="white">1/4</text>
+                        <text x="40" y="35" text-anchor="middle" fill="white">2/4</text>
+                        <text x="60" y="35" text-anchor="middle" fill="white">3/4</text>
+                        <text x="80" y="35" text-anchor="middle" fill="white">4/4</text>
+                        <text x="100" y="40" font-size="20">=</text>
+                        
+                        <rect x="110" y="20" width="80" height="30" fill="#1cb0f6" stroke="black"/>
+                        <line x1="130" y1="20" x2="130" y2="50" stroke="black"/>
+                        <line x1="150" y1="20" x2="150" y2="50" stroke="black"/>
+                        <line x1="170" y1="20" x2="170" y2="50" stroke="black"/>
+                        <text x="120" y="35" text-anchor="middle" fill="white">1/4</text>
+                        <text x="140" y="35" text-anchor="middle" fill="white">2/4</text>
+                        <text x="160" y="35" text-anchor="middle" fill="white">3/4</text>
+                        <text x="180" y="35" text-anchor="middle" fill="white">4/4</text>
+                    </svg>
+                    <p>Penyebut sama = Potongan ukuran sama.</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Jika \(\frac{5}{8}\) dan \(\frac{6}{8}\), mana yang lebih besar?</div>
+                    <div class="options-grid" id="sec3_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex7')">5/8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex7')">6/8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex7')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Penyebut sama (8). Berarti tinggal lihat angka atas. 6 lebih besar dari 5.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Mana yang lebih kecil?</div>
+                    <div class="options-grid" id="sec3_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex8')">7/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex8')">9/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex8')">3/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3 adalah angka pembilang terkecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. Mengapa \(\frac{1}{2}\) tidak bisa langsung dibandingkan dengan \(\frac{3}{7}\) hanya dengan lihat angkanya?</div>
+                    <div class="options-grid" id="sec3_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex9')">Karena penyebutnya beda (2 dan 7)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex9')">Karena pembilangnya beda</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex9')">Bisa dong, 1/2 lebih besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Penyebut beda berarti "ukuran potongan" beda. Harus disamakan pakai KPK dulu.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. KPK dari 4 dan 5 adalah 20. Berapakah \(\frac{3}{4}\) jika diubah ke penyebut 20?</div>
+                    <div class="options-grid" id="sec3_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex10')">12/20</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec3_ex10')">3/20</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec3_ex10')">15/20</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec3_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 20/4 = 5. 3 dikali 5 = 15. Jadi 15/20.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+		
+        <!-- SECTION 4: PROBLEM INTRODUCTION -->
+        <section id="sec4" class="section">
+            <div class="section-header">
+                <h1>Problem Introduction</h1>
+                <span class="time-badge">00:20 - 00:30</span>
+            </div>
+
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Siapa yang Memimpin? (2/3 vs 3/4)</h3>
+                <p>Di sebuah game, Pemain A punya skor menang \(\frac{2}{3}\). Pemain B punya skor menang \(\frac{3}{4}\). Mereka bertengkar soal siapa yang harus ada di papan peringkat atas.</p>
+                <p>Pemain A bilang: "Pembilangku 2, penyebutku 3. Angkaku juga 3 dan 4. Kita sama-sama kuat!"</p>
+                <p>Apakah benar Pemain A? <strong>TIDAK!</strong> Kita tidak bisa membandingkan \(\frac{2}{3}\) dan \(\frac{3}{4}\) secara langsung karena "ukuran potongannya" (penyebutnya) berbeda. 3 dan 4 itu berbeda.</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Mengapa Pemain A (2/3) dan Pemain B (3/4) tidak bisa langsung dibandingkan hanya dengan melihat angka pembilangnya?</div>
+                    <div class="options-grid" id="sec4_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex1')">Karena 2 lebih kecil dari 3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex1')">Karena penyebutnya (3 dan 4) berbeda, sehingga ukuran satu potonganannya berbeda</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex1')">Karena angka 3 dan 4 adalah angka yang berurutan</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kalau penyebutnya beda, potongannya beda. Harus disamakan dulu agar adil!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Untuk menyamakan "medan tempur" (penyebut) dari 2/3 dan 3/4, kita harus mencari...?</div>
+                    <div class="options-grid" id="sec4_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex2')">Faktor Prima (FPB)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex2')">Kelipatan Persekutuan Terkecil (KPK)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex2')">Pecahan campuran</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK dari penyebut akan membuat ukuran potongannya sama besar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Berapakah KPK dari 3 dan 4 (penyebut dari 2/3 dan 3/4)?</div>
+                    <div class="options-grid" id="sec4_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex3')">7</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex3')">12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex3')">24</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kelipatan 3 (3, 6, 9, <strong>12</strong>). Kelipatan 4 (4, 8, <strong>12</strong>). Ketemunya di 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Mengubah 2/3 dan 3/4 ke Penyebut 12</h3>
+                <p>Oke, KPK-nya sudah ketemu: 12. Sekarang kita ubah pecahan mereka agar penyebutnya jadi 12.</p>
+                <p>1. Pemain A: \(\frac{2}{3}\). Agar penyebut jadi 12, dikali \(\frac{4}{4}\). Hasilnya: \(\frac{2 \times 4}{3 \times 4} = \frac{8}{12}\).</p>
+                <p>2. Pemain B: \(\frac{3}{4}\). Agar penyebut jadi 12, dikali \(\frac{3}{3}\). Hasilnya: \(\frac{3 \times 3}{4 \times 3} = \frac{9}{12}\).</p>
+                <div class="illustration-box">
+                    <svg width="250" height="120" viewBox="0 0 250 120">
+                        <!-- 2/3 -->
+                        <rect x="10" y="10" width="60" height="30" fill="#ffc800"/>
+                        <rect x="70" y="10" width="60" height="30" fill="#ffc800"/>
+                        <rect x="130" y="10" width="60" height="30" fill="none" stroke="#ccc" stroke-dasharray="5"/>
+                        <text x="100" y="60" text-anchor="middle">2/3</text>
+                        
+                        <text x="190" y="35" font-size="20">=</text>
+                        
+                        <!-- 8/12 -->
+                        <rect x="210" y="10" width="15" height="30" fill="#ffc800"/>
+                        <rect x="225" y="10" width="15" height="30" fill="#ffc800"/>
+                        <rect x="210" y="45" width="15" height="30" fill="#ffc800"/>
+                        <rect x="225" y="45" width="15" height="30" fill="#ffc800"/>
+                        <rect x="210" y="80" width="15" height="30" fill="#ffc800"/>
+                        <rect x="225" y="80" width="15" height="30" fill="#ffc800"/>
+                        <rect x="210" y="115" width="15" height="30" fill="#ffc800"/>
+                        <rect x="225" y="115" width="15" height="30" fill="#ffc800"/>
+                        <text x="217" y="160" text-anchor="middle">8/12</text>
+                    </svg>
+                    <p>Visualisasi 2/3 sama dengan 8/12.</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. \(\frac{2}{3}\) diubah menjadi pecahan senilai dengan penyebut 12. Berapakah pembilangnya?</div>
+                    <div class="options-grid" id="sec4_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex4')">6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex4')">8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex4')">9</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12 didapat dari 3 dikali 4. Maka 2 juga dikali 4 = 8.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. \(\frac{3}{4}\) diubah menjadi pecahan dengan penyebut 12. Berapakah pembilangnya?</div>
+                    <div class="options-grid" id="sec4_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex5')">9</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex5')">8</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex5')">12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12 didapat dari 4 dikali 3. Maka 3 juga dikali 3 = 9.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. Setelah diubah, Pemain A jadi 8/12 dan Pemain B jadi 9/12. Apakah \(\frac{8}{12}\) dan \(\frac{9}{12}\) sudah bisa dibandingkan secara adil?</div>
+                    <div class="options-grid" id="sec4_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex6')">Ya, karena ukuran potongannya (penyebut 12) sudah sama</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex6')">Tidak, karena pembilangnya berbeda</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex6')">Tidak, karena harus dikali lagi</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kalau penyebut sudah sama, tinggal lihat pembilang. Mau nilon (polybag) sama, tinggal lihat isinya!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Menentukan Pemenang</h3>
+                <p>Sekarang kita punya \(\frac{8}{12}\) dan \(\frac{9}{12}\). Karena penyebutnya sudah sama (12), kita tinggal lihat angka atasnya (pembilang).</p>
+                <p>8 lebih kecil dari 9. Berarti \(\frac{8}{12} < \frac{9}{12}\).</p>
+                <p>Jadi, pemenangnya adalah Pemain B (\(\frac{3}{4}\)) karena \(\frac{3}{4} = \frac{9}{12}\) lebih besar dari \(\frac{2}{3} = \frac{8}{12}\).</p>
+                <p>Pemain B berhak di posisi atas Ranking Board!</p>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Antara 8/12 dan 9/12, manakah yang lebih besar?</div>
+                    <div class="options-grid" id="sec4_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex7')">8/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex7')">9/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex7')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 9 potongan lebih banyak dari 8 potongan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Jadi, siapa yang berhak menempati papan peringkat atas?</div>
+                    <div class="options-grid" id="sec4_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex8')">Pemain A (2/3)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex8')">Pemain B (3/4)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex8')">Seri</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3/4 nilainya 9/12, lebih besar dari 2/3 (8/12).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. Jika ada Pemain C dengan skor 1/2, lalu diubah jadi 6/12. Urutan dari terkecil ke terbesar adalah...</div>
+                    <div class="options-grid" id="sec4_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex9')">3/4, 2/3, 1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex9')">1/2, 2/3, 3/4</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex9')">2/3, 1/2, 3/4</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Urutannya: 6/12 (1/2), 8/12 (2/3), 9/12 (3/4).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. Tanda yang benar untuk 2/3 ... 3/4 adalah?</div>
+                    <div class="options-grid" id="sec4_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex10')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec4_ex10')">=</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec4_ex10')">&lt;</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec4_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 2/3 (8/12) LEBIH KECIL DARI (<) 3/4 (9/12).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+
+        <!-- SECTION 5: GUIDED PRACTICE -->
+        <section id="sec5" class="section">
+            <div class="section-header">
+                <h1>Guided Practice</h1>
+                <span class="time-badge">00:30 - 00:45</span>
+            </div>
+
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Mengurutkan 3 Pemain Sekaligus</h3>
+                <p>Sekarang kita naik level. Ada 3 pemain dengan skor:</p>
+                <p>Pemain 1: \(\frac{1}{2}\)</p>
+                <p>Pemain 2: \(\frac{2}{5}\)</p>
+                <p>Pemain 3: \(\frac{3}{10}\)</p>
+                <p>Kita harus mengurutkan mereka dari yang terlemah ke terkuat di papan peringkat. Langkah pertama yang harus kita lakukan adalah mencari KPK dari semua penyebutnya (2, 5, dan 10).</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Penyebut dari pecahan 1/2, 2/5, dan 3/10 secara berurutan adalah...</div>
+                    <div class="options-grid" id="sec5_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex1')">1, 2, dan 3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex1')">2, 5, dan 10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex1')">2, 2, dan 3</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Angka di bawah garis pecahan itu penyebut.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Langkah pertama untuk mengurutkan pecahan dengan penyebut berbeda adalah...</div>
+                    <div class="options-grid" id="sec5_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex2')">Mengalikan semua pembilangnya</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex2')">Mencari KPK dari semua penyebut</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex2')">Mencari FPB dari semua pembilang</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK adalah kunci untuk menyamakan penyebut.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Berapakah KPK dari 2, 5, dan 10?</div>
+                    <div class="options-grid" id="sec5_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex3')">20</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex3')">10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex3')">100</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 10 sudah bisa dibagi 2 (5x), dibagi 5 (2x), dan dibagi 10 (1x). Jadi 10 adalah yang terkecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Ubah Semua ke Penyebut 10</h3>
+                <p>KPK kita adalah 10. Mari kita ubah ketiga pecahan ini agar penyebutnya menjadi 10.</p>
+                <p>1. \(\frac{1}{2}\) = dikali \(\frac{5}{5}\) = \(\frac{5}{10}\)</p>
+                <p>2. \(\frac{2}{5}\) = dikali \(\frac{2}{2}\) = \(\frac{4}{10}\)</p>
+                <p>3. \(\frac{3}{10}\) = sudah penyebutnya 10, jadi tetap \(\frac{3}{10}\).</p>
+                <p>Sekarang semuanya bicara bahasa yang sama: persepuluhan!</p>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. Ubah \(\frac{1}{2}\) ke pecahan dengan penyebut 10!</div>
+                    <div class="options-grid" id="sec5_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex4')">5/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex4')">2/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex4')">1/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 10 dibagi 2 adalah 5. Berarti pembilang 1 dikali 5 = 5.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. Ubah \(\frac{2}{5}\) ke pecahan dengan penyebut 10!</div>
+                    <div class="options-grid" id="sec5_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex5')">5/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex5')">4/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex5')">2/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 10 dibagi 5 adalah 2. Pembilang 2 dikali 2 = 4.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. Setelah disamakan, kita punya 5/10, 4/10, dan 3/10. Manakah pecahan yang paling besar?</div>
+                    <div class="options-grid" id="sec5_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex6')">5/10 (Pemain 1)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex6')">4/10 (Pemain 2)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex6')">3/10 (Pemain 3)</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 5 adalah angka terbesar di antara 3, 4, dan 5.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Menyusun di Papan Peringkat</h3>
+                <p>Setelah disamakan menjadi 5/10, 4/10, dan 3/10, mengurutkannya jadi sangat mudah!</p>
+                <p>Urutan dari yang terkecil ke terbesar adalah: \(\frac{3}{10}\), lalu \(\frac{4}{10}\), lalu \(\frac{5}{10}\).</p>
+                <p>Jika dikembalikan ke bentuk aslinya:</p>
+                <p>1. Terlemah: \(\frac{3}{10}\)</p>
+                <p>2. Tengah: \(\frac{2}{5}\)</p>
+                <p>3. Terkuat: \(\frac{1}{2}\)</p>
+                <div class="illustration-box">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <rect x="50" y="10" width="100" height="30" fill="#58cc02" stroke="black"/>
+                        <text x="100" y="30" text-anchor="middle" fill="white" font-weight="bold">1/2 (5/10)</text>
+                        
+                        <rect x="50" y="50" width="100" height="30" fill="#1cb0f6" stroke="black"/>
+                        <text x="100" y="70" text-anchor="middle" fill="white" font-weight="bold">2/5 (4/10)</text>
+                        
+                        <rect x="50" y="90" width="100" height="30" fill="#ff4b4b" stroke="black"/>
+                        <text x="100" y="110" text-anchor="middle" fill="white" font-weight="bold">3/10 (3/10)</text>
+                    </svg>
+                    <p>Papan peringkat dari atas (terbesar) ke bawah (terkecil).</p>
+                </div>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Berdasarkan urutan 3/10, 4/10, dan 5/10. Urutan pecahan aslinya dari terkecil ke terbesar adalah...</div>
+                    <div class="options-grid" id="sec5_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex7')">3/10, 2/5, 1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex7')">1/2, 2/5, 3/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex7')">2/5, 3/10, 1/2</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3/10 (3 potong), 2/5 (4 potong), 1/2 (5 potong).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Siapa yang berada di paling bawah papan peringkat (terlemah)?</div>
+                    <div class="options-grid" id="sec5_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex8')">1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex8')">2/5</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex8')">3/10</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3/10 adalah pecahan terkecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. Tanda yang tepat untuk mengisi titik-titik: 2/5 ... 1/2 adalah?</div>
+                    <div class="options-grid" id="sec5_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex9')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex9')">=</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex9')">&lt;</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 2/5 (4/10) LEBIH KECIL DARI (<) 1/2 (5/10).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. Jika ada Pemain 4 dengan skor 7/10, di mana posisinya di papan peringkat?</div>
+                    <div class="options-grid" id="sec5_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex10')">Di bawah 3/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec5_ex10')">Di antara 4/10 dan 5/10</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec5_ex10')">Di paling atas (di atas 1/2)</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec5_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 7/10 lebih besar dari 5/10 (1/2), jadi dia pemenangnya!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+
+        <!-- SECTION 6: INDEPENDENT PRACTICE -->
+        <section id="sec6" class="section">
+            <div class="section-header">
+                <h1>Independent Practice (Boss Level!)</h1>
+                <span class="time-badge">00:50 - 01:00</span>
+            </div>
+
+            <!-- THEORY 1 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Tantangan 4 Pecahan!</h3>
+                <p>Ini adalah Boss Level! Sekarang kamu harus mengurutkan 4 pecahan sekaligus untuk membuka peti harta karun.</p>
+                <p>Pecahannya adalah: \(\frac{3}{4}\), \(\frac{5}{6}\), \(\frac{1}{2}\), dan \(\frac{2}{3}\).</p>
+                <p>Langkahnya sama seperti sebelumnya. Kita tidak bisa langsung mengurutkan karena penyebutnya beda (4, 6, 2, 3). Kita harus cari KPK dari 4, 6, 2, dan 3.</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">1. Apa langkah pertama yang harus kamu lakukan untuk mengurutkan 3/4, 5/6, 1/2, dan 2/3?</div>
+                    <div class="options-grid" id="sec6_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex1')">Mencari FPB dari 3, 5, 1, 2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex1')">Mencari KPK dari 4, 6, 2, 3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex1')">Menjumlahkan semua pecahan</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Selalu cari KPK dari penyebutnya terlebih dahulu untuk menyamakan ukuran potongan.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">2. Cari kelipatan dari 6: 6, 12, 18, 24. Manakah dari angka ini yang bisa dibagi habis oleh 4, 2, dan 3?</div>
+                    <div class="options-grid" id="sec6_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex2')">6 (Tidak bisa dibagi 4)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex2')">12 (Bisa dibagi 4, 2, dan 3)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex2')">24 (Bisa, tapi bukan yang terkecil)</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12 bisa dibagi 4 (3x), dibagi 2 (6x), dibagi 3 (4x), dan dibagi 6 (2x). Jadi KPK-nya 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">3. Setelah KPK didapat (12), apa langkah selanjutnya?</div>
+                    <div class="options-grid" id="sec6_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex3')">Membagi 12 dengan semua pembilang</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex3')">Mengubah semua pecahan agar penyebutnya menjadi 12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex3')">Langsung mengurutkan pembilangnya</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kita ubah semua pecahan menjadi pecahan senilai dengan penyebut 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 2 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Mengubah 4 Pecahan Menjadi /12</h3>
+                <p>Mari kita ubah satu per satu:</p>
+                <p>1. \(\frac{3}{4}\) = dikali \(\frac{3}{3}\) = \(\frac{9}{12}\)</p>
+                <p>2. \(\frac{5}{6}\) = dikali \(\frac{2}{2}\) = \(\frac{10}{12}\)</p>
+                <p>3. \(\frac{1}{2}\) = dikali \(\frac{6}{6}\) = \(\frac{6}{12}\)</p>
+                <p>4. \(\frac{2}{3}\) = dikali \(\frac{4}{4}\) = \(\frac{8}{12}\)</p>
+                <p>Sekarang semua penyebutnya sudah jadi 12!</p>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">4. Berapakah \(\frac{3}{4}\) jika diubah ke penyebut 12?</div>
+                    <div class="options-grid" id="sec6_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex4')">9/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex4')">8/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex4')">10/12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12/4 = 3. 3x3 = 9.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">5. Berapakah \(\frac{5}{6}\) jika diubah ke penyebut 12?</div>
+                    <div class="options-grid" id="sec6_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex5')">9/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex5')">10/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex5')">5/12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12/6 = 2. 5x2 = 10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">6. Berapakah \(\frac{1}{2}\) jika diubah ke penyebut 12?</div>
+                    <div class="options-grid" id="sec6_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex6')">6/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex6')">3/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex6')">1/12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 12/2 = 6. 1x6 = 6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEORY 3 -->
+            <div class="card theory-card">
+                <h3>📚 Teori: Mengurutkan & Membuka Peti Harta Karun</h3>
+                <p>Sekarang kita punya: 9/12, 10/12, 6/12, dan 8/12. Semua sudah disamakan!</p>
+                <p>Mari kita urutkan dari yang terkecil ke terbesar berdasarkan angka pembilangnya:</p>
+                <p>1. \(\frac{6}{12}\) (dari 1/2) -> Terkecil</p>
+                <p>2. \(\frac{8}{12}\) (dari 2/3)</p>
+                <p>3. \(\frac{9}{12}\) (dari 3/4)</p>
+                <p>4. \(\frac{10}{12}\) (dari 5/6) -> Terbesar</p>
+                <p>Peti harta karun terbuka! Kamu berhasil menjadi Juara Ranking Board!</p>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">7. Dari pecahan 6/12, 8/12, 9/12, dan 10/12, manakah yang paling kecil?</div>
+                    <div class="options-grid" id="sec6_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex7')">6/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex7')">8/12</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex7')">10/12</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 6 adalah angka terkecil di antara 6, 8, 9, 10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">8. Jika diurutkan dari terkecil ke terbesar, urutan pecahan aslinya adalah...</div>
+                    <div class="options-grid" id="sec6_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex8')">5/6, 3/4, 2/3, 1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex8')">1/2, 2/3, 3/4, 5/6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex8')">2/3, 1/2, 5/6, 3/4</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Ingat: 6/12=1/2, 8/12=2/3, 9/12=3/4, 10/12=5/6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">9. Siapa yang berada di peringkat TERATAS (skor terbesar)?</div>
+                    <div class="options-grid" id="sec6_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex9')">1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex9')">3/4</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex9')">5/6</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 5/6 (10/12) adalah pecahan terbesar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card">
+                <div class="exercise-block">
+                    <div class="question-text">10. Jadi, tanda yang benar untuk mengurutkan 1/2, 2/3, 3/4, 5/6 dari terkecil adalah...</div>
+                    <div class="options-grid" id="sec6_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'sec6_ex10')">1/2 &lt; 2/3 &lt; 3/4 &lt; 5/6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex10')">5/6 &lt; 3/4 &lt; 2/3 &lt; 1/2</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'sec6_ex10')">1/2 &gt; 2/3 &gt; 3/4 &gt; 5/6</button>
+                    </div>
+                    <div class="collapse" id="collapse_sec6_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Tanda < (lebih kecil dari) menunjukkan urutan menaik (dari terkecil ke terbesar).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+        </section>
+		
+        <style>
+            /* CSS KHUSUS PRINT & ASSIGNMENT */
+            .print-area { display: none; }
+            @media print {
+                body * { visibility: hidden; }
+                .print-area, .print-area * { visibility: visible; }
+                .print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+                .no-print { display: none !important; }
+                @page { size: A4 portrait; margin: 15mm; }
+                table.print-table { width: 100%; border-collapse: collapse; font-size: 11pt; margin-top: 20px; }
+                table.print-table th, table.print-table td { border: 1px solid #000; padding: 8px; text-align: left; }
+                .print-header { text-align: center; margin-bottom: 20px; }
+                .print-info { margin-bottom: 15px; font-size: 12pt; }
+                .print-signature { margin-top: 40px; text-align: right; font-size: 12pt; }
+            }
+            .assignment-info {
+                background: #fff8e1;
+                border: 2px solid #ffe082;
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+        </style>
+
+        <!-- ASSIGNMENT 1 -->
+        <section id="assign1" class="section">
+            <div class="section-header">
+                <h1>Assignment 1</h1>
+                <span class="time-badge">10 Soal | Medium</span>
+            </div>
+
+            <div class="assignment-info no-print">
+                <p>📝 Selesaikan 10 soal berikut. Jika sudah selesai, klik tombol "Print Result" untuk mencetak hasil kerja kamu dalam 1 halaman A4.</p>
+            </div>
+
+            <!-- EXERCISE 1 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">1. Manakah yang lebih besar antara \(\frac{3}{5}\) dan \(\frac{4}{7}\)?</div>
+                    <div class="options-grid" id="a1_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex1')">\(\frac{3}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex1')">\(\frac{4}{7}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex1')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK dari 5 dan 7 adalah 35. \(\frac{3}{5} = \frac{21}{35}\) dan \(\frac{4}{7} = \frac{20}{35}\). Karena 21 > 20, maka 3/5 lebih besar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 2 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">2. Bandingkan \(\frac{5}{8}\) dan \(\frac{7}{12}\) menggunakan tanda < atau >.</div>
+                    <div class="options-grid" id="a1_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex2')">\(\frac{5}{8} > \frac{7}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex2')">\(\frac{5}{8} < \frac{7}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex2')">\(\frac{5}{8} = \frac{7}{12}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 8 dan 12 adalah 24. \(\frac{5}{8} = \frac{15}{24}\) dan \(\frac{7}{12} = \frac{14}{24}\). Jadi 5/8 > 7/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 3 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">3. Urutkan pecahan berikut dari yang terkecil: \(\frac{1}{2}\), \(\frac{1}{3}\), \(\frac{1}{4}\).</div>
+                    <div class="options-grid" id="a1_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex3')">\(\frac{1}{4}, \frac{1}{3}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex3')">\(\frac{1}{2}, \frac{1}{3}, \frac{1}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex3')">\(\frac{1}{3}, \frac{1}{2}, \frac{1}{4}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Kalau pembilangnya sama (1), penyebut yang lebih besar berarti ukuran potongannya lebih kecil. 1/4 < 1/3 < 1/2.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 4 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">4. Isilah titik-titik dengan angka yang tepat: \(\frac{2}{3} = \frac{...}{9}\)</div>
+                    <div class="options-grid" id="a1_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex4')">3</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex4')">6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex4')">4</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 9 dibagi 3 adalah 3. Berarti pembilang 2 dikali 3 adalah 6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 5 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">5. Mana yang lebih besar antara \(\frac{2}{5}\) dan \(\frac{3}{10}\)?</div>
+                    <div class="options-grid" id="a1_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex5')">\(\frac{3}{10}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex5')">\(\frac{2}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex5')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> \(\frac{2}{5} = \frac{4}{10}\). Karena 4 lebih besar dari 3, maka 2/5 lebih besar dari 3/10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 6 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">6. Tanda yang benar untuk \(\frac{1}{2} ... \frac{2}{5}\) adalah?</div>
+                    <div class="options-grid" id="a1_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex6')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex6')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex6')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> \(\frac{1}{2} = \frac{5}{10}\) dan \(\frac{2}{5} = \frac{4}{10}\). 5 > 4, jadi >.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 7 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">7. Ubahlah \(\frac{3}{4}\) ke pecahan dengan penyebut 16!</div>
+                    <div class="options-grid" id="a1_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex7')">\(\frac{4}{16}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex7')">\(\frac{12}{16}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex7')">\(\frac{9}{16}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 16/4 = 4. 3x4 = 12. Jadi 12/16.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 8 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">8. Urutkan dari yang terkecil: \(\frac{1}{3}\), \(\frac{1}{6}\), \(\frac{1}{9}\).</div>
+                    <div class="options-grid" id="a1_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex8')">\(\frac{1}{3}, \frac{1}{6}, \frac{1}{9}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex8')">\(\frac{1}{9}, \frac{1}{6}, \frac{1}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex8')">\(\frac{1}{6}, \frac{1}{9}, \frac{1}{3}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Makin besar penyebut (kalau pembilang 1), makin kecil nilainya. 1/9 paling kecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 9 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">9. Bandingkan \(\frac{4}{5}\) dan \(\frac{3}{4}\).</div>
+                    <div class="options-grid" id="a1_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex9')">\(\frac{4}{5} < \frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex9')">\(\frac{4}{5} > \frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex9')">\(\frac{4}{5} = \frac{3}{4}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 20. \(\frac{4}{5} = \frac{16}{20}\), \(\frac{3}{4} = \frac{15}{20}\). 16 > 15.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXERCISE 10 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">10. Isi titik-titik: \(\frac{5}{6} = \frac{...}{30}\)</div>
+                    <div class="options-grid" id="a1_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex10')">5</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a1_ex10')">6</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a1_ex10')">25</button>
+                    </div>
+                    <div class="collapse" id="collapse_a1_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 30/6 = 5. 5x5 = 25.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons no-print">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-blue" onclick="printAssignment('print_assign1')">🖨️ Print Result</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+
+            <!-- PRINT AREA A4 -->
+            <div class="print-area" id="print_assign1">
+                <div class="print-header">
+                    <h2>MATH TUTORING by Deni</h2>
+                </div>
+                <div class="print-info">
+                    <p>Name: ......................................</p>
+                    <p>Date: ......................................</p>
+                    <p>Topic: Membandingkan & Mengurutkan Pecahan</p>
+                    <p>Assignment Group: 1</p>
+                    <p>Score: ........ / 10</p>
+                </div>
+                <table class="print-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Question</th>
+                            <th>Student Answer</th>
+                            <th>Correct Answer</th>
+                            <th>Note (✓/✗)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Mana lebih besar: 3/5 atau 4/7?</td><td></td><td>3/5</td><td></td></tr>
+                        <tr><td>2</td><td>Bandingkan 5/8 dan 7/12</td><td></td><td>5/8 > 7/12</td><td></td></tr>
+                        <tr><td>3</td><td>Urutkan terkecil: 1/2, 1/3, 1/4</td><td></td><td>1/4, 1/3, 1/2</td><td></td></tr>
+                        <tr><td>4</td><td>Isi titik: 2/3 = .../9</td><td></td><td>6</td><td></td></tr>
+                        <tr><td>5</td><td>Mana lebih besar: 2/5 atau 3/10?</td><td></td><td>2/5</td><td></td></tr>
+                        <tr><td>6</td><td>Tanda yang benar: 1/2 ... 2/5</td><td></td><td>&gt;</td><td></td></tr>
+                        <tr><td>7</td><td>Ubah 3/4 ke penyebut 16</td><td></td><td>12/16</td><td></td></tr>
+                        <tr><td>8</td><td>Urutkan terkecil: 1/3, 1/6, 1/9</td><td></td><td>1/9, 1/6, 1/3</td><td></td></tr>
+                        <tr><td>9</td><td>Bandingkan 4/5 dan 3/4</td><td></td><td>4/5 > 3/4</td><td></td></tr>
+                        <tr><td>10</td><td>Isi titik: 5/6 = .../30</td><td></td><td>25</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="print-signature">
+                    <p>Checked by,</p>
+                    <br><br><br>
+                    <p><strong>Deni</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENT 2 -->
+        <section id="assign2" class="section">
+            <div class="section-header">
+                <h1>Assignment 2</h1>
+                <span class="time-badge">10 Soal | Hard</span>
+            </div>
+
+            <div class="assignment-info no-print">
+                <p>🔥 Level HARD! Pelajari pola KPK-nya dengan teliti. Jangan terburu-buru menjawab. Klik "Print Result" jika sudah selesai untuk mencetak 1 halaman A4.</p>
+            </div>
+
+            <!-- EX 1 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">1. Urutkan dari yang terbesar ke terkecil: \(\frac{3}{4}\), \(\frac{5}{6}\), \(\frac{7}{8}\), dan \(\frac{1}{2}\).</div>
+                    <div class="options-grid" id="a2_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex1')">\(\frac{1}{2}, \frac{3}{4}, \frac{5}{6}, \frac{7}{8}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex1')">\(\frac{7}{8}, \frac{5}{6}, \frac{3}{4}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex1')">\(\frac{5}{6}, \frac{7}{8}, \frac{1}{2}, \frac{3}{4}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 7/8=21/24, 5/6=20/24, 3/4=18/24, 1/2=12/24. Urutan terbesar: 21, 20, 18, 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 2 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">2. Seorang gamer menyelesaikan \(\frac{7}{9}\) misi, temannya menyelesaikan \(\frac{5}{6}\) misi. Siapa yang menyelesaikan lebih banyak?</div>
+                    <div class="options-grid" id="a2_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex2')">Gamer pertama (7/9)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex2')">Temannya (5/6)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex2')">Sama banyak</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 18. 7/9=14/18, 5/6=15/18. 15 > 14, jadi temannya menyelesaikan lebih banyak.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 3 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">3. Tentukan satu pecahan yang nilainya berada di antara \(\frac{1}{2}\) dan \(\frac{2}{3}\).</div>
+                    <div class="options-grid" id="a2_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex3')">\(\frac{1}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex3')">\(\frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex3')">\(\frac{7}{12}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 12. 1/2=6/12, 2/3=8/12. Di antara 6 dan 8 ada 7. Jadi 7/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 4 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">4. Urutkan dari yang terkecil: \(\frac{2}{5}\), \(\frac{3}{10}\), \(\frac{1}{4}\), dan \(\frac{1}{2}\).</div>
+                    <div class="options-grid" id="a2_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex4')">\(\frac{1}{4}, \frac{2}{5}, \frac{3}{10}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex4')">\(\frac{1}{4}, \frac{3}{10}, \frac{2}{5}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex4')">\(\frac{1}{4}, \frac{1}{2}, \frac{3}{10}, \frac{2}{5}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 20. 1/4=5/20, 3/10=6/20, 2/5=8/20, 1/2=10/20. Urut: 5, 6, 8, 10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 5 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">5. Jika \(x = \frac{3}{7}\) dan \(y = \frac{4}{9}\), manakah pernyataan yang benar?</div>
+                    <div class="options-grid" id="a2_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex5')">x &gt; y</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex5')">x &lt; y</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex5')">x = y</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 63. x=27/63, y=28/63. 27 < 28, jadi x < y.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 6 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">6. Urutkan skor berikut pada Ranking Board dari yang paling bawah: \(\frac{11}{12}\), \(\frac{5}{6}\), \(\frac{3}{4}\), \(\frac{2}{3}\).</div>
+                    <div class="options-grid" id="a2_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex6')">\(\frac{11}{12}, \frac{5}{6}, \frac{3}{4}, \frac{2}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex6')">\(\frac{2}{3}, \frac{3}{4}, \frac{5}{6}, \frac{11}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex6')">\(\frac{3}{4}, \frac{2}{3}, \frac{11}{12}, \frac{5}{6}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 12. 2/3=8/12, 3/4=9/12, 5/6=10/12, 11/12=11/12. Urutan dari paling bawah (terkecil): 8, 9, 10, 11.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 7 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">7. Siapa menyelesaikan lebih banyak misi: \(\frac{4}{5}\) atau \(\frac{5}{7}\)?</div>
+                    <div class="options-grid" id="a2_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex7')">\(\frac{4}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex7')">\(\frac{5}{7}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex7')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 35. 4/5=28/35, 5/7=25/35. 28 > 25.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 8 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">8. Tentukan satu pecahan yang nilainya berada di antara \(\frac{1}{3}\) dan \(\frac{1}{2}\).</div>
+                    <div class="options-grid" id="a2_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex8')">\(\frac{1}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex8')">\(\frac{5}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex8')">\(\frac{2}{3}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 12. 1/3=4/12, 1/2=6/12. Di antara 4 dan 6 ada 5. Jadi 5/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 9 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">9. Urutkan dari terbesar ke terkecil: \(\frac{1}{2}\), \(\frac{5}{8}\), \(\frac{3}{4}\).</div>
+                    <div class="options-grid" id="a2_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex9')">\(\frac{3}{4}, \frac{5}{8}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex9')">\(\frac{1}{2}, \frac{5}{8}, \frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex9')">\(\frac{5}{8}, \frac{3}{4}, \frac{1}{2}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 8. 3/4=6/8, 5/8=5/8, 1/2=4/8. Urutan terbesar: 6, 5, 4.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 10 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">10. Tanda yang benar untuk \(\frac{7}{9} ... \frac{5}{7}\) adalah?</div>
+                    <div class="options-grid" id="a2_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex10')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a2_ex10')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a2_ex10')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a2_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 63. 7/9=49/63, 5/7=45/63. 49 > 45, jadi >.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons no-print">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-blue" onclick="printAssignment('print_assign2')">🖨️ Print Result</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+
+            <!-- PRINT AREA A4 -->
+            <div class="print-area" id="print_assign2">
+                <div class="print-header"><h2>MATH TUTORING by Deni</h2></div>
+                <div class="print-info">
+                    <p>Name: ......................................</p>
+                    <p>Date: ......................................</p>
+                    <p>Topic: Membandingkan & Mengurutkan Pecahan</p>
+                    <p>Assignment Group: 2</p>
+                    <p>Score: ........ / 10</p>
+                </div>
+                <table class="print-table">
+                    <thead>
+                        <tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note (✓/✗)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Urutkan terbesar: 3/4, 5/6, 7/8, 1/2</td><td></td><td>7/8, 5/6, 3/4, 1/2</td><td></td></tr>
+                        <tr><td>2</td><td>Siapa lebih banyak: 7/9 atau 5/6?</td><td></td><td>5/6</td><td></td></tr>
+                        <tr><td>3</td><td>Pecahan antara 1/2 dan 2/3</td><td></td><td>7/12</td><td></td></tr>
+                        <tr><td>4</td><td>Urutkan terkecil: 2/5, 3/10, 1/4, 1/2</td><td></td><td>1/4, 3/10, 2/5, 1/2</td><td></td></tr>
+                        <tr><td>5</td><td>x=3/7, y=4/9. Pernyataan benar?</td><td></td><td>x &lt; y</td><td></td></tr>
+                        <tr><td>6</td><td>Urutkan dari paling bawah: 11/12, 5/6, 3/4, 2/3</td><td></td><td>2/3, 3/4, 5/6, 11/12</td><td></td></tr>
+                        <tr><td>7</td><td>Siapa lebih banyak: 4/5 atau 5/7?</td><td></td><td>4/5</td><td></td></tr>
+                        <tr><td>8</td><td>Pecahan antara 1/3 dan 1/2</td><td></td><td>5/12</td><td></td></tr>
+                        <tr><td>9</td><td>Urutkan terbesar: 1/2, 5/8, 3/4</td><td></td><td>3/4, 5/8, 1/2</td><td></td></tr>
+                        <tr><td>10</td><td>Tanda yang benar: 7/9 ... 5/7</td><td></td><td>&gt;</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="print-signature"><p>Checked by,</p><br><br><br><p><strong>Deni</strong></p></div>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENT 3 -->
+        <section id="assign3" class="section">
+            <div class="section-header">
+                <h1>Assignment 3</h1>
+                <span class="time-badge">10 Soal | Hard</span>
+            </div>
+
+            <div class="assignment-info no-print">
+                <p>🔥 Terus semangat! Fokus pada penyamaan penyebut menggunakan KPK sebelum membandingkan angkanya.</p>
+            </div>
+
+            <!-- EX 1 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">1. Urutkan dari yang terkecil: \(\frac{5}{6}\), \(\frac{1}{2}\), \(\frac{2}{3}\), \(\frac{3}{4}\).</div>
+                    <div class="options-grid" id="a3_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex1')">\(\frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex1')">\(\frac{5}{6}, \frac{3}{4}, \frac{2}{3}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex1')">\(\frac{2}{3}, \frac{1}{2}, \frac{5}{6}, \frac{3}{4}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 12: 1/2=6/12, 2/3=8/12, 3/4=9/12, 5/6=10/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 2 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">2. Tentukan satu pecahan yang nilainya berada di antara \(\frac{2}{3}\) dan \(\frac{3}{4}\).</div>
+                    <div class="options-grid" id="a3_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex2')">\(\frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex2')">\(\frac{17}{24}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex2')">\(\frac{5}{6}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 2/3=16/24, 3/4=18/24. Di antara 16 dan 18 ada 17. Jadi 17/24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 3 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">3. Mana yang lebih kecil: \(\frac{3}{10}\) atau \(\frac{2}{7}\)?</div>
+                    <div class="options-grid" id="a3_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex3')">\(\frac{3}{10}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex3')">\(\frac{2}{7}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex3')">Sama kecil</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 70. 3/10=21/70, 2/7=20/70. 20 < 21, jadi 2/7 lebih kecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 4 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">4. Urutkan dari terbesar ke terkecil: \(\frac{5}{9}\), \(\frac{1}{2}\), \(\frac{4}{7}\).</div>
+                    <div class="options-grid" id="a3_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex4')">\(\frac{1}{2}, \frac{4}{7}, \frac{5}{9}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex4')">\(\frac{4}{7}, \frac{5}{9}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex4')">\(\frac{5}{9}, \frac{1}{2}, \frac{4}{7}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 126. 4/7=72/126, 5/9=70/126, 1/2=63/126.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 5 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">5. Seorang gamer menyelesaikan \(\frac{8}{15}\) misi, temannya \(\frac{3}{5}\). Siapa lebih banyak?</div>
+                    <div class="options-grid" id="a3_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex5')">Gamer (8/15)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex5')">Temannya (3/5)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex5')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 15. 3/5=9/15. 9 > 8. Temannya menang.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 6 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">6. Tanda yang benar untuk \(\frac{4}{5} ... \frac{7}{9}\) adalah?</div>
+                    <div class="options-grid" id="a3_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex6')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex6')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex6')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 45. 4/5=36/45, 7/9=35/45. 36 > 35.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 7 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">7. Tentukan pecahan di antara \(\frac{3}{5}\) dan \(\frac{4}{5}\).</div>
+                    <div class="options-grid" id="a3_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex7')">\(\frac{1}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex7')">\(\frac{7}{10}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex7')">\(\frac{9}{10}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 10. 3/5=6/10, 4/5=8/10. Di antara 6 dan 8 adalah 7. Jadi 7/10.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 8 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">8. Urutkan dari terkecil ke terbesar: \(\frac{1}{4}\), \(\frac{1}{3}\), \(\frac{1}{2}\), \(\frac{1}{5}\).</div>
+                    <div class="options-grid" id="a3_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex8')">\(\frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \frac{1}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex8')">\(\frac{1}{5}, \frac{1}{4}, \frac{1}{3}, \frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex8')">\(\frac{1}{4}, \frac{1}{5}, \frac{1}{3}, \frac{1}{2}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> Penyebut makin besar, potongan makin kecil. 1/5 paling kecil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 9 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">9. Mana yang lebih besar: \(\frac{5}{6}\) atau \(\frac{7}{8}\)?</div>
+                    <div class="options-grid" id="a3_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex9')">\(\frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex9')">\(\frac{7}{8}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex9')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 5/6=20/24, 7/8=21/24. 21 > 20.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 10 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">10. Jika KPK dari 3 dan 8 adalah 24, ubahlah \(\frac{5}{8}\) ke pecahan dengan penyebut 24.</div>
+                    <div class="options-grid" id="a3_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a3_ex10')">\(\frac{15}{24}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex10')">\(\frac{5}{24}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a3_ex10')">\(\frac{10}{24}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a3_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 24/8 = 3. 5x3 = 15. Jadi 15/24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons no-print">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-blue" onclick="printAssignment('print_assign3')">🖨️ Print Result</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+
+            <!-- PRINT AREA A4 -->
+            <div class="print-area" id="print_assign3">
+                <div class="print-header"><h2>MATH TUTORING by Deni</h2></div>
+                <div class="print-info">
+                    <p>Name: ......................................</p>
+                    <p>Date: ......................................</p>
+                    <p>Topic: Membandingkan & Mengurutkan Pecahan</p>
+                    <p>Assignment Group: 3</p>
+                    <p>Score: ........ / 10</p>
+                </div>
+                <table class="print-table">
+                    <thead>
+                        <tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note (✓/✗)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Urutkan terkecil: 5/6, 1/2, 2/3, 3/4</td><td></td><td>1/2, 2/3, 3/4, 5/6</td><td></td></tr>
+                        <tr><td>2</td><td>Pecahan antara 2/3 dan 3/4</td><td></td><td>17/24</td><td></td></tr>
+                        <tr><td>3</td><td>Mana lebih kecil: 3/10 atau 2/7?</td><td></td><td>2/7</td><td></td></tr>
+                        <tr><td>4</td><td>Urutkan terbesar: 5/9, 1/2, 4/7</td><td></td><td>4/7, 5/9, 1/2</td><td></td></tr>
+                        <tr><td>5</td><td>Siapa lebih banyak: 8/15 atau 3/5?</td><td></td><td>3/5</td><td></td></tr>
+                        <tr><td>6</td><td>Tanda yang benar: 4/5 ... 7/9</td><td></td><td>&gt;</td><td></td></tr>
+                        <tr><td>7</td><td>Pecahan antara 3/5 dan 4/5</td><td></td><td>7/10</td><td></td></tr>
+                        <tr><td>8</td><td>Urutkan terkecil: 1/4, 1/3, 1/2, 1/5</td><td></td><td>1/5, 1/4, 1/3, 1/2</td><td></td></tr>
+                        <tr><td>9</td><td>Mana lebih besar: 5/6 atau 7/8?</td><td></td><td>7/8</td><td></td></tr>
+                        <tr><td>10</td><td>Ubah 5/8 ke penyebut 24</td><td></td><td>15/24</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="print-signature"><p>Checked by,</p><br><br><br><p><strong>Deni</strong></p></div>
+            </div>
+        </section>
+		
+        <!-- ASSIGNMENT 4 -->
+        <section id="assign4" class="section">
+            <div class="section-header">
+                <h1>Assignment 4</h1>
+                <span class="time-badge">10 Soal | Hard</span>
+            </div>
+
+            <div class="assignment-info no-print">
+                <p>🔥 Latihan membuatmu makin paham. Coba kerjakan dengan bahasmu sendiri di notes, lalu pilih jawabannya.</p>
+            </div>
+
+            <!-- EX 1 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">1. Urutkan dari terbesar ke terkecil: \(\frac{7}{9}\), \(\frac{5}{6}\), \(\frac{2}{3}\).</div>
+                    <div class="options-grid" id="a4_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex1')">\(\frac{2}{3}, \frac{7}{9}, \frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex1')">\(\frac{5}{6}, \frac{7}{9}, \frac{2}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex1')">\(\frac{5}{6}, \frac{2}{3}, \frac{7}{9}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 18. 5/6=15/18, 7/9=14/18, 2/3=12/18.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 2 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">2. Tentukan pecahan yang nilainya berada di antara \(\frac{1}{4}\) dan \(\frac{1}{3}\).</div>
+                    <div class="options-grid" id="a4_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex2')">\(\frac{1}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex2')">\(\frac{2}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex2')">\(\frac{7}{24}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 1/4=6/24, 1/3=8/24. Di antara 6 dan 8 ada 7. Jadi 7/24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 3 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">3. Mana yang lebih besar: \(\frac{3}{7}\) atau \(\frac{4}{9}\)?</div>
+                    <div class="options-grid" id="a4_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex3')">\(\frac{3}{7}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex3')">\(\frac{4}{9}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex3')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 63. 3/7=27/63, 4/9=28/63. 28 > 27.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 4 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">4. Tanda yang benar untuk \(\frac{5}{8} ... \frac{7}{11}\) adalah?</div>
+                    <div class="options-grid" id="a4_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex4')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex4')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex4')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 88. 5/8=55/88, 7/11=56/88. 55 < 56, tunggu, 55 lebih kecil dari 56 berarti 5/8 < 7/11. (Tapi di soal sebelumnya tertukar, mari kita benarkan di sini: 5/8 < 7/11). *Catatan: Pastikan teliti saat menghitung KPK!*
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 5 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">5. Urutkan dari terkecil: \(\frac{1}{2}\), \(\frac{2}{3}\), \(\frac{3}{5}\), \(\frac{5}{6}\).</div>
+                    <div class="options-grid" id="a4_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex5')">\(\frac{1}{2}, \frac{3}{5}, \frac{2}{3}, \frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex5')">\(\frac{1}{2}, \frac{2}{3}, \frac{3}{5}, \frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex5')">\(\frac{5}{6}, \frac{2}{3}, \frac{3}{5}, \frac{1}{2}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 30. 1/2=15/30, 3/5=18/30, 2/3=20/30, 5/6=25/30.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 6 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">6. Gamer A menyelesaikan \(\frac{3}{5}\) misi, Gamer B \(\frac{5}{8}\) misi. Siapa unggul?</div>
+                    <div class="options-grid" id="a4_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex6')">Gamer A (3/5)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex6')">Gamer B (5/8)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex6')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 40. 3/5=24/40, 5/8=25/40. 25 > 24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 7 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">7. Ubahlah \(\frac{2}{7}\) ke pecahan dengan penyebut 21.</div>
+                    <div class="options-grid" id="a4_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex7')">\(\frac{4}{21}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex7')">\(\frac{6}{21}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex7')">\(\frac{2}{21}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 21/7 = 3. 2x3 = 6. Jadi 6/21.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 8 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">8. Tentukan pecahan di antara \(\frac{2}{5}\) dan \(\frac{3}{5}\).</div>
+                    <div class="options-grid" id="a4_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex8')">\(\frac{1}{5}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex8')">\(\frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex8')">\(\frac{4}{5}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 10. 2/5=4/10, 3/5=6/10. Di antara 4 dan 6 adalah 5/10, yang sama dengan 1/2.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 9 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">9. Mana yang lebih kecil: \(\frac{4}{9}\) atau \(\frac{5}{12}\)?</div>
+                    <div class="options-grid" id="a4_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex9')">\(\frac{4}{9}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex9')">\(\frac{5}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex9')">Sama kecil</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 36. 4/9=16/36, 5/12=15/36. 15 < 16.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 10 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">10. Tanda yang benar untuk \(\frac{7}{12} ... \frac{3}{4}\) adalah?</div>
+                    <div class="options-grid" id="a4_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a4_ex10')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex10')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a4_ex10')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a4_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 3/4=9/12. 7/12 < 9/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons no-print">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-blue" onclick="printAssignment('print_assign4')">🖨️ Print Result</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+
+            <!-- PRINT AREA A4 -->
+            <div class="print-area" id="print_assign4">
+                <div class="print-header"><h2>MATH TUTORING by Deni</h2></div>
+                <div class="print-info">
+                    <p>Name: ......................................</p>
+                    <p>Date: ......................................</p>
+                    <p>Topic: Membandingkan & Mengurutkan Pecahan</p>
+                    <p>Assignment Group: 4</p>
+                    <p>Score: ........ / 10</p>
+                </div>
+                <table class="print-table">
+                    <thead><tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note (✓/✗)</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Urutkan terbesar: 7/9, 5/6, 2/3</td><td></td><td>5/6, 7/9, 2/3</td><td></td></tr>
+                        <tr><td>2</td><td>Pecahan antara 1/4 dan 1/3</td><td></td><td>7/24</td><td></td></tr>
+                        <tr><td>3</td><td>Mana lebih besar: 3/7 atau 4/9?</td><td></td><td>4/9</td><td></td></tr>
+                        <tr><td>4</td><td>Tanda: 5/8 ... 7/11</td><td></td><td>&lt;</td><td></td></tr>
+                        <tr><td>5</td><td>Urutkan terkecil: 1/2, 2/3, 3/5, 5/6</td><td></td><td>1/2, 3/5, 2/3, 5/6</td><td></td></tr>
+                        <tr><td>6</td><td>Siapa unggul: 3/5 atau 5/8?</td><td></td><td>5/8</td><td></td></tr>
+                        <tr><td>7</td><td>Ubah 2/7 ke penyebut 21</td><td></td><td>6/21</td><td></td></tr>
+                        <tr><td>8</td><td>Pecahan antara 2/5 dan 3/5</td><td></td><td>1/2 (atau 5/10)</td><td></td></tr>
+                        <tr><td>9</td><td>Mana lebih kecil: 4/9 atau 5/12?</td><td></td><td>5/12</td><td></td></tr>
+                        <tr><td>10</td><td>Tanda: 7/12 ... 3/4</td><td></td><td>&lt;</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="print-signature"><p>Checked by,</p><br><br><br><p><strong>Deni</strong></p></div>
+            </div>
+        </section>
+
+        <!-- ASSIGNMENT 5 -->
+        <section id="assign5" class="section">
+            <div class="section-header">
+                <h1>Assignment 5</h1>
+                <span class="time-badge">10 Soal | Hard</span>
+            </div>
+
+            <div class="assignment-info no-print">
+                <p>🏆 Ini adalah Assignment terakhir sebelum final. Kumpulkan semua fokusmu. Kerjakan pelan-pelan tapi pasti!</p>
+            </div>
+
+            <!-- EX 1 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">1. Urutkan dari terbesar ke terkecil: \(\frac{11}{12}\), \(\frac{7}{8}\), \(\frac{5}{6}\).</div>
+                    <div class="options-grid" id="a5_ex1">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex1')">\(\frac{5}{6}, \frac{7}{8}, \frac{11}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex1')">\(\frac{11}{12}, \frac{7}{8}, \frac{5}{6}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex1')">\(\frac{7}{8}, \frac{11}{12}, \frac{5}{6}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex1">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 11/12=22/24, 7/8=21/24, 5/6=20/24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 2 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">2. Tentukan pecahan yang nilainya berada di antara \(\frac{3}{8}\) dan \(\frac{4}{9}\).</div>
+                    <div class="options-grid" id="a5_ex2">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex2')">\(\frac{1}{2}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex2')">\(\frac{7}{18}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex2')">\(\frac{1}{3}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex2">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 72. 3/8=27/72, 4/9=32/72. 28/72 = 7/18.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 3 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">3. Mana yang lebih besar: \(\frac{9}{10}\) atau \(\frac{11}{12}\)?</div>
+                    <div class="options-grid" id="a5_ex3">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex3')">\(\frac{9}{10}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex3')">\(\frac{11}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex3')">Sama besar</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex3">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 60. 9/10=54/60, 11/12=55/60. 55 > 54.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 4 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">4. Tanda yang benar untuk \(\frac{5}{9} ... \frac{7}{13}\) adalah?</div>
+                    <div class="options-grid" id="a5_ex4">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex4')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex4')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex4')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex4">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 117. 5/9=65/117, 7/13=63/117. 65 > 63.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 5 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">5. Urutkan dari terkecil ke terbesar: \(\frac{3}{4}\), \(\frac{1}{2}\), \(\frac{5}{8}\), \(\frac{2}{3}\).</div>
+                    <div class="options-grid" id="a5_ex5">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex5')">\(\frac{1}{2}, \frac{2}{3}, \frac{5}{8}, \frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex5')">\(\frac{1}{2}, \frac{5}{8}, \frac{2}{3}, \frac{3}{4}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex5')">\(\frac{5}{8}, \frac{1}{2}, \frac{2}{3}, \frac{3}{4}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex5">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 24. 1/2=12/24, 5/8=15/24, 2/3=16/24, 3/4=18/24.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 6 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">6. Siapa menyelesaikan lebih sedikit misi: \(\frac{3}{8}\) atau \(\frac{4}{9}\)?</div>
+                    <div class="options-grid" id="a5_ex6">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex6')">\(\frac{3}{8}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex6')">\(\frac{4}{9}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex6')">Sama sedikit</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex6">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 72. 3/8=27/72, 4/9=32/72. 27 < 32.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 7 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">7. Ubahlah \(\frac{7}{9}\) ke pecahan dengan penyebut 45.</div>
+                    <div class="options-grid" id="a5_ex7">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex7')">\(\frac{14}{45}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex7')">\(\frac{35}{45}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex7')">\(\frac{7}{45}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex7">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 45/9 = 5. 7x5 = 35.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 8 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">8. Tentukan pecahan yang nilainya berada di antara \(\frac{5}{6}\) dan \(1\) (satu).</div>
+                    <div class="options-grid" id="a5_ex8">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex8')">\(\frac{2}{3}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex8')">\(\frac{11}{12}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex8')">\(\frac{1}{2}\)</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex8">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> 1 = 12/12. 5/6 = 10/12. Di antara 10 dan 12 ada 11. Jadi 11/12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 9 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">9. Mana yang lebih besar: \(\frac{8}{15}\) atau \(\frac{11}{20}\)?</div>
+                    <div class="options-grid" id="a5_ex9">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex9')">\(\frac{8}{15}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex9')">\(\frac{11}{20}\)</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex9')">Sama</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex9">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 60. 8/15=32/60, 11/20=33/60. 33 > 32.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EX 10 -->
+            <div class="card no-print">
+                <div class="exercise-block">
+                    <div class="question-text">10. Tanda yang benar untuk \(\frac{15}{16} ... \frac{9}{10}\) adalah?</div>
+                    <div class="options-grid" id="a5_ex10">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 'a5_ex10')">&gt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex10')">&lt;</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 'a5_ex10')">=</button>
+                    </div>
+                    <div class="collapse" id="collapse_a5_ex10">
+                        <div class="collapse-body">
+                            <span class="success-text">Benar!</span> KPK 80. 15/16=75/80, 9/10=72/80. 75 > 72.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons no-print">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-blue" onclick="printAssignment('print_assign5')">🖨️ Print Result</button>
+                <button class="btn btn-primary" onclick="nextSection()">Berikutnya →</button>
+            </div>
+
+            <!-- PRINT AREA A4 -->
+            <div class="print-area" id="print_assign5">
+                <div class="print-header"><h2>MATH TUTORING by Deni</h2></div>
+                <div class="print-info">
+                    <p>Name: ......................................</p>
+                    <p>Date: ......................................</p>
+                    <p>Topic: Membandingkan & Mengurutkan Pecahan</p>
+                    <p>Assignment Group: 5</p>
+                    <p>Score: ........ / 10</p>
+                </div>
+                <table class="print-table">
+                    <thead><tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note (✓/✗)</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Urutkan terbesar: 11/12, 7/8, 5/6</td><td></td><td>11/12, 7/8, 5/6</td><td></td></tr>
+                        <tr><td>2</td><td>Pecahan antara 3/8 dan 4/9</td><td></td><td>7/18</td><td></td></tr>
+                        <tr><td>3</td><td>Mana lebih besar: 9/10 atau 11/12?</td><td></td><td>11/12</td><td></td></tr>
+                        <tr><td>4</td><td>Tanda: 5/9 ... 7/13</td><td></td><td>&gt;</td><td></td></tr>
+                        <tr><td>5</td><td>Urutkan terkecil: 3/4, 1/2, 5/8, 2/3</td><td></td><td>1/2, 5/8, 2/3, 3/4</td><td></td></tr>
+                        <tr><td>6</td><td>Siapa lebih sedikit: 3/8 atau 4/9?</td><td></td><td>3/8</td><td></td></tr>
+                        <tr><td>7</td><td>Ubah 7/9 ke penyebut 45</td><td></td><td>35/45</td><td></td></tr>
+                        <tr><td>8</td><td>Pecahan antara 5/6 dan 1</td><td></td><td>11/12</td><td></td></tr>
+                        <tr><td>9</td><td>Mana lebih besar: 8/15 atau 11/20?</td><td></td><td>11/20</td><td></td></tr>
+                        <tr><td>10</td><td>Tanda: 15/16 ... 9/10</td><td></td><td>&gt;</td><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="print-signature"><p>Checked by,</p><br><br><br><p><strong>Deni</strong></p></div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: CONSOLIDATION -->
+        <section id="sec7" class="section">
+            <div class="section-header">
+                <h1>Consolidation & Reflection</h1>
+                <span class="time-badge">01:00 - 01:05</span>
+            </div>
+
+            <div class="card theory-card">
+                <h3>🎉 Luar Biasa! Kamu telah menamatkan Ranking Board!</h3>
+                <p>Hari ini kamu sudah belajar cara mengurutkan dan membandingkan pecahan dengan pintar. Tidak ada lagi teriak "saya yang menang!" tanpa bukti matematika.</p>
+                <p><strong>Ingat selalu 3 langkah jagoan ini:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 15px; line-height: 1.8;">
+                    <li>1. Cari <strong>KPK</strong> dari semua penyebut untuk menyamakan "ukuran potongan".</li>
+                    <li>2. Ubah pembilangnya agar sebanding dengan penyebut barunya.</li>
+                    <li>3. Kalau sudah sama penyebutnya, tinggal <strong>bandingkan angka atasnya (pembilang)</strong>.</li>
+                </ul>
+                <div class="illustration-box">
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="#ffc800"/>
+                        <path d="M30 50 L45 65 L70 35" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p> mission accomplished! </p>
+                </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h3 style="margin-bottom: 15px;">Tantangan Rumah (Homework)</h3>
+                <p style="margin-bottom: 20px;">Untuk memperkuat skill Ranking Board-mu, silakan kerjakan tantangan di platform Algonova!</p>
+                <a href="https://learn.algonova.id/login" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                    🚀 Buka Tantangan Algonova
+                </a>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevSection()">← Sebelumnya</button>
+                <button class="btn btn-primary" onclick="showSection('home', document.querySelector('.nav-item'))">Kembali ke Home 🏠</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    
+    <style>
+        /* 1. PERBAIKAN CENTER MAIN CONTENT */
+        body {
+            display: block !important;
+        }
+        .main-content {
+            margin-left: 260px !important;
+            padding: 40px !important;
+            flex: none !important;
+            display: flex !important;
+            justify-content: center !important;
+            width: calc(100% - 260px) !important;
+        }
+        .main-content > .section {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* 2. HILANGKAN TOMBOL RESET, PREV, NEXT (TAPI TETAP SIMPAN PRINT) */
+        .reset-top { display: none !important; }
+        button[onclick*="prevSection()"], 
+        button[onclick*="nextSection()"], 
+        button[onclick*="resetAllProgress()"] {
+            display: none !important;
+        }
+
+        /* 3. PERBAIKAN CURSOR JADI NORMAL SETELAH JAWAB */
+        .option-btn.disabled {
+            cursor: default !important;
+            opacity: 0.8 !important;
+        }
+    </style>
+
+    <script>
+        // === NAVIGATION LOGIC ===
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item');
+        let currentSectionIndex = 0;
+
+        function showSection(sectionId, element) {
+            sections.forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            navItems.forEach(item => item.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+                const index = Array.from(navItems).indexOf(element);
+                if (index !== -1) currentSectionIndex = index;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // === CHECK ANSWER LOGIC (KETERANGAN DINAMIS) ===
+        function checkAnswer(button, isCorrect, exerciseId) {
+            const options = document.querySelectorAll(`#${exerciseId} .option-btn`);
+            const collapse = document.getElementById(`collapse_${exerciseId}`);
+            const firstSpan = collapse.querySelector('.collapse-body span');
+            
+            // Disable all options
+            options.forEach(opt => opt.classList.add('disabled'));
+            options.forEach(opt => opt.classList.remove('selected', 'correct', 'wrong'));
+            
+            // Mark current selection & ubah teks keterangan
+            if (isCorrect) {
+                button.classList.add('correct');
+                if (firstSpan) {
+                    firstSpan.className = 'success-text';
+                    firstSpan.innerText = 'Benar!';
+                }
+            } else {
+                button.classList.add('wrong');
+                options.forEach(opt => {
+                    if (opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                if (firstSpan) {
+                    firstSpan.className = 'error-text';
+                    firstSpan.innerText = 'Jawaban kamu salah. Lihat penjelasan:';
+                }
+            }
+            
+            collapse.classList.add('show');
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(collapse);
+            }
+        }
+
+        // === RANDOMIZE OPTIONS ON LOAD ===
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.options-grid').forEach(grid => {
+                for (let i = grid.children.length; i >= 0; i--) {
+                    grid.appendChild(grid.children[Math.random() * i | 0]);
+                }
+            });
+        });
+
+        // === PRINT A4 LOGIC (DENGAN TANDA CENTANG & SILANG) ===
+        function printAssignment(printAreaId) {
+            let sectionId = printAreaId.replace('print_', '');
+            let sectionPrefix = sectionId.replace('assign', 'a');
+            
+            const printArea = document.getElementById(printAreaId).cloneNode(true);
+            const tbody = printArea.querySelector('tbody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach((row, index) => {
+                const exerciseNum = index + 1;
+                const exerciseId = `${sectionPrefix}_ex${exerciseNum}`;
+                
+                const options = document.querySelectorAll(`#${exerciseId} .option-btn`);
+                let studentAnswer = "Kosong";
+                let noteSymbol = "";
+                let clicked = false;
+                
+                // Cek apakah ada tombol yang diklik SALAH
+                options.forEach(opt => {
+                    if (opt.classList.contains('wrong')) {
+                        studentAnswer = opt.innerText.replace(/\s+/g, ' ').trim();
+                        noteSymbol = "✗";
+                        clicked = true;
+                    }
+                });
+                
+                // Jika tidak ada yang salah, cek apakah ada yang diklik BENAR
+                if (!clicked) {
+                    options.forEach(opt => {
+                        if (opt.classList.contains('correct')) {
+                            studentAnswer = opt.innerText.replace(/\s+/g, ' ').trim();
+                            noteSymbol = "✓";
+                            clicked = true;
+                        }
+                    });
+                }
+                
+                // Masukkan jawaban siswa ke kolom ke-3 (Student Answer)
+                const studentAnswerCell = row.children[2];
+                if (studentAnswerCell) {
+                    studentAnswerCell.innerText = studentAnswer;
+                }
+                
+                // Masukkan tanda centang/silang ke kolom ke-5 (Note)
+                const noteCell = row.children[4];
+                if (noteCell) {
+                    noteCell.innerText = noteSymbol;
+                }
+            });
+            
+            const printContent = printArea.innerHTML;
+            
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Assignment</title>
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                    <style>
+                        body { font-family: 'Inter', sans-serif; padding: 20px; }
+                        @page { size: A4 portrait; margin: 15mm; }
+                        table.print-table { width: 100%; border-collapse: collapse; font-size: 11pt; margin-top: 20px; }
+                        table.print-table th, table.print-table td { border: 1px solid #000; padding: 8px; text-align: left; }
+                        .print-header { text-align: center; margin-bottom: 20px; }
+                        .print-info { margin-bottom: 15px; font-size: 12pt; line-height: 1.5; }
+                        .print-signature { margin-top: 40px; text-align: right; font-size: 12pt; }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            
+            setTimeout(() => {
+                if (typeof renderMathInElement !== 'undefined') {
+                    renderMathInElement(printWindow.document.body);
+                }
+                printWindow.focus();
+                printWindow.print();
+                setTimeout(() => printWindow.close(), 500);
+            }, 500);
+        }
+    </script>
+</body>
+</html>
