@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nilai Tempat Desimal — Math Tutoring by Deni</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#58cc02;--green-d:#46a302;--blue:#1cb0f6;--blue-d:#1899d6;
+  --red:#ff4b4b;--yellow:#ffc800;--purple:#ce82ff;
+  --gray:#afafaf;--gray-l:#e5e5e5;--gray-bg:#f7f7f7;
+  --text:#4b4b4b;--text-l:#777;--white:#fff;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--gray-bg);line-height:1.6}
+
+/* ===== TOP HEADER ===== */
+.top-header{background:var(--white);padding:14px 24px;border-bottom:3px solid var(--gray-l);position:sticky;top:0;z-index:200;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.top-header h1{font-size:1.25rem;color:var(--green);font-weight:900}
+.top-header .subtitle{font-size:.82rem;color:var(--text-l);font-weight:600}
+.header-left{display:flex;align-items:center;gap:14px}
+.header-logo{width:42px;height:42px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900}
+
+/* ===== BUTTONS ===== */
+.btn{font-family:inherit;font-weight:800;border:none;border-radius:12px;padding:12px 20px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;font-size:.85rem;transition:all .1s;box-shadow:0 4px 0 rgba(0,0,0,.1)}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.1)}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-d)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 0 var(--blue-d)}
+.btn-yellow{background:var(--yellow);color:#fff;box-shadow:0 4px 0 #cca300}
+.btn-outline{background:#fff;color:var(--blue);border:2px solid var(--gray-l);box-shadow:0 4px 0 var(--gray-l)}
+.btn-outline:active{box-shadow:0 2px 0 var(--gray-l)}
+.btn:disabled{background:var(--gray-l);color:var(--gray);box-shadow:none;cursor:not-allowed;transform:none}
+
+/* ===== STUDENT INFO BAR ===== */
+.student-info{background:var(--white);padding:14px 24px;border-bottom:2px solid var(--gray-l);display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.info-field{display:flex;flex-direction:column;gap:3px}
+.info-field label{font-size:.68rem;font-weight:800;color:var(--text-l);text-transform:uppercase;letter-spacing:.5px}
+.info-field input{font-family:inherit;padding:7px 11px;border:2px solid var(--gray-l);border-radius:8px;font-size:.9rem;font-weight:600;color:var(--text)}
+.info-field input:focus{outline:none;border-color:var(--blue)}
+.score-badge{background:linear-gradient(135deg,#fff8e1,#ffe082);border:2px solid #ffc107;border-radius:10px;padding:7px 11px;text-align:center}
+.score-badge .label{font-size:.68rem;font-weight:800;color:#996f00;text-transform:uppercase}
+.score-badge .value{font-size:1.1rem;font-weight:900;color:#7a5400}
+
+/* ===== MAP PATH ===== */
+.map-path{background:linear-gradient(180deg,#e5f6ff 0%,#f7f7f7 100%);padding:36px 16px 24px;display:flex;justify-content:center;overflow-x:auto}
+.map-track{display:flex;flex-direction:column;align-items:center;gap:0;position:relative;min-width:120px}
+.map-node{width:76px;height:76px;border-radius:50%;background:var(--white);border:4px solid var(--gray-l);display:flex;align-items:center;justify-content:center;font-size:1.6rem;cursor:pointer;position:relative;transition:all .2s;z-index:2;box-shadow:0 4px 0 var(--gray-l)}
+.map-node:hover{transform:scale(1.08)}
+.map-node.active{border-color:var(--blue);box-shadow:0 4px 0 var(--blue-d)}
+.map-node.completed{background:var(--green);border-color:var(--green-d);box-shadow:0 4px 0 var(--green-d)}
+.map-connector{width:4px;height:32px;background:var(--gray-l);z-index:1}
+.map-connector.completed{background:var(--green)}
+.map-label{position:absolute;top:82px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;font-weight:800;color:var(--text);text-align:center;background:var(--white);padding:5px 11px;border-radius:8px;border:2px solid var(--gray-l);line-height:1.3}
+.map-label .dur{display:block;font-size:.62rem;color:var(--text-l);font-weight:700}
+
+/* ===== MAIN LAYOUT ===== */
+.main-container{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--white);border-right:2px solid var(--gray-l);padding:20px 14px;position:sticky;top:71px;height:calc(100vh - 71px);overflow-y:auto}
+.sidebar h3{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-l);margin-bottom:14px;font-weight:900;padding:0 8px}
+.sidebar-nav{list-style:none;display:flex;flex-direction:column;gap:4px}
+.sidebar-nav a{display:block;padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;font-size:.84rem;border:2px solid transparent;transition:all .1s;line-height:1.3}
+.sidebar-nav a:hover{background:var(--gray-bg)}
+.sidebar-nav a.active{background:#e5f6ff;border-color:var(--blue);color:var(--blue-d)}
+.sidebar-nav a .dur{display:block;font-size:.66rem;color:var(--text-l);font-weight:600;margin-top:2px}
+.sidebar-nav a.assignment-link{border-left:4px solid var(--purple);padding-left:10px}
+.content-area{padding:28px 32px 60px;max-width:920px;margin:0 auto;width:100%}
+
+/* ===== SECTION & SLIDES ===== */
+.section{margin-bottom:40px;background:var(--white);border-radius:var(--r);padding:28px;box-shadow:0 2px 10px rgba(0,0,0,.04);scroll-margin-top:90px}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--gray-l)}
+.section-icon{width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.section-title{flex:1}
+.section-title h2{font-size:1.3rem;color:var(--text);font-weight:900}
+.section-duration{display:inline-block;background:var(--gray-bg);padding:3px 10px;border-radius:8px;font-size:.7rem;font-weight:800;color:var(--text-l);margin-top:4px}
+
+.progress-bar{height:10px;background:var(--gray-l);border-radius:5px;margin-bottom:24px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);width:0%;transition:width .4s ease;border-radius:5px}
+
+.slide-wrapper{position:relative;min-height:350px}
+.slide{display:none;animation:fadeIn .4s ease}
+.slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== THEORY ===== */
+.theory{background:linear-gradient(135deg,#fffbe6,#fff9db);border:2px solid #ffe066;border-left:6px solid var(--yellow);border-radius:12px;padding:18px 22px;margin:0 0 20px 0}
+.theory h3{color:#a07200;font-size:1.05rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.theory p{margin-bottom:8px;line-height:1.7}
+.theory .example{background:#fff;border-radius:8px;padding:12px 16px;margin:10px 0;border-left:4px solid var(--blue)}
+.theory .example-label{font-size:.68rem;font-weight:900;text-transform:uppercase;color:var(--blue);margin-bottom:4px;letter-spacing:.5px}
+.illustration{background:var(--white);border-radius:12px;padding:16px;margin:14px 0;text-align:center;border:2px solid var(--gray-l)}
+.illustration img{max-width:100%;height:auto;border-radius:8px}
+.illustration-caption{font-size:.76rem;color:var(--text-l);margin-top:6px;font-style:italic}
+
+/* ===== PLACE VALUE CHART ===== */
+.pv-chart{margin:14px auto;max-width:520px;overflow-x:auto}
+.pv-chart table{border-collapse:collapse;width:100%;font-size:.85rem}
+.pv-chart th{background:var(--blue);color:#fff;padding:8px 6px;font-weight:800;text-align:center;font-size:.72rem;text-transform:uppercase}
+.pv-chart th.comma-col{background:var(--yellow)}
+.pv-chart td{text-align:center;padding:10px 6px;border:1px solid var(--gray-l);font-weight:800;font-size:1.1rem}
+.pv-chart td.comma-cell{background:#fff8e1;font-size:1.3rem;color:#a07200}
+.pv-chart .group-header th{background:var(--blue-d);font-size:.62rem}
+.pv-chart .group-header th.bulat{background:var(--green)}
+.pv-chart .group-header th.pecahan{background:var(--purple)}
+.pv-chart .highlight-cell{background:#fff3cd;border:2px solid var(--yellow)}
+
+/* ===== DECIMAL VISUAL ===== */
+.decimal-visual{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.decimal-block{display:flex;flex-direction:column;align-items:center;gap:6px}
+.decimal-block .shape{width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem}
+.decimal-block .one{background:var(--green);color:#fff;border-radius:8px}
+.decimal-block .tenth{background:var(--blue);color:#fff;border-radius:4px;width:60px;height:30px}
+.decimal-block .hundredth{background:var(--purple);color:#fff;border-radius:2px;width:15px;height:15px}
+.decimal-block .label{font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center}
+
+/* ===== QUESTION ===== */
+.question{background:var(--white);border:2px solid var(--gray-l);border-radius:12px;padding:18px 22px;margin:0;transition:all .2s}
+.question.correct{border-color:var(--green);background:#f4ffe8}
+.question.incorrect{border-color:var(--red);background:#fff0f0}
+.question-number{display:inline-block;background:var(--blue);color:#fff;font-weight:900;font-size:.7rem;padding:2px 10px;border-radius:10px;margin-bottom:10px;letter-spacing:.3px}
+.question-text{font-size:1.05rem;font-weight:700;margin-bottom:15px;line-height:1.6}
+.options{display:grid;gap:8px}
+.option{font-family:inherit;text-align:left;padding:12px 14px;border:2px solid var(--gray-l);border-radius:12px;background:var(--white);cursor:pointer;font-weight:600;color:var(--text);font-size:.95rem;transition:all .1s;display:flex;align-items:center;gap:10px;box-shadow:0 2px 0 var(--gray-l)}
+.option:hover:not(:disabled){border-color:var(--blue);background:#f0f8ff;transform:translateY(-1px)}
+.option:disabled{cursor:not-allowed;opacity:.85;transform:none;box-shadow:none}
+.option .opt-letter{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--gray-bg);border-radius:50%;font-weight:900;font-size:.8rem;flex-shrink:0}
+.option.selected{border-color:var(--blue);background:#e5f6ff;color:var(--blue-d);box-shadow:0 2px 0 var(--blue-d)}
+.option.selected .opt-letter{background:var(--blue);color:#fff}
+.option.correct{background:#f4ffe8;border-color:var(--green);color:var(--green-d);box-shadow:0 2px 0 var(--green-d)}
+.option.correct .opt-letter{background:var(--green);color:#fff}
+.option.incorrect{background:#fff0f0;border-color:var(--red);color:var(--red);box-shadow:0 2px 0 var(--red)}
+.option.incorrect .opt-letter{background:var(--red);color:#fff}
+
+.feedback{margin-top:15px;padding:13px 15px;border-radius:10px;font-size:.9rem;display:block}
+.feedback.correct{background:#f4ffe8;border-left:4px solid var(--green)}
+.feedback.incorrect{background:#fff0f0;border-left:4px solid var(--red)}
+.feedback-title{font-weight:900;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.feedback.correct .feedback-title{color:var(--green-d)}
+.feedback.incorrect .feedback-title{color:var(--red)}
+.feedback .correct-answer{margin:6px 0;font-weight:700}
+.feedback .explanation{color:var(--text);line-height:1.6;font-size:.88rem}
+.word-problem-tag{display:inline-block;background:var(--purple);color:#fff;font-size:.6rem;font-weight:900;padding:2px 8px;border-radius:6px;margin-left:6px;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
+
+/* ===== SLIDE NAVIGATION ===== */
+.slide-nav{margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.nav-right{display:flex;gap:10px;margin-left:auto}
+
+/* ===== CONSOLIDATION ===== */
+.consolidation-box{background:linear-gradient(135deg,#e0f7ff,#fff);border:2px solid var(--blue);border-radius:16px;padding:28px;text-align:center}
+.consolidation-box h3{color:var(--blue-d);margin-bottom:10px;font-size:1.2rem}
+.consolidation-box p{color:var(--text);margin-bottom:16px;line-height:1.7}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h2{color:var(--green);margin-bottom:16px;font-size:1.3rem;display:flex;align-items:center;gap:10px}
+.modal ul{list-style:none}
+.modal ul li{padding:12px 16px;background:var(--gray-bg);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:.92rem}
+.modal ul li::before{content:"✓";background:var(--green);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;font-size:.85rem}
+.modal-close{margin-top:20px;width:100%;background:var(--green);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:900;cursor:pointer;font-family:inherit;font-size:.95rem;box-shadow:0 4px 0 var(--green-d)}
+.modal-close:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-d)}
+
+/* ===== ASSIGNMENT ===== */
+.assignment-section{margin-bottom:40px;background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.04);scroll-margin-top:90px}
+.assignment-header-bar{background:linear-gradient(135deg,var(--purple),#a855f7);color:#fff;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.assignment-header-bar h2{color:#fff;font-size:1.3rem;font-weight:900}
+.assignment-header-bar .meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.assignment-header-bar .badge{background:rgba(255,255,255,.22);padding:4px 12px;border-radius:8px;font-size:.78rem;font-weight:800}
+.assignment-actions{padding:14px 28px;display:flex;gap:10px;flex-wrap:wrap;border-bottom:2px solid var(--gray-l)}
+.assignment-body{padding:24px 28px}
+
+/* ===== ANSWER SHEET ===== */
+.answer-sheet{background:var(--white);border-radius:12px;overflow:hidden;border:2px solid var(--gray-l);margin:0 0 24px 0}
+.answer-sheet-title{background:var(--gray-bg);padding:10px 16px;font-weight:900;font-size:.82rem;color:var(--text);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--gray-l)}
+.answer-sheet table{width:100%;border-collapse:collapse;font-size:.8rem}
+.answer-sheet th{background:var(--gray-bg);padding:8px;text-align:left;font-weight:900;font-size:.66rem;color:var(--text-l);text-transform:uppercase;border-bottom:2px solid var(--gray-l);letter-spacing:.3px}
+.answer-sheet td{padding:8px;border-bottom:1px solid var(--gray-l);vertical-align:top}
+.answer-sheet tr:last-child td{border-bottom:none}
+.answer-sheet .v{color:var(--green);font-weight:900;font-size:1rem}
+.answer-sheet .x{color:var(--red);font-weight:900;font-size:1rem}
+.answer-sheet .q-summary{font-size:.74rem;color:var(--text);max-width:280px;line-height:1.3}
+.checked-by{text-align:right;padding:20px 28px;border-top:2px solid var(--gray-l);background:var(--gray-bg)}
+.checked-by p{font-size:.85rem;font-weight:700;color:var(--text)}
+.checked-by .name{font-size:1.1rem;font-weight:900;color:var(--green);margin-top:24px}
+
+/* ===== PRINT ===== */
+.print-container{display:none}
+body.printing .top-header,
+body.printing .student-info,
+body.printing .map-path,
+body.printing .main-container{display:none !important}
+body.printing .print-container{display:block;padding:20px}
+body.printing .print-container .print-header{text-align:center;margin-bottom:20px;border-bottom:3px solid var(--green);padding-bottom:16px}
+body.printing .print-container .print-header h1{color:var(--green);font-size:1.4rem}
+body.printing .print-container .print-info{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0;font-size:.85rem}
+body.printing .print-container .print-info div{padding:4px 0}
+body.printing .print-container .assignment-section{box-shadow:none;border:2px solid #ccc;border-radius:8px;margin-bottom:16px}
+body.printing .print-container .slide{display:block !important;page-break-inside:avoid;margin-bottom:15px}
+body.printing .print-container .slide-nav{display:none !important}
+body.printing .print-container .progress-bar{display:none}
+body.printing .print-container .option{border:1px solid #ccc !important;background:#fff !important;color:#000 !important;box-shadow:none !important;padding:6px 10px}
+body.printing .print-container .option .opt-letter{background:#eee !important;color:#000 !important}
+body.printing .print-container .question{border:1px solid #ccc !important;page-break-inside:avoid}
+body.printing .print-container .feedback{display:none}
+body.printing .print-container .answer-sheet{page-break-inside:avoid}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .main-container{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;border-right:none;border-bottom:2px solid var(--gray-l);max-height:none}
+  .content-area{padding:16px}
+  .top-header{flex-direction:column;align-items:stretch}
+}
+
+.katex{font-size:1.02em}
+.theory .katex{font-size:1.08em}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP HEADER ===== -->
+<header class="top-header">
+  <div class="header-left">
+    <div class="header-logo">D</div>
+    <div>
+      <h1>Math Tutoring by Deni</h1>
+      <div class="subtitle">Topic: <strong>Nilai Tempat Desimal</strong></div>
+    </div>
+  </div>
+  <button class="btn btn-outline" id="classRulesBtn">📋 Class Rules</button>
+</header>
+
+<!-- ===== STUDENT INFO BAR ===== -->
+<div class="student-info" id="studentInfoHeader">
+  <div class="info-field">
+    <label>Name</label>
+    <input type="text" data-field="name" placeholder="Nama siswa">
+  </div>
+  <div class="info-field">
+    <label>Date</label>
+    <input type="date" data-field="date">
+  </div>
+  <div class="info-field">
+    <label>Assignment Group</label>
+    <input type="text" data-field="group" placeholder="Mis. Group A">
+  </div>
+  <div class="info-field">
+    <label>Active Score</label>
+    <div class="score-badge">
+      <div class="label">Score</div>
+      <div class="value"><span id="activeScore">0</span>/10</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAP PATH ===== -->
+<section class="map-path">
+  <div class="map-track" id="mapTrack"></div>
+</section>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="main-container">
+  <aside class="sidebar">
+    <h3>📍 Navigasi Materi</h3>
+    <nav>
+      <ul class="sidebar-nav" id="sidebarNav"></ul>
+    </nav>
+  </aside>
+  
+  <main class="content-area" id="contentArea"></main>
+</div>
+
+<!-- ===== CLASS RULES MODAL ===== -->
+<div class="modal-overlay" id="classRulesModal">
+  <div class="modal">
+    <h2>📋 Aturan Kelas</h2>
+    <ul>
+      <li>Berbicara secara bergantian</li>
+      <li>Meminta izin jika ingin meninggalkan kelas</li>
+      <li>Menyalakan kamera dan microphone jika diperlukan</li>
+    </ul>
+    <button class="modal-close" id="closeModalBtn">Mengerti</button>
+  </div>
+</div>
+
+<!-- ===== PRINT CONTAINER ===== -->
+<div class="print-container" id="printContainer"></div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+const courseContent = {
+  topic: "Nilai Tempat Desimal",
+  sections: []
+};
+
+/* ===== CHAT 1: SECTION 1 — SPIRAL REVIEW WARM-UP ===== */
+courseContent.sections.push({
+  id: 'section1',
+  title: 'Spiral Review Warm-up',
+  duration: '00:00-00:10',
+  icon: '🔄',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Konsep Dasar Bilangan Desimal',
+      content: `
+        <p>Bilangan desimal adalah cara menuliskan bilangan yang menggunakan tanda <strong>koma (,)</strong> sebagai pemisah antara <strong>bagian bulat</strong> dan <strong>bagian pecahan</strong>. Di Indonesia, pemisah desimal menggunakan koma, sedangkan beberapa negara menggunakan titik.</p>
+        <div class="example">
+          <div class="example-label">Contoh</div>
+          Pada bilangan $3{,}5$: angka <strong>3</strong> adalah bagian bulat (tempat satuan), dan angka <strong>5</strong> adalah bagian pecahan (tempat persepuluhan). Bilangan ini dibaca "<em>tiga koma lima</em>".
+        </div>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr class="group-header">
+                <th colspan="1" class="bulat">Bagian Bulat</th>
+                <th class="comma-col"></th>
+                <th colspan="2" class="pecahan">Bagian Pecahan</th>
+              </tr>
+              <tr>
+                <th>Satuan</th>
+                <th class="comma-col">,</th>
+                <th>Persepuluhan</th>
+                <th>Perseratusan</th>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td class="comma-cell">,</td>
+                <td class="highlight-cell">5</td>
+                <td>0</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Tabel nilai tempat bilangan $3{,}5$</div>
+        </div>
+        <p>Setiap posisi (tempat) dalam bilangan desimal memiliki <strong>nilai tempat</strong> yang berbeda. Pemahaman tentang nilai tempat ini menjadi pondasi untuk operasi hitung, pembulatan, dan konversi pecahan.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $4{,}72$, angka $7$ menempati nilai tempat...',
+      opts: ['Satuan','Puluhan','Persepuluhan','Perseratusan','Perseribuan'],
+      correct: 2,
+      exp: 'Pada bilangan $4{,}72$: angka $4$ di tempat satuan, angka $7$ di tempat persepuluhan ($\\frac{1}{10}$), dan angka $2$ di tempat perseratusan ($\\frac{1}{100}$).'
+    },
+    {
+      type: 'mcq',
+      q: 'Pak Budi mengukur panjang meja belajar di rumahnya dan mendapatkan hasil $1{,}85$ meter. Nilai tempat yang ditempati oleh angka $8$ pada bilangan tersebut adalah...',
+      opts: ['Satuan','Puluhan','Persepuluhan','Perseratusan','Perseribuan'],
+      correct: 2,
+      exp: 'Pada $1{,}85$: angka $1$ = satuan, angka $8$ = persepuluhan, angka $5$ = perseratusan. Jadi $8$ menempati tempat persepuluhan dengan nilai $8 \\times 0{,}1 = 0{,}8$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan berikut yang memiliki angka $3$ di tempat perseratusan?',
+      opts: ['$3{,}45$','$4{,}35$','$4{,}53$','$43{,}5$','$0{,}3$'],
+      correct: 2,
+      exp: 'Tempat perseratusan adalah posisi kedua setelah koma. Pada $4{,}53$, angka $3$ ada di posisi kedua setelah koma yaitu perseratusan. (Pada $4{,}35$, angka $3$ ada di persepuluhan).'
+    },
+    {
+      type: 'theory',
+      title: 'Sistem Nilai Tempat pada Bilangan Desimal',
+      content: `
+        <p>Pada sistem desimal, setiap pergeseran <strong>satu tempat ke kiri</strong> membuat nilai menjadi <strong>10 kali lebih besar</strong>, dan setiap pergeseran <strong>satu tempat ke kanan</strong> membuat nilai menjadi <strong>$\\frac{1}{10}$ kali</strong> (sepersepuluh) dari nilai sebelumnya.</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr class="group-header">
+                <th colspan="2" class="bulat">Bagian Bulat</th>
+                <th class="comma-col"></th>
+                <th colspan="3" class="pecahan">Bagian Pecahan</th>
+              </tr>
+              <tr>
+                <th>Puluhan</th>
+                <th>Satuan</th>
+                <th class="comma-col">,</th>
+                <th>Persepuluhan</th>
+                <th>Perseratusan</th>
+                <th>Perseribuan</th>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>4</td>
+                <td class="comma-cell">,</td>
+                <td class="highlight-cell">3</td>
+                <td>7</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>$\\times 10$</td>
+                <td>$\\times 1$</td>
+                <td></td>
+                <td>$\\times \\frac{1}{10}$</td>
+                <td>$\\times \\frac{1}{100}$</td>
+                <td>$\\times \\frac{1}{1000}$</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Tabel nilai tempat bilangan $24{,}375$</div>
+        </div>
+        <p>Nilai setiap angka pada bilangan $24{,}375$ adalah:</p>
+        <div class="example">
+          <div class="example-label">Penjabaran</div>
+          $2 \\times 10 = 20$<br>
+          $4 \\times 1 = 4$<br>
+          $3 \\times \\frac{1}{10} = 0{,}3$<br>
+          $7 \\times \\frac{1}{100} = 0{,}07$<br>
+          $5 \\times \\frac{1}{1000} = 0{,}005$         </div>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Nilai dari angka $2$ pada bilangan $0{,}42$ adalah...',
+      opts: ['$2$','$0{,}2$','$0{,}02$','$0{,}002$','$20$'],
+      correct: 2,
+      exp: 'Pada $0{,}42$, angka $2$ berada di tempat perseratusan, sehingga nilainya $= 2 \\times \\frac{1}{100} = 2 \\times 0{,}01 = 0{,}02$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang penjual buah menimbang mangga seberat $5{,}25$ kg. Berapakah nilai dari angka $5$ yang terletak di bagian pecahan (setelah koma)?',
+      opts: ['$5$','$0{,}5$','$0{,}05$','$0{,}005$','$50$'],
+      correct: 2,
+      exp: 'Pada $5{,}25$: angka $5$ pertama = satuan, angka $2$ = persepuluhan, angka $5$ kedua (setelah koma, posisi terakhir) = perseratusan. Nilainya $= 5 \\times 0{,}01 = 0{,}05$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $8{,}341$, nilai tempat dari angka $1$ adalah...',
+      opts: ['$1$','$0{,}1$','$0{,}01$','$0{,}001$','$10$'],
+      correct: 3,
+      exp: 'Pada $8{,}341$: angka $1$ berada di posisi ketiga setelah koma, yaitu tempat perseribuan. Nilainya $= 1 \\times \\frac{1}{1000} = 0{,}001$.'
+    },
+    {
+      type: 'theory',
+      title: 'Membaca dan Menulis Bilangan Desimal',
+      content: `
+        <p>Ada dua cara membaca bilangan desimal:</p>
+        <p><strong>Cara 1 — Membaca angka per angka setelah koma:</strong></p>
+        <div class="example">
+          <div class="example-label">Contoh</div>
+          $7{,}8$ → "tujuh koma delapan"<br>
+          $15{,}46$ → "lima belas koma empat enam"<br>
+          $0{,}203$ → "nol koma dua nol tiga"
+        </div>
+        <p><strong>Cara 2 — Menyebutkan nilai tempatnya:</strong></p>
+        <div class="example">
+          <div class="example-label">Contoh</div>
+          $7{,}8$ → "tujuh dan delapan persepuluhan"<br>
+          $0{,}05$ → "nol dan lima perseratusan"<br>
+          $3{,}125$ → "tiga dan seratus dua puluh lima perseribuan"
+        </div>
+        <p><strong>⚠️ Penting:</strong> Jangan membaca $0{,}50$ sebagai "nol koma lima puluh". Yang benar adalah "nol koma lima nol" atau "nol dan lima puluh perseratusan".</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Bilangan $0{,}06$ dibaca...',
+      opts: ['Nol koma enam','Nol koma nol enam','Nol enam','Enam perseratus','Nol koma enampuluh'],
+      correct: 1,
+      exp: 'Cara membaca bilangan desimal adalah menyebut bagian bulat, lalu "koma", lalu membaca setiap angka setelah koma satu per satu. $0{,}06$ → "nol koma nol enam".'
+    },
+    {
+      type: 'mcq',
+      q: 'Suhu ruangan kelas tercatat sebesar $27{,}5$°C. Bilangan ini jika dibaca dengan benar adalah...',
+      opts: ['Dua tujuh koma lima','Dua puluh tujuh koma lima','Dua ratus tujuh koma lima','Dua puluh tujuh koma lima puluh','Dua koma tujuh lima'],
+      correct: 1,
+      exp: 'Bagian bulat $27$ dibaca "dua puluh tujuh", lalu "koma", lalu angka setelah koma dibaca per angka: "lima". Jadi: "dua puluh tujuh koma lima".',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: '"Tiga koma nol empat" jika ditulis dalam bentuk bilangan adalah...',
+      opts: ['$3{,}4$','$3{,}04$','$3{,}004$','$30{,}4$','$0{,}34$'],
+      correct: 1,
+      exp: '"Tiga" = bagian bulat $3$, "koma" = pemisah, "nol" = angka pertama setelah koma ($0$), "empat" = angka kedua setelah koma ($4$). Hasil: $3{,}04$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu menimbang gula seberat "nol koma nol lima kilogram". Berat gula yang ditimbang ibu adalah...',
+      opts: ['$0{,}5$ kg','$0{,}05$ kg','$0{,}005$ kg','$5$ kg','$0{,}55$ kg'],
+      correct: 1,
+      exp: '"Nol" = bagian bulat $0$, "koma" = pemisah, "nol" = angka pertama setelah koma, "lima" = angka kedua setelah koma. Hasil: $0{,}05$ kg.',
+      wp: true
+    }
+  ]
+});
+
+/* ===== CHAT 2: SECTIONS 2, 3, 4 ===== */
+
+/* ===== SECTION 2 — INTRODUCTION & REAL-WORLD CONNECTION ===== */
+courseContent.sections.push({
+  id: 'section2',
+  title: 'Introduction & Real-World',
+  duration: '00:10-00:15',
+  icon: '🌍',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Mengapa Kita Perlu Memahami Desimal?',
+      content: `
+        <p>Dalam kehidupan sehari-hari, kita tidak selalu berurusan dengan bilangan bulat. Seringkali kita menemukan bagian yang tidak utuh, seperti setengah gelas air, seperempat kilogram gula, atau suhu tubuh 36,5 derajat. Di sinilah <strong>bilangan desimal</strong> berperan penting.</p>
+        <div class="illustration">
+          <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div style="font-size:2.5rem">📏</div>
+              <div style="font-size:.8rem;font-weight:700">Pengukuran Panjang</div>
+              <div style="font-size:.75rem;color:var(--text-l)">$1{,}5$ meter</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:2.5rem">💰</div>
+              <div style="font-size:.8rem;font-weight:700">Mata Uang</div>
+              <div style="font-size:.75rem;color:var(--text-l)">Rp$12.500{,}50$</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:2.5rem">🌡️</div>
+              <div style="font-size:.8rem;font-weight:700">Suhu Tubuh</div>
+              <div style="font-size:.75rem;color:var(--text-l)">$36{,}5$°C</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:2.5rem">🏃</div>
+              <div style="font-size:.8rem;font-weight:700">Waktu Lari</div>
+              <div style="font-size:.75rem;color:var(--text-l)">$9{,}81$ detik</div>
+            </div>
+          </div>
+          <div class="illustration-caption">Penggunaan desimal dalam kehidupan nyata.</div>
+        </div>
+        <p>Tanpa bilangan desimal, kita tidak bisa mencatat pengukuran dengan tepat. Bayangkan jika apoteker hanya boleh menggunakan bilangan bulat untuk menakar obat—tentu sangat berbahaya! Desimal memungkinkan kita menulis pecahan dengan sistem basis sepuluh yang sama dengan bilangan bulat.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah dari kejadian berikut yang TIDAK melibatkan penggunaan bilangan desimal?',
+      opts: ['Menimbang berat badan $45{,}3$ kg','Mengukur panjang meja $1{,}2$ meter','Mencatat jumlah siswa di kelas yang berjumlah 40 orang','Mencatat waktu lari 100 meter yaitu $12{,}5$ detik','Mengukur suhu badan $37{,}2$°C'],
+      correct: 2,
+      exp: 'Jumlah siswa di kelas adalah 40 orang, yang merupakan bilangan bulat (tidak ada bagian pecahan). Bilangan desimal digunakan ketika ada bagian yang tidak utuh, seperti pada pengukuran berat, panjang, waktu, dan suhu.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang atlet lari menyelesaikan lomba 100 meter dalam waktu $10{,}45$ detik. Pada bilangan ini, angka $4$ menunjukkan...',
+      opts: ['4 detik','4 persepuluhan detik','4 perseratusan detik','4 perseribuan detik','40 detik'],
+      correct: 1,
+      exp: 'Pada $10{,}45$: angka $0$ di satuan, $4$ di tempat persepuluhan ($\\frac{1}{10}$), dan $5$ di perseratusan. Jadi $4$ menunjukkan 4 persepuluhan detik.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu membeli 1 kg gula pasir di warung. Timbangan menunjukkan angka $1{,}25$ kg. Artinya, ibu membeli gula seberat...',
+      opts: ['1 kg dan 2 gram','1 kg dan 25 gram','1 kg dan 250 gram','1 kg dan 25 perseratus kg','1 kg dan 5 gram'],
+      correct: 2,
+      exp: '$0{,}25$ kg sama dengan $\\frac{25}{100}$ kg. Karena 1 kg = 1000 gram, maka $0{,}25$ kg = 250 gram. Jadi total beratnya 1 kg 250 gram.',
+      wp: true
+    },
+    {
+      type: 'theory',
+      title: 'Desimal sebagai Bagian dari Kesatuan Utuh',
+      content: `
+        <p>Mari kita bayangkan sebuah balok besar yang mewakili satu kesatuan ($1$).</p>
+        <div class="illustration">
+          <div style="display:flex;justify-content:center;align-items:flex-end;gap:20px">
+            <div style="text-align:center">
+              <div style="width:100px;height:100px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.2rem">1</div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">Kesatuan Utuh</div>
+            </div>
+            <div style="text-align:center">
+              <div style="width:100px;height:100px;display:grid;grid-template-columns:repeat(10,1fr);gap:1px;background:#fff;border:1px solid #ccc">
+                ${Array(10).fill(0).map((_,i)=>`<div style="background:${i<1?'var(--blue)':'#e5e5e5'}"></div>`).join('')}
+              </div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">$0{,}1$ (1 persepuluhan)</div>
+            </div>
+            <div style="text-align:center">
+              <div style="width:100px;height:100px;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr);gap:0;background:#fff;border:1px solid #ccc">
+                ${Array(100).fill(0).map((_,i)=>`<div style="background:${i<1?'var(--purple)':'#f0f0f0'}"></div>`).join('')}
+              </div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">$0{,}01$ (1 perseratusan)</div>
+            </div>
+          </div>
+          <div class="illustration-caption">Ilustrasi pembagian kesatuan utuh menjadi persepuluhan dan perseratusan.</div>
+        </div>
+        <p>Jika balok utuh dibagi menjadi 10 bagian yang sama, setiap bagian disebut <strong>persepuluhan</strong> ($0{,}1$). Jika dibagi lagi menjadi 100 bagian yang sama, setiap bagian disebut <strong>perseratusan</strong> ($0{,}01$).</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Jika satu kesatuan utuh dibagi menjadi 10 bagian yang sama, maka 3 bagian tersebut bernilai...',
+      opts: ['$3$','$0{,}3$','$0{,}03$','$3{,}0$','$30$'],
+      correct: 1,
+      exp: 'Membagi 1 kesatuan menjadi 10 bagian menghasilkan pecahan persepuluhan. 3 bagian dari 10 berarti $\\frac{3}{10}$, yang jika ditulis dalam desimal adalah $0{,}3$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah pizza dipotong menjadi 100 bagian yang sama. Aldi memakan 5 potong. Bagian pizza yang dimakan Aldi jika ditulis dalam bilangan desimal adalah...',
+      opts: ['$0{,}5$','$0{,}05$','$5{,}0$','$0{,}005$','$0{,}50$'],
+      correct: 1,
+      exp: '5 potong dari 100 bagian sama dengan $\\frac{5}{100}$. Pada sistem desimal, $\\frac{1}{100}$ menempati posisi perseratusan. Jadi $\\frac{5}{100} = 0{,}05$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah representasi yang benar untuk $0{,}7$?',
+      opts: ['$\\frac{7}{100}$','7 dari 10 bagian yang sama','7 dari 100 bagian yang sama','$\\frac{1}{7}$','70 bagian utuh'],
+      correct: 1,
+      exp: '$0{,}7$ sama dengan $\\frac{7}{10}$. Ini berarti 7 bagian dari 10 bagian yang sama besar (persepuluhan).'
+    },
+    {
+      type: 'theory',
+      title: 'Uang sebagai Model Desimal',
+      content: `
+        <p>Uang yang kita gunakan sehari-hari adalah model terbaik untuk memahami desimal. Perhatikan pecahan uang berikut:</p>
+        <div class="illustration">
+          <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+            <div style="text-align:center">
+              <div style="width:80px;height:50px;background:#e5e5e5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;border:2px solid #999">Rp1.000</div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">Satuan</div>
+            </div>
+            <div style="text-align:center">
+              <div style="width:60px;height:60px;background:silver;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem">Rp100</div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">$0{,}1$ bagian</div>
+            </div>
+            <div style="text-align:center">
+              <div style="width:40px;height:40px;background:gold;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.6rem">Rp10</div>
+              <div class="label" style="font-size:.68rem;color:var(--text-l);font-weight:700;text-align:center;margin-top:6px">$0{,}01$ bagian</div>
+            </div>
+          </div>
+          <div class="illustration-caption">Hubungan uang Rupiah dengan nilai tempat desimal.</div>
+        </div>
+        <p>Jika Rp1.000 dianggap sebagai 1 kesatuan, maka Rp100 adalah $\\frac{1}{10}$ dari Rp1.000 (atau $0{,}1$), dan Rp10 adalah $\\frac{1}{100}$ dari Rp1.000 (atau $0{,}01$).</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Jika Rp1.000 dianggap sebagai 1 kesatuan, maka Rp450 jika ditulis dalam bentuk desimal adalah...',
+      opts: ['$450$','$45{,}0$','$4{,}50$','$0{,}450$','$0{,}45$'],
+      correct: 4,
+      exp: 'Rp450 berarti Rp400 (4 keping Rp100 = 4 persepuluhan) dan Rp50 (5 keping Rp10 = 5 perseratusan). Jadi jika Rp1.000 adalah 1, maka Rp450 adalah $0{,}45$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang siswa memiliki uang Rp250. Jika Rp1.000 dianggap sebagai 1 kesatuan utuh, bagian uang siswa tersebut dalam bentuk desimal adalah...',
+      opts: ['$2{,}50$','$0{,}250$','$0{,}25$','$25{,}0$','$0{,}025$'],
+      correct: 2,
+      exp: 'Rp250 sama dengan 2 keping Rp100 dan 1 keping Rp50. Ini berarti 2 persepuluhan dan 5 perseratusan. Ditulis sebagai $0{,}25$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Pak Joko mengisi bensin sebanyak 2 liter di pom bensin. Jika pom bensin menampilkan angka 2,50 liter, berapa nilai tempat angka 0 pada bilangan tersebut?',
+      opts: ['Satuan','Persepuluhan','Perseratusan','Perseribuan','Puluhan'],
+      correct: 2,
+      exp: 'Pada 2,50 liter: angka 2 ada di bagian satuan, angka 5 di persepuluhan, dan angka 0 di posisi perseratusan.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil pengukuran tinggi badan seorang siswa adalah 1,45 meter. Jika diukur dalam satuan sentimeter (1 meter = 100 cm), tinggi badan siswa tersebut adalah...',
+      opts: ['$14{,}5$ cm','$145$ cm','$1.450$ cm','$0{,}145$ cm','$104{,}5$ cm'],
+      correct: 1,
+      exp: 'Karena 1 meter = 100 cm, maka 1,45 meter = 1,45 × 100 = 145 cm. Angka 1 menjadi 100 cm, 0,4 menjadi 40 cm, dan 0,05 menjadi 5 cm. Total 145 cm.',
+      wp: true
+    }
+  ]
+});
+
+/* ===== SECTION 3 — REVIEW OF PRIOR KNOWLEDGE ===== */
+courseContent.sections.push({
+  id: 'section3',
+  title: 'Review of Prior Knowledge',
+  duration: '00:15-00:20',
+  icon: '📚',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Nilai Tempat Bilangan Bulat',
+      content: `
+        <p>Sebelum mendalami desimal, mari kita ingat kembali nilai tempat pada bilangan bulat. Setiap pergeseran ke kiri bernilai 10 kali lipat dari posisi sebelumnya.</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr>
+                <th>Ribuan</th>
+                <th>Ratusan</th>
+                <th>Puluhan</th>
+                <th>Satuan</th>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>5</td>
+                <td class="highlight-cell">7</td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>$\\times 1000$</td>
+                <td>$\\times 100$</td>
+                <td>$\\times 10$</td>
+                <td>$\\times 1$</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Nilai tempat bilangan 4.579</div>
+        </div>
+        <div class="example">
+          <div class="example-label">Penjabaran</div>
+          Angka 4 = 4.000<br>
+          Angka 5 = 500<br>
+          Angka 7 = 70<br>
+          Angka 9 = 9
+        </div>
+        <p>Aturan ini berlaku terus-menerus. Koma desimal menandai titik tengah, di mana sebelah kiri adalah bilangan bulat dengan kelipatan 10, dan sebelah kanan adalah bagian pecahan dengan pembagian 10.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan bulat 3.486, nilai dari angka 8 adalah...',
+      opts: ['8','80','800','8.000','800.000'],
+      correct: 1,
+      exp: 'Angka 8 pada 3.486 berada di posisi puluhan. Nilainya adalah 8 × 10 = 80.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah sekolah memiliki 2.540 siswa. Nilai tempat yang ditempati angka 2 pada bilangan tersebut adalah...',
+      opts: ['Satuan','Puluhan','Ratusan','Ribuan','Puluh ribuan'],
+      correct: 3,
+      exp: 'Pada 2.540: 0 = satuan, 4 = puluhan, 5 = ratusan, 2 = ribuan. Jadi angka 2 menempati tempat ribuan.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari 5.000 + 300 + 20 + 4 adalah...',
+      opts: ['$5.234$','$5.324$','$5.342$','$5.432$','$3.524$'],
+      correct: 0,
+      exp: '5.000 menempati ribuan, 300 menempati ratusan, 20 menempati puluhan, dan 4 menempati satuan. Jika digabungkan menjadi 5.324.'
+    },
+    {
+      type: 'theory',
+      title: 'Pecahan dan Desimal',
+      content: `
+        <p>Pecahan dengan penyebut 10, 100, atau 1.000 dapat langsung dituliskan dalam bentuk desimal.</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr>
+                <th>Bentuk Pecahan</th>
+                <th>Bentuk Desimal</th>
+                <th>Dibaca</th>
+              </tr>
+              <tr>
+                <td>$\\frac{3}{10}$</td>
+                <td class="highlight-cell">$0{,}3$</td>
+                <td>Nol koma tiga</td>
+              </tr>
+              <tr>
+                <td>$\\frac{7}{100}$</td>
+                <td class="highlight-cell">$0{,}07$</td>
+                <td>Nol koma nol tujuh</td>
+              </tr>
+              <tr>
+                <td>$\\frac{9}{1000}$</td>
+                <td class="highlight-cell">$0{,}009$</td>
+                <td>Nol koma nol nol sembilan</td>
+              </tr>
+              <tr>
+                <td>$2\\frac{4}{10}$</td>
+                <td class="highlight-cell">$2{,}4$</td>
+                <td>Dua koma empat</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Konversi pecahan menjadi desimal</div>
+        </div>
+        <p>Perhatikan bahwa penyebut menentukan jumlah tempat desimal di belakang koma: penyebut 10 memiliki 1 tempat, 100 memiliki 2 tempat, dan 1000 memiliki 3 tempat.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk desimal dari $\\frac{45}{100}$ adalah...',
+      opts: ['$0{,}45$','$4{,}5$','$0{,}045$','$45{,}0$','$0{,}54$'],
+      correct: 0,
+      exp: 'Karena penyebutnya 100, ada 2 angka di belakang koma. 45 dari 100 sama dengan 0,45.'
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu membuat kue dan membutuhkan $\\frac{3}{10}$ kg tepung. Jika ditimbang menggunakan timbangan digital (dalam kg), angka yang muncul di layar adalah...',
+      opts: ['$3{,}0$ kg','$0{,}3$ kg','$0{,}03$ kg','$3{,}3$ kg','$0{,}13$ kg'],
+      correct: 1,
+      exp: '$\\frac{3}{10}$ sama dengan 3 persepuluhan. Dalam bentuk desimal ditulis 0,3 kg.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk pecahan campuran dari $1{,}25$ adalah...',
+      opts: ['$1\\frac{25}{10}$','$1\\frac{25}{100}$','$\\frac{125}{10}$','$1\\frac{5}{100}$','$1\\frac{2}{100}$'],
+      correct: 1,
+      exp: 'Angka 1 adalah bagian bulat. Angka di belakang koma ada 2 digit (25), yang berarti penyebutnya 100. Jadi bentuk pecahannya adalah $1\\frac{25}{100}$.'
+    },
+    {
+      type: 'theory',
+      title: 'Desimal yang Setara',
+      content: `
+        <p>Sama seperti pecahan, bilangan desimal juga bisa memiliki bentuk yang setara (nilainya sama) dengan menambahkan angka nol di akhir.</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr>
+                <th>Desimal</th>
+                <th>Pecahan</th>
+                <th>Nilai</th>
+              </tr>
+              <tr>
+                <td>$0{,}5$</td>
+                <td>$\\frac{5}{10}$</td>
+                <td rowspan="3" style="vertical-align:middle;background:#fff8e1;font-weight:900;color:var(--green-d)">Setara!</td>
+              </tr>
+              <tr>
+                <td>$0{,}50$</td>
+                <td>$\\frac{50}{100}$</td>
+              </tr>
+              <tr>
+                <td>$0{,}500$</td>
+                <td>$\\frac{500}{1000}$</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Menambahkan angka nol di akhir desimal tidak mengubah nilainya.</div>
+        </div>
+        <div class="example">
+          <div class="example-label">Penting!</div>
+          Menambahkan nol di <strong>belakang</strong> angka terakhir pada bagian pecahan TIDAK mengubah nilainya: $0{,}5 = 0{,}50 = 0{,}500$.<br>
+          Namun, menambahkan nol di <strong>depan</strong> angka pertama pada bagian pecahan Mengubah nilainya: $0{,}5 \\neq 0{,}05$.
+        </div>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan desimal yang setara dengan $0{,}8$?',
+      opts: ['$0{,}08$','$0{,}80$','$8{,}0$','$0{,}88$','$0{,}008$'],
+      correct: 1,
+      exp: 'Menambahkan angka nol di akhir bagian pecahan tidak mengubah nilai. $0{,}8$ sama dengan $\\frac{8}{10}$, dan jika kedua dikali 10 menjadi $\\frac{80}{100}$, yang berarti $0{,}80$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang penjual kelapa menyatakan bahwa 1 buah kelapa beratnya $0{,}5$ kg. Jika ia menimbang 10 buah kelapa sekaligus, timbangan akan menunjukkan angka $5$ kg. Berapakah nilai tempat dari angka 5 pada 0,5 kg?',
+      opts: ['Satuan','Puluhan','Persepuluhan','Perseratusan','Perseribuan'],
+      correct: 2,
+      exp: 'Pada 0,5, angka 5 berada tepat di sebelah kanan koma. Itu adalah posisi pertama setelah koma, yaitu persepuluhan.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah pernyataan yang BENAR tentang $0{,}3$ dan $0{,}30$?',
+      opts: ['$0{,}3$ lebih besar dari $0{,}30$','$0{,}3$ lebih kecil dari $0{,}30$','$0{,}3$ sama dengan $0{,}30$','$0{,}3$ sama dengan $0{,}03$','$0{,}30$ sama dengan $30$'],
+      correct: 2,
+      exp: '$0{,}3 = \\frac{3}{10} = \\frac{30}{100} = 0{,}30$. Nilai keduanya sama persis, yaitu 3 bagian dari 10 kesatuan.'
+    }
+  ]
+});
+
+/* ===== SECTION 4 — PROBLEM INTRODUCTION ===== */
+courseContent.sections.push({
+  id: 'section4',
+  title: 'Problem Introduction',
+  duration: '00:20-00:30',
+  icon: '🧩',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Menganalisis Nilai Tempat yang Lebih Kompleks',
+      content: `
+        <p>Sekarang kita akan menggabungkan bilangan bulat dan desimal dalam satu angka. Perhatikan contoh kompleks berikut:</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr class="group-header">
+                <th colspan="3" class="bulat">Bagian Bulat</th>
+                <th class="comma-col"></th>
+                <th colspan="3" class="pecahan">Bagian Pecahan</th>
+              </tr>
+              <tr>
+                <th>Ratusan</th>
+                <th>Puluhan</th>
+                <th>Satuan</th>
+                <th class="comma-col">,</th>
+                <th>Persepuluhan</th>
+                <th>Perseratusan</th>
+                <th>Perseribuan</th>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>2</td>
+                <td>6</td>
+                <td class="comma-cell">,</td>
+                <td class="highlight-cell">3</td>
+                <td>8</td>
+                <td>5</td>
+              </tr>
+              <tr>
+                <td>$\\times 100$</td>
+                <td>$\\times 10$</td>
+                <td>$\\times 1$</td>
+                <td></td>
+                <td>$\\times \\frac{1}{10}$</td>
+                <td>$\\times \\frac{1}{100}$</td>
+                <td>$\\times \\frac{1}{1000}$</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Analisis nilai tempat pada $426{,}385$</div>
+        </div>
+        <div class="example">
+          <div class="example-label">Penjabaran Nilai</div>
+          $4 \\times 100 = 400$<br>
+          $2 \\times 10 = 20$<br>
+          $6 \\times 1 = 6$<br>
+          $3 \\times \\frac{1}{10} = 0{,}3$<br>
+          $8 \\times \\frac{1}{100} = 0{,}08$<br>
+          $5 \\times \\frac{1}{1000} = 0{,}005$         </div>
+        <p>Total jika dijumlahkan: $400 + 20 + 6 + 0{,}3 + 0{,}08 + 0{,}005 = 426{,}385$</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $57{,}294$, nilai dari angka $2$ adalah...',
+      opts: ['$2$','$0{,}2$','$0{,}02$','$0{,}002$','$20$'],
+      correct: 1,
+      exp: 'Pada $57{,}294$: angka 7 = satuan, angka 2 berada di posisi pertama setelah koma (persepuluhan). Nilainya adalah $2 \\times \\frac{1}{10} = 0{,}2$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah mobil melaju sejauh $124{,}75$ km. Berapakah nilai tempat dari angka $5$ pada jarak tersebut?',
+      opts: ['$5$ km','$0{,}5$ km','$0{,}05$ km','$0{,}005$ km','$50$ km'],
+      correct: 2,
+      exp: 'Pada $124{,}75$: angka 7 ada di persepuluhan, dan angka 5 ada di posisi kedua setelah koma, yaitu perseratusan. Nilainya $5 \\times \\frac{1}{100} = 0{,}05$ km.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $9{,}038$, angka manakah yang memiliki nilai $0{,}008$?',
+      opts: ['Angka 9','Angka 0 di sebelah kiri koma','Angka 3','Angka 0 di sebelah kanan koma','Angka 8'],
+      correct: 4,
+      exp: 'Nilai $0{,}008$ berarti 8 perseribuan. Pada $9{,}038$, angka 8 berada di posisi ketiga setelah koma, yaitu $8 \\times \\frac{1}{1000} = 0{,}008$.'
+    },
+    {
+      type: 'theory',
+      title: 'Bentuk Penguraian (Expanded Form) Desimal',
+      content: `
+        <p>Sebuah bilangan desimal dapat ditulis dalam bentuk uraian jumlahan dari nilai tempat masing-masing angka. Ada dua cara umum untuk menuliskannya.</p>
+        <div class="example">
+          <div class="example-label">Contoh Bilangan: $53{,}46$</div>
+          <strong>Cara 1 (Desimal):</strong><br>
+          $50 + 3 + 0{,}4 + 0{,}06$<br><br>
+          <strong>Cara 2 (Pecahan):</strong><br>
+          $50 + 3 + \\frac{4}{10} + \\frac{6}{100}$         </div>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr>
+                <th>Angka</th>
+                <th>Nilai Tempat</th>
+                <th>Nilai (Desimal)</th>
+                <th>Nilai (Pecahan)</th>
+              </tr>
+              <tr><td>5</td><td>Puluhan</td><td>50</td><td>50</td></tr>
+              <tr><td>3</td><td>Satuan</td><td>3</td><td>3</td></tr>
+              <tr><td>4</td><td>Persepuluhan</td><td>$0{,}4$</td><td>$\\frac{4}{10}$</td></tr>
+              <tr><td>6</td><td>Perseratusan</td><td>$0{,}06$</td><td>$\\frac{6}{100}$</td></tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Penguraian nilai tempat $53{,}46$</div>
+        </div>
+        <p>Menulis dalam bentuk penguraian membantu kita memahami bahwa setiap digit memiliki kontribusi yang spesifik terhadap nilai keseluruhan bilangan.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk penguraian (expanded form) dari $7{,}45$ adalah...',
+      opts: ['$7 + 4 + 5$','$7 + 0{,}4 + 0{,}05$','$70 + 4 + 0{,}5$','$7 + \\frac{4}{100} + \\frac{5}{10}$','$0{,}7 + 0{,}4 + 0{,}05$'],
+      correct: 1,
+      exp: 'Pada $7{,}45$: 7 di satuan (nilainya 7), 4 di persepuluhan (nilainya 0,4), 5 di perseratusan (nilainya 0,05). Jika dijumlahkan: $7 + 0{,}4 + 0{,}05$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah penggaris memiliki panjang $12{,}05$ cm. Bentuk penguraian yang benar untuk panjang penggaris tersebut adalah...',
+      opts: ['$10 + 2 + 0{,}5$','$10 + 2 + 0{,}05$','$1 + 2 + 0{,}5$','$10 + 2 + \\frac{5}{10}$','$12 + 0{,}5$'],
+      correct: 1,
+      exp: 'Pada $12{,}05$: 1 di puluhan (10), 2 di satuan (2), 0 di persepuluhan (0), 5 di perseratusan (0,05). Jadi penguraiannya adalah $10 + 2 + 0{,}05$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $200 + 30 + 0{,}4 + 0{,}08$ jika ditulis dalam bentuk standar adalah...',
+      opts: ['$23{,}48$','$230{,}48$','$2.300{,}48$','$23{,}048$','$230{,}048$'],
+      correct: 1,
+      exp: '200 (ratusan), 30 (puluhan), 0,4 (persepuluhan), 0,08 (perseratusan). Satuan tidak ada, jadi diisi 0. Hasil standarnya adalah $230{,}48$.'
+    },
+    {
+      type: 'theory',
+      title: 'Membandingkan dan Mengurutkan Desimal',
+      content: `
+        <p>Untuk membandingkan dua bilangan desimal, kita harus melihat nilai tempatnya dari <strong>kiri ke kanan</strong> (dimulai dari bagian bulat terbesar).</p>
+        <div class="example">
+          <div class="example-label">Langkah Membandingkan</div>
+          1. Bandingkan bagian bulatnya terlebih dahulu.<br>
+          2. Jika sama, bandingkan angka di tempat persepuluhan.<br>
+          3. Jika masih sama, bandingkan di tempat perseratusan, dan seterusnya.
+        </div>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr>
+                <th></th>
+                <th>Puluhan</th>
+                <th>Satuan</th>
+                <th class="comma-col">,</th>
+                <th>Persepuluhan</th>
+                <th>Perseratusan</th>
+              </tr>
+              <tr>
+                <td>Bilangan A</td>
+                <td>4</td>
+                <td>5</td>
+                <td class="comma-cell">,</td>
+                <td>7</td>
+                <td class="highlight-cell">2</td>
+              </tr>
+              <tr>
+                <td>Bilangan B</td>
+                <td>4</td>
+                <td>5</td>
+                <td class="comma-cell">,</td>
+                <td>7</td>
+                <td class="highlight-cell">9</td>
+              </tr>
+            </table>
+          </div>
+          <div class="illustration-caption">Membandingkan $45{,}72$ dan $45{,}79$</div>
+        </div>
+        <p>Pada contoh di atas, bagian bulat dan persepuluhan sama. Saat kita melihat perseratusan, 9 lebih besar dari 2. Maka <strong>$45{,}79 > 45{,}72$</strong>.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah tanda yang tepat untuk membandingkan $0{,}5$ dan $0{,}45$?',
+      opts: ['$0{,}5 < 0{,}45$','$0{,}5 > 0{,}45$','$0{,}5 = 0{,}45$','$0{,}5 \\leq 0{,}45$','Tidak dapat ditentukan'],
+      correct: 1,
+      exp: 'Untuk membandingkan, samakan jumlah angka di belakang koma: $0{,}5$ menjadi $0{,}50$. Lalu bandingkan: $0{,}50$ vs $0{,}45$. Karena 50 lebih besar dari 45, maka $0{,}5 > 0{,}45$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Tiga siswa melakukan lomba lari. Hasil waktu mereka adalah: Budi (12,4 detik), Agus (12,15 detik), dan Doni (12,5 detik). Siapakah yang berlari paling cepat (waktu terkecil)?',
+      opts: ['Budi','Agus','Doni','Budi dan Agus sama cepat','Tidak ada yang tercepat'],
+      correct: 1,
+      exp: 'Samakan angka di belakang koma: Budi = 12,40; Agus = 12,15; Doni = 12,50. Waktu terkecil adalah 12,15 detik. Jadi Agus adalah yang paling cepat.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Urutan bilangan desimal dari yang terkecil ke terbesar yang benar untuk {$0{,}7$; $0{,}71$; $0{,}07$; $0{,}17$} adalah...',
+      opts: ['$0{,}07 < 0{,}7 < 0{,}17 < 0{,}71$','$0{,}7 < 0{,}07 < 0{,}17 < 0{,}71$','$0{,}07 < 0{,}17 < 0{,}7 < 0{,}71$','$0{,}07 < 0{,}17 < 0{,}71 < 0{,}7$','$0{,}7 < 0{,}17 < 0{,}07 < 0{,}71$'],
+      correct: 2,
+      exp: 'Ubah semua menjadi 2 angka di belakang koma: 0,70; 0,71; 0,07; 0,17. Urutkan: 0,07 < 0,17 < 0,70 < 0,71. Kembalikan ke bentuk asal: 0,07 < 0,17 < 0,7 < 0,71.'
+    }
+  ]
+});
+
+/* ===== CHAT 3: SECTIONS 5, 6, 7 & ASSIGNMENT 1 ===== */
+
+/* ===== SECTION 5 — GUIDED PRACTICE ===== */
+courseContent.sections.push({
+  id: 'section5',
+  title: 'Guided Practice',
+  duration: '00:30-00:45',
+  icon: '🧭',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Menentukan Nilai dan Nama Tempat',
+      content: `
+        <p>Mari kita berlatih menentukan nilai tempat dan nilai angka secara terbimbing. Ingat perbedaan antara <strong>nama tempat</strong> dan <strong>nilai angka</strong>.</p>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr><th>Bilangan</th><th>Angka</th><th>Nama Tempat</th><th>Nilai Angka</th></tr>
+              <tr><td rowspan="3">$4{,}567$</td><td>4</td><td>Satuan</td><td>4</td></tr>
+              <tr><td>5</td><td>Persepuluhan</td><td>$0{,}5$</td></tr>
+              <tr><td>6</td><td>Perseratusan</td><td>$0{,}06$</td></tr>
+            </table>
+          </div>
+        </div>
+        <p>Nama tempat adalah posisi digit tersebut (misal: perseratusan), sedangkan nilai angka adalah hasil perkalian digit dengan nilainya (misal: $6 \\times \\frac{1}{100} = 0{,}06$).</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $8{,}45$, apakah nama tempat dan nilai dari angka $4$?',
+      opts: ['Nama tempat: Perseratusan, Nilai: $0{,}4$','Nama tempat: Persepuluhan, Nilai: $0{,}4$','Nama tempat: Persepuluhan, Nilai: $4$','Nama tempat: Perseratusan, Nilai: $0{,}04$','Nama tempat: Satuan, Nilai: $4$'],
+      correct: 1,
+      exp: 'Angka $4$ berada tepat setelah koma (posisi pertama), sehingga nama tempatnya adalah persepuluhan. Nilainya adalah $4 \\times 0{,}1 = 0{,}4$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang atlet lompat galah mencatatkan lompatan sejauh $4{,}08$ meter. Berapakah nilai dari angka $8$ pada lompatan tersebut?',
+      opts: ['$8$ meter','$0{,}8$ meter','$0{,}08$ meter','$0{,}008$ meter','$80$ meter'],
+      correct: 2,
+      exp: 'Pada $4{,}08$, angka $0$ berada di persepuluhan dan angka $8$ berada di posisi kedua setelah koma (perseratusan). Nilainya $8 \\times \\frac{1}{100} = 0{,}08$ meter.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $12{,}75$, angka $7$ memiliki nilai...',
+      opts: ['$7$','$70$','$0{,}7$','$0{,}07$','$0{,}007$'],
+      correct: 2,
+      exp: 'Angka $7$ pada $12{,}75$ berada di posisi pertama setelah koma, yaitu tempat persepuluhan. Nilainya adalah $7 \\times \\frac{1}{10} = 0{,}7$.'
+    },
+    {
+      type: 'theory',
+      title: 'Mengubah Pecahan ke Desimal dan Sebaliknya',
+      content: `
+        <p>Kita bisa mengubah pecahan berpenyebut 10, 100, atau 1000 menjadi desimal dengan mudah.</p>
+        <div class="example">
+          <div class="example-label">Pecahan ke Desimal</div>
+          $\\frac{45}{100} = 0{,}45$ <br>
+          $\\frac{7}{10} = 0{,}7$ <br>
+          $3\\frac{2}{10} = 3{,}2$         </div>
+        <p>Sebaliknya, kita juga bisa membaca desimal sebagai pecahan. Jumlah angka di belakang koma menentukan penyebutnya.</p>
+        <div class="example">
+          <div class="example-label">Desimal ke Pecahan</div>
+          $0{,}8 = \\frac{8}{10}$ <br>
+          $0{,}25 = \\frac{25}{100}$ <br>
+          $1{,}005 = 1\\frac{5}{1000}$         </div>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk pecahan dari bilangan desimal $0{,}65$ adalah...',
+      opts: ['$\\frac{65}{10}$','$\\frac{65}{100}$','$\\frac{65}{1000}$','$6\\frac{5}{10}$','$\\frac{6}{100}$'],
+      correct: 1,
+      exp: 'Bilangan $0{,}65$ memiliki 2 angka di belakang koma, sehingga penyebutnya adalah 100. Maka bentuk pecahannya adalah $\\frac{65}{100}$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu memotong kain sepanjang $\\frac{3}{4}$ meter. Jika $\\frac{3}{4}$ diubah menjadi pecahan berpenyebut 100 menjadi $\\frac{75}{100}$, berapakah bentuk desimal dari panjang kain tersebut?',
+      opts: ['$0{,}34$ meter','$0{,}75$ meter','$7{,}5$ meter','$0{,}075$ meter','$75$ meter'],
+      correct: 1,
+      exp: 'Pecahan $\\frac{75}{100}$ memiliki penyebut 100. Jika ditulis dalam desimal, angka 75 menempati posisi persepuluhan dan perseratusan, sehingga menjadi $0{,}75$ meter.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk desimal dari $2\\frac{5}{10}$ adalah...',
+      opts: ['$2{,}5$','$2{,}05$','$0{,}25$','$25{,}0$','$2{,}50$'],
+      correct: 0,
+      exp: 'Bilangan bulatnya adalah 2. Pecahan $\\frac{5}{10}$ sama dengan $0{,}5$. Jika digabungkan menjadi $2{,}5$.'
+    },
+    {
+      type: 'theory',
+      title: 'Membulatkan Bilangan Desimal',
+      content: `
+        <p>Membulatkan desimal berarti menyederhanakan bilangan dengan menghilangkan sebagian angka di belakang koma.</p>
+        <div class="example">
+          <div class="example-label">Aturan Pembulatan</div>
+          1. Tentukan sampai berapa tempat desimal akan dibulatkan.<br>
+          2. Lihat satu angka di sebelah kanannya.<br>
+          3. Jika angka tersebut $5$ atau lebih, maka angka sebelumnya <strong>naik 1</strong>.<br>
+          4. Jika kurang dari $5$, angka sebelumnya tetap.
+        </div>
+        <div class="illustration">
+          <div class="pv-chart">
+            <table>
+              <tr><th>Bilangan Asli</th><th>Dibulatkan ke 1 tempat</th><th>Dibulatkan ke bilangan bulat terdekat</th></tr>
+              <tr><td>$4{,}37$</td><td>$4{,}4$</td><td>$4$</td></tr>
+              <tr><td>$8{,}52$</td><td>$8{,}5$</td><td>$9$</td></tr>
+            </table>
+          </div>
+        </div>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil pembulatan bilangan $7{,}68$ sampai satu tempat di belakang koma (persepuluhan terdekat) adalah...',
+      opts: ['$7{,}6$','$7{,}7$','$7{,}8$','$8{,}0$','$7{,}68$'],
+      correct: 1,
+      exp: 'Kita membulatkan ke persepuluhan (angka 6). Lihat satu angka di kanannya, yaitu 8. Karena $8 \\ge 5$, maka angka 6 naik menjadi 7. Hasilnya $7{,}7$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah truk bermuatan $1.250{,}4$ kg beras. Jika berat tersebut dibulatkan ke bilangan bulat terdekat, berat beras yang tercatat adalah...',
+      opts: ['$1.250$ kg','$1.251$ kg','$1.200$ kg','$1.300$ kg','$1.000$ kg'],
+      correct: 0,
+      exp: 'Untuk membulatkan ke bilangan bulat, kita lihat angka di belakang koma (persepuluhan), yaitu 4. Karena $4 < 5$, maka bagian bulat tetap. Hasilnya $1.250$ kg.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Bilangan $0{,}96$ jika dibulatkan ke bilangan bulat terdekat menjadi...',
+      opts: ['$0$','$0{,}9$','$1$','$1{,}0$','$9$'],
+      correct: 2,
+      exp: 'Bagian bulat adalah 0. Angka di belakang koma adalah 9. Karena $9 \\ge 5$, maka bagian bulat naik 1 menjadi 1.'
+    }
+  ]
+});
+
+/* ===== SECTION 6 — INDEPENDENT PRACTICE ===== */
+courseContent.sections.push({
+  id: 'section6',
+  title: 'Independent Practice',
+  duration: '00:45-00:55',
+  icon: '🚀',
+  type: 'lesson',
+  items: [
+    {
+      type: 'theory',
+      title: 'Penjumlahan dan Pengurangan Desimal',
+      content: `
+        <p>Untuk menjumlahkan atau mengurangkan desimal, pastikan tanda koma <strong>sejajar</strong>. Ini akan membuat otomatis nilai tempatnya juga sejajar (satuan dengan satuan, persepuluhan dengan persepuluhan).</p>
+        <div class="illustration">
+          <div class="pv-chart" style="max-width:300px">
+            <table>
+              <tr><td></td><td>1</td><td class="highlight-cell">,</td><td>4</td><td>5</td></tr>
+              <tr><td>+</td><td>0</td><td class="comma-cell">,</td><td>2</td><td>0</td></tr>
+              <tr style="border-top:2px solid #000"><td></td><td>1</td><td class="comma-cell">,</td><td>6</td><td>5</td></tr>
+            </table>
+          </div>
+        </div>
+        <p>Perhatikan bahwa $1{,}45 + 0{,}2 = 1{,}65$. Kita menambahkan $0$ di akhir $0{,}2$ menjadi $0{,}20$ agar jumlah digit di belakang koma sama.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $2{,}5 + 1{,}14$ adalah...',
+      opts: ['$3{,}64$','$3{,}19$','$3{,}64$','$2{,}64$','$3{,}39$'],
+      correct: 0,
+      exp: 'Sejajarkan koma: $2{,}50 + 1{,}14$. Satuan: $2+1=3$. Persepuluhan: $5+1=6$. Perseratusan: $0+4=4$. Hasilnya $3{,}64$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Andi memiliki uang Rp$5.000{,}00$. Ia membeli es krim seharga Rp$3.250{,}50$. Sisa uang Andi adalah...',
+      opts: ['Rp$1.750{,}50$','Rp$1.749{,}50$','Rp$1.850{,}50$','Rp$2.750{,}50$','Rp$1.750{,}00$'],
+      correct: 0,
+      exp: '$5.000{,}00 - 3.250{,}50$. Pada perseratusan: $0-0=0$. Persepuluhan: $0-5$ (pinjam 1 dari satuan, jadi $10-5=5$). Satuan: $9-0=9$. Puluhan: $9-5=4$. Ratusan: $9-2=7$. Ribu: $4-3=1$. Hasilnya $1.750{,}50$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $10 - 0{,}25$ adalah...',
+      opts: ['$9{,}75$','$10{,}25$','$9{,}25$','$0{,}75$','$9{,}85$'],
+      correct: 0,
+      exp: 'Ubah $10$ menjadi $10{,}00$. Lalu $10{,}00 - 0{,}25$. Perseratusan: $0-5$ (pinjam, $10-5=5$). Persepuluhan: $9-2=7$. Satuan: $9-0=9$. Hasil $9{,}75$.'
+    },
+    {
+      type: 'theory',
+      title: 'Perkalian dan Pembagian dengan 10, 100, 1000',
+      content: `
+        <p>Ada trik cepat untuk perkalian dan pembagian desimal dengan kelipatan 10:</p>
+        <div class="example">
+          <div class="example-label">Perkalian (Geser koma ke KANAN)</div>
+          $0{,}45 \\times 10 = 4{,}5$ (geser 1 langkah) <br>
+          $0{,}45 \\times 100 = 45$ (geser 2 langkah) <br>
+          $1{,}2 \\times 1000 = 1200$ (geser 3 langkah)
+        </div>
+        <div class="example">
+          <div class="example-label">Pembagian (Geser koma ke KIRI)</div>
+          $35{,}6 : 10 = 3{,}56$ (geser 1 langkah) <br>
+          $35{,}6 : 100 = 0{,}356$ (geser 2 langkah) <br>
+          $5 : 1000 = 0{,}005$ (geser 3 langkah)
+        </div>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $4{,}25 \\times 100$ adalah...',
+      opts: ['$0{,}425$','$42{,}5$','$425$','$4.250$','$4{,}0025$'],
+      correct: 2,
+      exp: 'Perkalian dengan 100 berarti menggeser koma 2 langkah ke kanan. $4{,}25$ menjadi $425$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Panjang sebuah lapangan adalah $150$ meter. Jika diukur dalam kilometer (1 km = 1000 m), panjang lapangan tersebut adalah...',
+      opts: ['$0{,}015$ km','$0{,}15$ km','$1{,}5$ km','$15$ km','$150.000$ km'],
+      correct: 1,
+      exp: 'Untuk mengubah meter ke kilometer, kita bagi 1000. $150 : 1000$ berarti menggeser koma 3 langkah ke kiri. $150$ menjadi $0{,}150$ atau $0{,}15$ km.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $7{,}5 : 10$ adalah...',
+      opts: ['$75$','$7{,}05$','$0{,}75$','$0{,}075$','$0{,}750$'],
+      correct: 2,
+      exp: 'Pembagian dengan 10 berarti menggeser koma 1 langkah ke kiri. $7{,}5$ menjadi $0{,}75$.'
+    },
+    {
+      type: 'theory',
+      title: 'Mencari Angka yang Hilang',
+      content: `
+        <p>Pemahaman nilai tempat sangat penting untuk menemukan angka yang hilang dalam sebuah persamaan atau pola.</p>
+        <div class="example">
+          <div class="example-label">Contoh</div>
+          Jika $\\square + 0{,}05 = 0{,}45$, maka $\\square = 0{,}40$.<br>
+          Jika $\\frac{3}{10} = 0{,}\\square$, maka $\\square = 3$.
+        </div>
+        <p>Kita harus memastikan nilai tempat setiap digit sesuai dengan operasi yang berlaku.</p>
+      `
+    },
+    {
+      type: 'mcq',
+      q: 'Angka yang tepat untuk mengisi titik-titik pada $\\frac{\\dots}{100} = 0{,}7$ adalah...',
+      opts: ['$7$','$70$','$700$','$0{,}7$','$17$'],
+      correct: 1,
+      exp: '$0{,}7$ sama dengan $0{,}70$. Pada pecahan $\\frac{70}{100}$, jika dibagi 100 (geser koma 2 langkah ke kiri), hasilnya adalah $0{,}70$ atau $0{,}7$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah timbangan digital menunjukkan berat $0{,}65$ kg. Jika ditulis dalam bentuk gram (1 kg = 1000 gram), timbangan tersebut menunjukkan angka...',
+      opts: ['$6{,}5$ gram','$65$ gram','$650$ gram','$6.500$ gram','$0{,}00065$ gram'],
+      correct: 2,
+      exp: 'Kg ke gram berarti dikali 1000. $0{,}65 \\times 1000$ berarti geser koma 3 langkah ke kanan. Hasilnya $650$ gram.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Jika $0{,}x = \\frac{40}{100}$, maka nilai $x$ yang benar adalah...',
+      opts: ['$4$','$40$','$0{,}4$','$400$','$0{,}04$'],
+      correct: 0,
+      exp: '$\\frac{40}{100} = 0{,}40$. Jika $0{,}x = 0{,}40$, maka $x$ haruslah $4$.'
+    }
+  ]
+});
+
+/* ===== SECTION 7 — CONSOLIDATION & REFLECTION ===== */
+courseContent.sections.push({
+  id: 'section7',
+  title: 'Consolidation & Reflection',
+  duration: '00:55-01:00',
+  icon: '🎓',
+  type: 'consolidation',
+  content: 'Selamat! Kamu telah menyelesaikan sesi pembelajaran "Nilai Tempat Desimal". Kamu sudah memahami konsep bagian pecahan, mengubah pecahan ke desimal, operasi hitung dasar, dan pembulatan desimal. Teruslah berlatih agar semakin mahir!'
+});
+
+/* ===== ASSIGNMENT 1 ===== */
+courseContent.sections.push({
+  id: 'assignment1',
+  title: 'Assignment 1',
+  duration: 'Latihan Mandiri',
+  icon: '📝',
+  type: 'assignment',
+  assignmentNum: 1,
+  items: [
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $3{,}14$, angka $1$ menempati nilai tempat...',
+      opts: ['Satuan','Puluhan','Persepuluhan','Perseratusan','Perseribuan'],
+      correct: 2,
+      exp: 'Angka $1$ berada di posisi pertama setelah koma, yaitu tempat persepuluhan.',
+      illustration: '<div class="pv-chart"><table><tr><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th><th>Perseratusan</th></tr><tr><td>3</td><td class="comma-cell">,</td><td class="highlight-cell">1</td><td>4</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Nilai dari angka $5$ pada bilangan $0{,}045$ adalah...',
+      opts: ['$0{,}5$','$0{,}05$','$0{,}005$','$5$','$50$'],
+      correct: 2,
+      exp: 'Angka $5$ berada di posisi ketiga setelah koma (perseribuan), sehingga nilainya $5 \\times \\frac{1}{1000} = 0{,}005$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang penjual minyak goreng menimbang $2{,}5$ liter minyak. Nilai tempat yang ditempati oleh angka $5$ adalah...',
+      opts: ['Satuan','Puluhan','Persepuluhan','Perseratusan','Perseribuan'],
+      correct: 2,
+      exp: 'Pada $2{,}5$, angka $2$ di satuan dan angka $5$ di posisi pertama setelah koma, yaitu persepuluhan.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Bilangan desimal dari pecahan $\\frac{8}{100}$ adalah...',
+      opts: ['$0{,}8$','$0{,}08$','$0{,}008$','$8{,}0$','$0{,}88$'],
+      correct: 1,
+      exp: 'Karena penyebutnya 100, ada 2 angka di belakang koma. $\\frac{8}{100} = 0{,}08$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk pecahan campuran dari $1{,}5$ adalah...',
+      opts: ['$1\\frac{5}{10}$','$1\\frac{5}{100}$','$\\frac{15}{10}$','$1\\frac{1}{5}$','$1\\frac{5}{1000}$'],
+      correct: 0,
+      exp: 'Bagian bulat 1. Angka $5$ di belakang koma ada 1 digit, berarti penyebutnya 10. Hasilnya $1\\frac{5}{10}$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan desimal yang setara dengan $0{,}3$?',
+      opts: ['$0{,}03$','$0{,}30$','$3{,}0$','$0{,}33$','$0{,}003$'],
+      correct: 1,
+      exp: 'Menambahkan nol di akhir bagian pecahan tidak mengubah nilai. $0{,}3 = 0{,}30$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Penguraian (expanded form) yang benar untuk bilangan $45{,}7$ adalah...',
+      opts: ['$40 + 5 + 0{,}7$','$4 + 5 + 0{,}7$','$40 + 5 + 0{,}07$','$40 + 5 + 7$','$400 + 50 + 0{,}7$'],
+      correct: 0,
+      exp: '4 di puluhan (40), 5 di satuan (5), 7 di persepuluhan (0,7). Hasilnya $40 + 5 + 0{,}7$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil pembulatan dari $6{,}48$ ke bilangan bulat terdekat adalah...',
+      opts: ['$6$','$7$','$6{,}5$','$6{,}4$','$5$'],
+      correct: 0,
+      exp: 'Lihat angka di belakang koma (4). Karena $4 < 5$, maka bagian bulat tetap. Hasilnya 6.',
+      wp: true,
+      illustration: '<div class="pv-chart" style="max-width:300px"><table><tr><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th></tr><tr><td>6</td><td class="comma-cell">,</td><td class="highlight-cell">4</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah penggaris diukur memiliki panjang $0{,}15$ meter. Jika diubah menjadi sentimeter (1 m = 100 cm), panjang penggaris tersebut adalah...',
+      opts: ['$1{,}5$ cm','$15$ cm','$150$ cm','$0{,}015$ cm','$15{,}0$ m'],
+      correct: 1,
+      exp: 'Meter ke cm berarti dikali 100. $0{,}15 \\times 100$ berarti geser koma 2 langkah ke kanan. Hasilnya $15$ cm.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Urutan bilangan dari yang terkecil ke terbesar yang benar untuk {$0{,}2$; $0{,}02$; $0{,}22$; $0{,}12$} adalah...',
+      opts: ['$0{,}2 < 0{,}02 < 0{,}12 < 0{,}22$','$0{,}02 < 0{,}2 < 0{,}12 < 0{,}22$','$0{,}02 < 0{,}12 < 0{,}2 < 0{,}22$','$0{,}22 < 0{,}2 < 0{,}12 < 0{,}02$','$0{,}02 < 0{,}22 < 0{,}12 < 0{,}2$'],
+      correct: 2,
+      exp: 'Samakan digit: $0{,}20$; $0{,}02$; $0{,}22$; $0{,}12$. Urutkan: $0{,}02 < 0{,}12 < 0{,}20 < 0{,}22$. Kembalikan ke asal: $0{,}02 < 0{,}12 < 0{,}2 < 0{,}22$.'
+    }
+  ]
+});
+
+/* ===== CHAT 4: ASSIGNMENTS 2, 3, 4, 5 ===== */
+
+/* ===== ASSIGNMENT 2 ===== */
+courseContent.sections.push({
+  id: 'assignment2',
+  title: 'Assignment 2',
+  duration: 'Latihan Mandiri',
+  icon: '📝',
+  type: 'assignment',
+  assignmentNum: 2,
+  items: [
+    {
+      type: 'mcq',
+      q: 'Pada bilangan $12{,}345$, nilai dari angka $3$ adalah...',
+      opts: ['$3$','$0{,}3$','$0{,}03$','$0{,}003$','$30$'],
+      correct: 1,
+      exp: 'Angka $3$ berada di posisi pertama setelah koma (persepuluhan), sehingga nilainya $3 \\times \\frac{1}{10} = 0{,}3$.',
+      illustration: '<div class="pv-chart"><table><tr class="group-header"><th colspan="2" class="bulat">Bagian Bulat</th><th class="comma-col"></th><th colspan="3" class="pecahan">Bagian Pecahan</th></tr><tr><th>Puluhan</th><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th><th>Perseratusan</th><th>Perseribuan</th></tr><tr><td>1</td><td>2</td><td class="comma-cell">,</td><td class="highlight-cell">3</td><td>4</td><td>5</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu menerima kembalian sebesar Rp$12.500{,}50$. Nilai tempat dari angka $5$ pada bagian pecahan (setelah koma) adalah...',
+      opts: ['Satuan','Persepuluhan','Perseratusan','Perseribuan','Puluhan'],
+      correct: 1,
+      exp: 'Pada $12.500{,}50$, angka $5$ pertama setelah koma berada di posisi persepuluhan (mewakili 50 sen).',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk penguraian (expanded form) dari $23{,}05$ adalah...',
+      opts: ['$20 + 3 + 0{,}5$','$20 + 3 + 0{,}05$','$2 + 3 + 0{,}5$','$20 + 3 + \\frac{5}{10}$','$200 + 3 + 0{,}05$'],
+      correct: 1,
+      exp: '2 di puluhan (20), 3 di satuan (3), 0 di persepuluhan (0), 5 di perseratusan (0,05). Hasilnya $20 + 3 + 0{,}05$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk desimal dari pecahan $\\frac{45}{1000}$ adalah...',
+      opts: ['$0{,}45$','$0{,}045$','$4{,}5$','$0{,}405$','$45{,}0$'],
+      correct: 1,
+      exp: 'Penyebut 1000 berarti ada 3 angka di belakang koma. $\\frac{45}{1000} = 0{,}045$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Bentuk pecahan dari bilangan desimal $0{,}08$ adalah...',
+      opts: ['$\\frac{8}{10}$','$\\frac{8}{100}$','$\\frac{8}{1000}$','$\\frac{80}{10}$','$\\frac{8}{1}$'],
+      correct: 1,
+      exp: 'Ada 2 angka di belakang koma, sehingga penyebutnya 100. Maka $0{,}08 = \\frac{8}{100}$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang atlet lari mencatat waktu $10{,}25$ detik. Nilai dari angka $2$ pada waktu tersebut adalah...',
+      opts: ['$2$ detik','$0{,}2$ detik','$0{,}02$ detik','$0{,}002$ detik','$20$ detik'],
+      correct: 1,
+      exp: 'Angka $2$ berada di posisi pertama setelah koma (persepuluhan). Nilainya $2 \\times 0{,}1 = 0{,}2$ detik.',
+      wp: true,
+      illustration: '<div class="pv-chart" style="max-width:300px"><table><tr><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th><th>Perseratusan</th></tr><tr><td>0</td><td class="comma-cell">,</td><td class="highlight-cell">2</td><td>5</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan desimal yang setara dengan $0{,}6$?',
+      opts: ['$0{,}06$','$0{,}60$','$6{,}0$','$0{,}006$','$0{,}66$'],
+      correct: 1,
+      exp: 'Menambahkan angka nol di akhir bagian pecahan tidak mengubah nilai. $0{,}6 = \\frac{6}{10} = \\frac{60}{100} = 0{,}60$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil pembulatan dari $8{,}87$ ke satu tempat di belakang koma (persepuluhan terdekat) adalah...',
+      opts: ['$8{,}8$','$8{,}9$','$9{,}0$','$8{,}7$','$8{,}87$'],
+      correct: 1,
+      exp: 'Kita melihat angka di posisi perseratusan, yaitu 7. Karena $7 \\ge 5$, maka angka 8 naik menjadi 9. Hasilnya $8{,}9$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $4{,}5 \\times 10$ adalah...',
+      opts: ['$0{,}45$','$4{,}05$','$45$','$450$','$45{,}0$'],
+      correct: 2,
+      exp: 'Perkalian dengan 10 berarti menggeser koma 1 langkah ke kanan. $4{,}5$ menjadi $45$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah tongkat panjangnya $1{,}5$ meter. Jika diukur dalam sentimeter (1 m = 100 cm), panjang tongkat tersebut adalah...',
+      opts: ['$15$ cm','$0{,}015$ cm','$150$ cm','$1.500$ cm','$105$ cm'],
+      correct: 2,
+      exp: 'Meter ke cm berarti dikali 100. $1{,}5 \\times 100$ berarti geser koma 2 langkah ke kanan. Hasilnya $150$ cm.',
+      wp: true
+    }
+  ]
+});
+
+/* ===== ASSIGNMENT 3 ===== */
+courseContent.sections.push({
+  id: 'assignment3',
+  title: 'Assignment 3',
+  duration: 'Latihan Mandiri',
+  icon: '📝',
+  type: 'assignment',
+  assignmentNum: 3,
+  items: [
+    {
+      type: 'mcq',
+      q: 'Manakah tanda yang tepat untuk membandingkan $0{,}45$ dan $0{,}4$?',
+      opts: ['$0{,}45 < 0{,}4$','$0{,}45 > 0{,}4$','$0{,}45 = 0{,}4$','$0{,}45 \\leq 0{,}4$','Tidak dapat ditentukan'],
+      correct: 1,
+      exp: 'Samakan digit: $0{,}45$ vs $0{,}40$. Karena 45 lebih besar dari 40, maka $0{,}45 > 0{,}4$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Tiga siswa mengukur tinggi mereka. Aldi $1{,}5$ m, Budi $1{,}45$ m, dan Candra $1{,}55$ m. Siapakah siswa yang paling tinggi?',
+      opts: ['Aldi','Budi','Candra','Aldi dan Budi sama','Tidak ada yang tertinggi'],
+      correct: 2,
+      exp: 'Samakan digit: Aldi $1{,}50$, Budi $1{,}45$, Candra $1{,}55$. Nilai terbesar adalah $1{,}55$ m. Jadi Candra paling tinggi.',
+      wp: true,
+      illustration: '<div style="display:flex;justify-content:center;gap:20px"><div style="text-align:center"><div style="height:75px;width:20px;background:var(--blue)"></div><div>Aldi 1.50m</div></div><div style="text-align:center"><div style="height:65px;width:20px;background:var(--gray)"></div><div>Budi 1.45m</div></div><div style="text-align:center"><div style="height:85px;width:20px;background:var(--green)"></div><div>Candra 1.55m</div></div></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Urutan bilangan dari yang terbesar ke terkecil yang benar untuk {$0{,}7$; $0{,}71$; $0{,}07$} adalah...',
+      opts: ['$0{,}07 > 0{,}7 > 0{,}71$','$0{,}71 > 0{,}07 > 0{,}7$','$0{,}71 > 0{,}7 > 0{,}07$','$0{,}7 > 0{,}71 > 0{,}07$','$0{,}7 > 0{,}07 > 0{,}71$'],
+      correct: 2,
+      exp: 'Samakan digit: $0{,}70$; $0{,}71$; $0{,}07$. Urutan terbesar: $0{,}71 > 0{,}70 > 0{,}07$. Kembalikan ke asal: $0{,}71 > 0{,}7 > 0{,}07$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan yang terletak di antara $0{,}3$ dan $0{,}4$?',
+      opts: ['$0{,}25$','$0{,}45$','$0{,}35$','$0{,}5$','$0{,}29$'],
+      correct: 2,
+      exp: 'Samakan digit: $0{,}30$ dan $0{,}40$. Angka di antaranya harus memiliki angka persepuluhan 3 dan perseratusan lebih dari 0, misalnya $0{,}35$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Dalam lomba renang, Doni waktu $30{,}5$ detik, Eka $30{,}15$ detik, dan Fani $30{,}05$ detik. Siapa yang berenang paling lambat (waktu terbesar)?',
+      opts: ['Doni','Eka','Fani','Doni dan Eka sama','Fani dan Eka sama'],
+      correct: 0,
+      exp: 'Samakan digit: Doni $30{,}50$, Eka $30{,}15$, Fani $30{,}05$. Waktu terbesar adalah $30{,}50$ detik, sehingga Doni adalah yang paling lambat.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah tanda yang tepat untuk $4{,}509$ dan $4{,}51$?',
+      opts: ['$4{,}509 > 4{,}51$','$4{,}509 < 4{,}51$','$4{,}509 = 4{,}51$','$4{,}509 \\leq 4{,}51$','Tidak dapat ditentukan'],
+      correct: 1,
+      exp: 'Samakan digit: $4{,}509$ vs $4{,}510$. Karena 509 lebih kecil dari 510, maka $4{,}509 < 4{,}51$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Pada garis bilangan, titik A berada tepat di tengah antara $0$ dan $1$. Nilai titik A adalah...',
+      opts: ['$0{,}1$','$0{,}5$','$1{,}5$','$0{,}9$','$0{,}01$'],
+      correct: 1,
+      exp: 'Titik tengah antara $0$ dan $1$ adalah setengah kesatuan, yaitu $\\frac{1}{2}$ atau $0{,}5$.',
+      illustration: '<div style="background:#fff;border:2px solid var(--gray-l);border-radius:8px;padding:20px;margin:10px 0"><div style="position:relative;height:40px"><div style="position:absolute;left:0;top:15px;width:100%;height:2px;background:#000"></div><div style="position:absolute;left:0;top:10px;width:2px;height:12px;background:#000"></div><div style="position:absolute;left:0;top:25px;font-size:.8rem">0</div><div style="position:absolute;left:50%;top:8px;width:4px;height:16px;background:var(--red);transform:translateX(-50%)"></div><div style="position:absolute;left:50%;top:25px;font-size:.8rem;color:var(--red);transform:translateX(-50%)">A</div><div style="position:absolute;right:0;top:10px;width:2px;height:12px;background:#000"></div><div style="position:absolute;right:0;top:25px;font-size:.8rem">1</div></div></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Manakah bilangan yang lebih besar dari $0{,}5$ tetapi lebih kecil dari $0{,}6$?',
+      opts: ['$0{,}45$','$0{,}55$','$0{,}65$','$0{,}4$','$0{,}6$'],
+      correct: 1,
+      exp: 'Bilangan yang lebih besar dari $0{,}50$ dan lebih kecil dari $0{,}60$ adalah $0{,}55$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Pak Joko memiliki 3 ekor sapi dengan berat $0{,}5$ ton, $0{,}45$ ton, dan $0{,}8$ ton. Sapi mana yang paling ringan?',
+      opts: ['Sapi 1 ($0{,}5$ ton)','Sapi 2 ($0{,}45$ ton)','Sapi 3 ($0{,}8$ ton)','Sapi 1 dan 2 sama ringan','Tidak ada yang paling ringan'],
+      correct: 1,
+      exp: 'Samakan digit: $0{,}50$; $0{,}45$; $0{,}80$. Berat terkecil adalah $0{,}45$ ton. Jadi Sapi 2 paling ringan.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Pernyataan yang BENAR mengenai $2{,}3$ dan $2{,}30$ adalah...',
+      opts: ['$2{,}3 > 2{,}30$','$2{,}3 < 2{,}30$','$2{,}3 = 2{,}30$','$2{,}3 \\neq 2{,}30$','$2{,}3$ lebih besar 1 perseratusan'],
+      correct: 2,
+      exp: 'Menambahkan angka 0 di akhir bagian pecahan tidak mengubah nilai. $2{,}3 = 2{,}30$.'
+    }
+  ]
+});
+
+/* ===== ASSIGNMENT 4 ===== */
+courseContent.sections.push({
+  id: 'assignment4',
+  title: 'Assignment 4',
+  duration: 'Latihan Mandiri',
+  icon: '📝',
+  type: 'assignment',
+  assignmentNum: 4,
+  items: [
+    {
+      type: 'mcq',
+      q: 'Hasil pembulatan dari $3{,}14$ ke bilangan bulat terdekat adalah...',
+      opts: ['$3$','$4$','$3{,}1$','$3{,}0$','$5$'],
+      correct: 0,
+      exp: 'Lihat angka di belakang koma (1). Karena $1 < 5$, bagian bulat tetap. Hasilnya 3.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah sepeda melaju sejauh $4{,}8$ km. Jika jarak tersebut dibulatkan ke bilangan bulat terdekat, hasilnya adalah...',
+      opts: ['$4$ km','$5$ km','$4{,}5$ km','$4{,}8$ km','$6$ km'],
+      correct: 1,
+      exp: 'Lihat angka di belakang koma (8). Karena $8 \\ge 5$, bagian bulat (4) naik 1 menjadi 5. Hasilnya 5 km.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $1{,}5 + 2{,}4$ adalah...',
+      opts: ['$3{,}9$','$3{,}19$','$3{,}4$','$2{,}9$','$3{,}1$'],
+      correct: 0,
+      exp: 'Sejajarkan koma. $1{,}5 + 2{,}4 = (1+2) , (5+4) = 3{,}9$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Andi memiliki uang Rp$10.000{,}00$. Ia membeli buku seharga Rp$3.250{,}50$. Sisa uang Andi adalah...',
+      opts: ['Rp$6.750{,}50$','Rp$6.749{,}50$','Rp$7.750{,}50$','Rp$6.850{,}00$','Rp$6.750{,}00$'],
+      correct: 0,
+      exp: '$10.000{,}00 - 3.250{,}50$. Pada perseratusan: $0-0=0$. Persepuluhan: $0-5$ (pinjam 1 dari satuan, jadi $10-5=5$). Satuan: $9-0=9$. Puluhan: $9-5=4$. Ratusan: $9-2=7$. Ribu: $6-3=3$. Hasilnya Rp$6.750{,}50$.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $5 - 0{,}4$ adalah...',
+      opts: ['$4{,}6$','$5{,}4$','$4{,}4$','$0{,}1$','$5{,}6$'],
+      correct: 0,
+      exp: 'Ubah $5$ menjadi $5{,}0$. Lalu $5{,}0 - 0{,}4$. Persepuluhan: $0-4$ (pinjam, $10-4=6$). Satuan: $4-0=4$. Hasilnya $4{,}6$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil pembulatan dari $12{,}567$ ke perseratusan terdekat (dua tempat di belakang koma) adalah...',
+      opts: ['$12{,}56$','$12{,}57$','$12{,}50$','$12{,}60$','$13{,}00$'],
+      correct: 1,
+      exp: 'Kita bulatkan ke perseratusan (angka 6). Lihat angka di kanannya, yaitu 7. Karena $7 \\ge 5$, maka 6 naik menjadi 7. Hasilnya $12{,}57$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah pipa memiliki diameter $5{,}83$ cm. Jika dibulatkan ke persepuluhan terdekat, diameter pipa tersebut adalah...',
+      opts: ['$5{,}8$ cm','$5{,}9$ cm','$6{,}0$ cm','$5{,}7$ cm','$5{,}80$ cm'],
+      correct: 0,
+      exp: 'Kita bulatkan ke persepuluhan (angka 8). Lihat angka di kanannya, yaitu 3. Karena $3 < 5$, angka 8 tetap. Hasilnya $5{,}8$ cm.',
+      wp: true,
+      illustration: '<div class="pv-chart" style="max-width:300px"><table><tr><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th><th>Perseratusan</th></tr><tr><td>5</td><td class="comma-cell">,</td><td class="highlight-cell">8</td><td>3</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $0{,}25 + 0{,}25$ adalah...',
+      opts: ['$0{,}50$','$0{,}30$','$0{,}55$','$0{,}20$','$1{,}00$'],
+      correct: 0,
+      exp: 'Sejajarkan koma. Perseratusan: $5+5=10$ (tulis 0 simpan 1). Persepuluhan: $2+2+1=5$. Satuan: $0+0=0$. Hasilnya $0{,}50$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Ibu membeli $2{,}5$ kg apel dan $1{,}25$ kg jeruk. Total berat buah yang dibeli ibu adalah...',
+      opts: ['$3{,}75$ kg','$3{,}30$ kg','$2{,}75$ kg','$3{,}50$ kg','$3{,}25$ kg'],
+      correct: 0,
+      exp: 'Samakan digit: $2{,}50 + 1{,}25$. Perseratusan: $0+5=5$. Persepuluhan: $5+2=7$. Satuan: $2+1=3$. Hasilnya $3{,}75$ kg.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $2{,}5 - 1{,}05$ adalah...',
+      opts: ['$1{,}45$','$1{,}55$','$1{,}35$','$0{,}45$','$1{,}50$'],
+      correct: 0,
+      exp: 'Ubah $2{,}5$ menjadi $2{,}50$. Perseratusan: $0-5$ (pinjam, $10-5=5$). Persepuluhan: $4-0=4$. Satuan: $1-1=0$. Hasilnya $1{,}45$.'
+    }
+  ]
+});
+
+/* ===== ASSIGNMENT 5 ===== */
+courseContent.sections.push({
+  id: 'assignment5',
+  title: 'Assignment 5',
+  duration: 'Latihan Mandiri',
+  icon: '📝',
+  type: 'assignment',
+  assignmentNum: 5,
+  items: [
+    {
+      type: 'mcq',
+      q: 'Hasil dari $0{,}2 \\times 10$ adalah...',
+      opts: ['$0{,}02$','$2$','$0{,}20$','$20$','$0{,}12$'],
+      correct: 1,
+      exp: 'Perkalian dengan 10 menggeser koma 1 langkah ke kanan. $0{,}2$ menjadi $2$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah papan kayu memiliki panjang $1{,}5$ meter. Jika dipotong menjadi 10 bagian yang sama panjang, berapakah panjang setiap potongan kayu tersebut?',
+      opts: ['$0{,}15$ meter','$1{,}50$ meter','$15$ meter','$0{,}015$ meter','$0{,}5$ meter'],
+      correct: 0,
+      exp: 'Membagi 10 bagian berarti membagi dengan 10. Pembagian dengan 10 menggeser koma 1 langkah ke kiri. $1{,}5$ menjadi $0{,}15$ meter.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $45 : 100$ adalah...',
+      opts: ['$0{,}45$','$4{,}5$','$450$','$0{,}045$','$45{,}00$'],
+      correct: 0,
+      exp: 'Pembagian dengan 100 menggeser koma 2 langkah ke kiri. $45$ (atau $45{,}0$) menjadi $0{,}45$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $1{,}2 \\times 100$ adalah...',
+      opts: ['$1{,}200$','$0{,}012$','$12$','$120$','$1.200$'],
+      correct: 3,
+      exp: 'Perkalian dengan 100 menggeser koma 2 langkah ke kanan. $1{,}2$ menjadi $120$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Seorang penjual gula menakar $500$ gram gula. Jika ditimbang dalam kilogram (1 kg = 1000 gram), berat gula tersebut adalah...',
+      opts: ['$0{,}5$ kg','$5$ kg','$0{,}05$ kg','$50$ kg','$0{,}005$ kg'],
+      correct: 0,
+      exp: 'Gram ke kg berarti dibagi 1000. $500 : 1000$ menggeser koma 3 langkah ke kiri. $500$ menjadi $0{,}500$ atau $0{,}5$ kg.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $3{,}6 : 10$ adalah...',
+      opts: ['$36$','$0{,}36$','$0{,}036$','$3{,}60$','$0{,}6$'],
+      correct: 1,
+      exp: 'Pembagian dengan 10 menggeser koma 1 langkah ke kiri. $3{,}6$ menjadi $0{,}36$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Sebuah balok diukur memiliki volume $0{,}35$ meter kubik. Jika volume tersebut dikalikan dengan 10, berapakah volume balok tersebut sekarang?',
+      opts: ['$3{,}5$ meter kubik','$0{,}035$ meter kubik','$35$ meter kubik','$3{,}50$ meter kubik','$350$ meter kubik'],
+      correct: 0,
+      exp: 'Perkalian dengan 10 menggeser koma 1 langkah ke kanan. $0{,}35$ menjadi $3{,}5$ meter kubik.',
+      wp: true,
+      illustration: '<div class="pv-chart" style="max-width:300px"><table><tr><th>Satuan</th><th class="comma-col">,</th><th>Persepuluhan</th><th>Perseratusan</th></tr><tr><td>0</td><td class="comma-cell">,</td><td>3</td><td class="highlight-cell">5</td></tr></table></div>'
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $0{,}8 : 100$ adalah...',
+      opts: ['$0{,}08$','$0{,}008$','$8$','$80$','$0{,}8$'],
+      correct: 1,
+      exp: 'Pembagian dengan 100 menggeser koma 2 langkah ke kiri. $0{,}8$ (ditulis $0{,}80$) menjadi $0{,}008$.'
+    },
+    {
+      type: 'mcq',
+      q: 'Ada 3 kotak berisi obat. Setiap kotak berisi $0{,}5$ kg obat. Berapakah total berat obat dalam semua kotak?',
+      opts: ['$1{,}5$ kg','$0{,}15$ kg','$3{,}5$ kg','$1{,}05$ kg','$15$ kg'],
+      correct: 0,
+      exp: 'Total berat = $3 \\times 0{,}5$ kg. Karena $0{,}5$ adalah setengah, maka $3 \\times \\frac{1}{2} = 1{,}5$. Jadi total beratnya $1{,}5$ kg.',
+      wp: true
+    },
+    {
+      type: 'mcq',
+      q: 'Hasil dari $0{,}05 \\times 1000$ adalah...',
+      opts: ['$0{,}5$','$5$','$50$','$0{,}005$','$500$'],
+      correct: 2,
+      exp: 'Perkalian dengan 1000 menggeser koma 3 langkah ke kanan. $0{,}05$ menjadi $50$.'
+    }
+  ]
+});
+
+/* === END CHAT 4 CONTENT === */
+
+/* === END CONTENT === */
+
+/* ================================================================
+   RENDER ENGINE (SLIDE-BASED)
+   ================================================================ */
+const LETTERS = ['a','b','c','d','e'];
+
+function renderKaTeX(el){
+  if(typeof renderMathInElement !== 'undefined'){
+    renderMathInElement(el, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError:false
+    });
+  }
+}
+
+function renderTheorySlide(item, idx, total, sectionId){
+  const prevBtn = idx > 0 ? `<button class="btn btn-outline prev-btn">← Kembali</button>` : `<div></div>`;
+  return `
+    <div class="slide ${idx===0?'active':''}" data-slide-index="${idx}">
+      <div class="theory">
+        <h3>📖 ${item.title}</h3>
+        ${item.content}
+      </div>
+      <div class="slide-nav">
+        ${prevBtn}
+        <div class="nav-right">
+          <button class="btn btn-green next-btn">Lanjut →</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderMCQSlide(item, qNum, idx, sectionId){
+  const correctLetter = LETTERS[item.correct];
+  let summary = item.q.replace(/\$/g,'').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g,'$1/$2').replace(/\\times/g,'×').substring(0,70);
+  if(item.q.length > 70) summary += '...';
+  
+  let optsHTML = '';
+  item.opts.forEach((opt,i)=>{
+    optsHTML += `<button class="option" data-option="${LETTERS[i]}"><span class="opt-letter">${LETTERS[i].toUpperCase()}</span><span>${opt}</span></button>`;
+  });
+  
+  const wpTag = item.wp ? '<span class="word-problem-tag">Soal Cerita</span>' : '';
+  const prevBtn = idx > 0 ? `<button class="btn btn-outline prev-btn">← Kembali</button>` : `<div></div>`;
+  
+  return `
+    <div class="slide ${idx===0?'active':''}" data-slide-index="${idx}" data-correct="${correctLetter}" data-summary="${summary.replace(/"/g,'&quot;')}">
+      <div class="question">
+        <span class="question-number">Soal ${qNum}</span>${wpTag}
+        <div class="question-text">${item.q}</div>
+        ${item.illustration ? `<div class="illustration">${item.illustration}</div>` : ''}
+        <div class="options">${optsHTML}</div>
+        <div class="feedback" style="display:none">
+          <div class="feedback-title"></div>
+          <div class="correct-answer">Jawaban benar: <strong>${correctLetter.toUpperCase()}</strong></div>
+          <div class="explanation">${item.exp}</div>
+        </div>
+      </div>
+      <div class="slide-nav">
+        ${prevBtn}
+        <div class="nav-right">
+          <button class="btn btn-blue check-btn" disabled>Periksa</button>
+          <button class="btn btn-yellow retry-btn" style="display:none">↻ Coba Lagi</button>
+          <button class="btn btn-green next-btn">Lanjut →</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSection(section){
+  let slidesHTML = '';
+  let qCounter = 0;
+  const totalSlides = section.items.length;
+  
+  section.items.forEach((item, i)=>{
+    if(item.type === 'theory'){
+      slidesHTML += renderTheorySlide(item, i, totalSlides, section.id);
+    } else if(item.type === 'mcq'){
+      qCounter++;
+      slidesHTML += renderMCQSlide(item, qCounter, i, section.id);
+    }
+  });
+  
+  return `
+    <section id="${section.id}" class="section">
+      <div class="section-header">
+        <div class="section-icon">${section.icon}</div>
+        <div class="section-title">
+          <h2>${section.title}</h2>
+          <span class="section-duration">⏱️ ${section.duration}</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${100/totalSlides}%"></div></div>
+      <div class="slide-wrapper">${slidesHTML}</div>
+    </section>`;
+}
+
+function renderConsolidation(section){
+  return `
+    <section id="${section.id}" class="section">
+      <div class="section-header">
+        <div class="section-icon">${section.icon}</div>
+        <div class="section-title">
+          <h2>${section.title}</h2>
+          <span class="section-duration">⏱️ ${section.duration}</span>
+        </div>
+      </div>
+      <div class="consolidation-box">
+        <h3>🎓 Consolidation & Reflection</h3>
+        <p>${section.content || 'Selamat! Kamu telah menyelesaikan sesi pembelajaran hari ini. Lanjutkan belajar dan berlatih di platform online kami untuk menguasai materi lebih dalam.'}</p>
+        <a href="https://learn.algonova.id" target="_blank" class="btn btn-green" style="text-decoration:none;display:inline-block">🚀 Lanjut ke learn.algonova.id</a>
+      </div>
+    </section>`;
+}
+
+function renderAssignment(section){
+  const num = section.assignmentNum;
+  let qCounter = 0;
+  let slidesHTML = '';
+  let sheetRows = '';
+  const totalSlides = section.items.length;
+  
+  section.items.forEach((item, i)=>{
+    if(item.type === 'mcq'){
+      qCounter++;
+      slidesHTML += renderMCQSlide(item, qCounter, i, section.id);
+      let summary = item.q.replace(/\$/g,'').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g,'$1/$2').replace(/\\times/g,'×').substring(0,70);
+      if(item.q.length > 70) summary += '...';
+      sheetRows += `<tr data-q="${qCounter}">
+        <td>${qCounter}</td>
+        <td class="q-summary">${summary}</td>
+        <td class="student-answer">-</td>
+        <td class="correct-answer">-</td>
+        <td class="status">-</td>
+      </tr>`;
+    }
+  });
+  
+  return `
+    <section id="${section.id}" class="assignment-section" data-assignment-num="${num}">
+      <div class="assignment-header-bar">
+        <h2>${section.icon} ${section.title}</h2>
+        <div class="meta">
+          <span class="badge">10 Soal</span>
+          <span class="badge">Skor: <span id="score-${num}">0</span>/10</span>
+        </div>
+      </div>
+      <div class="assignment-actions">
+        <button class="btn btn-blue print-btn" data-target="${section.id}">🖨️ Print Assignment</button>
+      </div>
+      <div class="assignment-body">
+        <div class="answer-sheet">
+          <div class="answer-sheet-title">📋 Lembar Penilaian</div>
+          <table id="answer-sheet-${num}">
+            <thead>
+              <tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>v/x</th></tr>
+            </thead>
+            <tbody>${sheetRows}</tbody>
+          </table>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${100/totalSlides}%"></div></div>
+        <div class="slide-wrapper">${slidesHTML}</div>
+      </div>
+      <div class="checked-by">
+        <p>Checked by,</p>
+        <p class="name">Deni</p>
+      </div>
+    </section>`;
+}
+
+function renderAll(){
+  const contentArea = document.getElementById('contentArea');
+  const sidebarNav = document.getElementById('sidebarNav');
+  const mapTrack = document.getElementById('mapTrack');
+  
+  let contentHTML = '';
+  let sidebarHTML = '';
+  let mapHTML = '';
+  
+  courseContent.sections.forEach((section, idx)=>{
+    if(section.type === 'assignment'){
+      contentHTML += renderAssignment(section);
+    } else if(section.type === 'consolidation'){
+      contentHTML += renderConsolidation(section);
+    } else {
+      contentHTML += renderSection(section);
+    }
+    
+    const isAssignment = section.type === 'assignment';
+    sidebarHTML += `<li><a href="#${section.id}" data-target="${section.id}" class="${isAssignment?'assignment-link':''}">
+      ${section.icon} ${section.title}
+      <span class="dur">${section.duration}</span>
+    </a></li>`;
+    
+    mapHTML += `<div class="map-node" data-target="${section.id}" title="${section.title}">${section.icon}
+      <div class="map-label">${section.title}<span class="dur">${section.duration}</span></div>
+    </div>`;
+    if(idx < courseContent.sections.length - 1){
+      mapHTML += `<div class="map-connector"></div>`;
+    }
+  });
+  
+  contentArea.innerHTML = contentHTML;
+  sidebarNav.innerHTML = sidebarHTML;
+  mapTrack.innerHTML = mapHTML;
+  
+  renderKaTeX(contentArea);
+  setupSlides();
+  setupSidebarTracking();
+  setupMapNodes();
+  setupPrintButtons();
+}
+
+/* ===== SLIDE LOGIC ===== */
+function setupSlides(){
+  document.querySelectorAll('.section, .assignment-section').forEach(section=>{
+    const slides = section.querySelectorAll('.slide');
+    const progressFill = section.querySelector('.progress-fill');
+    
+    slides.forEach((slide, index)=>{
+      const checkBtn = slide.querySelector('.check-btn');
+      const retryBtn = slide.querySelector('.retry-btn');
+      const nextBtn = slide.querySelector('.next-btn');
+      const prevBtn = slide.querySelector('.prev-btn');
+      const options = slide.querySelectorAll('.option');
+      
+      // Previous slide logic
+      if(prevBtn){
+        prevBtn.addEventListener('click', ()=>{
+          if(index > 0){
+            slides[index].classList.remove('active');
+            slides[index-1].classList.add('active');
+            const progress = (index / slides.length) * 100;
+            progressFill.style.width = progress + '%';
+            section.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        });
+      }
+      
+      // Option selection
+      options.forEach(opt=>{
+        opt.addEventListener('click', ()=>{
+          if(opt.disabled) return;
+          options.forEach(o=>o.classList.remove('selected'));
+          opt.classList.add('selected');
+          if(checkBtn) checkBtn.disabled = false;
+        });
+      });
+      
+      // Check answer
+      if(checkBtn){
+        checkBtn.addEventListener('click', ()=>{
+          const selected = slide.querySelector('.option.selected');
+          if(!selected) return;
+          const correctAnswer = slide.dataset.correct;
+          const isCorrect = selected.dataset.option === correctAnswer;
+          
+          options.forEach(o=>o.disabled = true);
+          selected.classList.remove('selected');
+          
+          const feedback = slide.querySelector('.feedback');
+          feedback.style.display = 'block';
+          
+          if(isCorrect){
+            selected.classList.add('correct');
+            slide.querySelector('.question').classList.add('correct');
+            feedback.classList.add('correct');
+            feedback.classList.remove('incorrect');
+            feedback.querySelector('.feedback-title').innerHTML = '✓ Jawaban Benar!';
+            checkBtn.style.display = 'none';
+          } else {
+            selected.classList.add('incorrect');
+            slide.querySelector('.question').classList.add('incorrect');
+            feedback.classList.add('incorrect');
+            feedback.classList.remove('correct');
+            feedback.querySelector('.feedback-title').innerHTML = '✗ Belum Tepat';
+            options.forEach(o=>{
+              if(o.dataset.option === correctAnswer) o.classList.add('correct');
+            });
+            checkBtn.style.display = 'none';
+            retryBtn.style.display = 'block';
+          }
+          
+          updateAnswerSheet(slide);
+        });
+      }
+      
+      // Retry
+      if(retryBtn){
+        retryBtn.addEventListener('click', ()=>{
+          options.forEach(o=>{
+            o.disabled = false;
+            o.classList.remove('correct','incorrect','selected');
+          });
+          slide.querySelector('.question').classList.remove('correct','incorrect');
+          const feedback = slide.querySelector('.feedback');
+          feedback.style.display = 'none';
+          feedback.classList.remove('correct','incorrect');
+          retryBtn.style.display = 'none';
+          checkBtn.style.display = 'block';
+          checkBtn.disabled = true;
+        });
+      }
+      
+      // Next slide
+      if(nextBtn){
+        nextBtn.addEventListener('click', ()=>{
+          if(index < slides.length - 1){
+            slides[index].classList.remove('active');
+            slides[index+1].classList.add('active');
+            const progress = ((index + 1) / slides.length) * 100;
+            progressFill.style.width = progress + '%';
+            section.scrollIntoView({behavior:'smooth', block:'start'});
+          } else {
+            progressFill.style.width = '100%';
+            section.classList.add('completed');
+            updateMapProgress();
+          }
+        });
+      }
+    });
+  });
+}
+
+function updateAnswerSheet(slide){
+  const assignment = slide.closest('.assignment-section');
+  if(!assignment) return;
+  
+  const assignmentNum = assignment.dataset.assignmentNum;
+  const questions = Array.from(assignment.querySelectorAll('.slide'));
+  const qIdx = questions.indexOf(slide) + 1;
+  
+  const row = document.querySelector(`#answer-sheet-${assignmentNum} tr[data-q="${qIdx}"]`);
+  if(!row) return;
+  
+  const selectedOpt = slide.querySelector('.option.correct, .option.incorrect');
+  const isCorrect = slide.querySelector('.question').classList.contains('correct');
+  const isAnswered = selectedOpt !== null;
+  
+  row.querySelector('.student-answer').textContent = isAnswered ? selectedOpt.dataset.option.toUpperCase() : '-';
+  row.querySelector('.correct-answer').textContent = slide.dataset.correct.toUpperCase();
+  const statusCell = row.querySelector('.status');
+  statusCell.textContent = isAnswered ? (isCorrect ? 'v' : 'x') : '-';
+  statusCell.className = 'status ' + (isAnswered ? (isCorrect ? 'v' : 'x') : '');
+  
+  const correctCount = assignment.querySelectorAll('.question.correct').length;
+  const scoreEl = document.getElementById(`score-${assignmentNum}`);
+  if(scoreEl) scoreEl.textContent = correctCount;
+  
+  const activeScoreEl = document.getElementById('activeScore');
+  if(activeScoreEl && isAssignmentInView(assignment)){
+    activeScoreEl.textContent = correctCount;
+  }
+}
+
+function isAssignmentInView(assignment){
+  const rect = assignment.getBoundingClientRect();
+  return rect.top < window.innerHeight && rect.bottom > 0;
+}
+
+function updateMapProgress(){
+  // Optional: can add logic to mark map nodes as completed
+}
+
+/* ===== SIDEBAR TRACKING ===== */
+function setupSidebarTracking(){
+  const sections = document.querySelectorAll('.section, .assignment-section');
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        navLinks.forEach(link=>{
+          link.classList.toggle('active', link.dataset.target === id);
+        });
+        const assignment = entry.target.closest('.assignment-section');
+        if(assignment){
+          const num = assignment.dataset.assignmentNum;
+          const score = assignment.querySelectorAll('.question.correct').length;
+          const activeScoreEl = document.getElementById('activeScore');
+          if(activeScoreEl) activeScoreEl.textContent = score;
+        }
+      }
+    });
+  }, {threshold:0.15, rootMargin:'-100px 0px -50% 0px'});
+  
+  sections.forEach(s=>observer.observe(s));
+  
+  navLinks.forEach(link=>{
+    link.addEventListener('click', e=>{
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+/* ===== MAP NODES ===== */
+function setupMapNodes(){
+  document.querySelectorAll('.map-node').forEach(node=>{
+    node.addEventListener('click', ()=>{
+      const target = document.getElementById(node.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+/* ===== PRINT ===== */
+function setupPrintButtons(){
+  document.querySelectorAll('.print-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      printAssignment(btn.dataset.target);
+    });
+  });
+}
+
+function printAssignment(assignmentId){
+  const assignment = document.getElementById(assignmentId);
+  if(!assignment) return;
+  
+  const studentInfo = document.getElementById('studentInfoHeader');
+  const name = studentInfo.querySelector('[data-field="name"]').value || '______';
+  const date = studentInfo.querySelector('[data-field="date"]').value || '______';
+  const group = studentInfo.querySelector('[data-field="group"]').value || '______';
+  const num = assignment.dataset.assignmentNum;
+  const score = document.getElementById(`score-${num}`).textContent;
+  
+  const printContainer = document.getElementById('printContainer');
+  printContainer.innerHTML = `
+    <div class="print-header">
+      <h1>Math Tutoring by Deni</h1>
+      <p><strong>Topic:</strong> ${courseContent.topic}</p>
+    </div>
+    <div class="print-info">
+      <div><strong>Name:</strong> ${name}</div>
+      <div><strong>Date:</strong> ${date}</div>
+      <div><strong>Assignment Group:</strong> ${group}</div>
+      <div><strong>Score:</strong> ${score}/10</div>
+    </div>
+  `;
+  
+  const clone = assignment.cloneNode(true);
+  // Make all slides visible for print
+  clone.querySelectorAll('.slide').forEach(s => s.classList.add('active'));
+  clone.querySelectorAll('.slide-nav').forEach(n => n.style.display = 'none');
+  clone.querySelectorAll('.progress-bar').forEach(p => p.style.display = 'none');
+  clone.querySelectorAll('.feedback').forEach(f => f.style.display = 'none');
+  clone.querySelectorAll('.option').forEach(o => {
+    o.disabled = false;
+    o.classList.remove('correct','incorrect','selected');
+  });
+  
+  printContainer.appendChild(clone);
+  
+  document.body.classList.add('printing');
+  window.print();
+  
+  setTimeout(()=>{
+    document.body.classList.remove('printing');
+    printContainer.innerHTML = '';
+  }, 500);
+}
+
+/* ===== CLASS RULES MODAL ===== */
+document.getElementById('classRulesBtn').addEventListener('click', ()=>{
+  document.getElementById('classRulesModal').classList.add('active');
+});
+document.getElementById('closeModalBtn').addEventListener('click', ()=>{
+  document.getElementById('classRulesModal').classList.remove('active');
+});
+document.getElementById('classRulesModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'classRulesModal'){
+    e.currentTarget.classList.remove('active');
+  }
+});
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderAll();
+});
+</script>
+</body>
+</html>
