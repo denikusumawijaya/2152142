@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Operasi Pecahan</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        :root {
+            --primary: #58cc02;
+            --primary-dark: #46a302;
+            --blue: #1cb0f6;
+            --bg: #fff;
+            --text: #3c3c3c;
+            --border: #e5e5e5;
+            --wrong: #ff4b4b;
+            --right: #58cc02;
+        }
+        body {
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+        }
+        /* Header */
+        header {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-left h1 { margin: 0; font-size: 1.2rem; color: var(--text); }
+        .header-left p { margin: 0; font-size: 0.9rem; color: #777; }
+        .header-right button {
+            background: var(--blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1899d6;
+            transition: 0.2s;
+        }
+        .header-right button:active { transform: translateY(4px); box-shadow: none; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: white; padding: 30px; border-radius: 16px;
+            width: 90%; max-width: 400px; text-align: center;
+        }
+        .modal h3 { margin-top: 0; color: var(--blue); }
+        .modal ul { text-align: left; padding-left: 20px; }
+        .modal button { margin-top: 20px; background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 var(--primary-dark);}
+
+        /* Translation */
+        .translation { display: block; font-style: italic; font-size: 0.85em; color: #777; margin-top: 5px; }
+
+        /* Node Path (Duolingo Style) */
+        .path-container {
+            position: relative;
+            max-width: 350px;
+            margin: 40px auto;
+            padding-bottom: 50px;
+        }
+        .node {
+            width: 80px; height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 40px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 8px 0 var(--primary-dark);
+            transition: 0.2s;
+            border: 4px solid #fff;
+        }
+        .node:hover { transform: scale(1.05); }
+        .node:active { transform: translateY(4px); box-shadow: 0 4px 0 var(--primary-dark); }
+        .node svg, .node span { width: 40px; height: 40px; color: white; font-size: 24px; }
+        .node-label {
+            position: absolute;
+            bottom: -25px; left: 50%; transform: translateX(-50%);
+            background: #fff; padding: 2px 8px; border-radius: 8px;
+            font-size: 0.7rem; color: #777; white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Zigzag effect */
+        .node:nth-child(2) { margin-left: 20%; }
+        .node:nth-child(3) { margin-left: 40%; }
+        .node:nth-child(4) { margin-left: 20%; }
+        .node:nth-child(5) { margin-left: 0%; }
+        .node:nth-child(6) { margin-left: 20%; }
+        .node:nth-child(7) { margin-left: 40%; }
+        .node:nth-child(8) { margin-left: 20%; margin-bottom: 60px;}
+        .node:nth-child(9) { margin-left: 0%; }
+        .node:nth-child(10) { margin-left: 20%; }
+        .node:nth-child(11) { margin-left: 40%; }
+        .node:nth-child(12) { margin-left: 20%; }
+
+        /* Lesson View */
+        .lesson-view {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #f7f7f7; z-index: 150; flex-direction: column;
+        }
+        .lesson-view.active { display: flex; }
+        .lesson-header {
+            background: #fff; padding: 15px 30px; border-bottom: 2px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .lesson-header h2 { margin: 0; font-size: 1.2rem; color: var(--blue); }
+        .close-btn { background: #e5e5e5; border: none; width: 40px; height: 40px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
+        .lesson-body { display: flex; flex: 1; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px; background: #fff; border-right: 2px solid var(--border);
+            overflow-y: auto; padding: 15px;
+        }
+        .sidebar-item {
+            padding: 12px 15px; margin-bottom: 10px; border-radius: 12px;
+            cursor: pointer; border: 2px solid var(--border); display: flex; align-items: center; gap: 10px;
+            transition: 0.2s; font-weight: bold;
+        }
+        .sidebar-item:hover { background: #f7f7f7; }
+        .sidebar-item.active { border-color: var(--blue); background: #e8f7fe; color: var(--blue); }
+        .sidebar-item .icon { font-size: 1.5rem; }
+        .btn-external { display: block; text-align: center; background: var(--blue); color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 0 #1899d6; }
+
+        /* Main Content */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        .content-card {
+            background: #fff; max-width: 700px; margin: 0 auto; padding: 30px;
+            border-radius: 16px; border: 2px solid var(--border); box-shadow: 0 4px 0 #e5e5e5;
+        }
+        .theory-box { background: #f7f7f7; padding: 20px; border-radius: 12px; border-left: 5px solid var(--blue); margin: 20px 0; }
+        .theory-icon { text-align: center; font-size: 3rem; margin-bottom: 15px; }
+
+        /* Task Options */
+        .options-grid { display: grid; gap: 15px; margin-top: 20px; }
+        .option-btn {
+            background: #fff; border: 2px solid var(--border); padding: 15px; border-radius: 12px;
+            cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        .option-btn:hover { border-color: #b0b0b0; }
+        .option-btn.correct { background: #e8f7e8; border-color: var(--right); color: var(--right); font-weight: bold; }
+        .option-btn.wrong { background: #ffe8e8; border-color: var(--wrong); color: var(--wrong); }
+        .option-letter { width: 30px; height: 30px; background: #e5e5e5; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 0.9rem; }
+        .option-btn.correct .option-letter { background: var(--right); color: #fff; }
+        .option-btn.wrong .option-letter { background: var(--wrong); color: #fff; }
+
+        /* Feedback & Explanation */
+        .feedback { margin-top: 20px; padding: 15px; border-radius: 12px; display: none; }
+        .feedback.correct { display: block; background: #e8f7e8; border: 2px solid var(--right); color: var(--right); }
+        .feedback.wrong { display: block; background: #ffe8e8; border: 2px solid var(--wrong); color: var(--wrong); }
+        details { margin-top: 15px; background: #f7f7f7; padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        summary { cursor: pointer; font-weight: bold; color: var(--blue); }
+        .reset-btn { margin-top: 20px; background: #fff; border: 2px solid var(--border); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .reset-btn:hover { background: #f7f7f7; }
+        .print-btn { margin-top: 20px; background: #ffc800; color: #fff; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 #e6a800; float: right; }
+        .math-inline { font-size: 1.1em; }
+
+        /* Print Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; font-family: Arial, sans-serif; display: block !important; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+            th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; }
+            th { background: #f0f0f0; }
+            .katex { font-size: 1.1em; white-space: normal; }
+        }
+        #printArea { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <h1>Math Tutoring by Deni</h1>
+            <p id="topicHeader">Topic: Operasi Pecahan (Fraction Operations)</p>
+        </div>
+        <div class="header-right">
+            <button onclick="document.getElementById('rulesModal').classList.add('active')">Class Rules</button>
+        </div>
+    </header>
+
+    <!-- Class Rules Modal -->
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Class Rules 📏</h3>
+            <p style="font-style: italic; font-size: 0.9em; color: #777;">Aturan Kelas</p>
+            <ul>
+                <li>Berbicara secara bergantian
+                    <span class="translation">Take turns speaking</span>
+                </li>
+                <li>Meminta izin jika ingin meninggalkan kelas
+                    <span class="translation">Ask for permission if you want to leave the class</span>
+                </li>
+                <li>Menyalakan kamera dan microphone jika diperlukan
+                    <span class="translation">Turn on camera and microphone when needed</span>
+                </li>
+            </ul>
+            <button onclick="document.getElementById('rulesModal').classList.remove('active')">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Duolingo Path -->
+    <div class="path-container" id="pathContainer">
+        <!-- Nodes will be generated by JS -->
+    </div>
+
+    <!-- Lesson View -->
+    <div id="lessonView" class="lesson-view">
+        <div class="lesson-header">
+            <h2 id="lessonTitle">Lesson Title</h2>
+            <button class="close-btn" onclick="closeLesson()">X</button>
+        </div>
+        <div class="lesson-body">
+            <div class="sidebar" id="sidebar"></div>
+            <div class="main-content" id="mainContent"></div>
+        </div>
+    </div>
+
+    <!-- Print Area -->
+    <div id="printArea"></div>
+
+    <script>
+        // Menyimpan jawaban sementara untuk fitur print
+        let studentAnswers = {};
+	
+        // Data Structure for Lessons
+        let lessonData = {
+            "warmup": { title: "Spiral Review Warm-up", icon: "🔥", duration: "00:00-00:10", sidebar: [] },
+            "intro": { title: "Introduction & Real-World", icon: "🌍", duration: "00:10-00:15", sidebar: [] },
+            "review": { title: "Review of Prior Knowledge", icon: "🔍", duration: "00:15-00:20", sidebar: [] },
+            "problem": { title: "Problem Introduction", icon: "🧩", duration: "00:20-00:30", sidebar: [] },
+            "guided": { title: "Guided Practice", icon: "🧭", duration: "00:30-00:45", sidebar: [] },
+            "independent": { title: "Independent Practice", icon: "🚀", duration: "00:45-00:55", sidebar: [] },
+            "consolidation": { title: "Consolidation & Reflection", icon: "🧠", duration: "00:55-01:00", sidebar: [] },
+            "task1": { title: "Task 1", icon: "📝", duration: "01:00-01:10", isTask: true },
+            "task2": { title: "Task 2", icon: "📝", duration: "01:10-01:20", isTask: true },
+            "task3": { title: "Task 3", icon: "📝", duration: "01:20-01:30", isTask: true },
+            "task4": { title: "Task 4", icon: "📝", duration: "01:30-01:40", isTask: true },
+            "task5": { title: "Task 5", icon: "📝", duration: "01:40-01:50", isTask: true }
+        };
+
+        // ==========================================
+        // DATA INJECTION (Bagian 1: Warm-up)
+        // ==========================================
+        lessonData["warmup"].sidebar = [
+            {
+                type: "theory",
+                title: "Konsep Dasar Pecahan",
+                icon: "🍕",
+                content: `
+                    <p>Pecahan adalah bagian dari keseluruhan. Bentuk umumnya adalah $\frac{a}{b}$, di mana $a$ adalah pembilang (numerator) dan $b$ adalah penyebut (denominator).</p>
+                    <span class="translation">A fraction is a part of a whole. Its general form is $\frac{a}{b}$, where $a$ is the numerator and $b$ is the denominator.</span>
+                    <br><br>
+                    <div style="text-align:center;">
+                        <svg width="150" height="100" viewBox="0 0 150 100">
+                            <circle cx="50" cy="50" r="40" fill="#ffc800" stroke="#000" stroke-width="2"/>
+                            <path d="M 50 10 A 40 40 0 0 1 90 50 L 50 50 Z" fill="#ff4b4b" stroke="#000" stroke-width="2"/>
+                            <text x="30" y="60" font-size="12" font-weight="bold">1/4</text>
+                        </svg>
+                    </div>
+                    <p>Pada ilustrasi di atas, pizza dipotong menjadi 4 bagian sama besar. 1 bagian diarsir merah, sehingga mewakili pecahan $\frac{1}{4}$.</p>
+                    <span class="translation">In the illustration above, the pizza is cut into 4 equal parts. 1 part is shaded red, representing the fraction $\frac{1}{4}$.</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Sebuah kue ulang tahun dipotong menjadi 8 bagian sama besar. Adik memakan 3 potong. Berapakah pecahan yang menunjukkan bagian kue yang dimakan adik? <span class='translation'>A birthday cake is cut into 8 equal pieces. A younger sibling eats 3 pieces. What fraction represents the part of the cake eaten?</span>", options: ["$\frac{3}{8}$", "$\frac{8}{3}$", "$\frac{5}{8}$", "$\frac{3}{5}$", "$\frac{8}{5}$"], correct: 0, exp: "Pembilang adalah bagian yang dimakan (3), penyebut adalah total potongan (8). Jadi, $\frac{3}{8}$." },
+            { type: "task", q: "Bani memiliki 10 kelereng. Ia memberikan 4 kelereng kepada temannya. Pecahan yang menunjukkan sisa kelereng Bani adalah... <span class='translation'>Bani has 10 marbles. He gives 4 marbles to his friend. The fraction representing Bani's remaining marbles is...</span>", options: ["$\frac{4}{10}$", "$\frac{6}{10}$", "$\frac{10}{6}$", "$\frac{6}{4}$", "$\frac{4}{6}$"], correct: 1, exp: "Sisa kelereng Bani adalah 10 - 4 = 6. Total kelereng semula 10. Maka sisanya adalah $\frac{6}{10}$." },
+            { type: "task", q: "Manakah dari pecahan berikut yang ekuivalen (sama nilainya) dengan $\frac{1}{2}$? <span class='translation'>Which of the following fractions is equivalent to $\frac{1}{2}$?</span>", options: ["$\frac{2}{3}$", "$\frac{3}{4}$", "$\frac{4}{8}$", "$\frac{3}{5}$", "$\frac{2}{5}$"], correct: 2, exp: "$\frac{4}{8}$ jika dibagi 2 atas dan bawah menjadi $\frac{2}{4}$ lalu $\frac{1}{2}$. Jadi sama nilainya." },
+            
+            // Teori 2
+            {
+                type: "theory",
+                title: "Penyebut dan Pembilang yang Sama",
+                icon: "⚖️",
+                content: `
+                    <p>Membandingkan pecahan dengan penyebut yang sama: yang memiliki pembilang lebih besar adalah pecahan yang lebih besar.</p>
+                    <span class="translation">Comparing fractions with the same denominator: the one with the larger numerator is the larger fraction.</span>
+                    <p>Contoh: $\frac{3}{5} > \frac{2}{5}$</p>
+                    <p>Membandingkan pecahan dengan pembilang yang sama: yang memiliki penyebut lebih kecil adalah pecahan yang lebih besar.</p>
+                    <span class="translation">Comparing fractions with the same numerator: the one with the smaller denominator is the larger fraction.</span>
+                    <p>Contoh: $\frac{3}{4} > \frac{3}{5}$</p>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Ali berlari $\frac{3}{4}$ km, sedangkan Budi berlari $\frac{3}{5}$ km. Siapa yang berlari lebih jauh? <span class='translation'>Ali ran $\frac{3}{4}$ km, while Budi ran $\frac{3}{5}$ km. Who ran further?</span>", options: ["Budi", "Ali", "Sama jauh", "Tidak bisa ditentukan", "Ali jika cuaca cerah"], correct: 1, exp: "Pembilang sama (3), bandingkan penyebut. Karena 4 < 5, maka $\frac{3}{4} > \frac{3}{5}$. Jadi Ali lebih jauh." },
+            { type: "task", q: "Ibu membuat jus. Gelas A terisi $\frac{5}{8}$ penuh, Gelas B terisi $\frac{7}{8}$ penuh. Gelas mana yang berisi jus lebih banyak? <span class='translation'>Mother makes juice. Glass A is $\frac{5}{8}$ full, Glass B is $\frac{7}{8}$ full. Which glass contains more juice?</span>", options: ["Gelas A", "Gelas B", "Sama banyak", "Gelas A jika diaduk", "Tidak ada"], correct: 1, exp: "Penyebut sama (8), bandingkan pembilang. Karena 7 > 5, maka Gelas B lebih banyak." },
+			{ type: "task", q: "Manakah tanda yang benar untuk mengisi titik-titik: $\frac{2}{7} ... \frac{2}{9}$? <span class='translation'>Which sign is correct to fill the dots: $\frac{2}{7} ... \frac{2}{9}$?</span>", options: [">", "<", "=", "≥", "≤"], correct: 0, exp: "Pembilang sama (2), bandingkan penyebut. Karena 7 < 9, maka $\frac{2}{7} > \frac{2}{9}$." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Bentuk Pecahan Campuran",
+                icon: "🧮",
+                content: `
+                    <p>Pecahan campuran terdiri dari bilangan bulat dan pecahan biasa, misalnya $2\frac{1}{3}$.</p>
+                    <span class="translation">A mixed fraction consists of a whole number and a proper fraction, for example $2\frac{1}{3}$.</span>
+                    <p>Pecahan campuran dapat diubah menjadi pecahan biasa dengan rumus: $\text{Pecahan} = \frac{(\text{Bilangan Bulat} \times \text{Penyebut}) + \text{Pembilang}}{\text{Penyebut}}$</p>
+                    <span class="translation">A mixed fraction can be converted to an improper fraction using the formula: $\frac{(\text{Whole Number} \times \text{Denominator}) + \text{Numerator}}{\text{Denominator}}$</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Sebuah toko roti memiliki $3\frac{1}{2}$ loyang kue. Jika diubah menjadi pecahan biasa, berapakah nilainya? <span class='translation'>A bakery has $3\frac{1}{2}$ pans of cake. If converted to an improper fraction, what is the value?</span>", options: ["$\frac{7}{2}$", "$\frac{6}{2}$", "$\frac{5}{2}$", "$\frac{3}{2}$", "$\frac{8}{2}$"], correct: 0, exp: "$(3 \times 2) + 1 = 7$. Penyebut tetap 2. Jadi $\frac{7}{2}$." },
+            { type: "task", q: "Rina bersepeda sejauh $\frac{11}{4}$ km. Berapa bentuk pecahan campuran dari jarak yang ditempuh Rina? <span class='translation'>Rina cycled a distance of $\frac{11}{4}$ km. What is the mixed fraction form of the distance Rina traveled?</span>", options: ["$2\frac{3}{4}$", "$3\frac{1}{4}$", "$2\frac{1}{4}$", "$1\frac{3}{4}$", "$3\frac{3}{4}$"], correct: 0, exp: "11 dibagi 4 adalah 2 sisa 3. Jadi $2\frac{3}{4}$." },
+            { type: "task", q: "Paman panen buah naga. Ia mengisi 5 keranjang penuh dan tersisa $\frac{2}{3}$ keranjang. Berapa pecahan biasa dari total keranjang? <span class='translation'>Uncle harvests dragon fruit. He fills 5 full baskets and has $\frac{2}{3}$ basket left. What is the improper fraction of the total baskets?</span>", options: ["$\frac{17}{3}$", "$\frac{10}{3}$", "$\frac{7}{3}$", "$\frac{15}{3}$", "$\frac{12}{3}$"], correct: 0, exp: "$(5 \times 3) + 2 = 17$. Penyebut tetap 3. Jadi $\frac{17}{3}$." },
+            { type: "task", q: "Diketahui pecahan $\frac{15}{4}$. Berapakah bilangan bulat dan sisa pembilang jika diubah menjadi pecahan campuran? <span class='translation'>Given the fraction $\frac{15}{4}$. What is the whole number and the remaining numerator if converted to a mixed fraction?</span>", options: ["Bilangan bulat 3, sisa 3", "Bilangan bulat 4, sisa 1", "Bilangan bulat 2, sisa 7", "Bilangan bulat 3, sisa 2", "Bilangan bulat 1, sisa 11"], correct: 0, exp: "15 dibagi 4 adalah 3 sisa 3. (karena $4 \times 3 = 12$, $15-12=3$). Jadi bilangan bulat 3 dan pembilang 3." }
+        ];
+		
+        // ==========================================
+        // DATA INJECTION (Bagian 2: Intro & Review)
+        // ==========================================
+        lessonData["intro"].sidebar = [
+            // Teori 1
+            {
+                type: "theory",
+                title: "Pecahan di Kehidupan Sehari-hari",
+                icon: "🌍",
+                content: `
+                    <p>Pecahan tidak hanya ada di buku matematika, tetapi ada di mana-mana! Saat memasak, berbelanja, atau membagi sesuatu dengan teman.</p>
+                    <span class="translation">Fractions are not just in math books, they are everywhere! When cooking, shopping, or sharing something with friends.</span>
+                    <br><br>
+                    <div style="text-align:center;">
+                        <svg width="120" height="120" viewBox="0 0 120 120">
+                            <rect x="10" y="10" width="100" height="100" rx="10" fill="#fff4e6" stroke="#ff9800" stroke-width="2"/>
+                            <path d="M 60 10 L 60 110 M 10 60 L 110 60" stroke="#ccc" stroke-width="1"/>
+                            <rect x="10" y="10" width="50" height="50" fill="#ffc107" rx="5"/>
+                            <text x="25" y="40" font-size="16" font-weight="bold">1/4</text>
+                        </svg>
+                    </div>
+                    <p>Bayangkan Anda memotong kue dadar (pancake) berbentuk persegi menjadi 4 bagian sama besar. Jika Anda memakan 1 bagian, Anda telah memakan $\frac{1}{4}$ bagian kue.</p>
+                    <span class="translation">Imagine cutting a square pancake into 4 equal pieces. If you eat 1 piece, you have eaten $\frac{1}{4}$ of the pancake.</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Ibu membeli 1 kg gula. Gula tersebut akan dibagikan rata untuk 3 kue yang berbeda. Berapakah pecahan bagian gula untuk setiap kue? <span class='translation'>Mother bought 1 kg of sugar. The sugar will be divided equally for 3 different cakes. What fraction of sugar does each cake get?</span>", options: ["$\frac{1}{3}$", "$\frac{3}{1}$", "$\frac{2}{3}$", "$1$", "$\frac{1}{4}$"], correct: 0, exp: "1 kg dibagi 3 sama rarti, berarti setiap kue mendapat $\frac{1}{3}$ bagian dari gula tersebut." },
+            { type: "task", q: "Sebuah tim sepak bola melatih penalti. Dari 5 tendangan, Ronaldo berhasil mencetak 2 gol. Berapa pecahan yang menunjukkan keberhasilan Ronaldo? <span class='translation'>A football team practices penalties. Out of 5 kicks, Ronaldo scored 2 goals. What fraction represents Ronaldo's success?</span>", options: ["$\frac{5}{2}$", "$\frac{2}{5}$", "$\frac{2}{3}$", "$\frac{5}{3}$", "$\frac{3}{5}$"], correct: 1, exp: "Yang berhasil (pembilang) = 2. Total tendangan (penyebut) = 5. Maka keberhasilannya $\frac{2}{5}$." },
+            { type: "task", q: "Andi pergi ke toko sepatu. Sepatu yang diinginkan seharga Rp1.000.000. Andi hanya punya uang 1/2 dari harga sepatu tersebut. Berapa rupiah uang Andi? <span class='translation'>Andi goes to a shoe store. The desired shoes cost Rp1,000,000. Andi only has 1/2 of the shoe's price. How much money does Andi have?</span>", options: ["Rp500.000", "Rp1.500.000", "Rp250.000", "Rp2.000.000", "Rp1.000.000"], correct: 0, exp: "1/2 dari 1.000.000 adalah 1.000.000 / 2 = 500.000. Jadi Andi punya Rp500.000." },
+
+            // Teori 2
+            {
+                type: "theory",
+                title: "Operasi Pecahan dalam Dunia Nyata",
+                icon: "🛒",
+                content: `
+                    <p>Kita menggunakan operasi pecahan saat kita menggabungkan (penjumlahan), mengambil sebagian (pengurangan), menggandakan resep (perkalian), atau membagi makanan (pembagian).</p>
+                    <span class="translation">We use fraction operations when we combine (addition), take away (subtraction), multiply recipes (multiplication), or divide food (division).</span>
+                    <br>
+                    <div style="text-align:center;">
+                        <svg width="150" height="80" viewBox="0 0 150 80">
+                            <circle cx="30" cy="40" r="25" fill="#ffccbc" stroke="#ff5722" stroke-width="2"/>
+                            <path d="M 30 15 A 25 25 0 0 1 55 40 L 30 40 Z" fill="#ff5722"/>
+                            <text x="20" y="50" font-size="10">1/4</text>
+                            <text x="70" y="45" font-size="20">+</text>
+                            <circle cx="110" cy="40" r="25" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+                            <path d="M 110 15 A 25 25 0 0 1 135 40 L 110 40 Z" fill="#4caf50"/>
+                            <path d="M 110 15 A 25 25 0 0 0 85 40 L 110 40 Z" fill="#4caf50"/>
+                            <text x="95" y="50" font-size="10">2/4</text>
+                        </svg>
+                    </div>
+                    <p>Jika Andi memakan $\frac{1}{4}$ apel dan Budi memakan $\frac{2}{4}$ apel yang sama, maka total apel yang dimakan adalah $\frac{1}{4} + \frac{2}{4} = \frac{3}{4}$.</p>
+                    <span class="translation">If Andi eats $\frac{1}{4}$ of an apple and Budi eats $\frac{2}{4}$ of the same apple, the total apple eaten is $\frac{1}{4} + \frac{2}{4} = \frac{3}{4}$.</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Ibu membuat jus jeruk. Kakak meminum $\frac{2}{5}$ bagian, adik meminum $\frac{1}{5}$ bagian. Berapa bagian jus yang sudah dimimum? <span class='translation'>Mother makes orange juice. Older brother drinks $\frac{2}{5}$ part, younger brother drinks $\frac{1}{5}$ part. What part of the juice has been drunk?</span>", options: ["$\frac{3}{5}$", "$\frac{1}{5}$", "$\frac{2}{5}$", "$\frac{3}{10}$", "$\frac{5}{3}$"], correct: 0, exp: "Penyebut sama, jadi pembilang dijumlah: 2 + 1 = 3. Penyebut tetap 5. Hasilnya $\frac{3}{5}$." },
+            { type: "task", q: "Seorang tukang kayu memotong papan sepanjang $\frac{4}{5}$ meter. Kemudian ia memotong lagi $\frac{1}{5}$ meter untuk baki. Berapa sisa papan yang dimiliki tukang kayu? <span class='translation'>A carpenter cuts a board $\frac{4}{5}$ meters long. Then he cuts another $\frac{1}{5}$ meter for a tray. How much board is left for the carpenter?</span>", options: ["$\frac{3}{5}$ meter", "$\frac{5}{5}$ meter", "$\frac{1}{5}$ meter", "$\frac{2}{5}$ meter", "$\frac{4}{5}$ meter"], correct: 0, exp: "Sisa = Awal - Terpakai = $\frac{4}{5} - \frac{1}{5} = \frac{3}{5}$ meter." },
+            { type: "task", q: "Resep kue membutuhkan $\frac{1}{3}$ sendok teh garam. Jika Anda ingin membuat kue 2 kali lipat dari resep, berapa sendok teh garam yang dibutuhkan? <span class='translation'>A cake recipe requires $\frac{1}{3}$ teaspoon of salt. If you want to make twice the recipe, how many teaspoons of salt are needed?</span>", options: ["$\frac{2}{3}$ sendok teh", "$\frac{1}{6}$ sendok teh", "$\frac{1}{3}$ sendok teh", "2 sendok teh", "1 sendok teh"], correct: 0, exp: "Menggandakan resep berarti dikali 2. $\frac{1}{3} \times 2 = \frac{2}{3}$ sendok teh." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Mengapa Kita Belajar Pecahan?",
+                icon: "💡",
+                content: `
+                    <p>Mempelajari pecahan melatih otak kita untuk berpikir logis dan proporsional. Ini adalah dasar dari aljabar, peluang, dan statistik di tingkat lanjut.</p>
+                    <span class="translation">Studying fractions trains our brains to think logically and proportionally. It is the foundation of algebra, probability, and statistics at an advanced level.</span>
+                    <p>Tanpa pecahan, kita tidak bisa membangun gedung tinggi, membuat aplikasi komputer, atau bahkan memahami musik!</p>
+                    <span class="translation">Without fractions, we couldn't build tall buildings, make computer applications, or even understand music!</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Not musik menggunakan pecahan! Not seperempat (crochet) bernilai 1 ketukan dari 4 ketukan dalam sebuah bar. Pecahan berapa yang mewakili not seperempat tersebut? <span class='translation'>Musical notes use fractions! A quarter note (crochet) is worth 1 beat out of 4 beats in a bar. What fraction represents a quarter note?</span>", options: ["$\frac{1}{4}$", "$\frac{4}{1}$", "$\frac{1}{2}$", "$\frac{3}{4}$", "$\frac{4}{4}$"], correct: 0, exp: "1 ketukan dari total 4 ketukan berarti $\frac{1}{4}$." },
+            { type: "task", q: "Sebuah survei menunjukkan 3 dari 10 siswa suka makan sayur brokoli. Pecahan yang menunjukkan siswa yang TIDAK suka brokoli adalah... <span class='translation'>A survey shows 3 out of 10 students like eating broccoli. The fraction representing students who DO NOT like broccoli is...</span>", options: ["$\frac{7}{10}$", "$\frac{3}{10}$", "$\frac{10}{7}$", "$\frac{10}{3}$", "$\frac{1}{10}$"], correct: 0, exp: "Yang suka = 3/10. Yang tidak suka = 10/10 - 3/10 = 7/10." },
+            { type: "task", q: "Pada saat membangun rumah, arsitek menggambar denah dengan skala $\frac{1}{100}$. Jika kamar di gambar panjangnya 5 cm, berapa panjang asli kamar tersebut? <span class='translation'>When building a house, an architect draws a floor plan with a scale of $\frac{1}{100}$. If the room in the drawing is 5 cm long, what is the actual length of the room?</span>", options: ["500 cm", "5 cm", "100 cm", "20 cm", "50 cm"], correct: 0, exp: "Asli = Gambar / Skala = $5 / \frac{1}{100} = 5 \times 100 = 500$ cm." },
+            { type: "task", q: "Bensin mobil Budi berisi $\frac{3}{4}$ tangki. Setelah perjalanan jauh, bensin berkurang menjadi $\frac{1}{4}$ tangki. Berapa bagian tangki yang terpakai? <span class='translation'>Budi's car fuel is $\frac{3}{4}$ full. After a long trip, the fuel decreases to $\frac{1}{4}$ tank. How much of the tank was used?</span>", options: ["$\frac{2}{4}$ tangki", "$\frac{4}{4}$ tangki", "$\frac{1}{4}$ tangki", "$\frac{3}{4}$ tangki", "$\frac{2}{3}$ tangki"], correct: 0, exp: "Terpakai = Awal - Akhir = $\frac{3}{4} - \frac{1}{4} = \frac{2}{4}$ tangki." }
+        ];
+
+        lessonData["review"].sidebar = [
+            // Teori 1
+            {
+                type: "theory",
+                title: "Faktor Persekutuan Terbesar (FPB) & Penyederhanaan",
+                icon: "✂️",
+                content: `
+                    <p>Sebelum menghitung operasi pecahan, kita harus bisa menyederhanakannya. Pecahan $\frac{4}{8}$ sama nilainya dengan $\frac{1}{2}$. Proses ini memakai FPB.</p>
+                    <span class="translation">Before calculating fraction operations, we must be able to simplify them. The fraction $\frac{4}{8}$ is equal to $\frac{1}{2}$. This process uses GCF (Greatest Common Factor).</span>
+                    <br>
+                    <div style="text-align:center;">
+                        <svg width="100" height="100" viewBox="0 0 100 100">
+                            <rect x="10" y="20" width="80" height="40" fill="#bbdefb" stroke="#2196f3" stroke-width="2"/>
+                            <path d="M 30 20 L 30 60 M 50 20 L 50 60 M 70 20 L 70 60" stroke="#fff" stroke-width="2"/>
+                            <rect x="10" y="20" width="20" height="40" fill="#2196f3"/>
+                            <text x="15" y="50" fill="#fff" font-size="12">1/4</text>
+                        </svg>
+                    </div>
+                    <p>Cara cepat: bagi pembilang dan penyebut dengan FPB-nya. FPB dari 4 dan 8 adalah 4. Maka $\frac{4 \div 4}{8 \div 4} = \frac{1}{2}$.</p>
+                    <span class="translation">Quick way: divide the numerator and denominator by their GCF. The GCF of 4 and 8 is 4. So $\frac{4 \div 4}{8 \div 4} = \frac{1}{2}$.</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Toko kain memiliki stok $\frac{15}{20}$ meter kain sutra. Pecahan jika disederhanakan menjadi... <span class='translation'>A fabric store has $\frac{15}{20}$ meters of silk cloth. The simplified fraction is...</span>", options: ["$\frac{3}{4}$", "$\frac{15}{20}$", "$\frac{5}{6}$", "$\frac{1}{2}$", "$\frac{3}{5}$"], correct: 0, exp: "FPB dari 15 dan 20 adalah 5. $\frac{15 \div 5}{20 \div 5} = \frac{3}{4}$." },
+            { type: "task", q: "Budi lari $\frac{12}{15}$ km, lalu istirahat. Jarak yang ditempuh Budi dalam bentuk paling sederhana adalah... <span class='translation'>Budi runs $\frac{12}{15}$ km, then rests. The distance Budi traveled in simplest form is...</span>", options: ["$\frac{4}{5}$ km", "$\frac{3}{5}$ km", "$\frac{12}{15}$ km", "$\frac{1}{2}$ km", "$\frac{6}{10}$ km"], correct: 0, exp: "FPB dari 12 dan 15 adalah 3. $\frac{12 \div 3}{15 \div 3} = \frac{4}{5}$ km." },
+            { type: "task", q: "Paman memanen $\frac{25}{30}$ karung padi. Berapakah bentuk pecahan paling sederhana dari padi yang dipanen? <span class='translation'>Uncle harvests $\frac{25}{30}$ sacks of rice. What is the simplest fraction of the harvested rice?</span>", options: ["$\frac{5}{6}$", "$\frac{25}{30}$", "$\frac{5}{30}$", "$\frac{1}{6}$", "$\frac{2}{3}$"], correct: 0, exp: "FPB 25 dan 30 adalah 5. $\frac{25 \div 5}{30 \div 5} = \frac{5}{6}$." },
+
+            // Teori 2
+            {
+                type: "theory",
+                title: "Kelipatan Persekutuan Terkecil (KPK) & Penyebut Sama",
+                icon: "🔗",
+                content: `
+                    <p>Untuk menjumlahkan atau mengurangkan pecahan, penyebutnya harus sama. Jika penyebut berbeda, cari KPK dari penyebut-penyebut tersebut.</p>
+                    <span class="translation">To add or subtract fractions, the denominators must be the same. If the denominators are different, find the LCM (Least Common Multiple) of the denominators.</span>
+                    <p>Contoh: $\frac{1}{3} + \frac{1}{4}$. KPK dari 3 dan 4 adalah 12.</p>
+                    <p>$\frac{1}{3} = \frac{4}{12}$ dan $\frac{1}{4} = \frac{3}{12}$</p>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="180" height="60" viewBox="0 0 180 60">
+                            <rect x="5" y="10" width="50" height="40" fill="#fff9c4" stroke="#fbc02d" stroke-width="2"/>
+                            <rect x="5" y="10" width="12.5" height="40" fill="#fbc02d"/>
+                            <text x="15" y="35" font-size="12">1/3</text>
+                            
+                            <text x="65" y="35" font-size="20">=</text>
+                            
+                            <rect x="85" y="10" width="80" height="40" fill="#fff9c4" stroke="#fbc02d" stroke-width="2"/>
+                            <path d="M 85 10 L 105 10 L 105 50 L 85 50 Z" fill="#fbc02d"/>
+                            <path d="M 105 10 L 125 10 L 125 50 L 105 50 Z" fill="#fbc02d"/>
+                            <path d="M 125 10 L 145 10 L 145 50 L 125 50 Z" fill="#fbc02d"/>
+                            <path d="M 145 10 L 165 10 L 165 50 L 145 50 Z" fill="#fbc02d"/>
+                            <text x="110" y="35" font-size="10">4/12</text>
+                        </svg>
+                    </div>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Ali makan $\frac{1}{4}$ pizza, Budi makan $\frac{1}{8}$ pizza. Agar bisa dijumlahkan, pecahan $\frac{1}{4}$ diubah menjadi pecahan dengan penyebut 8. Hasil perubahannya adalah... <span class='translation'>Ali eats $\frac{1}{4}$ pizza, Budi eats $\frac{1}{8}$ pizza. To be added, the fraction $\frac{1}{4}$ is converted to a fraction with denominator 8. The conversion result is...</span>", options: ["$\frac{2}{8}$", "$\frac{1}{8}$", "$\frac{4}{8}$", "$\frac{3}{8}$", "$\frac{1}{2}$"], correct: 0, exp: "Penyebut 4 menjadi 8 (dikali 2), maka pembilang juga dikali 2. $\frac{1 \times 2}{4 \times 2} = \frac{2}{8}$." },
+            { type: "task", q: "Cari KPK dari 6 dan 9 untuk menyamakan penyebut pecahan $\frac{1}{6}$ dan $\frac{1}{9}$! <span class='translation'>Find the LCM of 6 and 9 to equalize the denominators of fractions $\frac{1}{6}$ and $\frac{1}{9}$!</span>", options: ["18", "54", "15", "3", "12"], correct: 0, exp: "Kelipatan 6: 6, 12, 18. Kelipatan 9: 9, 18. KPK pertama yang sama adalah 18." },
+            { type: "task", q: "Anggari makan $\frac{2}{3}$ batang jagung, adiknya makan $\frac{1}{2}$ batang. Berapa bentuk penyebut yang sama untuk pecahan $\frac{1}{2}$? <span class='translation'>Anggari eats $\frac{2}{3}$ of a corn on the cob, her younger sibling eats $\frac{1}{2}$ of one. What is the equivalent denominator form for the fraction $\frac{1}{2}$?</span>", options: ["$\frac{3}{6}$", "$\frac{2}{6}$", "$\frac{1}{6}$", "$\frac{1}{3}$", "$\frac{4}{6}$"], correct: 0, exp: "KPK dari 3 dan 2 adalah 6. $\frac{1}{2}$ diubah jadi penyebut 6 (dikali 3) = $\frac{3}{6}$." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Konversi Pecahan, Desimal, dan Persen",
+                icon: "🔄",
+                content: `
+                    <p>Pecahan, desimal, dan persen adalah tiga bentuk yang menunjukkan nilai yang sama.</p>
+                    <span class="translation">Fractions, decimals, and percentages are three forms that show the same value.</span>
+                    <div style="text-align:center;">
+                        <svg width="180" height="60" viewBox="0 0 180 60">
+                            <circle cx="30" cy="30" r="20" fill="#e1bee7" stroke="#8e24aa" stroke-width="2"/>
+                            <path d="M 30 10 A 20 20 0 0 1 50 30 L 30 30 Z" fill="#8e24aa"/>
+                            <text x="15" y="35" font-size="12">1/4</text>
+                            <text x="80" y="35" font-size="12">=</text>
+                            <text x="100" y="35" font-size="14">0.25</text>
+                            <text x="140" y="35" font-size="12">=</text>
+                            <text x="155" y="35" font-size="14">25%</text>
+                        </svg>
+                    </div>
+                    <p>Cara mengubah pecahan ke desimal: bagi pembilang dengan penyebut. Contoh: $\frac{1}{4} = 1 \div 4 = 0.25$.</p>
+                    <span class="translation">How to convert fraction to decimal: divide numerator by denominator. Example: $\frac{1}{4} = 1 \div 4 = 0.25$.</span>
+                    <p>Desimal ke persen: kalikan dengan 100. Jadi, $0.25 \times 100 = 25\%$.</p>
+                    <span class="translation">Decimal to percentage: multiply by 100. So, $0.25 \times 100 = 25\%$.</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Sebuah toko memberi diskon $\frac{1}{2}$ dari harga awal. Berapa persen diskon yang diberikan toko? <span class='translation'>A store gives a discount of $\frac{1}{2}$ off the original price. What percentage discount does the store give?</span>", options: ["50%", "20%", "25%", "100%", "10%"], correct: 0, exp: "$\frac{1}{2} = 0.5$. Jika dikali 100 menjadi 50%." },
+            { type: "task", q: "Hasil dari $\frac{3}{4}$ jika diubah menjadi desimal adalah... <span class='translation'>The result of $\frac{3}{4}$ when converted to a decimal is...</span>", options: ["0.75", "0.34", "0.3", "0.25", "1.33"], correct: 0, exp: "3 dibagi 4 = 0.75." },
+            { type: "task", q: "Doni mendapatkan nilai 18 dari 20 soal ulangan. Berapa persentase nilai Doni? <span class='translation'>Doni got a score of 18 out of 20 questions on a test. What is Doni's percentage score?</span>", options: ["90%", "80%", "18%", "45%", "9%"], correct: 0, exp: "Bentuk pecahannya 18/20. Disederhanakan jadi 9/10. 9 dibagi 10 = 0.9. Kalikan 100 = 90%." },
+            { type: "task", q: "Sebuah baterai menunjukkan sisa daya 25%. Pecahan paling sederhana dari sisa daya baterai adalah... <span class='translation'>A battery shows 25% remaining power. The simplest fraction of the remaining battery power is...</span>", options: ["$\frac{1}{4}$", "$\frac{1}{25}$", "$\frac{25}{100}$", "$\frac{1}{2}$", "$\frac{4}{1}$"], correct: 0, exp: "25% = $\frac{25}{100}$. Disederhanakan (FPB 25) = $\frac{1}{4}$." }
+        ];
+		
+        // ==========================================
+        // DATA INJECTION (Bagian 3: Problem Intro & Guided)
+        // ==========================================
+        lessonData["problem"].sidebar = [
+            // Teori 1
+            {
+                type: "theory",
+                title: "Penjumlahan Pecahan Penyebut Berbeda",
+                icon: "➕",
+                content: `
+                    <p>Untuk menjumlahkan pecahan dengan penyebut berbeda, kita harus menyamakan penyebutnya terlebih dahulu menggunakan KPK.</p>
+                    <span class="translation">To add fractions with different denominators, we must first equalize the denominators using LCM.</span>
+                    <p>Rumus: $\frac{a}{b} + \frac{c}{d} = \frac{a \times (\text{KPK}/b)}{\text{KPK}} + \frac{c \times (\text{KPK}/d)}{\text{KPK}}$</p>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="160" height="80" viewBox="0 0 160 80">
+                            <rect x="5" y="20" width="40" height="40" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+                            <rect x="5" y="20" width="20" height="40" fill="#4caf50"/>
+                            <text x="12" y="45" fill="#fff" font-size="10">1/2</text>
+                            <text x="50" y="45" font-size="16">+</text>
+                            <rect x="65" y="20" width="60" height="40" fill="#bbdefb" stroke="#2196f3" stroke-width="2"/>
+                            <rect x="65" y="20" width="20" height="40" fill="#2196f3"/>
+                            <text x="70" y="45" fill="#fff" font-size="10">1/3</text>
+                            <text x="130" y="45" font-size="16">=</text>
+                            <rect x="145" y="20" width="10" height="40" fill="#ffc107"/>
+                            <text x="145" y="75" font-size="10">5/6</text>
+                        </svg>
+                    </div>
+                    <p>Contoh: $\frac{1}{2} + \frac{1}{3}$. KPK dari 2 dan 3 adalah 6.<br>$\frac{1 \times 3}{2 \times 3} + \frac{1 \times 2}{3 \times 2} = \frac{3}{6} + \frac{2}{6} = \frac{5}{6}$</p>
+                    <span class="translation">Example: $\frac{1}{2} + \frac{1}{3}$. LCM of 2 and 3 is 6. $\frac{3}{6} + \frac{2}{6} = \frac{5}{6}$</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Andi bersepeda $\frac{2}{5}$ km, lalu berjalan kaki $\frac{1}{3}$ km. Berapa total jarak yang ditempuh Andi? <span class='translation'>Andi cycles $\frac{2}{5}$ km, then walks $\frac{1}{3}$ km. What is the total distance Andi traveled?</span>", options: ["$\frac{11}{15}$ km", "$\frac{3}{8}$ km", "$\frac{1}{15}$ km", "$\frac{6}{15}$ km", "$\frac{5}{8}$ km"], correct: 0, exp: "KPK 5 & 3 = 15. $\frac{2 \times 3}{15} + \frac{1 \times 5}{15} = \frac{6}{15} + \frac{5}{15} = \frac{11}{15}$ km." },
+            { type: "task", q: "Ibu mencampur $\frac{1}{4}$ kg gula pasir dan $\frac{2}{3}$ kg tepung terigu. Berapa kg campuran tersebut? <span class='translation'>Mother mixes $\frac{1}{4}$ kg of granulated sugar and $\frac{2}{3}$ kg of wheat flour. How many kg is the mixture?</span>", options: ["$\frac{11}{12}$ kg", "$\frac{3}{7}$ kg", "$\frac{2}{12}$ kg", "$\frac{8}{12}$ kg", "$\frac{5}{8}$ kg"], correct: 0, exp: "KPK 4 & 3 = 12. $\frac{1 \times 3}{12} + \frac{2 \times 4}{12} = \frac{3}{12} + \frac{8}{12} = \frac{11}{12}$ kg." },
+            { type: "task", q: "Sebuah tangki air terisi $\frac{3}{8}$ bagian pada pagi hari, dan bertambah $\frac{1}{4}$ bagian pada siang hari. Berapa bagian tangki yang terisi air? <span class='translation'>A water tank is filled $\frac{3}{8}$ full in the morning, and adds another $\frac{1}{4}$ full in the afternoon. What fraction of the tank is filled with water?</span>", options: ["$\frac{5}{8}$ bagian", "$\frac{4}{8}$ bagian", "$\frac{2}{8}$ bagian", "$\frac{7}{8}$ bagian", "$\frac{3}{12}$ bagian"], correct: 0, exp: "KPK 8 & 4 = 8. $\frac{3}{8} + \frac{1 \times 2}{4 \times 2} = \frac{3}{8} + \frac{2}{8} = \frac{5}{8}$ bagian." },
+
+            // Teori 2
+            {
+                type: "theory",
+                title: "Pengurangan Pecahan Penyebut Berbeda",
+                icon: "➖",
+                content: `
+                    <p>Cara mengurangkan pecahan dengan penyebut berbeda sama persis dengan penjumlahan, namun pembilangnya dikurangkan setelah penyebut disamakan.</p>
+                    <span class="translation">Subtracting fractions with different denominators is exactly the same as addition, but the numerators are subtracted after the denominators are equalized.</span>
+                    <p>Contoh: $\frac{4}{5} - \frac{1}{3}$. KPK dari 5 dan 3 adalah 15.<br>$\frac{4 \times 3}{15} - \frac{1 \times 5}{15} = \frac{12}{15} - \frac{5}{15} = \frac{7}{15}$</p>
+                    <span class="translation">Example: $\frac{4}{5} - \frac{1}{3}$. LCM of 5 and 3 is 15. $\frac{12}{15} - \frac{5}{15} = \frac{7}{15}$</span>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="160" height="80" viewBox="0 0 160 80">
+                            <rect x="5" y="20" width="60" height="40" fill="#ffcdd2" stroke="#f44336" stroke-width="2"/>
+                            <rect x="5" y="20" width="48" height="40" fill="#f44336"/>
+                            <text x="20" y="45" fill="#fff" font-size="10">4/5</text>
+                            <text x="70" y="45" font-size="16">-</text>
+                            <rect x="85" y="20" width="40" height="40" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+                            <rect x="85" y="20" width="13" height="40" fill="#4caf50"/>
+                            <text x="88" y="45" fill="#fff" font-size="8">1/3</text>
+                            <text x="130" y="45" font-size="16">=</text>
+                            <rect x="145" y="20" width="10" height="40" fill="#9c27b0"/>
+                            <text x="145" y="75" font-size="8">7/15</text>
+                        </svg>
+                    </div>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Sebuah drum berisi $\frac{7}{8}$ liter air. Jika digunakan $\frac{1}{4}$ liter untuk menyiram tanaman, berapa sisa air di drum? <span class='translation'>A drum contains $\frac{7}{8}$ liters of water. If $\frac{1}{4}$ liter is used to water plants, how much water is left in the drum?</span>", options: ["$\frac{5}{8}$ liter", "$\frac{6}{8}$ liter", "$\frac{8}{8}$ liter", "$\frac{3}{8}$ liter", "$\frac{1}{2}$ liter"], correct: 0, exp: "KPK 8 & 4 = 8. $\frac{7}{8} - \frac{1 \times 2}{4 \times 2} = \frac{7}{8} - \frac{2}{8} = \frac{5}{8}$ liter." },
+            { type: "task", q: "Pak Budi memiliki lahan sawah $\frac{9}{10}$ hektar. Ia menjual $\frac{1}{2}$ hektar. Berapa sisa lahan Pak Budi? <span class='translation'>Mr. Budi has $\frac{9}{10}$ hectares of rice field. He sells $\frac{1}{2}$ hectare. How much land does Mr. Budi have left?</span>", options: ["$\frac{4}{10}$ hektar", "$\frac{8}{10}$ hektar", "$\frac{2}{5}$ hektar", "$\frac{1}{2}$ hektar", "$\frac{5}{10}$ hektar"], correct: 0, exp: "KPK 10 & 2 = 10. $\frac{9}{10} - \frac{1 \times 5}{2 \times 5} = \frac{9}{10} - \frac{5}{10} = \frac{4}{10}$ hektar." },
+            { type: "task", q: "Sebuah galon berisi $\frac{5}{6}$ bagian air minum. Setelah diambil untuk membuat teh, tersisa $\frac{1}{4}$ bagian. Berapa bagian air yang digunakan untuk membuat teh? <span class='translation'>A gallon contains $\frac{5}{6}$ part of drinking water. After taking some to make tea, $\frac{1}{4}$ part remains. What part of the water was used to make tea?</span>", options: ["$\frac{7}{12}$ bagian", "$\frac{4}{2}$ bagian", "$\frac{11}{12}$ bagian", "$\frac{1}{12}$ bagian", "$\frac{6}{10}$ bagian"], correct: 0, exp: "KPK 6 & 4 = 12. $\frac{5 \times 2}{12} - \frac{1 \times 3}{12} = \frac{10}{12} - \frac{3}{12} = \frac{7}{12}$ bagian." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Menyelesaikan Masalah dengan Pecahan Campuran",
+                icon: "🧩",
+                content: `
+                    <p>Jika soal cerita melibatkan pecahan campuran (seperti $2\frac{1}{2}$), langkah terbaik adalah mengubahnya dulu menjadi pecahan biasa, lalu melakukan operasi.</p>
+                    <span class="translation">If a word problem involves mixed fractions (like $2\frac{1}{2}$), the best step is to convert them to improper fractions first, then perform the operation.</span>
+                    <p>Rumus: $A\frac{b}{c} = \frac{A \times c + b}{c}$</p>
+                    <p>Contoh soal: Ibu membeli $1\frac{1}{2}$ kg ayam. Ayam dimasak $\frac{3}{4}$ kg. Sisanya berapa?<br>$1\frac{1}{2} = \frac{3}{2}$. Lalu $\frac{3}{2} - \frac{3}{4} = \frac{6}{4} - \frac{3}{4} = \frac{3}{4}$ kg.</p>
+                    <span class="translation">Example: Mother buys $1\frac{1}{2}$ kg of chicken. $\frac{3}{4}$ kg is cooked. How much is left? $1\frac{1}{2} = \frac{3}{2}$. Then $\frac{3}{2} - \frac{3}{4} = \frac{6}{4} - \frac{3}{4} = \frac{3}{4}$ kg.</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Seorang tukang kayu membutuhkan papan sepanjang $2\frac{1}{4}$ meter. Di gudang tersisa papan sepanjang $3\frac{1}{2}$ meter. Jika ppan itu dipotong sesuai kebutuhan, berapa meter sisa papan? <span class='translation'>A carpenter needs a board $2\frac{1}{4}$ meters long. In the warehouse, there is a board $3\frac{1}{2}$ meters long. If the board is cut according to the need, how many meters of board are left?</span>", options: ["$1\frac{1}{4}$ meter", "$1\frac{1}{2}$ meter", "$2\frac{1}{4}$ meter", "$\frac{3}{4}$ meter", "$5\frac{3}{4}$ meter"], correct: 0, exp: "$3\frac{1}{2} = \frac{7}{2} = \frac{14}{4}$. $2\frac{1}{4} = \frac{9}{4}$. $\frac{14}{4} - \frac{9}{4} = \frac{5}{4} = 1\frac{1}{4}$ meter." },
+            { type: "task", q: "Toko roti membuat $5\frac{1}{3}$ loyang roti pagi ini. Terjual $2\frac{1}{6}$ loyang. Berapa loyang roti yang tersisa? <span class='translation'>A bakery makes $5\frac{1}{3}$ pans of bread this morning. $2\frac{1}{6}$ pans were sold. How many pans of bread are left?</span>", options: ["$3\frac{1}{6}$ loyang", "$3\frac{1}{3}$ loyang", "$2\frac{5}{6}$ loyang", "$4\frac{1}{6}$ loyang", "$7\frac{1}{2}$ loyang"], correct: 0, exp: "$5\frac{1}{3} = \frac{16}{3} = \frac{32}{6}$. $2\frac{1}{6} = \frac{13}{6}$. $\frac{32}{6} - \frac{13}{6} = \frac{19}{6} = 3\frac{1}{6}$ loyang." },
+            { type: "task", q: "Dani berlatih piano selama $1\frac{1}{2}$ jam pada Senin dan $\frac{3}{4}$ jam pada Selasa. Berapa total jam latihan piano Dani? <span class='translation'>Dani practices piano for $1\frac{1}{2}$ hours on Monday and $\frac{3}{4}$ hours on Tuesday. What is the total number of hours Dani practiced piano?</span>", options: ["$2\frac{1}{4}$ jam", "$1\frac{3}{4}$ jam", "$2\frac{1}{2}$ jam", "$1\frac{1}{4}$ jam", "$3$ jam"], correct: 0, exp: "$1\frac{1}{2} = \frac{3}{2} = \frac{6}{4}$. $\frac{6}{4} + \frac{3}{4} = \frac{9}{4} = 2\frac{1}{4}$ jam." },
+            { type: "task", q: "Sebuah truk pengangkut pasir membawa $4\frac{1}{2}$ ton pasir. Saat tiba di tujuan, pasir yang turun hanya $3\frac{3}{4}$ ton karena sebagian tumpah di jalan. Berapa ton pasir yang tumpah? <span class='translation'>A sand-carrying truck carries $4\frac{1}{2}$ tons of sand. Upon arrival at the destination, only $3\frac{3}{4}$ tons of sand were unloaded because some spilled on the road. How many tons of sand spilled?</span>", options: ["$\frac{3}{4}$ ton", "$1$ ton", "$\frac{1}{2}$ ton", "$1\frac{1}{4}$ ton", "$\frac{5}{4}$ ton"], correct: 0, exp: "$4\frac{1}{2} = \frac{9}{2} = \frac{18}{4}$. $3\frac{3}{4} = \frac{15}{4}$. Tumpahan = $\frac{18}{4} - \frac{15}{4} = \frac{3}{4}$ ton." }
+        ];
+
+        lessonData["guided"].sidebar = [
+            // Teori 1
+            {
+                type: "theory",
+                title: "Perkalian Pecahan",
+                icon: "✖️",
+                content: `
+                    <p>Untuk mengalikan pecahan, kalikan pembilang dengan pembilang, dan penyebut dengan penyebut secara langsung. Tidak perlu menyamakan penyebut!</p>
+                    <span class="translation">To multiply fractions, multiply the numerators together and the denominators together directly. No need to equalize the denominators!</span>
+                    <p>Rumus: $\frac{a}{b} \times \frac{c}{d} = \frac{a \times c}{b \times d}$</p>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="150" height="100" viewBox="0 0 150 100">
+                            <rect x="5" y="10" width="60" height="60" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+                            <rect x="5" y="10" width="30" height="60" fill="#4caf50"/>
+                            <text x="15" y="45" fill="#fff" font-size="12">1/2</text>
+                            <text x="70" y="45" font-size="20">×</text>
+                            <rect x="90" y="10" width="50" height="40" fill="#bbdefb" stroke="#2196f3" stroke-width="2"/>
+                            <rect x="90" y="10" width="50" height="20" fill="#2196f3"/>
+                            <text x="105" y="25" fill="#fff" font-size="8">2/5</text>
+                            <text x="70" y="90" font-size="14">= 2/10 (atau 1/5)</text>
+                        </svg>
+                    </div>
+                    <p>Contoh: $\frac{2}{3} \times \frac{4}{5} = \frac{2 \times 4}{3 \times 5} = \frac{8}{15}$</p>
+                    <span class="translation">Example: $\frac{2}{3} \times \frac{4}{5} = \frac{8}{15}$</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Ibu membeli $\frac{3}{4}$ kg gula. Gula tersebut dipakai $\frac{2}{3}$ bagian untuk membuat kue. Berapa kg gula yang dipakai untuk membuat kue? <span class='translation'>Mother bought $\frac{3}{4}$ kg of sugar. $\frac{2}{3}$ of that sugar was used to make a cake. How many kg of sugar were used to make the cake?</span>", options: ["$\frac{1}{2}$ kg", "$\frac{6}{7}$ kg", "$\frac{5}{12}$ kg", "$\frac{9}{8}$ kg", "$\frac{12}{3}$ kg"], correct: 0, exp: "$\frac{3}{4} \times \frac{2}{3} = \frac{6}{12}$. Jika disederhanakan dibagi 6 menjadi $\frac{1}{2}$ kg." },
+            { type: "task", q: "Sebuah lapangan memiliki luas $\frac{4}{5}$ hektar. $\frac{3}{8}$ dari lapangan tersebut akan ditanami jagung. Berapa luas lahan yang ditanami jagung? <span class='translation'>A field has an area of $\frac{4}{5}$ hectares. $\frac{3}{8}$ of the field will be planted with corn. What is the area of the land planted with corn?</span>", options: ["$\frac{3}{10}$ hektar", "$\frac{7}{13}$ hektar", "$\frac{32}{15}$ hektar", "$\frac{4}{10}$ hektar", "$\frac{1}{5}$ hektar"], correct: 0, exp: "$\frac{4}{5} \times \frac{3}{8} = \frac{12}{40}$. Sederhanakan dengan membagi 4 (FPB 12 & 40) = $\frac{3}{10}$ hektar." },
+            { type: "task", q: "Sepeda motor menempuh jarak $\frac{5}{6}$ km dalam 1 menit. Berapa km yang ditempuh dalam $\frac{2}{5}$ menit? <span class='translation'>A motorcycle travels $\frac{5}{6}$ km in 1 minute. How many km are traveled in $\frac{2}{5}$ minutes?</span>", options: ["$\frac{1}{3}$ km", "$\frac{10}{11}$ km", "$\frac{7}{30}$ km", "$\frac{25}{12}$ km", "$\frac{5}{15}$ km"], correct: 0, exp: "$\frac{5}{6} \times \frac{2}{5} = \frac{10}{30}$. Disederhanakan jadi $\frac{1}{3}$ km." },
+
+            // Teori 2
+            {
+                type: "theory",
+                title: "Pembagian Pecahan",
+                icon: "➗",
+                content: `
+                    <p>Untuk membagi pecahan, kalikan pecahan pertama dengan kebalikan (reciprocal) dari pecahan kedua. Kebalikan berarti menukar posisi pembilang dan penyebut.</p>
+                    <span class="translation">To divide fractions, multiply the first fraction by the reciprocal of the second fraction. Reciprocal means swapping the positions of the numerator and denominator.</span>
+                    <p>Rumus: $\frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \times \frac{d}{c}$</p>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="120" height="80" viewBox="0 0 120 80">
+                            <circle cx="30" cy="40" r="25" fill="#ffe0b2" stroke="#ff9800" stroke-width="2"/>
+                            <path d="M 30 15 A 25 25 0 0 1 55 40 L 30 40 Z" fill="#ff9800"/>
+                            <text x="15" y="45" font-size="10">1/4</text>
+                            <text x="60" y="45" font-size="16">÷</text>
+                            <text x="80" y="45" font-size="16">2 =</text>
+                            <text x="105" y="45" font-size="14" fill="#f44336">1/8</text>
+                        </svg>
+                    </div>
+                    <p>Contoh: $\frac{1}{2} \div \frac{3}{4} = \frac{1}{2} \times \frac{4}{3} = \frac{4}{6} = \frac{2}{3}$</p>
+                    <span class="translation">Example: $\frac{1}{2} \div \frac{3}{4} = \frac{1}{2} \times \frac{4}{3} = \frac{4}{6} = \frac{2}{3}$</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Seorang petani memiliki $\frac{4}{5}$ hektar lahan. Lahan tersebut akan dibagi rata menjadi 3 bagian untuk 3 anaknya. Berapa hektar lahan yang diterima setiap anak? <span class='translation'>A farmer has $\frac{4}{5}$ hectares of land. The land will be divided equally into 3 parts for his 3 children. How many hectares of land does each child receive?</span>", options: ["$\frac{4}{15}$ hektar", "$\frac{12}{5}$ hektar", "$\frac{7}{8}$ hektar", "$\frac{1}{3}$ hektar", "$\frac{3}{20}$ hektar"], correct: 0, exp: "$\frac{4}{5} \div 3 = \frac{4}{5} \times \frac{1}{3} = \frac{4}{15}$ hektar." },
+            { type: "task", q: "Ibu memiliki $\frac{3}{4}$ kg tepung. Tepung akan dibungkus ke dalam plastin kecil yang masing-masing berisi $\frac{1}{8}$ kg. Berapa banyak plastik kecil yang dibutuhkan? <span class='translation'>Mother has $\frac{3}{4}$ kg of flour. The flour will be packed into small plastic bags each containing $\frac{1}{8}$ kg. How many small plastic bags are needed?</span>", options: ["6 plastik", "3 plastik", "4 plastik", "8 plastik", "12 plastik"], correct: 0, exp: "$\frac{3}{4} \div \frac{1}{8} = \frac{3}{4} \times \frac{8}{1} = \frac{24}{4} = 6$ plastik." },
+            { type: "task", q: "Sebuah tali sepanjang $\frac{5}{6}$ meter dipotong menjadi potongan-potongan yang masing-masing panjangnya $\frac{1}{12}$ meter. Berapa banyak potongan tali yang dihasilkan? <span class='translation'>A rope $\frac{5}{6}$ meters long is cut into pieces each $\frac{1}{12}$ meters long. How many pieces of rope are produced?</span>", options: ["10 potong", "5 potong", "6 potong", "12 potong", "2 potong"], correct: 0, exp: "$\frac{5}{6} \div \frac{1}{12} = \frac{5}{6} \times \frac{12}{1} = \frac{60}{6} = 10$ potong." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Perkalian & Pembagian dengan Bentuk Aljabar",
+                icon: "🔬",
+                content: `
+                    <p>Konsep perkalian dan pembagian pecahan juga berlaku untuk pecahan aljabar, di mana terdapat variabel seperti $x$ atau $y$.</p>
+                    <span class="translation">The concept of fraction multiplication and division also applies to algebraic fractions, where there are variables like $x$ or $y$.</span>
+                    <p>Contoh Perkalian: $\frac{2x}{3} \times \frac{4}{5} = \frac{8x}{15}$</p>
+                    <span class="translation">Multiplication Example: $\frac{2x}{3} \times \frac{4}{5} = \frac{8x}{15}$</span>
+                    <p>Contoh Pembagian: $\frac{x}{4} \div \frac{2}{3} = \frac{x}{4} \times \frac{3}{2} = \frac{3x}{8}$</p>
+                    <span class="translation">Division Example: $\frac{x}{4} \div \frac{2}{3} = \frac{x}{4} \times \frac{3}{2} = \frac{3x}{8}$</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Sebuah toko kain menjual $\frac{3x}{4}$ meter kain sutra. Jika seorang pelanggan membeli $\frac{1}{3}$ dari kain tersebut, berapa meter kain yang dibeli pelanggan? <span class='translation'>A fabric store sells $\frac{3x}{4}$ meters of silk cloth. If a customer buys $\frac{1}{3}$ of that cloth, how many meters of cloth did the customer buy?</span>", options: ["$\frac{x}{4}$ meter", "$\frac{3x}{12}$ meter", "$\frac{4x}{3}$ meter", "$\frac{x}{3}$ meter", "$x$ meter"], correct: 0, exp: "$\frac{3x}{4} \times \frac{1}{3} = \frac{3x}{12} = \frac{x}{4}$ meter. (Sederhanakan dengan membagi 3)." },
+            { type: "task", q: "Volume air dalam tangki adalah $\frac{5y}{6}$ liter. Air tersebut akan dibagi rata ke dalam 5 ember. Berapa liter air di setiap ember? <span class='translation'>The volume of water in a tank is $\frac{5y}{6}$ liters. The water will be divided equally into 5 buckets. How many liters of water are in each bucket?</span>", options: ["$\frac{y}{6}$ liter", "$\frac{25y}{6}$ liter", "$\frac{y}{5}$ liter", "$\frac{5y}{30}$ liter", "$\frac{y}{30}$ liter"], correct: 0, exp: "$\frac{5y}{6} \div 5 = \frac{5y}{6} \times \frac{1}{5} = \frac{5y}{30} = \frac{y}{6}$ liter." },
+            { type: "task", q: "Sebuah kecepatan kendaraan adalah $\frac{4p}{5}$ km/menit. Jika kendaraan tersebut berjalan selama $\frac{3}{8}$ menit, berapa jarak yang ditempuh? <span class='translation'>A vehicle's speed is $\frac{4p}{5}$ km/min. If the vehicle travels for $\frac{3}{8}$ minutes, what is the distance traveled?</span>", options: ["$\frac{3p}{10}$ km", "$\frac{12p}{13}$ km", "$\frac{7p}{13}$ km", "$\frac{32p}{15}$ km", "$\frac{p}{2}$ km"], correct: 0, exp: "Jarak = Kecepatan $\times$ Waktu = $\frac{4p}{5} \times \frac{3}{8} = \frac{12p}{40}$. Disederhanakan (bagi 4) = $\frac{3p}{10}$ km." },
+            { type: "task", q: "Terdapat tali sepanjang $\frac{6x}{7}$ meter. Tali dipotong dengan ukuran masing-masing $\frac{2}{3}$ meter. Berapa banyak potongan tali yang dihasilkan? <span class='translation'>There is a rope $\frac{6x}{7}$ meters long. The rope is cut into pieces each $\frac{2}{3}$ meters long. How many pieces of rope are produced?</span>", options: ["$\frac{9x}{7}$ potong", "$\frac{12x}{21}$ potong", "$\frac{4x}{7}$ potong", "$\frac{7x}{9}$ potong", "$\frac{18x}{14}$ potong"], correct: 0, exp: "$\frac{6x}{7} \div \frac{2}{3} = \frac{6x}{7} \times \frac{3}{2} = \frac{18x}{14} = \frac{9x}{7}$ potong." }
+        ];
+
+        // ==========================================
+        // DATA INJECTION (Bagian 4: Independent & Consolidation & Tasks 1-5)
+        // ==========================================
+        lessonData["independent"].sidebar = [
+            // Teori 1
+            {
+                type: "theory",
+                title: "Pangkat pada Pecahan",
+                icon: "⚡",
+                content: `
+                    <p>Aturan pangkat pada pecahan berlaku untuk pembilang dan penyebut secara terpisah.</p>
+                    <span class="translation">The exponent rule for fractions applies to the numerator and denominator separately.</span>
+                    <p>Rumus: $\left(\frac{a}{b}\right)^n = \frac{a^n}{b^n}$</p>
+                    <div style="text-align:center; margin-top:10px;">
+                        <svg width="120" height="80" viewBox="0 0 120 80">
+                            <text x="30" y="40" font-size="20" fill="#3c3c3c">(</text>
+                            <rect x="40" y="15" width="40" height="40" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+                            <rect x="40" y="15" width="20" height="40" fill="#4caf50"/>
+                            <text x="50" y="40" fill="#fff" font-size="12">2/3</text>
+                            <text x="85" y="25" font-size="14" fill="#f44336">2</text>
+                            <text x="90" y="40" font-size="20">=</text>
+                            <text x="105" y="35" font-size="12">4/9</text>
+                        </svg>
+                    </div>
+                    <p>Contoh: $\left(\frac{2}{3}\right)^2 = \frac{2^2}{3^2} = \frac{4}{9}$</p>
+                    <span class="translation">Example: $\left(\frac{2}{3}\right)^2 = \frac{2^2}{3^2} = \frac{4}{9}$</span>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Sebuah bakteri membelah diri menjadi dua setiap jam. Jika awalnya ada $\frac{1}{4}$ koloni bakteri, berapa banyak bakteri setelah 3 jam? (Gunakan pangkat). <span class='translation'>A bacteria divides into two every hour. If initially there is $\frac{1}{4}$ colony, how much bacteria after 3 hours? (Use exponent).</span>", options: ["$\frac{1}{64}$", "$\frac{3}{12}$", "$\frac{1}{12}$", "$\frac{3}{4}$", "$\frac{8}{64}$"], correct: 0, exp: "$\left(\frac{1}{4}\right)^3 = \frac{1^3}{4^3} = \frac{1}{64}$." },
+            { type: "task", q: "Luas sebuah persegi adalah $\frac{9}{16}$ meter persegi. Berapakah panjang sisi persegi tersebut? <span class='translation'>The area of a square is $\frac{9}{16}$ square meters. What is the side length of the square?</span>", options: ["$\frac{3}{4}$ meter", "$\frac{81}{4}$ meter", "$\frac{3}{16}$ meter", "$\frac{9}{4}$ meter", "1 meter"], correct: 0, exp: "Sisi = $\sqrt{\frac{9}{16}} = \frac{\sqrt{9}}{\sqrt{16}} = \frac{3}{4}$ meter." },
+            { type: "task", q: "Sebuah kotak kubus memiliki volume $\frac{8}{27}$ meter kubik. Berapakah panjang rusuk kubus tersebut? <span class='translation'>A cube box has a volume of $\frac{8}{27}$ cubic meters. What is the edge length of the cube?</span>", options: ["$\frac{2}{3}$ meter", "$\frac{4}{9}$ meter", "$\frac{8}{9}$ meter", "2 meter", "$\frac{2}{9}$ meter"], correct: 0, exp: "Rusuk = $\sqrt[3]{\frac{8}{27}} = \frac{\sqrt[3]{8}}{\sqrt[3]{27}} = \frac{2}{3}$ meter." },
+
+            // Teori 2
+            {
+                type: "theory",
+                title: "Operasi Campuran Pecahan",
+                icon: "🧪",
+                content: `
+                    <p>Dalam menyelesaikan soal pecahan campuran, kita wajib mematuhi urutan operasi: Kurung, Pangkat, Kali/Bagi, Tambah/Kurang (KPAB).</p>
+                    <span class="translation">In solving mixed fraction problems, we must obey the order of operations: Parentheses, Exponents, Multiply/Divide, Add/Subtract (PEMDAS).</span>
+                    <p>Contoh: $\frac{1}{2} + \left(\frac{2}{3} \times \frac{3}{4}\right) - \frac{1}{4}$</p>
+                    <p>1. Kerjakan kurung: $\frac{2}{3} \times \frac{3}{4} = \frac{6}{12} = \frac{1}{2}$<br>
+                    2. Jadinya: $\frac{1}{2} + \frac{1}{2} - \frac{1}{4}$<br>
+                    3. Tambah dulu: $1 - \frac{1}{4} = \frac{3}{4}$</p>
+                `
+            },
+            // 3 Tasks
+            { type: "task", q: "Seorang penjahit punya $\frac{5}{6}$ meter kain. Ia memotong $\frac{1}{3}$ meter untuk seragam, lalu memotong lagi $\frac{1}{2}$ dari sisa kain untuk celana. Berapa sisa kain akhir? <span class='translation'>A tailor has $\frac{5}{6}$ meters of fabric. He cuts $\frac{1}{3}$ meter for a uniform, then cuts another $\frac{1}{2}$ of the remaining fabric for pants. What is the final remaining fabric?</span>", options: ["$\frac{1}{6}$ meter", "$\frac{1}{2}$ meter", "$\frac{1}{3}$ meter", "$\frac{5}{12}$ meter", "$\frac{1}{4}$ meter"], correct: 4, exp: "Sisa 1 = $\frac{5}{6} - \frac{1}{3} = \frac{3}{6} = \frac{1}{2}$. Sisa 2 = $\frac{1}{2} \times \frac{1}{2} = \frac{1}{4}$ dipotong. Sisa akhir = $\frac{1}{2} - \frac{1}{4} = \frac{1}{4}$." },
+            { type: "task", q: "Hitunglah hasil dari $\left(\frac{1}{2} + \frac{1}{4}\right) \times 2$! <span class='translation'>Calculate the result of $\left(\frac{1}{2} + \frac{1}{4}\right) \times 2$!</span>", options: ["$1\frac{1}{2}$", "1", "2", "$\frac{3}{4}$", "3"], correct: 0, exp: "Kurung dulu: $\frac{2}{4} + \frac{1}{4} = \frac{3}{4}$. Lalu kali 2: $\frac{3}{4} \times \frac{2}{1} = \frac{6}{4} = 1\frac{1}{2}$." },
+            { type: "task", q: "Ibu membeli $2$ kg gula. Ibu memakai $\frac{1}{4}$ bagian untuk kue, lalu memakai $\frac{1}{3}$ dari sisanya untuk minuman. Berapa kg gula yang dipakai untuk minuman? <span class='translation'>Mother bought 2 kg of sugar. She uses $\frac{1}{4}$ of it for cake, then uses $\frac{1}{3}$ of the remainder for drinks. How many kg of sugar were used for drinks?</span>", options: ["$\frac{1}{2}$ kg", "$\frac{1}{4}$ kg", "$\frac{1}{3}$ kg", "1 kg", "$\frac{3}{4}$ kg"], correct: 0, exp: "Sisa gula = $2 - (2 \times \frac{1}{4}) = 2 - \frac{1}{2} = 1\frac{1}{2} = \frac{3}{2}$ kg. Gula minuman = $\frac{1}{3} \times \frac{3}{2} = \frac{1}{2}$ kg." },
+
+            // Teori 3
+            {
+                type: "theory",
+                title: "Pecahan dalam Skala dan Rasio",
+                icon: "🗺️",
+                content: `
+                    <p>Skala pada peta adalah perbandingan jarak pada peta dengan jarak sebenarnya. Pecahan sangat berguna di sini.</p>
+                    <span class="translation">Map scale is the ratio of map distance to actual distance. Fractions are very useful here.</span>
+                    <p>Skala $1:100.000$ berarti $\frac{1}{100.000}$. Jika jarak peta 5 cm, jarak sebenarnya adalah $5 \div \frac{1}{100.000} = 500.000$ cm = 5 km.</p>
+                    <span class="translation">Scale $1:100,000$ means $\frac{1}{100,000}$. If map distance is 5 cm, actual distance is $500,000$ cm = 5 km.</span>
+                `
+            },
+            // 4 Tasks
+            { type: "task", q: "Pada sebuah peta, skala yang digunakan adalah $1:50.000$. Jika jarak rumah Danu ke sekolah di peta adalah 4 cm, berapakah jarak sebenarnya? <span class='translation'>On a map, the scale used is $1:50,000$. If the distance from Danu's house to school on the map is 4 cm, what is the actual distance?</span>", options: ["2 km", "200 m", "20 km", "50 km", "4 km"], correct: 0, exp: "Jarak = $4 \div \frac{1}{50.000} = 200.000$ cm = 2.000 m = 2 km." },
+            { type: "task", q: "Sebuah model mobil dibuat dengan skala $\frac{1}{20}$. Jika panjang mobil asli adalah 4 meter, berapakah panjang model mobil tersebut? <span class='translation'>A car model is made with a scale of $\frac{1}{20}$. If the real car length is 4 meters, what is the length of the car model?</span>", options: ["20 cm", "5 cm", "80 cm", "40 cm", "2 cm"], correct: 0, exp: "Panjang model = $4 \times \frac{1}{20} = \frac{4}{20}$ meter = $\frac{1}{5}$ m = 20 cm." },
+            { type: "task", q: "Sebuah resep membandingkan gula dan tepung dengan rasio 2:5. Jika digunakan $\frac{1}{2}$ kg gula, berapa kg tepung yang dibutuhkan? <span class='translation'>A recipe compares sugar and flour with a ratio of 2:5. If $\frac{1}{2}$ kg of sugar is used, how many kg of flour are needed?</span>", options: ["$1\frac{1}{4}$ kg", "1 kg", "2 kg", "$\frac{2}{5}$ kg", "$1\frac{1}{2}$ kg"], correct: 0, exp: "Tepung = $\frac{1}{2} \div \frac{2}{5} = \frac{1}{2} \times \frac{5}{2} = \frac{5}{4} = 1\frac{1}{4}$ kg." },
+            { type: "task", q: "Jarak kota A ke B pada peta adalah 6 cm, sedangkan jarak sebenarnya adalah 3 km. Berapakah skala peta tersebut dalam bentuk pecahan? <span class='translation'>The distance from city A to B on the map is 6 cm, while the actual distance is 3 km. What is the scale of the map in fraction form?</span>", options: ["$\frac{1}{50.000}$", "$\frac{1}{5.000}$", "$\frac{1}{500}$", "$\frac{1}{50}$", "$\frac{1}{500.000}$"], correct: 0, exp: "3 km = 300.000 cm. Skala = 6 : 300.000 = 1 : 50.000 = $\frac{1}{50.000}$." }
+        ];
+
+        // ==========================================
+        // TASK 1 - 5 DATA (50 SOAL CERITA)
+        // ==========================================
+        lessonData["task1"].tasks = [
+            { q: "Andi membeli $\frac{3}{4}$ kg apel dan $\frac{1}{2}$ kg jeruk. Berapa total buah yang dibeli Andi? <span class='translation'>Andi bought $\frac{3}{4}$ kg of apples and $\frac{1}{2}$ kg of oranges. What is the total fruit Andi bought?</span>", options: ["$1\frac{1}{4}$ kg", "$\frac{4}{6}$ kg", "$1\frac{1}{2}$ kg", "$\frac{2}{6}$ kg", "1 kg"], correct: 0, exp: "KPK 4 & 2 = 4. $\frac{3}{4} + \frac{2}{4} = \frac{5}{4} = 1\frac{1}{4}$ kg." },
+            { q: "Tangki air berisi $\frac{7}{8}$ liter. Digunakan $\frac{1}{4}$ liter. Sisa air? <span class='translation'>Water tank contains $\frac{7}{8}$ liter. Used $\frac{1}{4}$ liter. Remaining water?</span>", options: ["$\frac{5}{8}$ liter", "$\frac{6}{8}$ liter", "$\frac{8}{8}$ liter", "$\frac{3}{8}$ liter", "$\frac{1}{2}$ liter"], correct: 0, exp: "$\frac{7}{8} - \frac{2}{8} = \frac{5}{8}$ liter." },
+            { q: "Resep butuh $\frac{2}{3}$ cangkir gula. Tersedia $\frac{1}{4}$ cangkir. Kurang berapa cangkir? <span class='translation'>Recipe needs $\frac{2}{3}$ cup sugar. Available $\frac{1}{4}$ cup. How many cups are lacking?</span>", options: ["$\frac{5}{12}$ cangkir", "$\frac{1}{12}$ cangkir", "$\frac{8}{12}$ cangkir", "$\frac{3}{7}$ cangkir", "1 cangkir"], correct: 0, exp: "KPK 3 & 4 = 12. $\frac{8}{12} - \frac{3}{12} = \frac{5}{12}$ cangkir." },
+            { q: "Kawat sepanjang $\frac{5}{6}$ meter dipotong $\frac{1}{3}$ meter. Sisa kawat? <span class='translation'>Wire $\frac{5}{6}$ meters long is cut by $\frac{1}{3}$ meters. Remaining wire?</span>", options: ["$\frac{1}{2}$ meter", "$\frac{4}{3}$ meter", "$\frac{2}{3}$ meter", "$\frac{1}{3}$ meter", "1 meter"], correct: 0, exp: "$\frac{5}{6} - \frac{2}{6} = \frac{3}{6} = \frac{1}{2}$ meter." },
+            { q: "Ani jalan $\frac{1}{2}$ km, Budi $\frac{2}{5}$ km. Selisih jarak mereka? <span class='translation'>Ani walks $\frac{1}{2}$ km, Budi $\frac{2}{5}$ km. Difference in their distance?</span>", options: ["$\frac{1}{10}$ km", "$\frac{1}{5}$ km", "$\frac{2}{10}$ km", "$\frac{3}{10}$ km", "$\frac{5}{7}$ km"], correct: 0, exp: "KPK 2 & 5 = 10. $\frac{5}{10} - \frac{4}{10} = \frac{1}{10}$ km." },
+            { q: "Pensil sepanjang $\frac{1}{8}$ dipotong, $\frac{3}{8}$ patah. Total bagian pensil yang hilang? <span class='translation'>Pencil $\frac{1}{8}$ cut, $\frac{3}{8}$ broken. Total part of pencil lost?</span>", options: ["$\frac{1}{2}$ bagian", "$\frac{4}{16}$ bagian", "$\frac{2}{8}$ bagian", "1 bagian", "$\frac{3}{8}$ bagian"], correct: 0, exp: "$\frac{1}{8} + \frac{3}{8} = \frac{4}{8} = \frac{1}{2}$ bagian." },
+            { q: "Kebun luasnya $\frac{4}{5}$ ha, $\frac{1}{2}$ ha ditanami jagung. Sisa lahan? <span class='translation'>Garden area $\frac{4}{5}$ ha, $\frac{1}{2}$ ha planted with corn. Remaining land?</span>", options: ["$\frac{3}{10}$ ha", "$\frac{5}{7}$ ha", "$\frac{1}{2}$ ha", "$\frac{4}{10}$ ha", "$\frac{2}{5}$ ha"], correct: 0, exp: "$\frac{8}{10} - \frac{5}{10} = \frac{3}{10}$ ha." },
+            { q: "Botol berisi $\frac{2}{3}$ L, diminum $\frac{1}{4}$ L. Sisa air? <span class='translation'>Bottle contains $\frac{2}{3}$ L, drank $\frac{1}{4}$ L. Remaining water?</span>", options: ["$\frac{5}{12}$ L", "$\frac{1}{12}$ L", "$\frac{8}{12}$ L", "$\frac{3}{7}$ L", "1 L"], correct: 0, exp: "KPK 3 & 4 = 12. $\frac{8}{12} - \frac{3}{12} = \frac{5}{12}$ L." },
+            { q: "Pizza $\frac{7}{8}$ bagian, dimakan $\frac{1}{2}$ bagian. Sisa pizza? <span class='translation'>Pizza $\frac{7}{8}$ part, eaten $\frac{1}{2}$ part. Remaining pizza?</span>", options: ["$\frac{3}{8}$ bagian", "$\frac{6}{8}$ bagian", "$\frac{1}{2}$ bagian", "$\frac{5}{8}$ bagian", "1 bagian"], correct: 0, exp: "$\frac{7}{8} - \frac{4}{8} = \frac{3}{8}$ bagian." },
+            { q: "Cat $\frac{5}{6}$ L, dipakai $\frac{1}{3}$ L. Sisa cat? <span class='translation'>Paint $\frac{5}{6}$ L, used $\frac{1}{3}$ L. Remaining paint?</span>", options: ["$\frac{1}{2}$ L", "$\frac{4}{3}$ L", "$\frac{2}{3}$ L", "$\frac{1}{3}$ L", "1 L"], correct: 0, exp: "$\frac{5}{6} - \frac{2}{6} = \frac{3}{6} = \frac{1}{2}$ L." }
+        ];
+
+        lessonData["task2"].tasks = [
+            { q: "Kayu $2\frac{1}{2}$ m, dipotong $1\frac{1}{4}$ m. Sisa kayu? <span class='translation'>Wood $2\frac{1}{2}$ m, cut $1\frac{1}{4}$ m. Remaining wood?</span>", options: ["$1\frac{1}{4}$ m", "$1\frac{1}{2}$ m", "2 m", "1 m", "$\frac{1}{4}$ m"], correct: 0, exp: "$\frac{5}{2} - \frac{5}{4} = \frac{10}{4} - \frac{5}{4} = \frac{5}{4} = 1\frac{1}{4}$ m." },
+            { q: "Kain $3\frac{1}{3}$ m, dipakai $1\frac{1}{2}$ m. Sisa kain? <span class='translation'>Cloth $3\frac{1}{3}$ m, used $1\frac{1}{2}$ m. Remaining cloth?</span>", options: ["$1\frac{5}{6}$ m", "$1\frac{1}{2}$ m", "2 m", "$2\frac{1}{3}$ m", "$1\frac{1}{6}$ m"], correct: 0, exp: "$\frac{10}{3} - \frac{3}{2} = \frac{20}{6} - \frac{9}{6} = \frac{11}{6} = 1\frac{5}{6}$ m." },
+            { q: "Latihan $1\frac{1}{2}$ jam + $2\frac{1}{4}$ jam. Total latihan? <span class='translation'>Practice $1\frac{1}{2}$ hr + $2\frac{1}{4}$ hr. Total practice?</span>", options: ["$3\frac{3}{4}$ jam", "$3\frac{1}{2}$ jam", "3 jam", "$4\frac{1}{4}$ jam", "$3\frac{2}{6}$ jam"], correct: 0, exp: "$\frac{3}{2} + \frac{9}{4} = \frac{6}{4} + \frac{9}{4} = \frac{15}{4} = 3\frac{3}{4}$ jam." },
+            { q: "Air $4\frac{1}{2}$ L, tumpah $\frac{3}{4}$ L. Sisa air? <span class='translation'>Water $4\frac{1}{2}$ L, spilled $\frac{3}{4}$ L. Remaining water?</span>", options: ["$3\frac{3}{4}$ L", "$3\frac{1}{2}$ L", "4 L", "$5\frac{1}{4}$ L", "$4\frac{1}{4}$ L"], correct: 0, exp: "$\frac{9}{2} - \frac{3}{4} = \frac{18}{4} - \frac{3}{4} = \frac{15}{4} = 3\frac{3}{4}$ L." },
+            { q: "Gula $5\frac{1}{4}$ kg, dijual $2\frac{1}{2}$ kg. Sisa gula? <span class='translation'>Sugar $5\frac{1}{4}$ kg, sold $2\frac{1}{2}$ kg. Remaining sugar?</span>", options: ["$2\frac{3}{4}$ kg", "$2\frac{1}{2}$ kg", "3 kg", "$1\frac{3}{4}$ kg", "$3\frac{1}{4}$ kg"], correct: 0, exp: "$\frac{21}{4} - \frac{5}{2} = \frac{21}{4} - \frac{10}{4} = \frac{11}{4} = 2\frac{3}{4}$ kg." },
+            { q: "Sawah $6\frac{1}{4}$ ha, ditanami $3\frac{1}{8}$ ha. Sisa lahan? <span class='translation'>Rice field $6\frac{1}{4}$ ha, planted $3\frac{1}{8}$ ha. Remaining land?</span>", options: ["$3\frac{1}{8}$ ha", "$3\frac{1}{4}$ ha", "3 ha", "$2\frac{1}{8}$ ha", "4 ha"], correct: 0, exp: "$\frac{25}{4} - \frac{25}{8} = \frac{50}{8} - \frac{25}{8} = \frac{25}{8} = 3\frac{1}{8}$ ha." },
+            { q: "Jarak $10\frac{1}{2}$ km, ditempuh $4\frac{1}{4}$ km. Sisa jarak? <span class='translation'>Distance $10\frac{1}{2}$ km, traveled $4\frac{1}{4}$ km. Remaining distance?</span>", options: ["$6\frac{1}{4}$ km", "$6\frac{1}{2}$ km", "6 km", "$5\frac{1}{4}$ km", "$7\frac{1}{4}$ km"], correct: 0, exp: "$\frac{21}{2} - \frac{17}{4} = \frac{42}{4} - \frac{17}{4} = \frac{25}{4} = 6\frac{1}{4}$ km." },
+            { q: "Budi punya $5\frac{1}{2}$ batang korek, hilang $2\frac{1}{3}$ batang. Sisa korek? <span class='translation'>Budi has $5\frac{1}{2}$ matches, lost $2\frac{1}{3}$ matches. Remaining matches?</span>", options: ["$3\frac{1}{6}$ batang", "$3\frac{1}{2}$ batang", "3 batang", "$2\frac{1}{6}$ batang", "4 batang"], correct: 0, exp: "$\frac{11}{2} - \frac{7}{3} = \frac{33}{6} - \frac{14}{6} = \frac{19}{6} = 3\frac{1}{6}$ batang." },
+            { q: "Pipa $5\frac{1}{2}$ m disambung $3\frac{1}{3}$ m. Total pipa? <span class='translation'>Pipe $5\frac{1}{2}$ m joined with $3\frac{1}{3}$ m. Total pipe?</span>", options: ["$8\frac{5}{6}$ m", "$8\frac{1}{2}$ m", "8 m", "$9\frac{1}{3}$ m", "$8\frac{2}{5}$ m"], correct: 0, exp: "$\frac{11}{2} + \frac{10}{3} = \frac{33}{6} + \frac{20}{6} = \frac{53}{6} = 8\frac{5}{6}$ m." },
+            { q: "Beras $8\frac{1}{4}$ kg, dimasak $2\frac{1}{8}$ kg. Sisa beras? <span class='translation'>Rice $8\frac{1}{4}$ kg, cooked $2\frac{1}{8}$ kg. Remaining rice?</span>", options: ["$6\frac{1}{8}$ kg", "6 kg", "$6\frac{1}{4}$ kg", "$5\frac{1}{8}$ kg", "7 kg"], correct: 0, exp: "$\frac{33}{4} - \frac{17}{8} = \frac{66}{8} - \frac{17}{8} = \frac{49}{8} = 6\frac{1}{8}$ kg." }
+        ];
+
+        lessonData["task3"].tasks = [
+            { q: "Resep $\frac{1}{2}$ cangkir, buat $\frac{3}{4}$ resep. Tepung dibutuhkan? <span class='translation'>Recipe $\frac{1}{2}$ cup, make $\frac{3}{4}$ recipe. Flour needed?</span>", options: ["$\frac{3}{8}$ cangkir", "$\frac{4}{6}$ cangkir", "1 cangkir", "$\frac{1}{4}$ cangkir", "$\frac{2}{3}$ cangkir"], correct: 0, exp: "$\frac{1}{2} \times \frac{3}{4} = \frac{3}{8}$ cangkir." },
+            { q: "Jarak $\frac{4}{5}$ km/menit, selama $\frac{1}{2}$ menit. Total jarak? <span class='translation'>Distance $\frac{4}{5}$ km/min, for $\frac{1}{2}$ min. Total distance?</span>", options: ["$\frac{2}{5}$ km", "$\frac{4}{10}$ km (belum disederhanakan)", "1 km", "$\frac{1}{2}$ km", "$\frac{5}{6}$ km"], correct: 0, exp: "$\frac{4}{5} \times \frac{1}{2} = \frac{4}{10} = \frac{2}{5}$ km." },
+            { q: "Tali $\frac{3}{4}$ m, dipotong $\frac{1}{8}$ m. Berapa potong? <span class='translation'>Rope $\frac{3}{4}$ m, cut into $\frac{1}{8}$ m. How many pieces?</span>", options: ["6 potong", "3 potong", "4 potong", "8 potong", "2 potong"], correct: 0, exp: "$\frac{3}{4} \div \frac{1}{8} = \frac{3}{4} \times \frac{8}{1} = \frac{24}{4} = 6$ potong." },
+            { q: "Lahan $\frac{4}{5}$ ha, $\frac{3}{8}$ ditanami jagung. Luas jagung? <span class='translation'>Land $\frac{4}{5}$ ha, $\frac{3}{8}$ planted with corn. Area of corn?</span>", options: ["$\frac{3}{10}$ ha", "$\frac{12}{40}$ ha", "$\frac{7}{13}$ ha", "$\frac{1}{2}$ ha", "$\frac{4}{8}$ ha"], correct: 0, exp: "$\frac{4}{5} \times \frac{3}{8} = \frac{12}{40} = \frac{3}{10}$ ha." },
+            { q: "Kecepatan $\frac{5}{6}$ m/s, waktu $\frac{2}{5}$ s. Jarak? <span class='translation'>Speed $\frac{5}{6}$ m/s, time $\frac{2}{5}$ s. Distance?</span>", options: ["$\frac{1}{3}$ m", "$\frac{10}{30}$ m", "$\frac{7}{11}$ m", "2 m", "$\frac{2}{5}$ m"], correct: 0, exp: "$\frac{5}{6} \times \frac{2}{5} = \frac{10}{30} = \frac{1}{3}$ m." },
+            { q: "Air $\frac{2}{3}$ L, dituang ke botol $\frac{1}{6}$ L. Berapa botol? <span class='translation'>Water $\frac{2}{3}$ L, poured into $\frac{1}{6}$ L bottles. How many bottles?</span>", options: ["4 botol", "2 botol", "6 botol", "3 botol", "8 botol"], correct: 0, exp: "$\frac{2}{3} \div \frac{1}{6} = \frac{2}{3} \times \frac{6}{1} = \frac{12}{3} = 4$ botol." },
+            { q: "Tanki $\frac{1}{2}$ penuh, diisi $\frac{1}{3}$ dari kosong. Berapa penuh sekarang? <span class='translation'>Tank $\frac{1}{2}$ full, filled with $\frac{1}{3}$ of empty. How full now?</span>", options: ["$\frac{2}{3}$ bagian", "$\frac{1}{6}$ bagian", "$\frac{5}{6}$ bagian", "1 bagian", "$\frac{1}{3}$ bagian"], correct: 0, exp: "Kosong = $1 - \frac{1}{2} = \frac{1}{2}$. Diisi $\frac{1}{3} \times \frac{1}{2} = \frac{1}{6}$. Total = $\frac{1}{2} + \frac{1}{6} = \frac{3}{6} + \frac{1}{6} = \frac{4}{6} = \frac{2}{3}$." },
+            { q: "Perjalanan $\frac{1}{2}$ km, $\frac{3}{4}$ naik sepeda. Berapa km naik sepeda? <span class='translation'>Journey $\frac{1}{2}$ km, $\frac{3}{4}$ by bike. How many km by bike?</span>", options: ["$\frac{3}{8}$ km", "$\frac{4}{6}$ km", "$\frac{1}{2}$ km", "$\frac{2}{3}$ km", "1 km"], correct: 0, exp: "$\frac{1}{2} \times \frac{3}{4} = \frac{3}{8}$ km." },
+            { q: "Coklat $\frac{1}{4}$ batang, dipotong $\frac{1}{8}$. Berapa potong? <span class='translation'>Chocolate $\frac{1}{4}$ bar, cut $\frac{1}{8}$. How many pieces?</span>", options: ["2 potong", "4 potong", "1 potong", "8 potong", "3 potong"], correct: 0, exp: "$\frac{1}{4} \div \frac{1}{8} = \frac{1}{4} \times \frac{8}{1} = 2$ potong." },
+            { q: "Cat $\frac{3}{4}$ L, dipakai $\frac{2}{3}$ bagian. Berapa L dipakai? <span class='translation'>Paint $\frac{3}{4}$ L, used $\frac{2}{3}$ part. How many L used?</span>", options: ["$\frac{1}{2}$ L", "$\frac{6}{12}$ L", "$\frac{5}{7}$ L", "1 L", "$\frac{2}{3}$ L"], correct: 0, exp: "$\frac{3}{4} \times \frac{2}{3} = \frac{6}{12} = \frac{1}{2}$ L." }
+        ];
+
+        lessonData["task4"].tasks = [
+            { q: "Kecepatan $\frac{x}{4}$ km/menit, waktu $\frac{2}{3}$ menit. Jarak? <span class='translation'>Speed $\frac{x}{4}$ km/min, time $\frac{2}{3}$ min. Distance?</span>", options: ["$\frac{x}{6}$ km", "$\frac{2x}{12}$ km", "$\frac{8x}{3}$ km", "$\frac{x}{3}$ km", "$\frac{2x}{7}$ km"], correct: 0, exp: "$\frac{x}{4} \times \frac{2}{3} = \frac{2x}{12} = \frac{x}{6}$ km." },
+            { q: "Kain $\frac{3x}{2}$ m, dijual $\frac{1}{4}$. Jumlah dijual? <span class='translation'>Cloth $\frac{3x}{2}$ m, sold $\frac{1}{4}$. Amount sold?</span>", options: ["$\frac{3x}{8}$ m", "$\frac{12x}{2}$ m", "$\frac{3x}{6}$ m", "$\frac{4x}{3}$ m", "$\frac{x}{2}$ m"], correct: 0, exp: "$\frac{3x}{2} \times \frac{1}{4} = \frac{3x}{8}$ m." },
+            { q: "Uang $\frac{5x}{6}$, dibelanjakan $\frac{x}{3}$. Sisa uang? <span class='translation'>Money $\frac{5x}{6}$, spent $\frac{x}{3}$. Remaining money?</span>", options: ["$\frac{x}{2}$", "$\frac{4x}{3}$", "$\frac{x}{6}$", "$\frac{5x}{2}$", "$\frac{2x}{3}$"], correct: 0, exp: "$\frac{5x}{6} - \frac{2x}{6} = \frac{3x}{6} = \frac{x}{2}$." },
+            { q: "Tali $\frac{4y}{5}$ m, dipotong $\frac{1}{2}$ m. Berapa potong? <span class='translation'>Rope $\frac{4y}{5}$ m, cut $\frac{1}{2}$ m. How many pieces?</span>", options: ["$\frac{8y}{5}$ potong", "$\frac{4y}{10}$ potong", "$\frac{5y}{4}$ potong", "$\frac{2y}{5}$ potong", "5y potong"], correct: 0, exp: "$\frac{4y}{5} \div \frac{1}{2} = \frac{4y}{5} \times \frac{2}{1} = \frac{8y}{5}$ potong." },
+            { q: "Luas $\frac{x}{3}$, lebar $\frac{2}{3}$. Panjang? <span class='translation'>Area $\frac{x}{3}$, width $\frac{2}{3}$. Length?</span>", options: ["$\frac{x}{2}$", "$\frac{2x}{9}$", "$\frac{x}{9}$", "$\frac{2x}{3}$", "x"], correct: 0, exp: "P = Luas / L = $\frac{x}{3} \div \frac{2}{3} = \frac{x}{3} \times \frac{3}{2} = \frac{x}{2}$." },
+            { q: "Tanki $\frac{7x}{8}$ penuh. Air dipakai $\frac{x}{4}$. Sisa? <span class='translation'>Tank $\frac{7x}{8}$ full. Water used $\frac{x}{4}$. Remaining?</span>", options: ["$\frac{5x}{8}$", "$\frac{6x}{8}$", "$\frac{x}{2}$", "$\frac{7x}{4}$", "$\frac{3x}{8}$"], correct: 0, exp: "$\frac{7x}{8} - \frac{2x}{8} = \frac{5x}{8}$." },
+            { q: "Gula $\frac{2x}{3}$ kg, resep pakai $\frac{1}{4}$. Gula dipakai? <span class='translation'>Sugar $\frac{2x}{3}$ kg, recipe uses $\frac{1}{4}$. Sugar used?</span>", options: ["$\frac{x}{6}$ kg", "$\frac{2x}{12}$ kg", "$\frac{8x}{3}$ kg", "$\frac{3x}{4}$ kg", "$\frac{x}{3}$ kg"], correct: 0, exp: "$\frac{2x}{3} \times \frac{1}{4} = \frac{2x}{12} = \frac{x}{6}$ kg." },
+            { q: "Jarak $\frac{5y}{6}$ km, ditempuh $\frac{1}{5}$. Ditempuh? <span class='translation'>Distance $\frac{5y}{6}$ km, traveled $\frac{1}{5}$. Traveled?</span>", options: ["$\frac{y}{6}$ km", "$\frac{5y}{30}$ km", "$\frac{6y}{5}$ km", "$\frac{4y}{1}$ km", "$\frac{y}{5}$ km"], correct: 0, exp: "$\frac{5y}{6} \times \frac{1}{5} = \frac{5y}{30} = \frac{y}{6}$ km." },
+            { q: "Tali $\frac{6x}{7}$ m, dipotong $\frac{2}{3}$ m. Berapa potong? <span class='translation'>Rope $\frac{6x}{7}$ m, cut $\frac{2}{3}$ m. How many pieces?</span>", options: ["$\frac{9x}{7}$ potong", "$\frac{12x}{21}$ potong", "$\frac{7x}{9}$ potong", "$\frac{18x}{14}$ potong", "4x potong"], correct: 0, exp: "$\frac{6x}{7} \div \frac{2}{3} = \frac{6x}{7} \times \frac{3}{2} = \frac{18x}{14} = \frac{9x}{7}$ potong." },
+            { q: "Tanki $\frac{4x}{5}$ L, dituang ke botol $\frac{1}{2}$ L. Berapa botol? <span class='translation'>Tank $\frac{4x}{5}$ L, poured into $\frac{1}{2}$ L bottles. How many bottles?</span>", options: ["$\frac{8x}{5}$ botol", "$\frac{4x}{10}$ botol", "$\frac{5x}{4}$ botol", "$\frac{2x}{5}$ botol", "8x botol"], correct: 0, exp: "$\frac{4x}{5} \div \frac{1}{2} = \frac{4x}{5} \times \frac{2}{1} = \frac{8x}{5}$ botol." }
+        ];
+
+        lessonData["task5"].tasks = [
+            { q: "Resep $\frac{1}{2}$ cangkir, buat $\frac{2}{3}$ resep, tambah $\frac{1}{4}$ cangkir. Total? <span class='translation'>Recipe $\frac{1}{2}$ cup, make $\frac{2}{3}$ recipe, add $\frac{1}{4}$ cup. Total?</span>", options: ["$\frac{7}{12}$ cangkir", "$\frac{1}{2}$ cangkir", "$\frac{2}{3}$ cangkir", "1 cangkir", "$\frac{5}{12}$ cangkir"], correct: 0, exp: "Pakai = $\frac{1}{2} \times \frac{2}{3} = \frac{1}{3}$. Total = $\frac{1}{3} + \frac{1}{4} = \frac{4}{12} + \frac{3}{12} = \frac{7}{12}$." },
+            { q: "Tanki $\frac{3}{4}$ penuh, dipakai $\frac{1}{3}$ bagian, diisi $\frac{1}{6}$. Final? <span class='translation'>Tank $\frac{3}{4}$ full, used $\frac{1}{3}$ part, filled $\frac{1}{6}$. Final?</span>", options: ["$\frac{2}{3}$ bagian", "$\frac{1}{2}$ bagian", "$\frac{5}{6}$ bagian", "1 bagian", "$\frac{3}{4}$ bagian"], correct: 0, exp: "Dipakai = $\frac{1}{3} \times \frac{3}{4} = \frac{1}{4}$. Sisa = $\frac{3}{4} - \frac{1}{4} = \frac{1}{2}$. Final = $\frac{1}{2} + \frac{1}{6} = \frac{3}{6} + \frac{1}{6} = \frac{4}{6} = \frac{2}{3}$." },
+            { q: "Kawat $\frac{5}{6}$ m, dipotong $\frac{1}{3}$ m, disambung $\frac{1}{4}$ m. Final? <span class='translation'>Wire $\frac{5}{6}$ m, cut $\frac{1}{3}$ m, joined $\frac{1}{4}$ m. Final?</span>", options: ["$\frac{3}{4}$ m", "$\frac{1}{2}$ m", "$\frac{5}{6}$ m", "1 m", "$\frac{2}{3}$ m"], correct: 0, exp: "Sisa = $\frac{5}{6} - \frac{2}{6} = \frac{3}{6} = \frac{1}{2}$. Final = $\frac{1}{2} + \frac{1}{4} = \frac{2}{4} + \frac{1}{4} = \frac{3}{4}$." },
+            { q: "Uang Rp 100k, dipakai $\frac{1}{2}$, dapat $\frac{1}{5}$ dari sisa. Berapa dapat? <span class='translation'>Money Rp 100k, used $\frac{1}{2}$, got $\frac{1}{5}$ of remainder. How much got?</span>", options: ["Rp 10.000", "Rp 50.000", "Rp 20.000", "Rp 5.000", "Rp 100.000"], correct: 0, exp: "Sisa = $100k \times \frac{1}{2} = 50k$. Dapat = $50k \times \frac{1}{5} = 10k$." },
+            { q: "Kebun $\frac{4}{5}$ ha, ditanami $\frac{1}{2}$, sisa ditanami $\frac{1}{4}$. Berapa ha sisa terakhir? <span class='translation'>Garden $\frac{4}{5}$ ha, planted $\frac{1}{2}$, remainder planted $\frac{1}{4}$. How many ha final remainder?</span>", options: ["$\frac{3}{10}$ ha", "$\frac{1}{5}$ ha", "$\frac{1}{10}$ ha", "$\frac{2}{5}$ ha", "$\frac{1}{2}$ ha"], correct: 0, exp: "Sisa 1 = $\frac{4}{5} - \frac{2}{5} = \frac{2}{5}$. Ditanami = $\frac{1}{4} \times \frac{2}{5} = \frac{1}{10}$. Sisa akhir = $\frac{2}{5} - \frac{1}{10} = \frac{4}{10} - \frac{1}{10} = \frac{3}{10}$." },
+            { q: "Cat $\frac{7}{8}$ L, dipakai $\frac{1}{2}$ L, beli $\frac{1}{4}$ L. Final? <span class='translation'>Paint $\frac{7}{8}$ L, used $\frac{1}{2}$ L, bought $\frac{1}{4}$ L. Final?</span>", options: ["$\frac{5}{8}$ L", "$\frac{6}{8}$ L", "$\frac{3}{4}$ L", "$\frac{1}{2}$ L", "1 L"], correct: 0, exp: "Sisa = $\frac{7}{8} - \frac{4}{8} = \frac{3}{8}$. Final = $\frac{3}{8} + \frac{2}{8} = \frac{5}{8}$." },
+            { q: "Belajar $1\frac{1}{2}$ jam, istirahat $\frac{1}{4}$ jam, belajar lagi $\frac{2}{3}$ jam. Total waktu? <span class='translation'>Study $1\frac{1}{2}$ hr, rest $\frac{1}{4}$ hr, study again $\frac{2}{3}$ hr. Total time?</span>", options: ["$2\frac{5}{12}$ jam", "$2\frac{1}{2}$ jam", "2 jam", "$2\frac{1}{3}$ jam", "3 jam"], correct: 0, exp: "$\frac{3}{2} + \frac{1}{4} + \frac{2}{3} = \frac{18}{12} + \frac{3}{12} + \frac{8}{12} = \frac{29}{12} = 2\frac{5}{12}$ jam." },
+            { q: "Jarak 10 km, $\frac{1}{2}$ mobil, $\frac{1}{4}$ motor, sisa jalan kaki. Jalan kaki? <span class='translation'>Distance 10 km, $\frac{1}{2}$ car, $\frac{1}{4}$ motor, rest walking. Walking?</span>", options: ["$\frac{1}{4}$ bagian (2.5 km)", "$\frac{1}{2}$ bagian (5 km)", "$\frac{3}{4}$ bagian (7.5 km)", "1 bagian (10 km)", "$\frac{1}{3}$ bagian"], correct: 0, exp: "Sisa = $1 - \frac{1}{2} - \frac{1}{4} = \frac{4}{4} - \frac{2}{4} - \frac{1}{4} = \frac{1}{4}$. $10 \times \frac{1}{4} = 2.5$ km." },
+            { q: "Gula $2\frac{1}{2}$ kg, dipakai $\frac{1}{3}$, dijual $\frac{1}{4}$. Sisa? <span class='translation'>Sugar $2\frac{1}{2}$ kg, used $\frac{1}{3}$, sold $\frac{1}{4}$. Remaining?</span>", options: ["$1\frac{1}{4}$ kg", "1 kg", "$1\frac{1}{2}$ kg", "$\frac{5}{6}$ kg", "2 kg"], correct: 0, exp: "Awal = $\frac{5}{2}$. Pakai = $\frac{1}{3} \times \frac{5}{2} = \frac{5}{6}$. Sisa = $\frac{5}{2} - \frac{5}{6} = \frac{10}{6} = \frac{5}{3}$. Jual = $\frac{1}{4} \times \frac{5}{3} = \frac{5}{12}$. Akhir = $\frac{5}{3} - \frac{5}{12} = \frac{20}{12} - \frac{5}{12} = \frac{15}{12} = \frac{5}{4} = 1\frac{1}{4}$ kg." },
+            { q: "Tali $3\frac{1}{3}$ m, dipotong $\frac{1}{2}$ m, sambung $\frac{1}{6}$ m. Final? <span class='translation'>Rope $3\frac{1}{3}$ m, cut $\frac{1}{2}$ m, joined $\frac{1}{6}$ m. Final?</span>", options: ["3 m", "$3\frac{1}{2}$ m", "2 m", "$2\frac{1}{2}$ m", "4 m"], correct: 0, exp: "Awal = $\frac{10}{3} = \frac{20}{6}$. Potong = $\frac{1}{2} = \frac{3}{6}$. Sambung = $\frac{1}{6}$. Final = $\frac{20}{6} - \frac{3}{6} + \frac{1}{6} = \frac{18}{6} = 3$ m." }
+        ];
+
+        // ==========================================
+        // FIX KATEX ESCAPE CHARACTERS (Final & Aman)
+        // ==========================================
+        function fixEscapeChars(str) {
+            if (typeof str !== 'string') return str;
+            return str
+                .replace(/\f/g, '\\f')   // Perbaiki \frac
+                .replace(/\x08/g, '\\b') // Perbaiki \bar
+                .replace(/\t/g, '\\t')  // Perbaiki \text, \times
+                .replace(/\r/g, '\\r')  // Perbaiki \right, \rho
+                .replace(/ div /g, ' \\div ') // Perbaiki \div (karena \d hilang di JS string)
+                .replace(/left\(/g, '\\left(') // Perbaiki \left(
+                .replace(/right\)/g, '\\right)'); // Perbaiki \right)
+        }
+        
+        // Jalankan pembersihan untuk semua data
+        for (let key in lessonData) {
+            if (lessonData[key].sidebar) {
+                lessonData[key].sidebar.forEach(item => {
+                    if (item.q) item.q = fixEscapeChars(item.q);
+                    if (item.exp) item.exp = fixEscapeChars(item.exp);
+                    if (item.content) item.content = fixEscapeChars(item.content);
+                    if (item.options) item.options = item.options.map(opt => fixEscapeChars(opt));
+                });
+            }
+            if (lessonData[key].tasks) {
+                lessonData[key].tasks.forEach(item => {
+                    if (item.q) item.q = fixEscapeChars(item.q);
+                    if (item.exp) item.exp = fixEscapeChars(item.exp);
+                    if (item.options) item.options = item.options.map(opt => fixEscapeChars(opt));
+                });
+            }
+        }
+
+        // ==========================================
+        // UPDATE: Fungsi untuk Task 1-5 (Load, Check, Print)
+        // ==========================================
+		let currentShuffledOptions = [];
+		
+		function loadTask(key, index, el) {
+			// Set active sidebar
+			document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+			if(el) {
+				el.classList.add('active');
+			}
+
+            const item = lessonData[key].tasks[index-1];
+            const main = document.getElementById('mainContent');
+            
+            // Shuffle options
+            const optionsWithIndex = item.options.map((opt, i) => ({text: opt, correct: i === item.correct}));
+            shuffleArray(optionsWithIndex);
+            currentShuffledOptions = optionsWithIndex; // Simpan array yang sudah diacak
+
+            let optionsHtml = '';
+            optionsWithIndex.forEach((opt, i) => {
+                // Hanya kirim index (i) agar tidak ada konflik tanda kutip HTML
+                optionsHtml += `
+                    <button class="option-btn" onclick="checkTaskAnswer(this, ${i}, '${key}', ${index-1})">
+                        <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+                        <span>${opt.text}</span>
+                    </button>
+                `;
+            });
+
+            main.innerHTML = `
+                <div class="content-card">
+                    <div style="font-size: 2rem;">📝</div>
+                    <p style="font-size: 1.2rem; font-weight: bold;">${item.q}</p>
+                    <div class="options-grid">
+                        ${optionsHtml}
+                    </div>
+                    <div id="task-feedback-${key}-${index-1}" class="feedback"></div>
+                    <button class="reset-btn" onclick="loadTask('${key}', ${index})">Reset Answer 🔄</button>
+                </div>
+            `;
+            renderMathInElement(main, {delimiters: [{left: "$", right: "$", display: false}]});
+        }
+
+        function checkTaskAnswer(btn, optIndex, key, index) {
+            const feedbackDiv = document.getElementById(`task-feedback-${key}-${index}`);
+            const allOptions = btn.parentElement.querySelectorAll('.option-btn');
+            
+            allOptions.forEach(opt => opt.style.pointerEvents = 'none'); // disable further clicks
+            
+            // Ambil teks dan status benar dari array opsi yang sudah diacak
+            const selectedOpt = currentShuffledOptions[optIndex];
+            const isCorrect = selectedOpt.correct;
+            const selectedText = selectedOpt.text;
+            
+            // Simpan jawaban siswa ke memori
+            studentAnswers[index] = { text: selectedText, isCorrect: isCorrect };
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedbackDiv.className = 'feedback correct';
+                feedbackDiv.innerHTML = `<strong>Benar! ✔️</strong> <span class="translation">Correct!</span>`;
+            } else {
+                btn.classList.add('wrong');
+                // Highlight the correct one
+                allOptions.forEach(opt => {
+                    if(opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedbackDiv.className = 'feedback wrong';
+                feedbackDiv.innerHTML = `<strong>Salah! ❌</strong> <span class="translation">Wrong!</span>`;
+            }
+            
+            feedbackDiv.innerHTML += `
+                <details>
+                    <summary>Lihat Penjelasan (View Explanation)</summary>
+                    <p style="margin-top:10px;">${lessonData[key].tasks[index].exp}</p>
+                </details>
+            `;
+            renderMathInElement(feedbackDiv, {delimiters: [{left: "$", right: "$", display: false}]});
+        }
+
+        // Generate Duolingo Path Nodes
+        function generatePath() {
+            const path = document.getElementById('pathContainer');
+            let html = '';
+            for (let key in lessonData) {
+                 html += `<div class="node" onclick="openLesson('${key}')" title="${lessonData[key].duration}">
+                            ${lessonData[key].icon}
+                            <div class="node-label">
+                                ${lessonData[key].title}<br>
+                                <span style="font-size: 0.9em; color: #1cb0f6;">${lessonData[key].duration}</span>
+                            </div>
+                          </div>`;
+            }
+            path.innerHTML = html;
+        }
+
+        // Open Lesson View
+        function openLesson(key) {
+            document.getElementById('lessonView').classList.add('active');
+            studentAnswers = {};
+            
+            // Update Top Header & Lesson Title with Duration
+            const durationText = `(${lessonData[key].duration})`;
+            document.getElementById('lessonTitle').innerText = `${lessonData[key].title} ${durationText}`;
+            document.getElementById('topicHeader').innerText = `Topic: Operasi Pecahan | ${lessonData[key].title} ${durationText}`;
+            
+            const sidebar = document.getElementById('sidebar');
+            let sidebarHtml = '';
+            
+            if (lessonData[key].isTask) {
+                // Sidebar sederhana untuk Task 1-5
+                sidebarHtml = `<div style="padding: 10px 0; text-align: center; border-bottom: 2px solid #e5e5e5; margin-bottom: 15px;"><strong>Tugas ${key.replace('task','')} <span class="translation">Task ${key.replace('task','')}</span></strong></div>`;
+                for(let i=1; i<=10; i++) {
+                    sidebarHtml += `<div class="sidebar-item" onclick="loadTask('${key}', ${i}, this)"><span class="icon">📝</span> Soal ${i} <span class="translation">Question ${i}</span></div>`;
+                }
+                sidebarHtml += `<button class="print-btn" onclick="printTask('${key}')" style="width: 100%; margin-top: 20px;">🖨️ Print Task</button>`;
+            } else if (key === "consolidation") {
+                sidebarHtml = `<a href="https://learn.algonova.id" class="btn-external" target="_blank">Lanjut ke learn.algonova.id</a>`;
+            } else {
+                // Sidebar sederhana untuk Teori dan Task (Dikembalikan seperti semula)
+                lessonData[key].sidebar.forEach((item, index) => {
+                    let label = item.type === 'theory' ? `Teori ${getTheoryNumber(key, index)}` : `Task ${index + 1}`;
+                    sidebarHtml += `<div class="sidebar-item" onclick="loadContent('${key}', ${index})" id="sb-${key}-${index}">
+                                    <span class="icon">${item.icon || '✏️'}</span> ${label}
+                                   </div>`;
+                });
+            }
+            sidebar.innerHTML = sidebarHtml;
+            
+            // Load first content by default if exists
+            if(lessonData[key].sidebar && lessonData[key].sidebar.length > 0) {
+                loadContent(key, 0);
+            } else if (key === "consolidation") {
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="content-card">
+                        <div class="theory-icon">🧠</div>
+                        <h2>Consolidation & Reflection</h2>
+                        <div class="theory-box">
+                            <p>Selamat! Anda telah menyelesaikan materi Operasi Pecahan.</p>
+                            <span class="translation">Congratulations! You have completed the Fraction Operations material.</span>
+                            <p>Silakan klik tombol <strong>"Lanjut ke learn.algonova.id"</strong> di sidebar sebelah kiri untuk melanjutkan ke asesmen akhir.</p>
+                            <span class="translation">Please click the "Continue to learn.algonova.id" button on the left sidebar to proceed to the final assessment.</span>
+                        </div>
+                    </div>
+                `;
+                renderMathInElement(document.getElementById('mainContent'), {delimiters: [{left: "$", right: "$", display: false}]});
+            } else {
+                document.getElementById('mainContent').innerHTML = `<div class="content-card"><h3>Pilih materi di sidebar</h3><p>Select material from the sidebar</p></div>`;
+            }
+        }
+
+        // Helper to get theory number
+        function getTheoryNumber(key, index) {
+            let count = 0;
+            for(let i=0; i<=index; i++) {
+                if(lessonData[key].sidebar[i].type === 'theory') count++;
+            }
+            return count;
+        }
+
+        // Load Content (Theory or Task)
+        function loadContent(key, index) {
+            // Update active sidebar
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const sbEl = document.getElementById(`sb-${key}-${index}`);
+            if(sbEl) sbEl.classList.add('active');
+
+            const item = lessonData[key].sidebar[index];
+            const main = document.getElementById('mainContent');
+            
+            if (item.type === 'theory') {
+                main.innerHTML = `
+                    <div class="content-card">
+                        <div class="theory-icon">${item.icon}</div>
+                        <h2>${item.title}</h2>
+                        <div class="theory-box">
+                            ${item.content}
+                        </div>
+                    </div>
+                `;
+            } else {
+                renderTask(item, key, index);
+            }
+            
+            // Render KaTeX secara paksa
+            renderMathInElement(main, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+        }
+
+        // Render Task Logic
+        function renderTask(item, key, index) {
+            const main = document.getElementById('mainContent');
+            
+            // Shuffle options
+            const optionsWithIndex = item.options.map((opt, i) => ({text: opt, correct: i === item.correct}));
+            shuffleArray(optionsWithIndex);
+
+            let optionsHtml = '';
+            optionsWithIndex.forEach((opt, i) => {
+                optionsHtml += `
+                    <button class="option-btn" onclick="checkAnswer(this, ${opt.correct}, '${key}', ${index})">
+                        <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+                        <span>${opt.text}</span>
+                    </button>
+                `;
+            });
+
+            main.innerHTML = `
+                <div class="content-card">
+                    <div style="font-size: 2rem;">❓</div>
+                    <p style="font-size: 1.2rem; font-weight: bold;">${item.q}</p>
+                    <div class="options-grid">
+                        ${optionsHtml}
+                    </div>
+                    <div id="feedback-${key}-${index}" class="feedback"></div>
+                    <button class="reset-btn" onclick="loadContent('${key}', ${index})">Reset Answer 🔄</button>
+                </div>
+            `;
+            renderMathInElement(main, {delimiters: [{left: "$", right: "$", display: false}]});
+        }
+
+        // Check Answer
+        function checkAnswer(btn, isCorrect, key, index) {
+            const feedbackDiv = document.getElementById(`feedback-${key}-${index}`);
+            const allOptions = btn.parentElement.querySelectorAll('.option-btn');
+            
+            allOptions.forEach(opt => opt.style.pointerEvents = 'none'); // disable further clicks
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedbackDiv.className = 'feedback correct';
+                feedbackDiv.innerHTML = `<strong>Benar! ✔️</strong> <span class="translation">Correct!</span>`;
+            } else {
+                btn.classList.add('wrong');
+                // Highlight the correct one
+                allOptions.forEach(opt => {
+                    if(opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedbackDiv.className = 'feedback wrong';
+                feedbackDiv.innerHTML = `<strong>Salah! ❌</strong> <span class="translation">Wrong!</span>`;
+            }
+            
+            feedbackDiv.innerHTML += `
+                <details>
+                    <summary>Lihat Penjelasan (View Explanation)</summary>
+                    <p style="margin-top:10px;">${lessonData[key].sidebar[index].exp}</p>
+                </details>
+            `;
+            renderMathInElement(feedbackDiv, {delimiters: [{left: "$", right: "$", display: false}]});
+        }
+
+        // Utility: Shuffle Array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Print Task Logic
+        function printTask(taskKey) {
+            const printArea = document.getElementById('printArea');
+            let tableRows = '';
+            const tasks = lessonData[taskKey].tasks;
+            let score = 0;
+            
+            tasks.forEach((task, i) => {
+                const correctText = task.options[task.correct];
+                // Clean up translation spans for print
+                const cleanQuestion = task.q.replace(/<span class='translation'>.*?<\/span>/g, '');
+                
+                let studentAnsText = '-';
+                let noteSymbol = '❌';
+                
+                // Cek apakah siswa sudah menjawab soal ini
+                if (studentAnswers[i]) {
+                    studentAnsText = studentAnswers[i].text;
+                    if (studentAnswers[i].isCorrect) {
+                        score++;
+                        noteSymbol = '✔️';
+                    }
+                }
+                
+                tableRows += `<tr>
+                    <td>${i + 1}</td>
+                    <td>${cleanQuestion}</td>
+                    <td>${studentAnsText}</td>
+                    <td>${correctText}</td>
+                    <td style="text-align: center;">${noteSymbol}</td>
+                </tr>`;
+            });
+            
+            printArea.style.display = 'block'; // Paksa tampil dulu agar KaTeX bisa render
+            printArea.innerHTML = `
+                <h2>Math Tutoring by Deni</h2>
+                <p>Topic: Operasi Pecahan (Fraction Operations)</p>
+                <p>Name: ........................</p>
+                <p>Date: ........................</p>
+                <p>Task: ${taskKey.toUpperCase()}</p>
+                <p>Score: ${score}/10</p>
+                <table>
+                    <tr><th>No.</th><th>Question</th><th>Student Answer</th><th>Correct Answer</th><th>Note</th></tr>
+                    ${tableRows}
+                </table>
+                <br><br>
+                <p>Checked by,</p>
+                <br><br>
+                <p><strong>Deni</strong></p>
+            `;
+            
+            // Render KaTeX di area print sebelum dialog print muncul
+            renderMathInElement(printArea, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+            
+            // Beri delay sedikit agar KaTeX selesai merender sebelum print
+            setTimeout(() => {
+                window.print();
+                printArea.style.display = 'none'; // Sembunyikan lagi setelah print
+            }, 500);
+        }
+
+        function closeLesson() {
+            document.getElementById('lessonView').classList.remove('active');
+            document.getElementById('topicHeader').innerText = "Topic: Operasi Pecahan (Fraction Operations)";
+        }
+
+        // Initialize
+        generatePath();
+    </script>
+</body>
+</html>
