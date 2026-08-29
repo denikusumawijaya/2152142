@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Bilangan Bulat & Pecahan</title>
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <!-- KaTeX Auto-render -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    
+    <!-- Google Fonts: Baloo 2 for Vibe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #FDE047;
+            --secondary-color: #38BDF8;
+            --accent-color: #EC4899;
+            --text-color: #1E3A8A;
+            --bg-color: #E0F7FA;
+            --border-color: #1E40AF;
+            --correct-color: #22C55E;
+            --wrong-color: #EF4444;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Baloo 2', cursive, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#FFFFFF 20%, transparent 20%), radial-gradient(#FFFFFF 20%, transparent 20%);
+            background-position: 0 0, 50px 50px;
+            background-size: 100px 100px;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            border-bottom: 4px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.4) 2px, transparent 3px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        .header-left h1 {
+            font-size: 1.5rem;
+            color: var(--border-color);
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+        }
+
+        .header-left p {
+            font-size: 1rem;
+            color: #0C4A6E;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.1s;
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1rem;
+            box-shadow: 0 4px 0 var(--border-color);
+            z-index: 1;
+            background-color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0EA5E9;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--border-color);
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: #A7F3D0;
+            border-right: 4px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 4px 0 0 rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--border-color);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            background-color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+        }
+
+        .sidebar-item:hover {
+            background-color: white;
+            border-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-item.active {
+            background-color: var(--primary-color);
+            border-color: var(--border-color);
+            color: var(--border-color);
+            box-shadow: 3px 3px 0 var(--border-color);
+        }
+
+        .sidebar-item .time {
+            font-size: 0.8rem;
+            color: #6B7280;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background-image: linear-gradient(180deg, #E0F7FA 0%, #BAE6FD 100%);
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid var(--border-color);
+            box-shadow: 8px 8px 0 rgba(30, 58, 138, 0.2);
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .main-text {
+            font-size: 1.15rem;
+            margin-bottom: 4px;
+            color: var(--text-color);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .trans-text {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #64748B;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        h2.section-title {
+            color: var(--border-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed var(--secondary-color);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theory-box, .task-box {
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            background-color: #F8FAFC;
+            position: relative;
+        }
+
+        .theory-box {
+            border-left: 8px solid var(--secondary-color);
+            background-color: #F0F9FF;
+        }
+
+        .task-box {
+            border-left: 8px solid var(--accent-color);
+            background-color: #FFF1F2;
+        }
+
+        .illustration {
+            text-align: center;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.5);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .option {
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+            font-weight: 600;
+            background-color: white;
+            text-align: center;
+        }
+
+        .option:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0 var(--border-color);
+        }
+
+        .option.selected {
+            background-color: var(--primary-color);
+            box-shadow: 4px 4px 0 var(--border-color);
+            transform: translate(2px, 2px);
+        }
+
+        .option.correct {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: #166534;
+        }
+
+        .option.wrong {
+            background-color: var(--wrong-color);
+            color: white;
+            border-color: #991B1B;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feedback.correct { background-color: #D1FAE5; color: #166534; border: 2px solid var(--correct-color); }
+        .feedback.wrong { background-color: #FEE2E2; color: #991B1B; border: 2px solid var(--wrong-color); }
+
+        .collapse-btn {
+            margin-top: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 0.95rem;
+            border: 3px solid var(--border-color);
+            box-shadow: 0 4px 0 var(--border-color);
+        }
+        
+        .collapse-content {
+            display: none;
+            margin-top: 15px;
+            padding: 20px;
+            background-color: #FEF9C3;
+            border-radius: 12px;
+            border: 2px dashed #CA8A04;
+            font-size: 1rem;
+        }
+
+        .collapse-content.show {
+            display: block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-check { background-color: var(--correct-color); color: white; }
+        .btn-check:hover { background-color: #16A34A; }
+        .btn-reset { background-color: #F97316; color: white; }
+        .btn-reset:hover { background-color: #EA580C; }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            border-top: 3px dotted var(--border-color);
+            padding-top: 20px;
+        }
+
+        .pagination span {
+            font-weight: 700;
+            color: var(--border-color);
+        }
+
+        .btn-nav { background-color: var(--accent-color); color: white; }
+        .btn-nav:hover { background-color: #DB2777; }
+        .btn-nav:disabled { background-color: #CBD5E1; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(30, 58, 138, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid var(--border-color);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content ul {
+            text-align: left;
+            margin: 20px 0;
+            list-style-type: none;
+        }
+
+        .modal-content ul li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: #F8FAFC;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--secondary-color);
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { 
+                display: block !important;
+                position: absolute; 
+                left: 0; top: 0; 
+                width: 100%; 
+                padding: 20px; 
+            }
+            .sidebar, .pagination, .action-buttons, .options-container, .collapse-btn, .feedback { display: none !important; }
+            body { background: white; }
+        }
+
+        #printArea { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <svg width="50" height="50" viewBox="0 0 100 100">
+                <path d="M20,50 Q20,90 50,90 Q80,90 80,50 Q80,20 50,20 Q20,20 20,50 Z" fill="#F97316" stroke="#1E40AF" stroke-width="4"/>
+                <path d="M50,20 L35,0 L40,20 L45,0 L50,20 L55,0 L60,20 L65,0 Z" fill="#16A34A" stroke="#1E40AF" stroke-width="3"/>
+                <circle cx="35" cy="45" r="3" fill="#1E40AF"/>
+                <circle cx="65" cy="45" r="3" fill="#1E40AF"/>
+                <path d="M40,60 Q50,65 60,60" stroke="#1E40AF" stroke-width="2" fill="none"/>
+            </svg>
+            <div>
+                <h1>Math Tutoring by Deni</h1>
+                <p>Topic: Bilangan Bulat & Pecahan</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-primary" onclick="toggleModal()">Class Rules</button>
+        </div>
+    </header>
+
+    <div class="modal-overlay" id="classRulesModal">
+        <div class="modal-content">
+            <h2>Class Rules</h2>
+            <p class="trans-text">Aturan Kelas</p>
+            <ul>
+                <li>
+                    <span style="font-size:1.5rem">🗣️</span>
+                    <div>
+                        Berbicara secara bergantian
+                        <p class="trans-text" style="margin:0; font-size:0.9rem">Take turns speaking</p>
+                    </div>
+                </li>
+                <li>
+                    <span style="font-size:1.5rem">🚪</span>
+                    <div>
+                        Meminta izin jika ingin meninggalkan kelas
+                        <p class="trans-text" style="margin:0; font-size:0.9rem">Ask permission if you want to leave the class</p>
+                    </div>
+                </li>
+                <li>
+                    <span style="font-size:1.5rem">📹</span>
+                    <div>
+                        Menyalakan kamera dan microphone jika diperlukan
+                        <p class="trans-text" style="margin:0; font-size:0.9rem">Turn on camera and microphone if needed</p>
+                    </div>
+                </li>
+            </ul>
+            <button class="btn btn-primary" onclick="toggleModal()">Aye Aye Captain!</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Lesson Menu</h2>
+            <div class="sidebar-item active" onclick="loadSection('spiral', this)">
+                <span>Spiral Review Warm-up</span> <span class="time">00:00-00:10</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('intro', this)">
+                <span>Introduction & Real-World</span> <span class="time">00:10-00:15</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('review', this)">
+                <span>Review of Prior Knowledge</span> <span class="time">00:15-00:20</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('problem', this)">
+                <span>Problem Introduction</span> <span class="time">00:20-00:30</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('guided', this)">
+                <span>Guided Practice</span> <span class="time">00:30-00:45</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('independent', this)">
+                <span>Independent Practice</span> <span class="time">00:45-00:55</span>
+            </div>
+            <div class="sidebar-item" onclick="loadSection('consolidation', this)">
+                <span>Consolidation & Reflection</span> <span class="time">00:55-01:00</span>
+            </div>
+            <hr style="margin: 15px 0; border: 0; border-top: 3px dashed var(--border-color);">
+            <div class="sidebar-item" onclick="loadSection('task1', this)"><span>Task 1</span></div>
+            <div class="sidebar-item" onclick="loadSection('task2', this)"><span>Task 2</span></div>
+            <div class="sidebar-item" onclick="loadSection('task3', this)"><span>Task 3</span></div>
+            <div class="sidebar-item" onclick="loadSection('task4', this)"><span>Task 4</span></div>
+            <div class="sidebar-item" onclick="loadSection('task5', this)"><span>Task 5</span></div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-card" id="contentArea"></div>
+        </div>
+    </div>
+
+    <div id="printArea"></div>
+
+    <script>
+        const sectionsData = {
+            spiral: {
+                title: "Spiral Review Warm-up",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Konsep Dasar Bilangan Bulat</h2>
+                            <p class="main-text">Hari ini kita akan petualang di dunia Bilangan Bulat dan Pecahan! Bilangan bulat adalah bilangan utuh yang terdiri dari bilangan positif, nol, dan bilangan negatif.</p>
+                            <p class="trans-text">Today we will adventure in the world of Integers and Fractions! Integers are whole numbers consisting of positive numbers, zero, and negative numbers.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 300 100" width="280">
+                                    <line x1="20" y1="50" x2="280" y2="50" stroke="#1E3A8A" stroke-width="3"/>
+                                    <polygon points="280,50 270,45 270,55" fill="#1E3A8A"/>
+                                    <g font-family="Baloo 2" font-size="14" fill="#1E3A8A" text-anchor="middle">
+                                        <line x1="60" y1="45" x2="60" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="60" y="40">-2</text>
+                                        <line x1="110" y1="45" x2="110" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="110" y="40">-1</text>
+                                        <line x1="160" y1="45" x2="160" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="160" y="40">0</text>
+                                        <line x1="210" y1="45" x2="210" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="210" y="40">1</text>
+                                        <line x1="260" y1="45" x2="260" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="260" y="40">2</text>
+                                    </g>
+                                    <circle cx="110" cy="50" r="6" fill="#EF4444"/>
+                                </svg>
+                            </div>
+                            <p class="main-text">Bilangan negatif sering digunakan untuk mewakili suhu di bawah nol, hutang, atau kedalaman laut.</p>
+                            <p class="trans-text">Negative numbers are often used to represent temperatures below zero, debts, or ocean depths.</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Seorang penyelam berada di kedalaman 5 meter di bawah permukaan laut. Jika permukaan laut dianggap 0, posisi penyelam dalam bilangan bulat adalah...", q_trans: "A diver is at a depth of 5 meters below sea level. If sea level is considered 0, the diver's position in integers is...", svg: `<svg viewBox="0 0 200 100"><path d="M0,30 Q50,20 100,30 T200,30 L200,100 L0,100 Z" fill="#E0F7FA"/><line x1="100" y1="30" x2="100" y2="70" stroke="#EF4444" stroke-width="3"/><circle cx="100" cy="70" r="5" fill="#EF4444"/></svg>`, options: ["5", "-5", "0", "10", "-10"], correct: "-5", exp: "Di bawah permukaan laut berarti nilai kurang dari 0, jadi kedalaman 5 meter ditulis sebagai -5.", exp_trans: "Below sea level means a value less than 0, so a depth of 5 meters is written as -5." },
+                    { type: 'task', q: "Suhu di pagi hari adalah \(-3\)°C. Saat siang hari, suhu naik sebanyak \(5\)°C. Berapakah suhu saat siang hari?", q_trans: "The temperature in the morning was \(-3\)°C. At noon, the temperature rose by \(5\)°C. What is the temperature at noon?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="40" width="100" height="40" rx="5" fill="#FEF3C7"/><path d="M70,60 Q80,40 90,60" fill="none" stroke="#EF4444"/><path d="M110,60 Q120,40 130,60" fill="none" stroke="#EF4444"/></svg>`, options: ["\(2\)°C", "\(-8\)°C", "\(8\)°C", "\(-2\)°C", "\(5\)°C"], correct: "\(2\)°C", exp: "Suhu awal -3. Naik berarti tambah. \(-3 + 5 = 2\)°C.", exp_trans: "Initial temp -3. Rises means add. \(-3 + 5 = 2\)°C." },
+                    { type: 'task', q: "Ali memiliki uang Rp 10.000, lalu ia membeli es krim seharga Rp 15.000 dan berhutang ke warung. Bagaimana keadaan uang Ali sekarang?", q_trans: "Ali has Rp 10.000, then he buys ice cream for Rp 15.000 and owes the shop. What is Ali's money condition now?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="30" width="80" height="50" fill="#FDE047"/><text x="100" y="60" text-anchor="middle" font-size="14" fill="#1E3A8A">Hutang</text></svg>`, options: ["Rp 5.000", "-Rp 5.000", "Rp 15.000", "-Rp 15.000", "Rp 25.000"], correct: "-Rp 5.000", exp: "Uang Ali 10.000, belanja 15.000. Karena 15.000 > 10.000, Ali kekurangan 5.000, sehingga tertulis -Rp 5.000.", exp_trans: "Ali's money 10.000, spent 15.000. Since 15.000 > 10.000, Ali lacks 5.000, written as -Rp 5.000." },
+                    
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Konsep Faktor (Mencari Kunci Pintu)</h2>
+                            <p class="main-text">Faktor adalah bilangan yang dapat membagi habis suatu bilangan lain. Bayangkan faktor ini adalah 'kunci' yang pas untuk membuka 'pintu' angka tertentu.</p>
+                            <p class="trans-text">Factors are numbers that can divide another number exactly. Imagine factors as 'keys' that fit to open a specific number 'door'.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 150" width="150">
+                                    <rect x="60" y="60" width="80" height="80" rx="5" fill="#8B5CF6" stroke="#4C1D95" stroke-width="3"/>
+                                    <circle cx="100" cy="100" r="10" fill="#FDE047" stroke="#4C1D95" stroke-width="2"/>
+                                    <text x="100" y="105" font-size="14" text-anchor="middle" fill="#4C1D95" font-weight="bold">12</text>
+                                    <rect x="80" y="20" width="15" height="40" rx="3" fill="#EAB308" stroke="#4C1D95" stroke-width="2"/>
+                                    <circle cx="87" cy="20" r="8" fill="#EAB308" stroke="#4C1D95" stroke-width="2"/>
+                                    <text x="110" y="40" font-size="12" fill="#4C1D95">Kunci: 1,2,3,4,6,12</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Untuk mencari kunci pintu angka 12, kita cari bilangan apa saja yang bisa membagi 12 habis tanpa sisa.</p>
+                            <p class="trans-text">To find the keys for number 12, we look for numbers that can divide 12 exactly without a remainder.</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Untuk membuka pintu harta karun bernomor 24, kamu harus menemukan faktornya. Manakah dari berikut ini yang BUKAN faktor dari 24?", q_trans: "To open treasure door number 24, you must find its factors. Which of the following is NOT a factor of 24?", svg: `<svg viewBox="0 0 200 100"><rect x="70" y="40" width="60" height="50" fill="#8B5CF6"/><circle cx="100" cy="65" r="10" fill="#FDE047"/></svg>`, options: ["2", "3", "5", "6", "8"], correct: "5", exp: "24 tidak bisa dibagi habis oleh 5 (24 ÷ 5 = 4 sisa 4). Jadi, 5 bukan faktor.", exp_trans: "24 cannot be divided exactly by 5 (24 ÷ 5 = 4 remainder 4). So, 5 is not a factor." },
+                    { type: 'task', q: "Ada sekelompok kunci: 1, 2, 4, 8, 16. Kunci-kunci ini dapat membuka pintu bernomor...", q_trans: "There is a set of keys: 1, 2, 4, 8, 16. These keys can open the door numbered...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="20" width="120" height="60" fill="#E0F2FE"/><text x="100" y="60" text-anchor="middle" font-size="20" fill="#1E3A8A">?</text></svg>`, options: ["12", "14", "16", "18", "20"], correct: "16", exp: "Faktor dari 16 adalah 1, 2, 4, 8, dan 16. Jadi pintu yang bisa dibuka adalah 16.", exp_trans: "Factors of 16 are 1, 2, 4, 8, and 16. So the door that can be opened is 16." },
+                    { type: 'task', q: "Seseorang punya 12 kue untuk dibagi rata kepada teman-temannya tanpa ada sisa. Berapa jumlah teman yang BUKAN merupakan pilihan yang tepat untuk pembagian rata tersebut?", q_trans: "Someone has 12 cakes to be divided equally among friends without left over. How many friends is NOT the right choice for this equal division?", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#FBBF24"/><circle cx="100" cy="50" r="15" fill="#FBBF24"/><circle cx="150" cy="50" r="15" fill="#FBBF24"/></svg>`, options: ["2", "3", "4", "5", "6"], correct: "5", exp: "12 dibagi 5 menghasilkan sisa 2. Jadi 5 orang bukan pilihan yang tepat (5 bukan faktor 12).", exp_trans: "12 divided by 5 leaves a remainder 2. So 5 people is not the right choice (5 is not a factor of 12)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Konsep Kelipatan (Melompat di Platform)</h2>
+                            <p class="main-text">Kelipatan adalah hasil perkalian suatu bilangan dengan bilangan bulat lainnya. Bayangkan kamu melompat di atas platform. Jika kamu melompat dengan kelipatan 3, kamu akan mendarat di angka 3, 6, 9, 12, dan seterusnya.</p>
+                            <p class="trans-text">Multiples are the result of multiplying a number by other integers. Imagine jumping on platforms. If you jump in multiples of 3, you will land on 3, 6, 9, 12, and so on.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 300 100" width="280">
+                                    <line x1="10" y1="70" x2="290" y2="70" stroke="#1E3A8A" stroke-width="2"/>
+                                    <rect x="30" y="50" width="30" height="20" fill="#38BDF8" stroke="#1E40AF" stroke-width="2"/><text x="45" y="65" text-anchor="middle" fill="#FFF" font-size="12">3</text>
+                                    <rect x="80" y="50" width="30" height="20" fill="#38BDF8" stroke="#1E40AF" stroke-width="2"/><text x="95" y="65" text-anchor="middle" fill="#FFF" font-size="12">6</text>
+                                    <rect x="130" y="50" width="30" height="20" fill="#38BDF8" stroke="#1E40AF" stroke-width="2"/><text x="145" y="65" text-anchor="middle" fill="#FFF" font-size="12">9</text>
+                                    <rect x="180" y="50" width="30" height="20" fill="#38BDF8" stroke="#1E40AF" stroke-width="2"/><text x="195" y="65" text-anchor="middle" fill="#FFF" font-size="12">12</text>
+                                    <rect x="230" y="50" width="30" height="20" fill="#38BDF8" stroke="#1E40AF" stroke-width="2"/><text x="245" y="65" text-anchor="middle" fill="#FFF" font-size="12">15</text>
+                                    <circle cx="45" cy="20" r="10" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <p class="main-text">Kelipatan dimulai dari bilangan itu sendiri dikalikan nol, lalu satu, dua, dan seterusnya. Jadi kelipatan 3 adalah 0, 3, 6, 9, ...</p>
+                            <p class="trans-text">Multiples start from the number itself multiplied by zero, then one, two, and so on. So multiples of 3 are 0, 3, 6, 9, ...</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Seekor katak melompat dari platform angka 2. Pada lompatan ke-4, katak tersebut akan mendarat di platform bernomor berapa?", q_trans: "A frog jumps from platform number 2. On the 4th jump, which platform number will the frog land on?", svg: `<svg viewBox="0 0 200 100"><circle cx="40" cy="50" r="15" fill="#22C55E"/><circle cx="100" cy="50" r="15" fill="#22C55E"/><circle cx="160" cy="50" r="15" fill="#22C55E"/></svg>`, options: ["6", "8", "10", "12", "16"], correct: "8", exp: "Lompatan ke-4 berarti 2 x 4 = 8. Katak mendarat di angka 8.", exp_trans: "The 4th jump means 2 x 4 = 8. The frog lands on number 8." },
+                    { type: 'task', q: "Sebuah komputer melakukan scan setiap 4 menit. Jika scan pertama dimulai pada menit ke-4, scan ke-5 akan dilakukan pada menit ke...", q_trans: "A computer scans every 4 minutes. If the first scan starts at minute 4, the 5th scan will be done at minute...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" fill="#1E3A8A"/><circle cx="100" cy="50" r="15" fill="#38BDF8"/></svg>`, options: ["16", "20", "24", "25", "9"], correct: "20", exp: "Scan ke-5 berarti 4 x 5 = 20 menit. Komputer akan scan pada menit ke-20.", exp_trans: "5th scan means 4 x 5 = 20 minutes. Computer will scan at minute 20." },
+                    { type: 'task', q: "Manakah dari bilangan berikut yang BUKAN merupakan kelipatan dari 6?", q_trans: "Which of the following is NOT a multiple of 6?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["12", "18", "24", "28", "30"], correct: "28", exp: "28 tidak bisa dibagi habis oleh 6 (28 ÷ 6 = 4 sisa 4). Jadi 28 bukan kelipatan 6.", exp_trans: "28 cannot be divided exactly by 6 (28 ÷ 6 = 4 remainder 4). So 28 is not a multiple of 6." },
+                    { type: 'task', q: "Sebuah toko roti menerima pesanan setiap 7 hari sekali. Jika pesanan pertama hari ini (hari ke-7), pesanan ke-3 akan datang pada hari ke...", q_trans: "A bakery receives orders every 7 days. If the first order is today (day 7), the 3rd order will come on day...", svg: `<svg viewBox="0 0 200 100"><path d="M50,80 L60,50 L70,80 Z" fill="#D97706"/><circle cx="60" cy="40" r="15" fill="#F472B6"/></svg>`, options: ["14", "18", "21", "28", "35"], correct: "21", exp: "Pesanan ke-3 berarti 7 x 3 = 21. Pesanan datang pada hari ke-21.", exp_trans: "3rd order means 7 x 3 = 21. Order arrives on day 21." }
+                ]
+            },
+            intro: {
+                title: "Introduction & Real-World Connection",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Bilangan Prima & Pohon Faktor (Menghindari Rintangan)</h2>
+                            <p class="main-text">Bilangan prima adalah bilangan bulat lebih dari 1 yang hanya bisa dibagi habis oleh 1 dan dirinya sendiri. Contohnya: 2, 3, 5, 7, 11.</p>
+                            <p class="trans-text">Prime numbers are integers greater than 1 that can only be divided exactly by 1 and themselves. Examples: 2, 3, 5, 7, 11.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 100" width="180">
+                                    <circle cx="40" cy="50" r="20" fill="#FDE047" stroke="#1E40AF" stroke-width="3"/><text x="40" y="55" text-anchor="middle" fill="#1E40AF" font-weight="bold">2</text>
+                                    <circle cx="100" cy="50" r="20" fill="#FDE047" stroke="#1E40AF" stroke-width="3"/><text x="100" y="55" text-anchor="middle" fill="#1E40AF" font-weight="bold">3</text>
+                                    <circle cx="160" cy="50" r="20" fill="#FDE047" stroke="#1E40AF" stroke-width="3"/><text x="160" y="55" text-anchor="middle" fill="#1E40AF" font-weight="bold">5</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Sementara itu, Pohon Faktor adalah cara visual untuk memecah sebuah bilangan menjadi faktor primanya. Ini membantu kita menghindari rintangan berupa bilangan yang rumit!</p>
+                            <p class="trans-text">Meanwhile, a Factor Tree is a visual way to break down a number into its prime factors. This helps us avoid obstacles of complicated numbers!</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Seorang penjaga gerbang hanya membiarkan lewat bilangan prima. Jika kamu ingin melewati gerbang, nomor mana yang boleh kamu pakai?", q_trans: "A gatekeeper only allows prime numbers to pass. If you want to pass the gate, which number can you use?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="40" width="80" height="50" fill="#10B981"/><path d="M60,40 L40,20 L100,20 L60,40" fill="#10B981"/></svg>`, options: ["4", "6", "7", "9", "15"], correct: "7", exp: "7 hanya bisa dibagi habis oleh 1 dan 7. Jadi 7 adalah bilangan prima.", exp_trans: "7 can only be divided exactly by 1 and 7. So 7 is a prime number." },
+                    { type: 'task', q: "Dalam membuat pohon faktor untuk angka 12, ia dipecah menjadi 2 x 6. Lalu 6 dipecah lagi menjadi 2 x 3. Apa faktor prima dari 12?", q_trans: "In making a factor tree for number 12, it's broken into 2 x 6. Then 6 is broken into 2 x 3. What are the prime factors of 12?", svg: `<svg viewBox="0 0 200 120"><circle cx="100" cy="20" r="15" fill="#A7F3D0"/><line x1="100" y1="35" x2="70" y2="60" stroke="#1E3A8A"/><line x1="100" y1="35" x2="130" y2="60" stroke="#1E3A8A"/><circle cx="70" cy="70" r="10" fill="#A7F3D0"/><circle cx="130" cy="70" r="10" fill="#A7F3D0"/><line x1="130" y1="80" x2="110" y2="100" stroke="#1E3A8A"/><line x1="130" y1="80" x2="150" y2="100" stroke="#1E3A8A"/><text x="100" y="25" text-anchor="middle" font-size="12" fill="#1E3A8A">12</text></svg>`, options: ["2 x 6", "3 x 4", "2 x 2 x 3", "2 x 3 x 4", "6 x 2"], correct: "2 x 2 x 3", exp: "Faktor prima adalah bilangan prima di ujung pohon. Jadi 12 = 2 x 2 x 3.", exp_trans: "Prime factors are prime numbers at the ends of the tree. So 12 = 2 x 2 x 3." },
+                    { type: 'task', q: "Manakah dari angka berikut yang BUKAN bilangan prima?", q_trans: "Which of the following is NOT a prime number?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["11", "13", "15", "17", "19"], correct: "15", exp: "15 bisa dibagi habis oleh 1, 3, 5, dan 15. Jadi ia bukan bilangan prima.", exp_trans: "15 can be divided exactly by 1, 3, 5, and 15. So it is not a prime number." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">KPK & FPB (Power-Up untuk Senjata)</h2>
+                            <p class="main-text">KPK (Kelipatan Persekutuan Terkecil) adalah kelipatan terkecil yang sama dari dua bilangan. FPB (Faktor Persekutuan Terbesar) adalah faktor terbesar yang sama.</p>
+                            <p class="trans-text">LCM (Least Common Multiple) is the smallest multiple shared by two numbers. GCF (Greatest Common Factor) is the largest shared factor.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 150" width="150">
+                                    <rect x="50" y="100" width="100" height="30" fill="#1E40AF"/>
+                                    <path d="M100,100 L80,70 L120,70 Z" fill="#EF4444"/>
+                                    <circle cx="100" cy="50" r="20" fill="#FDE047" stroke="#1E40AF" stroke-width="3"/>
+                                    <text x="100" y="55" text-anchor="middle" font-weight="bold" fill="#1E40AF">PWR</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">KPK sering digunakan untuk menyamakan siklus (seperti Power-Up yang muncul setiap beberapa detik), sedangkan FPB untuk membagi barang jadi kelompok terbesar yang sama.</p>
+                            <p class="trans-text">LCM is often used to equalize cycles (like Power-Ups appearing every few seconds), while GCF is to divide items into the largest equal groups.</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Power-Up pedang muncul setiap 4 menit. Power-Up perisai muncul setiap 6 menit. Jika keduanya muncul bersamaan sekarang, berapa menit lagi mereka akan muncul bersamaan kembali?", q_trans: "Sword Power-Up appears every 4 mins. Shield Power-Up appears every 6 mins. If both appear together now, how many minutes until they appear together again?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="40" width="20" height="40" fill="#EF4444"/><circle cx="120" cy="60" r="20" fill="#38BDF8"/></svg>`, options: ["10 menit", "12 menit", "24 menit", "2 menit", "20 menit"], correct: "12 menit", exp: "Kita cari KPK dari 4 dan 6. Kelipatan 4: 4,8,12. Kelipatan 6: 6,12. Jadi KPK-nya 12 menit.", exp_trans: "We find LCM of 4 and 6. Multiples of 4: 4,8,12. Multiples of 6: 6,12. So LCM is 12 mins." },
+                    { type: 'task', q: "Guru memiliki 24 buku dan 36 pensil. Ia ingin membuat paket hadiah yang berisi jumlah buku dan pensil yang sama di setiap paket. Berapa jumlah maksimal paket yang bisa dibuat?", q_trans: "Teacher has 24 books and 36 pencils. She wants to make gift packages with equal number of books and pencils in each. What is the max packages she can make?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="30" height="40" fill="#FDE047"/><rect x="120" y="30" width="20" height="40" fill="#1E3A8A"/></svg>`, options: ["4", "6", "8", "12", "24"], correct: "12", exp: "Kita cari FPB dari 24 dan 36. Faktor 24: 1,2,3,4,6,8,12. Faktor 36: 1,2,3,4,6,9,12. Jadi FPB-nya 12.", exp_trans: "We find GCF of 24 and 36. Factors of 24: 1,2,3,4,6,8,12. Factors of 36: 1,2,3,4,6,9,12. So GCF is 12." },
+                    { type: 'task', q: "Dua lampu menyala berkedip. Lampu A berkedip setiap 3 detik, lampu B setiap 5 detik. Kapan mereka akan berkedip bersamaan untuk kedua kalinya?", q_trans: "Two lights blink. Light A blinks every 3 secs, Light B every 5 secs. When will they blink together for the second time?", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#FDE047"/><circle cx="150" cy="50" r="15" fill="#FDE047"/></svg>`, options: ["Detik ke-8", "Detik ke-15", "Detik ke-30", "Detik ke-3", "Detik ke-5"], correct: "Detik ke-30", exp: "KPK dari 3 dan 5 adalah 15. Berkedip bersama pertama di detik 15. Kedua di detik 30 (15x2).", exp_trans: "LCM of 3 and 5 is 15. First blink together at 15. Second at 30 (15x2)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Konsep Pecahan & Jenisnya (Membagi Harta Karun)</h2>
+                            <p class="main-text">Pecahan adalah bagian dari suatu keseluruhan. Di simbol pecahan \( \frac{a}{b} \), \( a \) disebut pembilang (bagian yang diambil) dan \( b \) disebut penyebut (total bagian).</p>
+                            <p class="trans-text">Fractions are parts of a whole. In fraction symbol \( \frac{a}{b} \), \( a \) is the numerator (part taken) and \( b \) is the denominator (total parts).</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 100" width="180">
+                                    <circle cx="50" cy="50" r="40" fill="#FBBF24" stroke="#1E3A8A" stroke-width="3"/>
+                                    <path d="M50,10 L50,90 A40,40 0 0,1 50,10 Z" fill="#D97706"/>
+                                    <text x="50" y="55" text-anchor="middle" fill="#1E3A8A" font-weight="bold">1/2</text>
+                                    
+                                    <circle cx="150" cy="50" r="40" fill="#FBBF24" stroke="#1E3A8A" stroke-width="3"/>
+                                    <path d="M150,10 L150,90 A40,40 0 0,0 108,30 Z" fill="#D97706"/>
+                                    <text x="150" y="55" text-anchor="middle" fill="#1E3A8A" font-weight="bold">1/4</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Ada pecahan biasa, pecahan campuran, dan pecahan desimal. Saat membagi harta karun, kita harus menggunakan pecahan untuk pembagian yang adil!</p>
+                            <p class="trans-text">There are proper fractions, mixed fractions, and decimal fractions. When dividing treasure, we must use fractions for fair division!</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Seorang bajak laut menemukan 4 peti harta karun. Ia ingin membaginya rata kepada 5 anak buahnya. Bagian masing-masing orang dalam bentuk pecahan adalah...", q_trans: "A pirate finds 4 treasure chests. He wants to divide them equally among 5 crew members. Each person's share in fraction form is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="40" width="30" height="30" fill="#FDE047"/><rect x="80" y="40" width="30" height="30" fill="#FDE047"/><rect x="120" y="40" width="30" height="30" fill="#FDE047"/><rect x="160" y="40" width="30" height="30" fill="#FDE047"/></svg>`, options: ["\( \frac{5}{4} \)", "\( \frac{4}{5} \)", "\( \frac{1}{4} \)", "\( \frac{1}{5} \)", "\( \frac{4}{1} \)"], correct: "\( \frac{4}{5} \)", exp: "Total peti 4 dibagi ke 5 orang. Berarti 4 per 5, ditulis \( \frac{4}{5} \).", exp_trans: "Total 4 chests divided to 5 people. Means 4 out of 5, written \( \frac{4}{5} \)." },
+                    { type: 'task', q: "Di sebuah pizza, Deni memakan 2 dari 8 potong pizza. Pecahan yang menunjukkan sisa pizza adalah...", q_trans: "In a pizza, Deni eats 2 out of 8 slices. The fraction showing the remaining pizza is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="40" fill="#FBBF24" stroke="#92400E" stroke-width="3"/><path d="M100,10 L100,50 L60,40 Z" fill="#D97706"/></svg>`, options: ["\( \frac{2}{8} \)", "\( \frac{6}{8} \)", "\( \frac{8}{6} \)", "\( \frac{4}{8} \)", "\( \frac{8}{2} \)"], correct: "\( \frac{6}{8} \)", exp: "Sisa pizza adalah 8 - 2 = 6 potong. Jadi sisanya adalah \( \frac{6}{8} \).", exp_trans: "Remaining pizza is 8 - 2 = 6 slices. So the rest is \( \frac{6}{8} \)." },
+                    { type: 'task', q: "Manakah dari pecahan berikut yang merupakan pecahan campuran?", q_trans: "Which of the following fractions is a mixed fraction?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{3}{2} \)", "\( \frac{1}{4} \)", "\( 2 \frac{1}{2} \)", "\( \frac{5}{5} \)", "\( \frac{7}{3} \)"], correct: "\( 2 \frac{1}{2} \)", exp: "Pecahan campuran memiliki bilangan bulat dan pecahan biasa, contohnya \( 2 \frac{1}{2} \).", exp_trans: "Mixed fraction has a whole number and a proper fraction, e.g., \( 2 \frac{1}{2} \)." },
+                    { type: 'task', q: "Pada pecahan \( \frac{3}{7} \), angka 3 dan 7 secara berurutan disebut...", q_trans: "In the fraction \( \frac{3}{7} \), the numbers 3 and 7 are respectively called...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="60" text-anchor="middle" font-size="24" fill="#1E3A8A" font-weight="bold">3/7</text></svg>`, options: ["Penyebut dan Pembilang", "Pembilang dan Penyebut", "Faktor dan Kelipatan", "Pembilang dan Faktor", "Penyebut dan Kelipatan"], correct: "Pembilang dan Penyebut", exp: "Angka di atas disebut pembilang, angka di bawah disebut penyebut.", exp_trans: "The top number is the numerator, the bottom is the denominator." }
+                ]
+            },
+			
+            review: {
+                title: "Review of Prior Knowledge",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Operasi Hitung Bilangan Bulat</h2>
+                            <p class="main-text">Untuk menjumlahkan atau mengurangkan bilangan bulat, bayangkan kamu berjalan di garis bilangan. Menghadap kanan untuk positif, dan menghadap kiri untuk negatif.</p>
+                            <p class="trans-text">To add or subtract integers, imagine walking on a number line. Facing right for positive, and facing left for negative.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 300 100" width="280">
+                                    <line x1="20" y1="50" x2="280" y2="50" stroke="#1E3A8A" stroke-width="3"/>
+                                    <polygon points="280,50 270,45 270,55" fill="#1E3A8A"/>
+                                    <g font-family="Baloo 2" font-size="14" fill="#1E3A8A" text-anchor="middle">
+                                        <line x1="60" y1="45" x2="60" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="60" y="40">-2</text>
+                                        <line x1="110" y1="45" x2="110" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="110" y="40">-1</text>
+                                        <line x1="160" y1="45" x2="160" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="160" y="40">0</text>
+                                        <line x1="210" y1="45" x2="210" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="210" y="40">1</text>
+                                        <line x1="260" y1="45" x2="260" y2="55" stroke="#1E3A8A" stroke-width="2"/><text x="260" y="40">2</text>
+                                    </g>
+                                    <!-- Character walking -->
+                                    <circle cx="110" cy="30" r="8" fill="#EC4899"/>
+                                    <path d="M110,38 L110,50" stroke="#EC4899" stroke-width="3"/>
+                                    <path d="M110,50 L130,50" stroke="#EC4899" stroke-width="3" stroke-dasharray="4"/>
+                                </svg>
+                            </div>
+                            <p class="main-text">Jika kamu berada di \(-1\) dan berjalan ke kanan sejauh 3 langkah, kamu akan tiba di \(2\). Persamaannya: \(-1 + 3 = 2\).</p>
+                            <p class="trans-text">If you are at \(-1\) and walk right 3 steps, you arrive at \(2\). Equation: \(-1 + 3 = 2\).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Seorang petualang berada di posisi \(-5\) di garis bilangan. Ia berjalan ke kanan sejauh 8 langkah. Di posisi mana ia berakhir?", q_trans: "An adventurer is at position \(-5\) on a number line. He walks right 8 steps. At what position does he end up?", svg: `<svg viewBox="0 0 200 80"><line x1="10" y1="40" x2="190" y2="40" stroke="#1E3A8A" stroke-width="2"/><circle cx="50" cy="40" r="4" fill="#EF4444"/><path d="M50,40 L140,40" stroke="#22C55E" stroke-width="3"/></svg>`, options: ["-13", "-3", "3", "13", "8"], correct: "3", exp: "Berjalan ke kanan berarti menambah. \(-5 + 8 = 3\).", exp_trans: "Walking right means adding. \(-5 + 8 = 3\)." },
+                    { type: 'task', q: "Suhu di dalam freezer adalah \(-15\)°C. Jika suhu turun lagi \(4\)°C karena listrik mati, berapakah suhu sekarang?", q_trans: "The temperature inside a freezer is \(-15\)°C. If the temperature drops another \(4\)°C due to power outage, what is the temperature now?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="20" width="80" height="60" fill="#E0F2FE" stroke="#1E3A8A" stroke-width="3"/><path d="M80,60 L100,30 L120,60 Z" fill="#38BDF8"/></svg>`, options: ["\(11\)°C", "\(-11\)°C", "\(19\)°C", "\(-19\)°C", "\(-20\)°C"], correct: "\(-19\)°C", exp: "Suhu turun berarti pengurangan. \(-15 - 4 = -19\)°C.", exp_trans: "Temperature drops means subtraction. \(-15 - 4 = -19\)°C." },
+                    { type: 'task', q: "Kapasitas baterai ponsel adalah 20%. Karena memainkan game, baterai berkurang 35%. Berapa persentase baterai sekarang?", q_trans: "Phone battery capacity is 20%. Because of playing games, the battery decreases by 35%. What is the battery percentage now?", svg: `<svg viewBox="0 0 200 100"><rect x="70" y="30" width="60" height="40" rx="5" fill="#EF4444" stroke="#1E3A8A" stroke-width="2"/><text x="100" y="55" text-anchor="middle" fill="white" font-weight="bold">20%</text></svg>`, options: ["55%", "15%", "-15%", "5%", "0%"], correct: "-15%", exp: "Baterai berkurang: \(20 - 35 = -15\%\). Ini berarti ponsel kehabisan daya dan 'hutang' daya 15%.", exp_trans: "Battery decreases: \(20 - 35 = -15\%\). This means the phone is out of power and 'owes' 15%." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Faktorisasi Prima (Membuat Pohon Faktor)</h2>
+                            <p class="main-text">Pohon faktor adalah cara mudah untuk memecah bilangan menjadi bilangan prima terkecil. Kita terus membagi bilangan sampai tidak bisa dibagi lagi selain oleh 1 dan dirinya sendiri.</p>
+                            <p class="trans-text">A factor tree is an easy way to break down numbers into their smallest prime numbers. We keep dividing the number until it can't be divided by anything other than 1 and itself.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 150" width="230">
+                                    <!-- Root -->
+                                    <circle cx="125" cy="20" r="15" fill="#FDE047" stroke="#1E40AF" stroke-width="2"/><text x="125" y="25" text-anchor="middle" fill="#1E40AF" font-weight="bold">24</text>
+                                    <!-- Lines -->
+                                    <line x1="125" y1="35" x2="70" y2="60" stroke="#1E3A8A"/>
+                                    <line x1="125" y1="35" x2="180" y2="60" stroke="#1E3A8A"/>
+                                    <!-- Children -->
+                                    <circle cx="70" cy="70" r="12" fill="#A7F3D0" stroke="#1E40AF" stroke-width="2"/><text x="70" y="75" text-anchor="middle" fill="#1E40AF" font-weight="bold">4</text>
+                                    <circle cx="180" cy="70" r="12" fill="#A7F3D0" stroke="#1E40AF" stroke-width="2"/><text x="180" y="75" text-anchor="middle" fill="#1E40AF" font-weight="bold">6</text>
+                                    <!-- Lines to leaves -->
+                                    <line x1="70" y1="82" x2="40" y2="110" stroke="#1E3A8A"/>
+                                    <line x1="70" y1="82" x2="100" y2="110" stroke="#1E3A8A"/>
+                                    <line x1="180" y1="82" x2="150" y2="110" stroke="#1E3A8A"/>
+                                    <line x1="180" y1="82" x2="210" y2="110" stroke="#1E3A8A"/>
+                                    <!-- Leaves -->
+                                    <circle cx="40" cy="120" r="10" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/><text x="40" y="125" text-anchor="middle" fill="white" font-weight="bold">2</text>
+                                    <circle cx="100" cy="120" r="10" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/><text x="100" y="125" text-anchor="middle" fill="white" font-weight="bold">2</text>
+                                    <circle cx="150" cy="120" r="10" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/><text x="150" y="125" text-anchor="middle" fill="white" font-weight="bold">2</text>
+                                    <circle cx="210" cy="120" r="10" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/><text x="210" y="125" text-anchor="middle" fill="white" font-weight="bold">3</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Faktorisasi prima dari 24 adalah \(2 \times 2 \times 2 \times 3\), atau bisa ditulis \(2^3 \times 3\).</p>
+                            <p class="trans-text">The prime factorization of 24 is \(2 \times 2 \times 2 \times 3\), or can be written \(2^3 \times 3\).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Sebuah brankas memiliki kode yang terdiri dari faktor prima dari angka 18. Jika kode disusun dari kecil ke besar, apa kodenya?", q_trans: "A safe has a code consisting of prime factors of 18. If the code is arranged from smallest to largest, what is the code?", svg: `<svg viewBox="0 0 200 100"><rect x="70" y="30" width="60" height="50" rx="5" fill="#1E3A8A"/><circle cx="100" cy="55" r="10" fill="#FDE047"/><text x="100" y="60" text-anchor="middle" fill="#1E3A8A" font-weight="bold">?</text></svg>`, options: ["2, 3", "2, 3, 3", "3, 6", "1, 2, 3", "2, 9"], correct: "2, 3, 3", exp: "18 = 2 x 9. 9 = 3 x 3. Jadi faktor primanya adalah 2, 3, 3.", exp_trans: "18 = 2 x 9. 9 = 3 x 3. So the prime factors are 2, 3, 3." },
+                    { type: 'task', q: "Pohon faktor dari 30 menghasilkan dua bilangan prima di salah satu cabangnya, yaitu 2 dan 3. Berapakah bilangan prima di cabang yang lain?", q_trans: "The factor tree of 30 yields two prime numbers on one branch, 2 and 3. What is the prime number on the other branch?", svg: `<svg viewBox="0 0 200 120"><circle cx="100" cy="30" r="12" fill="#FDE047"/><line x1="100" y1="42" x2="60" y2="70" stroke="#1E3A8A"/><line x1="100" y1="42" x2="140" y2="70" stroke="#1E3A8A"/><circle cx="60" cy="80" r="10" fill="#EC4899"/><circle cx="140" cy="80" r="10" fill="#EC4899"/></svg>`, options: ["3", "5", "7", "10", "15"], correct: "5", exp: "30 dibagi 2 menghasilkan 15. 15 dibagi 3 menghasilkan 5. Jadi cabang lainnya adalah 5.", exp_trans: "30 divided by 2 gives 15. 15 divided by 3 gives 5. So the other branch is 5." },
+                    { type: 'task', q: "Bentuk pangkat dari faktorisasi prima 40 adalah...", q_trans: "The exponent form of the prime factorization of 40 is...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">40</text></svg>`, options: ["\(2^2 \times 5\)", "\(2^3 \times 5\)", "\(2 \times 5^2\)", "\(2^3 \times 3\)", "\(4 \times 10\)"], correct: "\(2^3 \times 5\)", exp: "40 = 2 x 20 = 2 x 2 x 10 = 2 x 2 x 2 x 5 = \(2^3 \times 5\).", exp_trans: "40 = 2 x 20 = 2 x 2 x 10 = 2 x 2 x 2 x 5 = \(2^3 \times 5\)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">KPK & FPB (Power-Up Lanjutan)</h2>
+                            <p class="main-text">KPK dan FPB bisa dicari dengan mudah menggunakan Pohon Faktor! KPK digunakan untuk menyamakan siklus, sedangkan FPB untuk mencari pembagian terbesar.</p>
+                            <p class="trans-text">LCM and GCF can be easily found using a Factor Tree! LCM is used to equalize cycles, while GCF is to find the largest division.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 100" width="230">
+                                    <rect x="20" y="40" width="100" height="40" rx="5" fill="#A7F3D0" stroke="#1E40AF" stroke-width="2"/>
+                                    <text x="70" y="60" text-anchor="middle" fill="#1E40AF" font-weight="bold">KPK</text>
+                                    <text x="70" y="75" text-anchor="middle" fill="#1E40AF" font-size="10">Ambil semua & pangkat terbesar</text>
+                                    
+                                    <rect x="130" y="40" width="100" height="40" rx="5" fill="#FBBF24" stroke="#1E40AF" stroke-width="2"/>
+                                    <text x="180" y="60" text-anchor="middle" fill="#1E40AF" font-weight="bold">FPB</text>
+                                    <text x="180" y="75" text-anchor="middle" fill="#1E40AF" font-size="10">Ambil yang sama & pangkat terkecil</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Misalnya 12 (\(2^2 \times 3\)) dan 18 (\(2 \times 3^2\)). KPK-nya ambil semua: \(2^2 \times 3^2 = 36\). FPB-nya ambil yang sama: \(2 \times 3 = 6\).</p>
+                            <p class="trans-text">For example 12 (\(2^2 \times 3\)) and 18 (\(2 \times 3^2\)). LCM takes all: \(2^2 \times 3^2 = 36\). GCF takes the common: \(2 \times 3 = 6\).</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Planet A berputar mengelilingi matahari setiap 8 hari, Planet B setiap 12 hari. Jika hari ini mereka sejajar, kapan mereka akan sejajar kembali?", q_trans: "Planet A orbits the sun every 8 days, Planet B every 12 days. If they are aligned today, when will they align again?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="15" fill="#FDE047" stroke="#1E3A8A" stroke-width="2"/><circle cx="40" cy="50" r="8" fill="#38BDF8"/><circle cx="160" cy="50" r="10" fill="#EC4899"/></svg>`, options: ["20 hari", "24 hari", "48 hari", "96 hari", "4 hari"], correct: "24 hari", exp: "Kita cari KPK dari 8 dan 12. 8 = 2^3, 12 = 2^2 x 3. KPK = 2^3 x 3 = 24.", exp_trans: "We find LCM of 8 and 12. 8 = 2^3, 12 = 2^2 x 3. LCM = 2^3 x 3 = 24." },
+                    { type: 'task', q: "Ada 20 apel dan 30 jeruk. Andi ingin membuat kantong yang berisi campuran apel dan jeruk dengan jumlah yang sama di setiap kantong. Berapa maksimal kantong yang bisa dibuat?", q_trans: "There are 20 apples and 30 oranges. Andi wants to make bags containing a mix of apples and oranges with equal amounts in each bag. What is the max bags he can make?", svg: `<svg viewBox="0 0 200 100"><circle cx="40" cy="50" r="10" fill="#EF4444"/><circle cx="80" cy="50" r="10" fill="#EF4444"/><circle cx="120" cy="50" r="10" fill="#FBBF24"/><circle cx="160" cy="50" r="10" fill="#FBBF24"/></svg>`, options: ["2", "5", "10", "20", "60"], correct: "10", exp: "Kita cari FPB dari 20 dan 30. 20 = 2^2 x 5, 30 = 2 x 3 x 5. FPB = 2 x 5 = 10.", exp_trans: "We find GCF of 20 and 30. 20 = 2^2 x 5, 30 = 2 x 3 x 5. GCF = 2 x 5 = 10." },
+                    { type: 'task', q: "Bel sekolah berbunyi setiap 15 menit, dan bel istirahat setiap 20 menit. Berapa kali bel sekolah berbunyi hingga keduanya berbunyi bersamaan kembali untuk pertama kalinya?", q_trans: "School bell rings every 15 mins, and break bell rings every 20 mins. How many times does the school bell ring until both ring together for the first time?", svg: `<svg viewBox="0 0 200 100"><path d="M60,30 L100,30 L90,70 L70,70 Z" fill="#FDE047" stroke="#1E3A8A" stroke-width="2"/></svg>`, options: ["2 kali", "3 kali", "4 kali", "5 kali", "60 kali"], correct: "4 kali", exp: "KPK dari 15 dan 20 adalah 60 menit. 60 ÷ 15 = 4. Jadi bel sekolah berbunyi 4 kali (pada menit ke-15, 30, 45, dan 60).", exp_trans: "LCM of 15 and 20 is 60 mins. 60 ÷ 15 = 4. So school bell rings 4 times (at minute 15, 30, 45, and 60)." },
+                    { type: 'task', q: "Sebuah papan kayu sepanjang 48 cm dan 64 cm ingin dipotong menjadi bagian-bagian terpendek yang sama panjang tanpa sisa. Berapakah panjang setiap potongan?", q_trans: "A 48 cm and 64 cm wooden board wants to be cut into the shortest equal lengths without left over. What is the length of each piece?", svg: `<svg viewBox="0 0 200 100"><rect x="20" y="40" width="80" height="20" fill="#D97706"/><rect x="110" y="40" width="60" height="20" fill="#D97706"/></svg>`, options: ["8 cm", "12 cm", "16 cm", "24 cm", "192 cm"], correct: "16 cm", exp: "Kita cari FPB dari 48 dan 64. 48 = 2^4 x 3, 64 = 2^6. FPB = 2^4 = 16.", exp_trans: "We find GCF of 48 and 64. 48 = 2^4 x 3, 64 = 2^6. GCF = 2^4 = 16." }
+                ]
+            },
+            
+            problem: {
+                title: "Problem Introduction",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Pecahan Senilai (Kloning Item)</h2>
+                            <p class="main-text">Pecahan senilai adalah pecahan yang nilainya sama meskipun angka pembilang dan penyebutnya berbeda. Caranya adalah mengalikan atau membagi pembilang dan penyebut dengan angka yang sama.</p>
+                            <p class="trans-text">Equivalent fractions are fractions that have the same value even though the numerator and denominator numbers are different. The trick is to multiply or divide the numerator and denominator by the same number.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 100" width="230">
+                                    <!-- 1/2 -->
+                                    <circle cx="50" cy="50" r="40" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/>
+                                    <path d="M50,10 L50,90 A40,40 0 0,1 50,10 Z" fill="#D97706"/>
+                                    <text x="50" y="55" text-anchor="middle" fill="#1E3A8A" font-weight="bold">1/2</text>
+                                    <!-- Arrow -->
+                                    <path d="M100,50 L140,50" stroke="#1E3A8A" stroke-width="3" stroke-dasharray="4"/>
+                                    <polygon points="140,50 130,45 130,55" fill="#1E3A8A"/>
+                                    <!-- 2/4 -->
+                                    <circle cx="180" cy="50" r="40" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/>
+                                    <path d="M180,10 L180,90 A40,40 0 0,0 140,30 Z" fill="#D97706"/>
+                                    <path d="M180,10 L180,90 A40,40 0 0,1 220,30 Z" fill="#D97706"/>
+                                    <text x="180" y="55" text-anchor="middle" fill="#1E3A8A" font-weight="bold">2/4</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Sama seperti mengkloning item dalam game, pecahan senilai mengubah tampilan tanpa mengubah nilai aslinya! \( \frac{1}{2} = \frac{2}{4} = \frac{4}{8} \)</p>
+                            <p class="trans-text">Just like cloning items in a game, equivalent fractions change the appearance without changing the original value! \( \frac{1}{2} = \frac{2}{4} = \frac{4}{8} \)</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Kamu memiliki ramuan sihir \( \frac{2}{3} \). Jika kamu mengkloningnya menjadi bentuk yang penyebutnya 12, berapakah pembilangnya?", q_trans: "You have a magic potion \( \frac{2}{3} \). If you clone it to a form with denominator 12, what is the numerator?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="40" width="120" height="40" rx="5" fill="#FEF9C3" stroke="#1E40AF" stroke-width="3"/><text x="100" y="65" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">2/3 = ?/12</text></svg>`, options: ["4", "6", "8", "10", "12"], correct: "8", exp: "Untuk mendapat penyebut 12, kita kali 3. Maka pembilang juga dikali 3: \(2 \times 3 = 8\).", exp_trans: "To get denominator 12, multiply by 3. Numerator also multiplied by 3: \(2 \times 3 = 8\)." },
+                    { type: 'task', q: "Manakah dari pecahan berikut yang TIDAK senilai dengan \( \frac{3}{4} \)?", q_trans: "Which of the following fractions is NOT equivalent to \( \frac{3}{4} \)?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{6}{8} \)", "\( \frac{9}{12} \)", "\( \frac{12}{16} \)", "\( \frac{15}{20} \)", "\( \frac{18}{20} \)"], correct: "\( \frac{18}{20} \)", exp: "\( \frac{18}{20} = \frac{9}{10} \), nilainya 0.9, sedangkan \( \frac{3}{4} = 0.75 \). Jadi tidak senilai.", exp_trans: "\( \frac{18}{20} = \frac{9}{10} \), value is 0.9, while \( \frac{3}{4} = 0.75 \). So not equivalent." },
+                    { type: 'task', q: "Ramuan \( \frac{15}{25} \) dapat disederhanakan menjadi bentuk terkecil (faktor prima yang sama). Bentuk sederhananya adalah...", q_trans: "Potion \( \frac{15}{25} \) can be simplified to its smallest form (same prime factor). The simplified form is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#A7F3D0"/><text x="100" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">15/25</text></svg>`, options: ["\( \frac{1}{5} \)", "\( \frac{3}{5} \)", "\( \frac{2}{5} \)", "\( \frac{3}{25} \)", "\( \frac{5}{3} \)"], correct: "\( \frac{3}{5} \)", exp: "FPB dari 15 dan 25 adalah 5. \(15 \div 5 = 3\), \(25 \div 5 = 5\). Jadi \( \frac{3}{5} \).", exp_trans: "GCF of 15 and 25 is 5. \(15 \div 5 = 3\), \(25 \div 5 = 5\). So \( \frac{3}{5} \)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Membandingkan & Mengurutkan Pecahan</h2>
+                            <p class="main-text">Untuk membandingkan pecahan dengan penyebut berbeda, kita harus menyamakan penyebutnya terlebih dahulu menggunakan KPK!</p>
+                            <p class="trans-text">To compare fractions with different denominators, we must equalize the denominators first using LCM!</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 120" width="230">
+                                    <!-- 2/3 -->
+                                    <rect x="20" y="40" width="100" height="30" fill="#FBBF24" stroke="#1E3A8A"/>
+                                    <rect x="20" y="40" width="66" height="30" fill="#D97706"/>
+                                    <text x="70" y="90" text-anchor="middle" fill="#1E3A8A" font-weight="bold">2/3</text>
+                                    
+                                    <!-- 3/4 -->
+                                    <rect x="140" y="40" width="100" height="30" fill="#FBBF24" stroke="#1E3A8A"/>
+                                    <rect x="140" y="40" width="75" height="30" fill="#D97706"/>
+                                    <text x="190" y="90" text-anchor="middle" fill="#1E3A8A" font-weight="bold">3/4</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">KPK dari 3 dan 4 adalah 12. Jadi \( \frac{2}{3} = \frac{8}{12} \) dan \( \frac{3}{4} = \frac{9}{12} \). Karena 9 > 8, maka \( \frac{3}{4} > \frac{2}{3} \).</p>
+                            <p class="trans-text">LCM of 3 and 4 is 12. So \( \frac{2}{3} = \frac{8}{12} \) and \( \frac{3}{4} = \frac{9}{12} \). Since 9 > 8, then \( \frac{3}{4} > \frac{2}{3} \).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Beri tanda yang benar untuk membandingkan \( \frac{2}{5} \) dan \( \frac{3}{10} \).", q_trans: "Give the correct sign to compare \( \frac{2}{5} \) and \( \frac{3}{10} \).", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">2/5  ?  3/10</text></svg>`, options: ["<", ">", "=", "≤", "≥"], correct: ">", exp: "Samakan penyebut ke 10. \( \frac{2}{5} = \frac{4}{10} \). Karena 4 > 3, maka \( \frac{2}{5} > \frac{3}{10} \).", exp_trans: "Equalize denominator to 10. \( \frac{2}{5} = \frac{4}{10} \). Since 4 > 3, then \( \frac{2}{5} > \frac{3}{10} \)." },
+                    { type: 'task', q: "Urutkan pecahan berikut dari yang terkecil ke terbesar: \( \frac{1}{2}, \frac{2}{3}, \frac{3}{4} \).", q_trans: "Sort the following fractions from smallest to largest: \( \frac{1}{2}, \frac{2}{3}, \frac{3}{4} \).", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#A7F3D0"/><circle cx="100" cy="50" r="15" fill="#38BDF8"/><circle cx="150" cy="50" r="15" fill="#EC4899"/></svg>`, options: ["\( \frac{3}{4}, \frac{2}{3}, \frac{1}{2} \)", "\( \frac{1}{2}, \frac{2}{3}, \frac{3}{4} \)", "\( \frac{2}{3}, \frac{1}{2}, \frac{3}{4} \)", "\( \frac{1}{2}, \frac{3}{4}, \frac{2}{3} \)", "\( \frac{3}{4}, \frac{1}{2}, \frac{2}{3} \)"], correct: "\( \frac{1}{2}, \frac{2}{3}, \frac{3}{4} \)", exp: "KPK dari 2,3,4 adalah 12. \( \frac{1}{2}=\frac{6}{12} \), \( \frac{2}{3}=\frac{8}{12} \), \( \frac{3}{4}=\frac{9}{12} \). Urut: 6, 8, 9.", exp_trans: "LCM of 2,3,4 is 12. \( \frac{1}{2}=\frac{6}{12} \), \( \frac{2}{3}=\frac{8}{12} \), \( \frac{3}{4}=\frac{9}{12} \). Order: 6, 8, 9." },
+                    { type: 'task', q: "Siapa yang punya bagian kue terbesar? Andi dapat \( \frac{5}{6} \), Budi dapat \( \frac{7}{8} \), Candra dapat \( \frac{2}{3} \).", q_trans: "Who has the largest cake portion? Andi gets \( \frac{5}{6} \), Budi gets \( \frac{7}{8} \), Candra gets \( \frac{2}{3} \).", svg: `<svg viewBox="0 0 200 100"><rect x="30" y="30" width="40" height="40" fill="#FBBF24"/><rect x="80" y="30" width="40" height="40" fill="#FBBF24"/><rect x="130" y="30" width="40" height="40" fill="#FBBF24"/></svg>`, options: ["Andi", "Budi", "Candra", "Bagian Andi dan Budi sama besar", "Candra dan Andi sama besar"], correct: "Budi", exp: "KPK dari 6, 8, 3 adalah 24. A=\frac{20}{24}, B=\frac{21}{24}, C=\frac{16}{24}. Jadi Budi terbesar.", exp_trans: "LCM of 6, 8, 3 is 24. A=\frac{20}{24}, B=\frac{21}{24}, C=\frac{16}{24}. So Budi is largest." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Nilai Tempat Desimal</h2>
+                            <p class="main-text">Pecahan desimal adalah pecahan dengan penyebut 10, 100, 1000, dan seterusnya. Nilai tempat di belakang koma adalah persepuluhan, perseratusan, perseribuan.</p>
+                            <p class="trans-text">Decimal fractions are fractions with denominators of 10, 100, 1000, and so on. Place values after the decimal point are tenths, hundredths, thousandths.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 300 120" width="280">
+                                    <rect x="10" y="40" width="280" height="50" rx="5" fill="#FEF9C3" stroke="#1E40AF" stroke-width="3"/>
+                                    <text x="50" y="70" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">3</text>
+                                    <text x="100" y="70" text-anchor="middle" font-size="20" fill="#1E3A8A">.</text>
+                                    <text x="140" y="70" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">4</text>
+                                    <text x="180" y="70" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">5</text>
+                                    <text x="220" y="70" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">6</text>
+                                    
+                                    <text x="50" y="105" text-anchor="middle" font-size="10" fill="#64748B">Satuan</text>
+                                    <text x="100" y="105" text-anchor="middle" font-size="10" fill="#64748B">Koma</text>
+                                    <text x="140" y="105" text-anchor="middle" font-size="10" fill="#EF4444">Persepuluhan</text>
+                                    <text x="180" y="105" text-anchor="middle" font-size="10" fill="#EF4444">Perseratusan</text>
+                                    <text x="220" y="105" text-anchor="middle" font-size="10" fill="#EF4444">Perseribuan</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Angka 3.456 berarti 3 satuan, 4 persepuluhan, 5 perseratusan, dan 6 perseribuan.</p>
+                            <p class="trans-text">The number 3.456 means 3 units, 4 tenths, 5 hundredths, and 6 thousandths.</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Dalam angka 42.157, angka 5 berada di nilai tempat...", q_trans: "In the number 42.157, the digit 5 is in the place value of...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="24" fill="#1E3A8A" font-weight="bold">42.157</text></svg>`, options: ["Satuan", "Persepuluhan", "Perseratusan", "Perseribuan", "Puluhan"], correct: "Perseratusan", exp: "Setelah koma: 1 adalah persepuluhan, 5 adalah perseratusan, 7 adalah perseribuan.", exp_trans: "After decimal: 1 is tenths, 5 is hundredths, 7 is thousandths." },
+                    { type: 'task', q: "Pecahan \( \frac{1}{10} + \frac{2}{100} \) jika ditulis dalam bentuk desimal adalah...", q_trans: "Fraction \( \frac{1}{10} + \frac{2}{100} \) if written in decimal form is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["0.12", "1.2", "0.3", "0.03", "0.012"], correct: "0.12", exp: "\( \frac{1}{10} = 0.1 \), \( \frac{2}{100} = 0.02 \). \(0.1 + 0.02 = 0.12\).", exp_trans: "\( \frac{1}{10} = 0.1 \), \( \frac{2}{100} = 0.02 \). \(0.1 + 0.02 = 0.12\)." },
+                    { type: 'task', q: "Nilai dari angka 0.345 jika dibulatkan menjadi dua angka di belakang koma adalah...", q_trans: "The value of 0.345 rounded to two decimal places is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#A7F3D0"/></svg>`, options: ["0.34", "0.35", "0.33", "0.4", "0.3"], correct: "0.35", exp: "Angka ketiga di belakang koma adalah 5, jadi angka sebelumnya (4) dibulatkan ke atas menjadi 5. Hasilnya 0.35.", exp_trans: "The 3rd digit after decimal is 5, so the previous digit (4) is rounded up to 5. Result is 0.35." },
+                    { type: 'task', q: "Jarak rumah Andi ke sekolah adalah 1.25 km. Jika ditulis dalam bentuk pecahan biasa, berapakah nilainya?", q_trans: "The distance from Andi's house to school is 1.25 km. If written in common fraction form, what is the value?", svg: `<svg viewBox="0 0 200 100"><path d="M20,80 L100,30 L180,80 Z" fill="#FDE047" stroke="#1E3A8A" stroke-width="3"/></svg>`, options: ["\(1 \frac{1}{4}\)", "\(1 \frac{1}{5}\)", "\(\frac{5}{4}\)", "\(1 \frac{2}{5}\)", "\(\frac{125}{1000}\)"], correct: "\(1 \frac{1}{4}\)", exp: "0.25 = \( \frac{25}{100} = \frac{1}{4} \). Jadi 1.25 km = \(1 \frac{1}{4}\) km.", exp_trans: "0.25 = \( \frac{25}{100} = \frac{1}{4} \). So 1.25 km = \(1 \frac{1}{4}\) km." }
+                ]
+            },
+			
+            guided: {
+                title: "Guided Practice",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Operasi Hitung Pecahan</h2>
+                            <p class="main-text">Untuk menjumlahkan atau mengurangkan pecahan, penyebutnya harus disamakan terlebih dahulu menggunakan KPK. Jika penyebutnya sudah sama, kita tinggal menjumlahkan atau mengurangkan pembilangnya.</p>
+                            <p class="trans-text">To add or subtract fractions, the denominators must be equalized first using LCM. If the denominators are already the same, we just add or subtract the numerators.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 120" width="230">
+                                    <!-- 1/4 -->
+                                    <rect x="20" y="20" width="50" height="50" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/>
+                                    <rect x="20" y="20" width="12.5" height="50" fill="#D97706"/>
+                                    <text x="45" y="90" text-anchor="middle" fill="#1E3A8A" font-weight="bold">1/4</text>
+                                    
+                                    <!-- Plus -->
+                                    <text x="90" y="55" text-anchor="middle" font-size="24" fill="#1E3A8A" font-weight="bold">+</text>
+                                    
+                                    <!-- 1/2 (as 2/4) -->
+                                    <rect x="110" y="20" width="50" height="50" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/>
+                                    <rect x="110" y="20" width="25" height="50" fill="#D97706"/>
+                                    <rect x="135" y="20" width="25" height="50" fill="#D97706"/>
+                                    <text x="135" y="90" text-anchor="middle" fill="#1E3A8A" font-weight="bold">2/4</text>
+
+                                    <!-- Equals -->
+                                    <text x="180" y="55" text-anchor="middle" font-size="24" fill="#1E3A8A" font-weight="bold">=</text>
+
+                                    <!-- 3/4 -->
+                                    <rect x="200" y="20" width="50" height="50" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/>
+                                    <rect x="200" y="20" width="37.5" height="50" fill="#D97706"/>
+                                    <text x="225" y="90" text-anchor="middle" fill="#1E3A8A" font-weight="bold">3/4</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Contoh: \( \frac{1}{4} + \frac{1}{2} \). KPK dari 4 dan 2 adalah 4. Ubah \( \frac{1}{2} \) menjadi \( \frac{2}{4} \). Lalu jumlahkan: \( \frac{1}{4} + \frac{2}{4} = \frac{3}{4} \).</p>
+                            <p class="trans-text">Example: \( \frac{1}{4} + \frac{1}{2} \). LCM of 4 and 2 is 4. Convert \( \frac{1}{2} \) to \( \frac{2}{4} \). Then add: \( \frac{1}{4} + \frac{2}{4} = \frac{3}{4} \).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Andi memakan \( \frac{1}{3} \) bagian kue, lalu Budi memakan \( \frac{1}{6} \) bagian kue yang sama. Berapakah total bagian kue yang telah dimakan?", q_trans: "Andi eats \( \frac{1}{3} \) of a cake, then Budi eats \( \frac{1}{6} \) of the same cake. What is the total portion of cake eaten?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#FBBF24" stroke="#1E3A8A" stroke-width="2"/><path d="M100,20 L100,50 L130,40 Z" fill="#D97706"/></svg>`, options: ["\( \frac{2}{9} \)", "\( \frac{1}{9} \)", "\( \frac{1}{2} \)", "\( \frac{2}{6} \)", "\( \frac{3}{6} \)"], correct: "\( \frac{1}{2} \)", exp: "KPK 3 dan 6 adalah 6. \( \frac{1}{3} = \frac{2}{6} \). \( \frac{2}{6} + \frac{1}{6} = \frac{3}{6} = \frac{1}{2} \).", exp_trans: "LCM of 3 and 6 is 6. \( \frac{1}{3} = \frac{2}{6} \). \( \frac{2}{6} + \frac{1}{6} = \frac{3}{6} = \frac{1}{2} \)." },
+                    { type: 'task', q: "Sebuah botol berisi \( \frac{5}{8} \) liter air. Jika \( \frac{1}{4} \) liter air dipakai untuk menyiram bunga, berapa liter sisa air dalam botol?", q_trans: "A bottle contains \( \frac{5}{8} \) liters of water. If \( \frac{1}{4} \) liter is used to water plants, how many liters of water are left?", svg: `<svg viewBox="0 0 200 100"><rect x="80" y="20" width="40" height="60" rx="5" fill="#E0F7FA" stroke="#1E3A8A" stroke-width="2"/><rect x="80" y="50" width="40" height="30" fill="#38BDF8"/></svg>`, options: ["\( \frac{4}{8} \)", "\( \frac{4}{4} \)", "\( \frac{6}{12} \)", "\( \frac{3}{8} \)", "\( \frac{6}{8} \)"], correct: "\( \frac{3}{8} \)", exp: "KPK 8 dan 4 adalah 8. \( \frac{1}{4} = \frac{2}{8} \). \( \frac{5}{8} - \frac{2}{8} = \frac{3}{8} \).", exp_trans: "LCM of 8 and 4 is 8. \( \frac{1}{4} = \frac{2}{8} \). \( \frac{5}{8} - \frac{2}{8} = \frac{3}{8} \)." },
+                    { type: 'task', q: "Hasil dari \( 2\frac{1}{2} - \frac{3}{4} \) adalah...", q_trans: "The result of \( 2\frac{1}{2} - \frac{3}{4} \) is...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">2 1/2 - 3/4 = ?</text></svg>`, options: ["\( 1\frac{3}{4} \)", "\( 1\frac{1}{4} \)", "\( 2\frac{1}{4} \)", "\( \frac{7}{4} \)", "\( 2\frac{1}{2} \)"], correct: "\( 1\frac{3}{4} \)", exp: "Ubah ke pecahan biasa: \( \frac{5}{2} - \frac{3}{4} = \frac{10}{4} - \frac{3}{4} = \frac{7}{4} = 1\frac{3}{4} \).", exp_trans: "Convert to improper fraction: \( \frac{5}{2} - \frac{3}{4} = \frac{10}{4} - \frac{3}{4} = \frac{7}{4} = 1\frac{3}{4} \)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Perkalian & Pembagian Pecahan</h2>
+                            <p class="main-text">Perkalian pecahan sangat mudah: kalikan pembilang dengan pembilang, dan penyebut dengan penyebut. Untuk pembagian, balikkan pecahan kedua (kenali kebalikannya) lalu ubah menjadi perkalian!</p>
+                            <p class="trans-text">Multiplying fractions is easy: multiply numerator by numerator, and denominator by denominator. For division, flip the second fraction (find its reciprocal) then change it to multiplication!</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 100" width="230">
+                                    <rect x="10" y="30" width="230" height="40" rx="5" fill="#FEF9C3" stroke="#1E40AF" stroke-width="3"/>
+                                    <text x="50" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">2/3</text>
+                                    <text x="85" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A">÷</text>
+                                    <text x="115" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">4/5</text>
+                                    <text x="150" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A">=</text>
+                                    <text x="185" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">2/3</text>
+                                    <text x="215" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A">x</text>
+                                    <text x="230" y="55" text-anchor="middle" font-size="12" fill="#EC4899" font-weight="bold">5/4</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Contoh: \( \frac{2}{3} \div \frac{4}{5} = \frac{2}{3} \times \frac{5}{4} = \frac{10}{12} = \frac{5}{6} \).</p>
+                            <p class="trans-text">Example: \( \frac{2}{3} \div \frac{4}{5} = \frac{2}{3} \times \frac{5}{4} = \frac{10}{12} = \frac{5}{6} \).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Sebuah lahan sawah memiliki luas \( \frac{4}{5} \) hektar. Jika \( \frac{1}{4} \) dari lahan tersebut ditanami padi, berapa hektar luas lahan yang ditanami padi?", q_trans: "A rice field has an area of \( \frac{4}{5} \) hectare. If \( \frac{1}{4} \) of the land is planted with rice, how many hectares of land are planted with rice?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" fill="#A7F3D0"/><rect x="40" y="30" width="30" height="40" fill="#16A34A"/></svg>`, options: ["\( \frac{4}{20} \)", "\( \frac{5}{9} \)", "\( \frac{16}{5} \)", "\( \frac{1}{5} \)", "\( \frac{4}{9} \)"], correct: "\( \frac{1}{5} \)", exp: "\( \frac{4}{5} \times \frac{1}{4} = \frac{4}{20} \). Disederhanakan menjadi \( \frac{1}{5} \).", exp_trans: "\( \frac{4}{5} \times \frac{1}{4} = \frac{4}{20} \). Simplified to \( \frac{1}{5} \)." },
+                    { type: 'task', q: "Tali sepanjang \( \frac{3}{4} \) meter dipotong menjadi 3 bagian sama panjang. Berapakah panjang setiap potongan tali?", q_trans: "A \( \frac{3}{4} \) meter long rope is cut into 3 equal lengths. What is the length of each piece of rope?", svg: `<svg viewBox="0 0 200 100"><line x1="20" y1="50" x2="180" y2="50" stroke="#92400E" stroke-width="4"/><line x1="70" y1="40" x2="70" y2="60" stroke="#1E3A8A" stroke-width="2"/><line x1="130" y1="40" x2="130" y2="60" stroke="#1E3A8A" stroke-width="2"/></svg>`, options: ["\( \frac{1}{4} \) m", "\( \frac{9}{4} \) m", "\( \frac{3}{12} \) m", "\( 2 \frac{1}{4} \) m", "\( \frac{4}{3} \) m"], correct: "\( \frac{1}{4} \) m", exp: "\( \frac{3}{4} \div 3 = \frac{3}{4} \times \frac{1}{3} = \frac{3}{12} = \frac{1}{4} \) meter.", exp_trans: "\( \frac{3}{4} \div 3 = \frac{3}{4} \times \frac{1}{3} = \frac{3}{12} = \frac{1}{4} \) meter." },
+                    { type: 'task', q: "Hasil dari \( \frac{5}{6} \times \frac{2}{5} \) adalah...", q_trans: "The result of \( \frac{5}{6} \times \frac{2}{5} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["\( \frac{1}{3} \)", "\( \frac{7}{11} \)", "\( \frac{10}{11} \)", "\( \frac{25}{12} \)", "\( \frac{3}{6} \)"], correct: "\( \frac{1}{3} \)", exp: "\( \frac{5}{6} \times \frac{2}{5} = \frac{10}{30} \). Disederhanakan membagi 5: \( \frac{2}{6} = \frac{1}{3} \).", exp_trans: "\( \frac{5}{6} \times \frac{2}{5} = \frac{10}{30} \). Simplified by dividing 5: \( \frac{2}{6} = \frac{1}{3} \)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Operasi Campuran pada Bilangan Bulat</h2>
+                            <p class="main-text">Saat menjumlahkan atau mengurangkan banyak bilangan bulat, kelompokkan tanda positif dan negatif terlebih dahulu untuk mempermudah perhitungan.</p>
+                            <p class="trans-text">When adding or subtracting many integers, group the positive and negative signs first to simplify calculation.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 100">
+                                    <rect x="20" y="30" width="160" height="40" rx="5" fill="#E0F2FE" stroke="#1E3A8A" stroke-width="2"/>
+                                    <text x="100" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">5 - 3 + 2 - 8 = ?</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Contoh: \( 5 - 3 + 2 - 8 \). Kumpulkan positif: \( 5 + 2 = 7 \). Kumpulkan negatif: \( -3 - 8 = -11 \). Lalu hitung: \( 7 - 11 = -4 \).</p>
+                            <p class="trans-text">Example: \( 5 - 3 + 2 - 8 \). Group positive: \( 5 + 2 = 7 \). Group negative: \( -3 - 8 = -11 \). Then calculate: \( 7 - 11 = -4 \).</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Seorang penyelam turun dari kedalaman \(-5\) meter ke kedalaman \(-15\) meter. Jarak yang ditempuh penyelam adalah...", q_trans: "A diver descends from a depth of \(-5\) meters to \(-15\) meters. The distance traveled by the diver is...", svg: `<svg viewBox="0 0 200 100"><line x1="10" y1="40" x2="190" y2="40" stroke="#1E3A8A" stroke-width="2"/><circle cx="50" cy="40" r="4" fill="#EF4444"/><circle cx="150" cy="40" r="4" fill="#EF4444"/></svg>`, options: ["10 meter", "-20 meter", "-10 meter", "20 meter", "5 meter"], correct: "10 meter", exp: "Jarak adalah selisih. \( -5 - (-15) = -5 + 15 = 10 \) meter.", exp_trans: "Distance is difference. \( -5 - (-15) = -5 + 15 = 10 \) meters." },
+                    { type: 'task', q: "Hasil dari \( 15 - 20 + 5 - 10 \) adalah...", q_trans: "The result of \( 15 - 20 + 5 - 10 \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" fill="#FEF9C3"/></svg>`, options: ["-10", "0", "10", "-20", "30"], correct: "-10", exp: "Positif: \( 15 + 5 = 20 \). Negatif: \( -20 - 10 = -30 \). \( 20 - 30 = -10 \).", exp_trans: "Positive: \( 15 + 5 = 20 \). Negative: \( -20 - 10 = -30 \). \( 20 - 30 = -10 \)." },
+                    { type: 'task', q: "Saldo rekening Andi adalah Rp 50.000. Ia berbelanja seharga Rp 75.000 menggunakan kartu debit. Berapakah saldo akhir Andi?", q_trans: "Andi's bank account balance is Rp 50,000. He shops for Rp 75,000 using a debit card. What is Andi's final balance?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="30" width="80" height="40" fill="#EF4444"/><text x="100" y="55" text-anchor="middle" fill="white" font-weight="bold">Debit</text></svg>`, options: ["Rp 125.000", "Rp 25.000", "-Rp 25.000", "-Rp 125.000", "Rp 0"], correct: "-Rp 25.000", exp: "Pengeluarangan berarti pengurangan. \( 50.000 - 75.000 = -25.000 \). Saldo minus berarti hutang.", exp_trans: "Spending means subtraction. \( 50,000 - 75,000 = -25,000 \). Minus balance means debt." },
+                    { type: 'task', q: "Pada jam 12 malam, suhu udara adalah \( 4\)°C. Pada pagi hari suhu turun \( 7\)°C. Berapakah suhu pada pagi hari?", q_trans: "At 12 AM, the temperature was \( 4\)°C. In the morning the temperature dropped by \( 7\)°C. What is the temperature in the morning?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#E0F7FA" stroke="#1E3A8A"/></svg>`, options: ["\( 11\)°C", "\( 3\)°C", "\( -3\)°C", "\( -11\)°C", "\( -4\)°C"], correct: "\( -3\)°C", exp: "Suhu turun berarti kurang. \( 4 - 7 = -3\)°C.", exp_trans: "Temperature drops means minus. \( 4 - 7 = -3\)°C." }
+                ]
+            },
+            
+            independent: {
+                title: "Independent Practice",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Konversi Pecahan dan Desimal</h2>
+                            <p class="main-text">Pecahan dapat diubah menjadi desimal dengan cara membagi pembilang dengan penyebutnya. Sebaliknya, desimal dapat diubah ke pecahan dengan menempatkannya di nilai tempat yang sesuai.</p>
+                            <p class="trans-text">Fractions can be converted to decimals by dividing the numerator by the denominator. Conversely, decimals can be converted to fractions by placing them in the appropriate place value.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 250 100" width="230">
+                                    <rect x="10" y="30" width="230" height="40" rx="5" fill="#F0F9FF" stroke="#1E3A8A" stroke-width="2"/>
+                                    <text x="60" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">1/4</text>
+                                    <text x="110" y="55" text-anchor="middle" font-size="16" fill="#EC4899">=</text>
+                                    <text x="160" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">0.25</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Contoh: \( \frac{1}{4} = 1 \div 4 = 0.25 \). Dan \( 0.75 = \frac{75}{100} = \frac{3}{4} \).</p>
+                            <p class="trans-text">Example: \( \frac{1}{4} = 1 \div 4 = 0.25 \). And \( 0.75 = \frac{75}{100} = \frac{3}{4} \).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Bentuk desimal dari pecahan \( \frac{3}{5} \) adalah...", q_trans: "The decimal form of the fraction \( \frac{3}{5} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["0.3", "0.5", "0.6", "0.8", "1.5"], correct: "0.6", exp: "\( 3 \div 5 = 0.6 \). Atau samakan penyebut ke 10: \( \frac{6}{10} = 0.6 \).", exp_trans: "\( 3 \div 5 = 0.6 \). Or equalize denominator to 10: \( \frac{6}{10} = 0.6 \)." },
+                    { type: 'task', q: "Bentuk pecahan paling sederhana dari 0.45 adalah...", q_trans: "The simplest fraction form of 0.45 is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#A7F3D0"/></svg>`, options: ["\( \frac{45}{100} \)", "\( \frac{9}{20} \)", "\( \frac{5}{10} \)", "\( \frac{4}{5} \)", "\( \frac{9}{10} \)"], correct: "\( \frac{9}{20} \)", exp: "\( 0.45 = \frac{45}{100} \). Disederhanakan dengan FPB 5: \( \frac{9}{20} \).", exp_trans: "\( 0.45 = \frac{45}{100} \). Simplified by GCF 5: \( \frac{9}{20} \)." },
+                    { type: 'task', q: "Jika \( \frac{7}{8} \) diubah ke bentuk desimal, hasilnya adalah...", q_trans: "If \( \frac{7}{8} \) is converted to decimal form, the result is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["0.78", "0.875", "0.7", "0.87", "1.14"], correct: "0.875", exp: "\( 7 \div 8 = 0.875 \).", exp_trans: "\( 7 \div 8 = 0.875 \)." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Operasi Hitung Desimal</h2>
+                            <p class="main-text">Saat menjumlahkan atau mengurangkan desimal, pastikan tanda koma berada dalam satu garis lurus. Untuk perkalian, abaikan koma dulu, lalu hitung total angka di belakang koma.</p>
+                            <p class="trans-text">When adding or subtracting decimals, make sure the decimal points are in a straight line. For multiplication, ignore the decimal first, then count the total digits after the decimal.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 120" width="180">
+                                    <rect x="40" y="20" width="120" height="80" fill="#FEF9C3" stroke="#1E3A8A" stroke-width="2"/>
+                                    <text x="60" y="50" font-family="monospace" font-size="16" fill="#1E3A8A">2.5</text>
+                                    <text x="60" y="75" font-family="monospace" font-size="16" fill="#1E3A8A">+ 1.2</text>
+                                    <line x1="50" y1="80" x2="150" y2="80" stroke="#1E3A8A" stroke-width="2"/>
+                                    <text x="60" y="100" font-family="monospace" font-size="16" fill="#22C55E" font-weight="bold">3.7</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Contoh: \( 2.5 + 1.2 = 3.7 \). Untuk perkalian \( 0.2 \times 0.3 = 0.06 \) (karena ada 2 angka di belakang koma).</p>
+                            <p class="trans-text">Example: \( 2.5 + 1.2 = 3.7 \). For multiplication \( 0.2 \times 0.3 = 0.06 \) (because there are 2 digits after the decimal).</p>
+                        `
+                    },
+                    // 3 Tasks
+                    { type: 'task', q: "Andi membeli buku seharga Rp 12.500 dan pulpen seharga Rp 3.250. Berapakah total uang yang harus Andi bayar?", q_trans: "Andi buys a book for Rp 12,500 and a pen for Rp 3,250. What is the total money Andi has to pay?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="40" height="50" fill="#EF4444"/><rect x="100" y="40" width="10" height="40" fill="#1E3A8A"/></svg>`, options: ["Rp 15.750", "Rp 15.000", "Rp 16.000", "Rp 15.7500", "Rp 9.250"], correct: "Rp 15.750", exp: "Samakan angka di belakang koma: 12.500 + 3.250. \( 500 + 250 = 750 \), \( 12 + 3 = 15 \). Hasilnya 15.750.", exp_trans: "Align digits after decimal: 12.500 + 3.250. \( 500 + 250 = 750 \), \( 12 + 3 = 15 \). Result 15.750." },
+                    { type: 'task', q: "Hasil dari \( 0.5 \times 0.4 \) adalah...", q_trans: "The result of \( 0.5 \times 0.4 \) is...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A" font-weight="bold">0.5 x 0.4 = ?</text></svg>`, options: ["0.20", "0.02", "2.0", "0.9", "0.15"], correct: "0.20", exp: "Hitung \( 5 \times 4 = 20 \). Ada 2 angka di belakang koma, jadi 0.20 (atau 0.2).", exp_trans: "Calculate \( 5 \times 4 = 20 \). There are 2 digits after decimal, so 0.20 (or 0.2)." },
+                    { type: 'task', q: "Sebuah pipa memiliki panjang 5.5 meter. Jika dipotong 2.25 meter, berapakah sisa panjang pipa?", q_trans: "A pipe is 5.5 meters long. If 2.25 meters is cut, what is the remaining length of the pipe?", svg: `<svg viewBox="0 0 200 100"><rect x="20" y="40" width="160" height="20" fill="#64748B"/><rect x="20" y="40" width="60" height="20" fill="#EF4444"/></svg>`, options: ["3.25 meter", "3.75 meter", "3.30 meter", "7.75 meter", "3.35 meter"], correct: "3.25 meter", exp: "Susun: 5.50 - 2.25. \( 50 - 25 = 25 \), \( 5 - 2 = 3 \). Hasilnya 3.25 meter.", exp_trans: "Arrange: 5.50 - 2.25. \( 50 - 25 = 25 \), \( 5 - 2 = 3 \). Result 3.25 meters." },
+
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Bilangan Prima & Pohon Faktor (Menghindari Rintangan)</h2>
+                            <p class="main-text">Dalam menyelesaikan masalah KPK dan FPB yang kompleks, Pohon Faktor adalah senjata andalan kita. Ini membantu menghindari rintangan perhitungan manual yang lambat.</p>
+                            <p class="trans-text">In solving complex LCM and GCF problems, the Factor Tree is our ultimate weapon. It helps avoid the obstacles of slow manual calculation.</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 200 120" width="180">
+                                    <circle cx="100" cy="20" r="12" fill="#FDE047" stroke="#1E40AF" stroke-width="2"/>
+                                    <line x1="100" y1="32" x2="60" y2="60" stroke="#1E3A8A"/>
+                                    <line x1="100" y1="32" x2="140" y2="60" stroke="#1E3A8A"/>
+                                    <circle cx="60" cy="70" r="10" fill="#A7F3D0" stroke="#1E40AF" stroke-width="2"/>
+                                    <circle cx="140" cy="70" r="10" fill="#A7F3D0" stroke="#1E40AF" stroke-width="2"/>
+                                    <line x1="60" y1="80" x2="40" y2="100" stroke="#1E3A8A"/>
+                                    <line x1="60" y1="80" x2="80" y2="100" stroke="#1E3A8A"/>
+                                    <circle cx="40" cy="110" r="8" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/>
+                                    <circle cx="80" cy="110" r="8" fill="#EC4899" stroke="#1E40AF" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <p class="main-text">Dengan memecah bilangan menjadi faktor primanya, kita bisa dengan cepat melihat bilangan prima mana yang sama dan mana yang berbeda.</p>
+                            <p class="trans-text">By breaking down numbers into their prime factors, we can quickly see which prime numbers are the same and which are different.</p>
+                        `
+                    },
+                    // 4 Tasks
+                    { type: 'task', q: "Faktorisasi prima dari 60 adalah...", q_trans: "The prime factorization of 60 is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#FDE047"/></svg>`, options: ["\( 2^2 \times 3 \times 5 \)", "\( 2 \times 3 \times 5 \)", "\( 2^2 \times 3^2 \times 5 \)", "\( 2 \times 3^2 \times 5 \)", "\( 4 \times 15 \)"], correct: "\( 2^2 \times 3 \times 5 \)", exp: "60 = 2 x 30 = 2 x 2 x 15 = 2 x 2 x 3 x 5 = \( 2^2 \times 3 \times 5 \).", exp_trans: "60 = 2 x 30 = 2 x 2 x 15 = 2 x 2 x 3 x 5 = \( 2^2 \times 3 \times 5 \)." },
+                    { type: 'task', q: "Diketahui 24 = \( 2^3 \times 3 \) dan 36 = \( 2^2 \times 3^2 \). Berapakah FPB dari 24 dan 36?", q_trans: "Given 24 = \( 2^3 \times 3 \) and 36 = \( 2^2 \times 3^2 \). What is the GCF of 24 and 36?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#F0F9FF"/></svg>`, options: ["6", "12", "72", "4", "8"], correct: "12", exp: "FPB ambil pangkat terkecil yang sama. 2 pangkat min(3,2)=2. 3 pangkat min(1,2)=1. \( 2^2 \times 3 = 4 \times 3 = 12 \).", exp_trans: "GCF takes the smallest exponent of common factors. 2 pow min(3,2)=2. 3 pow min(1,2)=1. \( 2^2 \times 3 = 4 \times 3 = 12 \)." },
+                    { type: 'task', q: "Diketahui 15 = \( 3 \times 5 \) dan 20 = \( 2^2 \times 5 \). Berapakah KPK dari 15 dan 20?", q_trans: "Given 15 = \( 3 \times 5 \) and 20 = \( 2^2 \times 5 \). What is the LCM of 15 and 20?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FFF1F2"/></svg>`, options: ["5", "20", "60", "30", "300"], correct: "60", exp: "KPK ambil semua pangkat terbesar. \( 2^2 \times 3 \times 5 = 4 \times 3 \times 5 = 60 \).", exp_trans: "LCM takes all highest exponents. \( 2^2 \times 3 \times 5 = 4 \times 3 \times 5 = 60 \)." },
+                    { type: 'task', q: "Tiga buah lampu menyala setiap 4 detik, 6 detik, dan 8 detik. Jika ketiga lampu menyala bersamaan pada detik ke-0, kapan mereka akan menyala bersamaan kembali?", q_trans: "Three lights blink every 4 seconds, 6 seconds, and 8 seconds. If all three blink together at second 0, when will they blink together again?", svg: `<svg viewBox="0 0 200 100"><circle cx="40" cy="50" r="10" fill="#FDE047"/><circle cx="100" cy="50" r="10" fill="#FDE047"/><circle cx="160" cy="50" r="10" fill="#FDE047"/></svg>`, options: ["12 detik", "16 detik", "18 detik", "24 detik", "48 detik"], correct: "24 detik", exp: "Cari KPK dari 4, 6, 8. \( 4=2^2, 6=2 \times 3, 8=2^3 \). KPK = \( 2^3 \times 3 = 8 \times 3 = 24 \).", exp_trans: "Find LCM of 4, 6, 8. \( 4=2^2, 6=2 \times 3, 8=2^3 \). LCM = \( 2^3 \times 3 = 8 \times 3 = 24 \)." }
+                ]
+            },
+            
+            consolidation: {
+                title: "Consolidation & Reflection",
+                pages: [
+                    // 1 Teori
+                    {
+                        type: 'theory',
+                        content: `
+                            <h2 class="section-title">Sampai Jumpa di Petualangan Selanjutnya!</h2>
+                            <p class="main-text">Kerja bagus hari ini! Kita telah menaklukkan Bilangan Bulat, Faktor, Kelipatan, Pohon Faktor, KPK & FPB, Pecahan, dan Desimal. Kamu adalah petualang matematika yang hebat!</p>
+                            <p class="trans-text">Great job today! We have conquered Integers, Factors, Multiples, Factor Trees, LCM & GCF, Fractions, and Decimals. You are a great math adventurer!</p>
+                            <div class="illustration">
+                                <svg viewBox="0 0 300 150" width="280">
+                                    <rect x="120" y="20" width="60" height="60" rx="10" fill="#FDE047" stroke="#1E40AF" stroke-width="4"/>
+                                    <circle cx="135" cy="40" r="5" fill="#1E40AF"/><circle cx="165" cy="40" r="5" fill="#1E40AF"/>
+                                    <path d="M130,55 Q150,70 170,55" stroke="#1E40AF" stroke-width="3" fill="none"/>
+                                    <path d="M100,100 L100,80 L200,80 L200,100 Z" fill="#FBBF24" stroke="#1E40AF" stroke-width="3"/>
+                                    <text x="150" y="140" text-anchor="middle" font-size="14" fill="#1E40AF" font-weight="bold">Master of Math!</text>
+                                </svg>
+                            </div>
+                            <p class="main-text">Apakah kamu siap menjadi Master Pembagian resmi? Ambil portal ke petualanganmu selanjutnya!</p>
+                            <p class="trans-text">Are you ready to become an official Math Master? Take the portal to your next adventure!</p>
+                            <div style="text-align: center; margin-top: 30px;">
+                                <a href="https://learn.algonova.id" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block; padding: 15px 30px; font-size: 1.2rem; background-color: var(--accent-color); color: white;">
+                                    ▶️ Go to learn.algonova.id
+                                </a>
+                            </div>
+                        `
+                    }
+                ]
+            },
+			
+            task1: {
+                title: "Task 1: Bilangan Bulat & Garis Bilangan",
+                pages: [
+                    { type: 'task', q: "Suhu di pagi hari adalah \(-5\)°C. Saat siang hari, suhu naik sebesar \(7\)°C. Berapakah suhu saat siang hari?", q_trans: "The temperature in the morning was \(-5\)°C. At noon, the temperature rose by \(7\)°C. What is the temperature at noon?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#E0F7FA" stroke="#1E3A8A" stroke-width="2"/><text x="100" y="55" text-anchor="middle" font-size="16" fill="#1E3A8A" font-weight="bold">-5 + 7</text></svg>`, options: ["\(2\)°C", "\(-2\)°C", "\(12\)°C", "\(-12\)°C", "\(35\)°C"], correct: "\(2\)°C", exp: "Suhu naik berarti penjumlahan: \(-5 + 7 = 2\)°C.", exp_trans: "Temperature rises means addition: \(-5 + 7 = 2\)°C." },
+                    { type: 'task', q: "Saldo rekening bank Deni adalah -Rp 20.000 (hutang). Jika ia menabung Rp 50.000, berapakah saldo akhirnya?", q_trans: "Deni's bank account balance is -Rp 20,000 (debt). If he saves Rp 50,000, what is his final balance?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#FDE047"/><text x="100" y="55" text-anchor="middle" font-size="14" fill="#1E3A8A" font-weight="bold">-20k + 50k</text></svg>`, options: ["-Rp 30.000", "Rp 30.000", "Rp 70.000", "-Rp 70.000", "Rp 20.000"], correct: "Rp 30.000", exp: "\(-20.000 + 50.000 = 30.000\). Saldo akhirnya Rp 30.000.", exp_trans: "\(-20,000 + 50,000 = 30,000\). Final balance is Rp 30,000." },
+                    { type: 'task', q: "Sebuah kapal selam berada di kedalaman -120 meter. Jika ia naik sejauh 45 meter, di kedalaman berapakah kapal selam itu sekarang?", q_trans: "A submarine is at a depth of -120 meters. If it ascends by 45 meters, at what depth is the submarine now?", svg: `<svg viewBox="0 0 200 100"><path d="M0,20 Q50,10 100,20 T200,20 L200,100 L0,100 Z" fill="#E0F7FA"/><path d="M80,50 L120,50 L110,70 L90,70 Z" fill="#1E3A8A"/></svg>`, options: ["-165 m", "-75 m", "75 m", "165 m", "-85 m"], correct: "-75 m", exp: "Naik berarti menambah positif: \(-120 + 45 = -75\) meter.", exp_trans: "Ascending means adding positive: \(-120 + 45 = -75\) meters." },
+                    { type: 'task', q: "Dalam permainan video, skor Andi adalah -15 poin. Di level berikutnya, ia mendapatkan 40 poin. Berapakah skor Andi sekarang?", q_trans: "In a video game, Andi's score is -15 points. In the next level, he gets 40 points. What is Andi's score now?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" fill="#A7F3D0"/><text x="100" y="55" text-anchor="middle" font-size="14" fill="#1E3A8A">-15 + 40</text></svg>`, options: ["-55 poin", "25 poin", "-25 poin", "55 poin", "15 poin"], correct: "25 poin", exp: "\(-15 + 40 = 25\) poin.", exp_trans: "\(-15 + 40 = 25\) points." },
+                    { type: 'task', q: "Suhu malam hari adalah \(4\)°C. Saat menjelang pagi, suhu turun \(8\)°C. Berapakah suhu pagi hari?", q_trans: "Night temperature is \(4\)°C. Towards morning, the temperature drops by \(8\)°C. What is the morning temperature?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#E0F7FA"/></svg>`, options: ["\(12\)°C", "\(-4\)°C", "\(4\)°C", "\(-12\)°C", "\(-8\)°C"], correct: "\(-4\)°C", exp: "Suhu turun berarti pengurangan: \(4 - 8 = -4\)°C.", exp_trans: "Temperature drops means subtraction: \(4 - 8 = -4\)°C." },
+                    { type: 'task', q: "Manakah dari pernyataan berikut yang benar jika membandingkan bilangan bulat \(-5\) dan \(-2\)?", q_trans: "Which of the following statements is true when comparing integers \(-5\) and \(-2\)?", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A">-5 vs -2</text></svg>`, options: ["\(-5 > -2\)", "\(-5 < -2\)", "\(-5 = -2\)", "\(-2 < -5\)", "\(-5 \le -2\)"], correct: "\(-5 < -2\)", exp: "Di garis bilangan negatif, yang angkanya lebih besar (jaraknya lebih jauh dari nol) nilainya lebih kecil. \(-5\) ada di kiri \(-2\).", exp_trans: "On negative number lines, the larger number (further from zero) has a smaller value. \(-5\) is to the left of \(-2\)." },
+                    { type: 'task', q: "Hasil dari \( -8 + 12 - 15 \) adalah...", q_trans: "The result of \( -8 + 12 - 15 \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["-11", "11", "19", "-19", "5"], correct: "-11", exp: "Kelompokkan positif: \(12\). Negatif: \(-8 - 15 = -23\). Lalu \(12 - 23 = -11\).", exp_trans: "Group positive: \(12\). Negative: \(-8 - 15 = -23\). Then \(12 - 23 = -11\)." },
+                    { type: 'task', q: "Sebuah drone berada di ketinggian 50 meter. Drone tersebut turun sejauh 75 meter. Posisi akhir drone adalah...", q_trans: "A drone is at an altitude of 50 meters. The drone descends by 75 meters. The final position of the drone is...", svg: `<svg viewBox="0 0 200 100"><line x1="10" y1="50" x2="190" y2="50" stroke="#1E3A8A" stroke-width="2"/><circle cx="100" cy="70" r="5" fill="#EF4444"/></svg>`, options: ["125 m", "-25 m", "25 m", "-125 m", "50 m"], correct: "-25 m", exp: "Turun berarti mengurangi. \(50 - 75 = -25\) meter (di bawah titik awal).", exp_trans: "Descending means subtracting. \(50 - 75 = -25\) meters (below starting point)." },
+                    { type: 'task', q: "Hasil dari \((-4) \times (-3) \times 2\) adalah...", q_trans: "The result of \((-4) \times (-3) \times 2\) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" fill="#A7F3D0"/></svg>`, options: ["-24", "24", "12", "-12", "-48"], correct: "24", exp: "Negatif kali negatif menjadi positif. \( (-4) \times (-3) = 12\). Lalu \(12 \times 2 = 24\).", exp_trans: "Negative times negative becomes positive. \( (-4) \times (-3) = 12\). Then \(12 \times 2 = 24\)." },
+                    { type: 'task', q: "Andi berhutang sebesar Rp 15.000 dan Budi berhutang sebesar Rp 25.000. Jika mereka digabung, total hutang mereka dalam bentuk bilangan bulat adalah...", q_trans: "Andi owes Rp 15,000 and Budi owes Rp 25,000. If combined, their total debt in integer form is...", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="30" width="80" height="40" fill="#EF4444"/></svg>`, options: ["-Rp 40.000", "Rp 40.000", "-Rp 10.000", "Rp 10.000", "-Rp 30.000"], correct: "-Rp 40.000", exp: "Hutang bernilai negatif. \(-15.000 + (-25.000) = -40.000\).", exp_trans: "Debt is negative. \(-15,000 + (-25,000) = -40,000\)." }
+                ]
+            },
+            task2: {
+                title: "Task 2: Faktor, Kelipatan, Prima & Pohon Faktor",
+                pages: [
+                    { type: 'task', q: "Sebuah brankas memiliki kode yang terdiri dari faktor dari 28. Manakah dari angka berikut yang BUKAN faktor dari 28?", q_trans: "A safe has a code consisting of factors of 28. Which of the following is NOT a factor of 28?", svg: `<svg viewBox="0 0 200 100"><rect x="70" y="40" width="60" height="50" fill="#8B5CF6"/></svg>`, options: ["2", "4", "7", "8", "14"], correct: "8", exp: "28 dibagi 8 menghasilkan sisa 4. Jadi 8 bukan faktor.", exp_trans: "28 divided by 8 leaves a remainder 4. So 8 is not a factor." },
+                    { type: 'task', q: "Untuk membuka pintu rahasia, kamu harus menyebutkan faktor prima dari 36. Manakah kombinasi yang benar?", q_trans: "To open a secret door, you must mention the prime factors of 36. Which combination is correct?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="30" width="80" height="50" fill="#1E3A8A"/></svg>`, options: ["2 dan 3", "2 dan 4", "3 dan 6", "2, 3, 6", "4 dan 9"], correct: "2 dan 3", exp: "Faktorisasi prima 36 = \(2^2 \times 3^2\). Jadi faktor primanya adalah 2 dan 3.", exp_trans: "Prime factorization of 36 = \(2^2 \times 3^2\). So prime factors are 2 and 3." },
+                    { type: 'task', q: "Katak melompat dengan kelipatan 9. Pada lompatan ke-4, katak mendarat di angka berapa?", q_trans: "A frog jumps in multiples of 9. On the 4th jump, what number does the frog land on?", svg: `<svg viewBox="0 0 200 100"><circle cx="40" cy="50" r="10" fill="#22C55E"/><circle cx="100" cy="50" r="10" fill="#22C55E"/><circle cx="160" cy="50" r="10" fill="#22C55E"/></svg>`, options: ["27", "36", "45", "40", "13"], correct: "36", exp: "Lompatan ke-4: \(9 \times 4 = 36\).", exp_trans: "4th jump: \(9 \times 4 = 36\)." },
+                    { type: 'task', q: "Penjaga gerbang hanya membolehkan lewat bilangan prima. Manakah angka yang boleh lewat?", q_trans: "The gatekeeper only allows prime numbers. Which number is allowed to pass?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="30" width="80" height="50" fill="#10B981"/></svg>`, options: ["21", "27", "29", "33", "39"], correct: "29", exp: "29 hanya bisa dibagi habis oleh 1 dan 29. Bilangan lain bisa dibagi 3 atau 7.", exp_trans: "29 can only be divided exactly by 1 and 29. Others can be divided by 3 or 7." },
+                    { type: 'task', q: "Dalam bentuk pangkat, faktorisasi prima dari 72 adalah...", q_trans: "In exponent form, the prime factorization of 72 is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#FDE047"/></svg>`, options: ["\(2^3 \times 3^2\)", "\(2^2 \times 3^3\)", "\(2 \times 3^4\)", "\(8 \times 9\)", "\(2^4 \times 3\)"], correct: "\(2^3 \times 3^2\)", exp: "72 = 2 x 36 = 2 x 2 x 18 = 2 x 2 x 2 x 9 = 2 x 2 x 2 x 3 x 3 = \(2^3 \times 3^2\).", exp_trans: "72 = 2 x 36 = 2 x 2 x 18 = 2 x 2 x 2 x 9 = 2 x 2 x 2 x 3 x 3 = \(2^3 \times 3^2\)." },
+                    { type: 'task', q: "Pohon faktor dari 48 memecah angka menjadi 6 dan 8. Lalu 6 menjadi 2x3, dan 8 menjadi 2x2x2. Berapa total faktor primanya?", q_trans: "Factor tree of 48 breaks number into 6 and 8. Then 6 into 2x3, and 8 into 2x2x2. What are the total prime factors?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="30" r="12" fill="#A7F3D0"/><line x1="100" y1="42" x2="60" y2="70" stroke="#1E3A8A"/><line x1="100" y1="42" x2="140" y2="70" stroke="#1E3A8A"/><circle cx="60" cy="80" r="8" fill="#EC4899"/><circle cx="140" cy="80" r="8" fill="#EC4899"/></svg>`, options: ["2, 3, 8", "2, 2, 2, 2, 3", "6, 8", "2, 3, 6, 8", "2, 3, 2, 2, 2"], correct: "2, 2, 2, 2, 3", exp: "6 menghasilkan 2 dan 3. 8 menghasilkan 2, 2, 2. Jadi totalnya 2, 2, 2, 2, 3.", exp_trans: "6 yields 2 and 3. 8 yields 2, 2, 2. So total is 2, 2, 2, 2, 3." },
+                    { type: 'task', q: "Manakah dari bilangan berikut yang BUKAN bilangan komposit?", q_trans: "Which of the following is NOT a composite number?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" fill="#FDE047"/></svg>`, options: ["25", "31", "35", "40", "49"], correct: "31", exp: "31 adalah bilangan prima (hanya bisa dibagi 1 dan 31), bukan komposit.", exp_trans: "31 is a prime number (only divisible by 1 and 31), not composite." },
+                    { type: 'task', q: "KPK dari 5 dan 7 adalah 35. Kelipatan persekutuan terkecil SELANJUTNYA adalah...", q_trans: "LCM of 5 and 7 is 35. The NEXT least common multiple is...", svg: `<svg viewBox="0 0 200 100"><line x1="10" y1="50" x2="190" y2="50" stroke="#1E3A8A"/><circle cx="50" cy="50" r="4"/><circle cx="150" cy="50" r="4"/></svg>`, options: ["40", "42", "70", "105", "140"], correct: "70", exp: "Kelipatan persekutuan adalah kelipatan dari KPK-nya. Kelipatan kedua dari 35 adalah \(35 \times 2 = 70\).", exp_trans: "Common multiples are multiples of the LCM. The 2nd multiple of 35 is \(35 \times 2 = 70\)." },
+                    { type: 'task', q: "Ada 32 siswa laki-laki dan 24 siswa perempuan. Mereka ingin dibagi menjadi kelompok dengan jumlah anggota laki-laki dan perempuan yang sama di setiap kelompok. Berapa maksimal jumlah kelompok yang bisa dibuat?", q_trans: "There are 32 boys and 24 girls. They want to be divided into groups with equal number of boys and girls in each group. What is the maximum number of groups?", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="10" fill="#38BDF8"/><circle cx="100" cy="50" r="10" fill="#EC4899"/><circle cx="150" cy="50" r="10" fill="#38BDF8"/></svg>`, options: ["4", "6", "8", "12", "16"], correct: "8", exp: "Cari FPB dari 32 dan 24. Faktor 32: 1,2,4,8,16,32. Faktor 24: 1,2,3,4,6,8,12,24. FPB-nya 8.", exp_trans: "Find GCF of 32 and 24. Factors of 32: 1,2,4,8,16,32. Factors of 24: 1,2,3,4,6,8,12,24. GCF is 8." },
+                    { type: 'task', q: "Manakah dari bilangan berikut yang merupakan kelipatan dari 11?", q_trans: "Which of the following is a multiple of 11?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["45", "56", "77", "89", "92"], correct: "77", exp: "77 bisa dibagi habis oleh 11 (\(11 \times 7 = 77\)).", exp_trans: "77 can be divided exactly by 11 (\(11 \times 7 = 77\))." }
+                ]
+            },
+            task3: {
+                title: "Task 3: KPK & FPB (Power-Up Senjata)",
+                pages: [
+                    { type: 'task', q: "Power-Up pedang muncul setiap 8 menit. Power-Up perisai muncul setiap 12 menit. Jika keduanya muncul bersamaan sekarang, berapa menit lagi mereka akan muncul bersamaan kembali?", q_trans: "Sword Power-Up appears every 8 mins. Shield Power-Up appears every 12 mins. If both appear together now, how many minutes until they appear together again?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="20" width="20" height="50" fill="#EF4444"/><circle cx="120" cy="60" r="20" fill="#38BDF8"/></svg>`, options: ["20 menit", "24 menit", "48 menit", "96 menit", "4 menit"], correct: "24 menit", exp: "Cari KPK dari 8 dan 12. Kelipatan 8: 8,16,24. Kelipatan 12: 12,24. Jadi KPK-nya 24.", exp_trans: "Find LCM of 8 and 12. Multiples of 8: 8,16,24. Multiples of 12: 12,24. So LCM is 24." },
+                    { type: 'task', q: "Guru memiliki 45 buku dan 60 pensil. Ia ingin membuat paket hadiah dengan jumlah buku dan pensil yang sama di setiap paket. Berapa jumlah maksimal paket yang bisa dibuat?", q_trans: "Teacher has 45 books and 60 pencils. She wants to make gift packages with equal number of books and pencils in each. What is the max packages?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="30" height="40" fill="#FDE047"/><rect x="120" y="30" width="20" height="40" fill="#1E3A8A"/></svg>`, options: ["5", "10", "15", "20", "30"], correct: "15", exp: "Cari FPB dari 45 dan 60. 45 = 3x3x5, 60 = 2x2x3x5. FPB = 3x5 = 15.", exp_trans: "Find GCF of 45 and 60. 45 = 3x3x5, 60 = 2x2x3x5. GCF = 3x5 = 15." },
+                    { type: 'task', q: "Diketahui 12 = \(2^2 \times 3\) dan 15 = \(3 \times 5\). Berapakah KPK dari 12 dan 15?", q_trans: "Given 12 = \(2^2 \times 3\) and 15 = \(3 \times 5\). What is the LCM of 12 and 15?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#F0F9FF"/></svg>`, options: ["3", "15", "30", "60", "180"], correct: "60", exp: "KPK ambil semua pangkat tertinggi: \(2^2 \times 3 \times 5 = 4 \times 3 \times 5 = 60\).", exp_trans: "LCM takes all highest exponents: \(2^2 \times 3 \times 5 = 4 \times 3 \times 5 = 60\)." },
+                    { type: 'task', q: "Diketahui 40 = \(2^3 \times 5\) dan 60 = \(2^2 \times 3 \times 5\). Berapakah FPB dari 40 dan 60?", q_trans: "Given 40 = \(2^3 \times 5\) and 60 = \(2^2 \times 3 \times 5\). What is the GCF of 40 and 60?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FFF1F2"/></svg>`, options: ["10", "20", "30", "60", "120"], correct: "20", exp: "FPB ambil pangkat terendah yang sama: \(2^2 \times 5 = 4 \times 5 = 20\).", exp_trans: "GCF takes lowest common exponents: \(2^2 \times 5 = 4 \times 5 = 20\)." },
+                    { type: 'task', q: "Bus A berangkat setiap 10 menit, Bus B setiap 15 menit. Jika pukul 07.00 keduanya berangkat bersamaan, pukul berapa mereka akan berangkat bersamaan kembali?", q_trans: "Bus A departs every 10 mins, Bus B every 15 mins. If at 07.00 both depart together, what time will they depart together again?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="40" width="40" height="30" rx="5" fill="#FDE047"/><rect x="120" y="40" width="40" height="30" rx="5" fill="#FDE047"/><circle cx="60" cy="55" r="5" fill="#1E3A8A"/></svg>`, options: ["07.15", "07.20", "07.25", "07.30", "07.45"], correct: "07.30", exp: "KPK dari 10 dan 15 adalah 30. 30 menit dari 07.00 adalah 07.30.", exp_trans: "LCM of 10 and 15 is 30. 30 mins from 07.00 is 07.30." },
+                    { type: 'task', q: "Seorang penjahit memiliki kain batik sepanjang 45 meter dan kain sutera sepanjang 60 meter. Ia ingin memotong kain tersebut dengan ukuran terpanjang yang sama tanpa sisa. Berapakah panjang setiap potongan kain?", q_trans: "A tailor has 45m of batik and 60m of silk. He wants to cut them into the longest equal lengths without leftover. What is the length of each piece?", svg: `<svg viewBox="0 0 200 100"><rect x="20" y="40" width="80" height="20" fill="#8B5CF6"/><rect x="110" y="40" width="60" height="20" fill="#FBBF24"/></svg>`, options: ["5 m", "10 m", "15 m", "20 m", "30 m"], correct: "15 m", exp: "Cari FPB dari 45 dan 60. 45 = 3x3x5, 60 = 2x2x3x5. FPB = 3x5 = 15.", exp_trans: "Find GCF of 45 and 60. 45 = 3x3x5, 60 = 2x2x3x5. GCF = 3x5 = 15." },
+                    { type: 'task', q: "Detak jantung alien A berbunyi setiap 4 detik, alien B setiap 5 detik. Kapan mereka berbunyi bersamaan untuk ketiga kalinya?", q_trans: "Alien A's heartbeat sounds every 4 secs, alien B every 5 secs. When will they sound together for the third time?", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#EC4899"/><circle cx="150" cy="50" r="15" fill="#38BDF8"/></svg>`, options: ["Detik ke-20", "Detik ke-40", "Detik ke-60", "Detik ke-10", "Detik ke-15"], correct: "Detik ke-60", exp: "KPK dari 4 dan 5 adalah 20. Ketiga kalinya berarti \(20 \times 3 = 60\).", exp_trans: "LCM of 4 and 5 is 20. Third time means \(20 \times 3 = 60\)." },
+                    { type: 'task', q: "Kotak kado berbentuk kubus memiliki ukuran rusuk 18 cm dan 24 cm. Jika ingin dihias dengan pita yang sama panjang tanpa sisa, berapakah panjang pita maksimal yang bisa digunakan untuk satu kotak?", q_trans: "Gift boxes have cube edges of 18 cm and 24 cm. If decorated with equal length ribbons without leftover, what is the max ribbon length for one box?", svg: `<svg viewBox="0 0 200 100"><rect x="60" y="20" width="60" height="60" fill="#FDE047" stroke="#1E3A8A" stroke-width="2"/></svg>`, options: ["2 cm", "3 cm", "6 cm", "8 cm", "9 cm"], correct: "6 cm", exp: "Cari FPB dari 18 dan 24. 18 = 2x3x3, 24 = 2x2x2x3. FPB = 2x3 = 6 cm.", exp_trans: "Find GCF of 18 and 24. 18 = 2x3x3, 24 = 2x2x2x3. GCF = 2x3 = 6 cm." },
+                    { type: 'task', q: "KPK dari tiga angka 8, 9, dan 10 adalah...", q_trans: "LCM of three numbers 8, 9, and 10 is...", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A">8, 9, 10</text></svg>`, options: ["72", "90", "180", "240", "360"], correct: "360", exp: "8=2^3, 9=3^2, 10=2x5. KPK ambil pangkat tertinggi: \(2^3 \times 3^2 \times 5 = 8 \times 9 \times 5 = 360\).", exp_trans: "8=2^3, 9=3^2, 10=2x5. LCM takes highest exponent: \(2^3 \times 3^2 \times 5 = 8 \times 9 \times 5 = 360\)." },
+                    { type: 'task', q: "Andi punya uang Rp 75.000 dan Budi punya Rp 100.000. Mereka ingin menukar uangnya menjadi pecahan yang sama nilainya. Berapakah pecahan maksimal yang bisa mereka pakai?", q_trans: "Andi has Rp 75,000 and Budi has Rp 100,000. They want to exchange their money into equal denominations. What is the max denomination they can use?", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#FBBF24"/><circle cx="150" cy="50" r="15" fill="#FBBF24"/></svg>`, options: ["Rp 5.000", "Rp 10.000", "Rp 15.000", "Rp 20.000", "Rp 25.000"], correct: "Rp 25.000", exp: "Cari FPB dari 75.000 dan 100.000. 75=3x5x5, 100=2x2x5x5. FPB = 5x5 = 25.000.", exp_trans: "Find GCF of 75,000 and 100,000. 75=3x5x5, 100=2x2x5x5. GCF = 5x5 = 25,000." }
+                ]
+            },
+            task4: {
+                title: "Task 4: Pecahan (Senilai, Bandingkan, Urutkan)",
+                pages: [
+                    { type: 'task', q: "Pecahan senilai dari \( \frac{3}{5} \) jika penyebutnya diubah menjadi 20 adalah...", q_trans: "The equivalent fraction of \( \frac{3}{5} \) if the denominator is changed to 20 is...", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{6}{20} \)", "\( \frac{9}{20} \)", "\( \frac{12}{20} \)", "\( \frac{15}{20} \)", "\( \frac{18}{20} \)"], correct: "\( \frac{12}{20} \)", exp: "Penyebut 20 dari 5 dikali 4. Maka pembilang 3 dikali 4 = 12. \( \frac{12}{20} \).", exp_trans: "Denominator 20 from 5 multiplied by 4. So numerator 3 multiplied by 4 = 12. \( \frac{12}{20} \)." },
+                    { type: 'task', q: "Bentuk paling sederhana dari pecahan \( \frac{18}{24} \) adalah...", q_trans: "The simplest form of fraction \( \frac{18}{24} \) is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#A7F3D0"/></svg>`, options: ["\( \frac{2}{3} \)", "\( \frac{3}{4} \)", "\( \frac{6}{8} \)", "\( \frac{9}{12} \)", "\( \frac{1}{2} \)"], correct: "\( \frac{3}{4} \)", exp: "Bagi 18 dan 24 dengan FPB-nya, yaitu 6. \(18 \div 6 = 3\), \(24 \div 6 = 4\). Hasilnya \( \frac{3}{4} \).", exp_trans: "Divide 18 and 24 by their GCF, which is 6. \(18 \div 6 = 3\), \(24 \div 6 = 4\). Result \( \frac{3}{4} \)." },
+                    { type: 'task', q: "Beri tanda yang benar untuk membandingkan \( \frac{5}{8} \) dan \( \frac{3}{4} \).", q_trans: "Give the correct sign to compare \( \frac{5}{8} \) and \( \frac{3}{4} \).", svg: `<svg viewBox="0 0 200 100"><text x="100" y="55" text-anchor="middle" font-size="20" fill="#1E3A8A">5/8  ?  3/4</text></svg>`, options: [">", "<", "=", "≥", "≤"], correct: "<", exp: "Samakan penyebut ke 8. \( \frac{3}{4} = \frac{6}{8} \). Karena 5 < 6, maka \( \frac{5}{8} < \frac{3}{4} \).", exp_trans: "Equalize denominator to 8. \( \frac{3}{4} = \frac{6}{8} \). Since 5 < 6, then \( \frac{5}{8} < \frac{3}{4} \)." },
+                    { type: 'task', q: "Urutkan pecahan berikut dari yang terkecil ke terbesar: \( \frac{1}{2}, \frac{2}{3}, \frac{3}{5} \).", q_trans: "Sort the following fractions from smallest to largest: \( \frac{1}{2}, \frac{2}{3}, \frac{3}{5} \).", svg: `<svg viewBox="0 0 200 100"><circle cx="50" cy="50" r="15" fill="#38BDF8"/><circle cx="100" cy="50" r="15" fill="#FDE047"/><circle cx="150" cy="50" r="15" fill="#EC4899"/></svg>`, options: ["\( \frac{1}{2}, \frac{2}{3}, \frac{3}{5} \)", "\( \frac{1}{2}, \frac{3}{5}, \frac{2}{3} \)", "\( \frac{2}{3}, \frac{1}{2}, \frac{3}{5} \)", "\( \frac{3}{5}, \frac{2}{3}, \frac{1}{2} \)", "\( \frac{2}{3}, \frac{3}{5}, \frac{1}{2} \)"], correct: "\( \frac{1}{2}, \frac{3}{5}, \frac{2}{3} \)", exp: "KPK 2,3,5 = 30. \( \frac{1}{2} = \frac{15}{30} \), \( \frac{2}{3} = \frac{20}{30} \), \( \frac{3}{5} = \frac{18}{30} \). Urut: 15, 18, 20.", exp_trans: "LCM 2,3,5 = 30. \( \frac{1}{2} = \frac{15}{30} \), \( \frac{2}{3} = \frac{20}{30} \), \( \frac{3}{5} = \frac{18}{30} \). Order: 15, 18, 20." },
+                    { type: 'task', q: "Pecahan \( \frac{4}{7} \) dan \( \frac{6}{?} \) adalah pecahan senilai. Berapakah nilai tanda tanya?", q_trans: "Fractions \( \frac{4}{7} \) and \( \frac{6}{?} \) are equivalent. What is the value of the question mark?", svg: `<svg viewBox="0 0 200 100"><rect x="50" y="30" width="100" height="40" rx="5" fill="#FEF9C3"/></svg>`, options: ["10.5", "11", "9", "14", "12"], correct: "10.5", exp: "Pembilang dari 4 ke 6 dikali 1.5. Maka penyebut \(7 \times 1.5 = 10.5\).", exp_trans: "Numerator from 4 to 6 multiplied by 1.5. So denominator \(7 \times 1.5 = 10.5\)." },
+                    { type: 'task', q: "Andi memakan \( \frac{2}{5} \) bagian pizza, Budi memakan \( \frac{3}{8} \) bagian pizza yang sama. Siapa yang makan lebih banyak?", q_trans: "Andi eats \( \frac{2}{5} \) of a pizza, Budi eats \( \frac{3}{8} \) of the same pizza. Who eats more?", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="40" fill="#FBBF24" stroke="#92400E" stroke-width="2"/></svg>`, options: ["Andi", "Budi", "Sama banyak", "Tidak bisa ditentukan", "Budi dan Andi sama"], correct: "Andi", exp: "KPK 5 dan 8 = 40. Andi: \( \frac{16}{40} \). Budi: \( \frac{15}{40} \). 16 > 15, jadi Andi lebih banyak.", exp_trans: "LCM 5 and 8 = 40. Andi: \( \frac{16}{40} \). Budi: \( \frac{15}{40} \). 16 > 15, so Andi eats more." },
+                    { type: 'task', q: "Manakah dari pecahan berikut yang merupakan pecahan campuran?", q_trans: "Which of the following is a mixed fraction?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{7}{3} \)", "\( \frac{1}{4} \)", "\( 3 \frac{1}{2} \)", "\( \frac{5}{2} \)", "\( \frac{9}{4} \)"], correct: "\( 3 \frac{1}{2} \)", exp: "Pecahan campuran memiliki bilangan bulat dan pecahan biasa. Contoh: \( 3 \frac{1}{2} \).", exp_trans: "Mixed fraction has a whole number and a proper fraction. E.g., \( 3 \frac{1}{2} \)." },
+                    { type: 'task', q: "Bentuk desimal dari pecahan \( \frac{1}{4} \) adalah...", q_trans: "The decimal form of fraction \( \frac{1}{4} \) is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#A7F3D0"/></svg>`, options: ["0.25", "0.50", "0.75", "0.40", "0.20"], correct: "0.25", exp: "\( 1 \div 4 = 0.25 \).", exp_trans: "\( 1 \div 4 = 0.25 \)." },
+                    { type: 'task', q: "Manakah pecahan yang nilainya paling besar?", q_trans: "Which fraction has the largest value?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["\( \frac{5}{6} \)", "\( \frac{7}{8} \)", "\( \frac{9}{10} \)", "\( \frac{11}{12} \)", "\( \frac{2}{3} \)"], correct: "\( \frac{11}{12} \)", exp: "Samakan penyebut ke 120. \( \frac{100}{120}, \frac{105}{120}, \frac{108}{120}, \frac{110}{120}, \frac{80}{120} \). Terbesar \( \frac{11}{12} \).", exp_trans: "Equalize denominator to 120. Largest is \( \frac{11}{12} \)." },
+                    { type: 'task', q: "Di kelas 7A, \( \frac{3}{8} \) siswa suka matematika. Di kelas 7B, \( \frac{2}{5} \) siswa suka matematika. Kelas mana yang persentase siswa suka matematika lebih besar?", q_trans: "In class 7A, \( \frac{3}{8} \) of students like math. In class 7B, \( \frac{2}{5} \) of students like math. Which class has a larger percentage of students liking math?", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#A7F3D0"/></svg>`, options: ["7A", "7B", "Sama besar", "Tidak bisa dibandingkan", "7B lebih kecil"], correct: "7B", exp: "KPK 8 dan 5 = 40. 7A: \( \frac{15}{40} \). 7B: \( \frac{16}{40} \). 16 > 15, jadi 7B lebih besar.", exp_trans: "LCM 8 and 5 = 40. 7A: \( \frac{15}{40} \). 7B: \( \frac{16}{40} \). 16 > 15, so 7B is larger." }
+                ]
+            },
+            task5: {
+                title: "Task 5: Operasi Pecahan & Desimal",
+                pages: [
+                    { type: 'task', q: "Hasil dari \( \frac{1}{3} + \frac{1}{6} \) adalah...", q_trans: "The result of \( \frac{1}{3} + \frac{1}{6} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{2}{9} \)", "\( \frac{1}{2} \)", "\( \frac{2}{6} \)", "\( \frac{1}{9} \)", "\( \frac{3}{6} \)"], correct: "\( \frac{1}{2} \)", exp: "KPK 3 dan 6 adalah 6. \( \frac{2}{6} + \frac{1}{6} = \frac{3}{6} = \frac{1}{2} \).", exp_trans: "LCM of 3 and 6 is 6. \( \frac{2}{6} + \frac{1}{6} = \frac{3}{6} = \frac{1}{2} \)." },
+                    { type: 'task', q: "Hasil dari \( 2\frac{1}{4} - \frac{1}{2} \) adalah...", q_trans: "The result of \( 2\frac{1}{4} - \frac{1}{2} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FFF1F2"/></svg>`, options: ["\( 1\frac{1}{4} \)", "\( 1\frac{3}{4} \)", "\( 2\frac{1}{4} \)", "\( \frac{7}{4} \)", "\( 1\frac{1}{2} \)"], correct: "\( 1\frac{3}{4} \)", exp: "Ubah ke pecahan biasa: \( \frac{9}{4} - \frac{2}{4} = \frac{7}{4} = 1\frac{3}{4} \).", exp_trans: "Convert to improper fraction: \( \frac{9}{4} - \frac{2}{4} = \frac{7}{4} = 1\frac{3}{4} \)." },
+                    { type: 'task', q: "Hasil dari \( \frac{3}{5} \times \frac{2}{9} \) adalah...", q_trans: "The result of \( \frac{3}{5} \times \frac{2}{9} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["\( \frac{6}{45} \)", "\( \frac{2}{15} \)", "\( \frac{5}{14} \)", "\( \frac{1}{5} \)", "\( \frac{6}{14} \)"], correct: "\( \frac{2}{15} \)", exp: "Kalikan langsung: \( \frac{6}{45} \). Sederhanakan dengan bagi 3: \( \frac{2}{15} \).", exp_trans: "Multiply directly: \( \frac{6}{45} \). Simplify by dividing 3: \( \frac{2}{15} \)." },
+                    { type: 'task', q: "Hasil dari \( \frac{4}{5} \div \frac{1}{2} \) adalah...", q_trans: "The result of \( \frac{4}{5} \div \frac{1}{2} \) is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#A7F3D0"/></svg>`, options: ["\( \frac{4}{10} \)", "\( \frac{8}{5} \)", "\( \frac{2}{5} \)", "\( 1\frac{1}{2} \)", "\( \frac{5}{8} \)"], correct: "\( \frac{8}{5} \)", exp: "Pembagian pecahan, kalikan dengan kebalikannya: \( \frac{4}{5} \times \frac{2}{1} = \frac{8}{5} \).", exp_trans: "Dividing fractions, multiply by reciprocal: \( \frac{4}{5} \times \frac{2}{1} = \frac{8}{5} \)." },
+                    { type: 'task', q: "Bentuk desimal dari pecahan \( \frac{5}{8} \) adalah...", q_trans: "The decimal form of fraction \( \frac{5}{8} \) is...", svg: `<svg viewBox="0 0 200 100"><circle cx="100" cy="50" r="30" fill="#FDE047"/></svg>`, options: ["0.58", "0.625", "0.85", "0.875", "0.56"], correct: "0.625", exp: "\( 5 \div 8 = 0.625 \).", exp_trans: "\( 5 \div 8 = 0.625 \)." },
+                    { type: 'task', q: "Bentuk pecahan paling sederhana dari 0.72 adalah...", q_trans: "The simplest fraction form of 0.72 is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#E0F2FE"/></svg>`, options: ["\( \frac{72}{100} \)", "\( \frac{7}{10} \)", "\( \frac{18}{25} \)", "\( \frac{7}{25} \)", "\( \frac{9}{12} \)"], correct: "\( \frac{18}{25} \)", exp: "0.72 = \( \frac{72}{100} \). Disederhanakan dengan FPB 4: \( \frac{18}{25} \).", exp_trans: "0.72 = \( \frac{72}{100} \). Simplified by GCF 4: \( \frac{18}{25} \)." },
+                    { type: 'task', q: "Hasil dari 12.5 + 3.25 adalah...", q_trans: "The result of 12.5 + 3.25 is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FFF1F2"/></svg>`, options: ["15.75", "15.30", "15.755", "16.25", "14.85"], correct: "15.75", exp: "Susun desimal: 12.50 + 3.25 = 15.75.", exp_trans: "Align decimals: 12.50 + 3.25 = 15.75." },
+                    { type: 'task', q: "Hasil dari 1.5 x 0.4 adalah...", q_trans: "The result of 1.5 x 0.4 is...", svg: `<svg viewBox="0 0 200 100"><rect x="40" y="30" width="120" height="40" rx="5" fill="#FDE047"/></svg>`, options: ["0.60", "0.06", "6.0", "1.9", "0.40"], correct: "0.60", exp: "15 x 4 = 60. Ada 2 angka desimal, jadi 0.60.", exp_trans: "15 x 4 = 60. There are 2 decimal digits, so 0.60." },
+                    { type: 'task', q: "Sebuah galon berisi 3/4 liter air. Jika dipakai 1/8 liter, berapa liter sisa air?", q_trans: "A gallon contains 3/4 liter of water. If 1/8 liter is used, how many liters are left?", svg: `<svg viewBox="0 0 200 100"><rect x="80" y="20" width="40" height="60" rx="5" fill="#E0F7FA" stroke="#1E3A8A"/><rect x="80" y="50" width="40" height="30" fill="#38BDF8"/></svg>`, options: ["\( \frac{5}{8} \)", "\( \frac{2}{6} \)", "\( \frac{1}{2} \)", "\( \frac{4}{8} \)", "\( \frac{3}{8} \)"], correct: "\( \frac{5}{8} \)", exp: "Samakan penyebut 8. \( \frac{6}{8} - \frac{1}{8} = \frac{5}{8} \).", exp_trans: "Equalize denominator to 8. \( \frac{6}{8} - \frac{1}{8} = \frac{5}{8} \)." },
+                    { type: 'task', q: "Kain sepanjang 5.5 meter dipotong 2.25 meter. Berapakah sisa kain tersebut (dalam meter)?", q_trans: "A 5.5 meter long fabric is cut by 2.25 meters. What is the remaining fabric (in meters)?", svg: `<svg viewBox="0 0 200 100"><rect x="20" y="40" width="160" height="20" fill="#8B5CF6"/><rect x="20" y="40" width="80" height="20" fill="#EF4444"/></svg>`, options: ["3.25", "3.75", "3.30", "2.25", "7.75"], correct: "3.25", exp: "5.50 - 2.25 = 3.25 meter.", exp_trans: "5.50 - 2.25 = 3.25 meters." }
+                ]
+            }
+        };
+
+        // --- SCRIPT PEMBERSIH DATA AMAN & REKURSIF ---
+        function safeCleanText(text) {
+            if (typeof text !== 'string') return text;
+            let s = text;
+            
+            // 1. Hapus karakter non-printable
+            s = s.replace(/[^\x20-\x7E\r\n\t]/g, '');
+            
+            // 2. Perbaiki keyword LaTeX yang rusak
+            s = s.replace(/rac\{/g, '\\frac{');
+            s = s.replace(/imes/g, '\\times');
+            s = s.replace(/\^circ/g, '^\\circ');
+            
+            // Perbaikan spesifik untuk \div, \le, \ge (harus ada spasi di kiri & kanan agar tidak merusak HTML/Kata)
+            s = s.replace(/ div /g, ' \\div ');
+            s = s.replace(/ le /g, ' \\le ');
+            s = s.replace(/ ge /g, ' \\ge ');
+            
+            // 3. Perbaiki delimiter ( ) menjadi \( \) HANYA jika teks mengandung rumus matematika
+            let isMath = /\\frac\{|\\times|\\circ|\\div|\\le|\\ge|\^\d/.test(s);
+            
+            if (isMath) {
+                // Ubah ( menjadi \( jika diikuti \frac, \times, angka, minus, atau pangkat ^
+                s = s.replace(/\(\s*(\\(frac|times|circ|div|le|ge)|\d|-|\^)/g, '\\( $1');
+                // Ubah ) menjadi \) jika didahului }, C (Celsius), angka, atau pangkat
+                s = s.replace(/(\}|C|\d|\^)\s*\)/g, '$1 \\)');
+            }
+            
+            return s;
+        }
+
+        function cleanObject(obj) {
+            for (let key in obj) {
+                if (typeof obj[key] === 'string') {
+                    obj[key] = safeCleanText(obj[key]);
+                } else if (Array.isArray(obj[key])) {
+                    // Perbaikan di sini: kita loop isi array dan bersihkan jika dia string atau objek
+                    obj[key].forEach((item, index) => {
+                        if (typeof item === 'string') {
+                            obj[key][index] = safeCleanText(item);
+                        } else if (typeof item === 'object' && item !== null) {
+                            cleanObject(item); // Rekursif ke objek di dalam array!
+                        }
+                    });
+                } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    cleanObject(obj[key]);
+                }
+            }
+        }
+        
+        cleanObject(sectionsData);
+
+        let currentSection = 'spiral';
+        let currentPage = 0;
+        let studentAnswers = { task1: {}, task2: {}, task3: {}, task4: {}, task5: {} };
+
+        function toggleModal() { document.getElementById('classRulesModal').classList.toggle('show'); }
+
+        function loadSection(sectionId, element) {
+            currentSection = sectionId;
+            currentPage = 0;
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            if(element) element.classList.add('active');
+            renderPage();
+        }
+
+        function renderPage() {
+            const section = sectionsData[currentSection];
+            if (!section) { document.getElementById('contentArea').innerHTML = "<h2>Content coming soon</h2>"; return; }
+
+            const pageData = section.pages[currentPage];
+            let html = `<h2 class="section-title">${section.title}</h2>`;
+            
+            if (pageData.type === 'theory') {
+                html += `<div class="theory-box">${pageData.content}</div>`;
+            } else if (pageData.type === 'task') {
+                html += renderTask(pageData);
+            }
+
+            html += `<div class="pagination">
+                        <button class="btn btn-nav" onclick="changePage(-1)" ${currentPage === 0 ? 'disabled' : ''}>← Previous</button>
+                        <span>Page ${currentPage + 1} of ${section.pages.length}</span>
+                        <button class="btn btn-nav" onclick="changePage(1)" ${currentPage === section.pages.length - 1 ? 'disabled' : ''}>Next →</button>
+                     </div>`;
+
+            document.getElementById('contentArea').innerHTML = html;
+            renderMath();
+        }
+
+        function changePage(direction) {
+            const section = sectionsData[currentSection];
+            currentPage += direction;
+            if (currentPage < 0) currentPage = 0;
+            if (currentPage >= section.pages.length) currentPage = section.pages.length - 1;
+            renderPage();
+        }
+
+        function renderTask(task) {
+            let prevAnswer = null;
+            if (currentSection.startsWith('task') && studentAnswers[currentSection] && studentAnswers[currentSection][currentPage]) {
+                prevAnswer = studentAnswers[currentSection][currentPage];
+            }
+
+            const shuffled = [...task.options].sort(() => 0.5 - Math.random());
+            let optionsHtml = '';
+            
+            shuffled.forEach(opt => {
+                let isSelected = (prevAnswer === opt) ? 'selected' : '';
+                let safeDataValue = opt.replace(/'/g, "\\'");
+                optionsHtml += `<div class="option ${isSelected}" data-value="${safeDataValue}" onclick="selectOption(this, '${safeDataValue}')">${opt}</div>`;
+            });
+
+            let printBtnHtml = '';
+            if (currentSection.startsWith('task')) {
+                let taskNum = currentSection.replace('task', '');
+                printBtnHtml = `<button class="btn" style="background-color:#0EA5E9; color:white; margin-left:auto;" onclick="printTask('${taskNum}')">🖨️ Print Task ${taskNum}</button>`;
+            }
+
+            return `
+                <div class="task-box">
+                    <p class="main-text">${task.q}</p>
+                    <p class="trans-text">${task.q_trans}</p>
+                    <div class="illustration">${task.svg}</div>
+                    <div class="options-container">${optionsHtml}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-check" onclick="checkAnswer(this, '${task.correct.replace(/'/g, "\\'")}', '${task.exp}', '${task.exp_trans}')">Check Answer</button>
+                        <button class="btn btn-reset" onclick="resetTask(this)">Reset</button>
+                        ${printBtnHtml}
+                    </div>
+                    <div id="feedbackArea"></div>
+                    <button class="btn collapse-btn" style="display:none;" onclick="toggleCollapse(this)">Show Explanation</button>
+                    <div class="collapse-content"><p class="main-text">${task.exp}</p><p class="trans-text">${task.exp_trans}</p></div>
+                </div>
+            `;
+        }
+
+        function selectOption(element, value) {
+            const container = element.parentNode;
+            container.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.setAttribute('data-value', value);
+            if (currentSection.startsWith('task')) { studentAnswers[currentSection][currentPage] = value; }
+        }
+
+        function checkAnswer(button, correctAnswer, exp, exp_trans) {
+            const taskBox = button.closest('.task-box');
+            const selected = taskBox.querySelector('.option.selected');
+            const feedbackArea = taskBox.querySelector('#feedbackArea');
+            const collapseBtn = taskBox.querySelector('.collapse-btn');
+            const collapseContent = taskBox.querySelector('.collapse-content');
+
+            if (!selected) { alert("Tolong pilih jawaban dulu!"); return; }
+
+            const userAnswer = selected.getAttribute('data-value');
+            taskBox.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (userAnswer === correctAnswer) {
+                selected.classList.add('correct');
+                feedbackArea.innerHTML = `<p class="feedback correct">✔️ Benar! Pintar sekali!</p>`;
+                feedbackArea.insertAdjacentHTML('beforeend', `<p class="trans-text" style="text-align:center; margin-top:5px;">Correct! You're so smart!</p>`);
+            } else {
+                selected.classList.add('wrong');
+                taskBox.querySelectorAll('.option').forEach(opt => {
+                    if (opt.getAttribute('data-value') === correctAnswer) opt.classList.add('correct');
+                });
+                feedbackArea.innerHTML = `<p class="feedback wrong">❌ Salah. Ayo pelajari lagi!</p>`;
+                feedbackArea.insertAdjacentHTML('beforeend', `<p class="trans-text" style="text-align:center; margin-top:5px;">Incorrect. Let's learn again!</p>`);
+            }
+
+            collapseContent.innerHTML = `<p class="main-text">${exp}</p><p class="trans-text">${exp_trans}</p>`;
+            collapseBtn.style.display = 'inline-block';
+            button.style.display = 'none';
+            renderMath();
+        }
+
+        function resetTask(button) {
+            const taskBox = button.closest('.task-box');
+            const options = taskBox.querySelectorAll('.option');
+            const feedbackArea = taskBox.querySelector('#feedbackArea');
+            const collapseBtn = taskBox.querySelector('.collapse-btn');
+            const collapseContent = taskBox.querySelector('.collapse-content');
+            const checkBtn = taskBox.querySelector('.btn-check');
+
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'wrong');
+                opt.style.pointerEvents = 'auto';
+            });
+            feedbackArea.innerHTML = '';
+            collapseBtn.style.display = 'none';
+            collapseContent.classList.remove('show');
+            collapseContent.innerHTML = '';
+            checkBtn.style.display = 'inline-block';
+            if (currentSection.startsWith('task')) { studentAnswers[currentSection][currentPage] = null; }
+        }
+
+        function toggleCollapse(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.innerText = content.classList.contains('show') ? 'Hide Explanation' : 'Show Explanation';
+        }
+
+        function renderMath() {
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.getElementById('contentArea'), {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false}
+                    ]
+                });
+            }
+        }
+
+        // Fungsi bantu untuk membersihkan simbol KaTeX menjadi teks biasa agar rapi saat di-print
+        function cleanMathForPrint(str) {
+            if (!str) return '';
+            return str.replace(/\\\(/g, '').replace(/\\\)/g, '')
+                      .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '$1/$2') // \frac{1}{2} -> 1/2
+                      .replace(/\\times/g, '×')
+                      .replace(/\\div/g, '÷')
+                      .replace(/\$\$/g, '')
+                      .replace(/\{/g, '').replace(/\}/g, '');
+        }
+
+        function printTask(taskNum) {
+            let section = sectionsData['task' + taskNum];
+            let score = 0;
+            let tableRows = '';
+            
+            section.pages.forEach((page, index) => {
+                let studentAns = studentAnswers['task' + taskNum][index] ? cleanMathForPrint(studentAnswers['task' + taskNum][index]) : '-';
+                let correctAns = cleanMathForPrint(page.correct);
+                let isCorrect = cleanMathForPrint(studentAnswers['task' + taskNum][index]) === correctAns;
+                if (isCorrect) score++;
+                
+                let cleanQ = cleanMathForPrint(page.q);
+                tableRows += `<tr><td style="text-align:center; border:1px solid #000; padding:5px;">${index+1}</td><td style="border:1px solid #000; padding:5px;">${cleanQ}</td><td style="text-align:center; border:1px solid #000; padding:5px;">${studentAns}</td><td style="text-align:center; border:1px solid #000; padding:5px;">${correctAns}</td><td style="text-align:center; border:1px solid #000; padding:5px;">${isCorrect ? '✔️' : '❌'}</td></tr>`;
+            });
+            
+            let printHtml = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; width: 100%; box-sizing: border-box;">
+                    <h1 style="text-align:center; margin-bottom: 5px; color:#1E3A8A;">Math Tutoring by Deni</h1>
+                    <p style="text-align:center; margin-top:0; font-size: 14px; color:#555;">Topic: Bilangan Bulat & Pecahan</p>
+                    <hr style="border: 1px solid #000; margin: 15px 0;">
+                    <div style="display:flex; justify-content:space-between; font-size: 14px; margin-bottom: 5px;">
+                        <span><strong>Name:</strong> ___________________________</span>
+                        <span><strong>Date:</strong> ____________________</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size: 14px; margin-bottom: 20px;">
+                        <span><strong>Task:</strong> ${taskNum}</span>
+                        <span><strong>Score:</strong> ${score} / 10</span>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr style="background-color: #FDE047;">
+                                <th style="border: 1px solid #000; padding: 8px; width: 5%;">No.</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 50%;">Question</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 15%;">Student Answer</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 15%;">Correct Answer</th>
+                                <th style="border: 1px solid #000; padding: 8px; width: 15%;">Note (❌/✔️)</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                    <div style="margin-top: 40px; text-align: right; font-size: 14px;">
+                        <p>Checked by,</p><br><br><p><strong>Deni</strong></p>
+                    </div>
+                </div>`;
+            
+            document.getElementById('printArea').innerHTML = printHtml;
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { renderPage(); });
+    </script>
+</body>
+</html>
