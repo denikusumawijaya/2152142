@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Rasio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; 
+            padding: 0; 
+            border: 0;
+            background: transparent;
+        }
+        .collapse-content.open { 
+            max-height: 2000px; 
+            padding: 1.5rem; 
+            border: 1px solid #bfdbfe; 
+            background: #eff6ff; 
+            border-radius: 0.5rem;
+            margin-top: 1rem; 
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { 
+                display: block !important; 
+                position: absolute; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .no-print { display: none !important; }
+            
+            /* Tambahan untuk menjamin muat 1 halaman A4 */
+            #printArea table { 
+                table-layout: fixed; 
+                width: 100%; 
+                font-size: 9px; 
+            }
+            #printArea td, #printArea th { 
+                word-wrap: break-word; 
+                padding: 2px !important; 
+            }
+            
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Rasio: Konsep Rasio</p>
+            <p class="translation text-blue-200">Topic: Ratio: The Concept of Ratio</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-blue-800">Aturan Kelas <br><span class="translation text-gray-500">Class Rules</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-blue-500 mt-1"></i>
+                    <div>Berbicara secara bergantian. <span class="translation">Take turns speaking.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-blue-500 mt-1"></i>
+                    <div>Meminta izin jika ingin meninggalkan kelas. <span class="translation">Ask permission if you want to leave the class.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-blue-500 mt-1"></i>
+                    <div>Menyalakan kamera dan microphone jika diperlukan. <span class="translation">Turn on camera and microphone if needed.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-blue-800 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Agenda Kelas</h3>
+                <p class="text-xs text-blue-200 mt-1">Pilih topik untuk navigasi <span class="translation text-blue-300 block">Select topic to navigate</span></p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div>
+                        </a>
+                    </li>
+                    
+                    <hr class="my-3 border-gray-200">
+                    
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-blue-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+            
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Konsep Dasar Rasio</h2>
+                        <p class="translation">Basic Concept of Ratio</p>
+                        
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded flex justify-center">
+                                <svg width="180" height="120" viewBox="0 0 180 120">
+                                    <!-- Ilustrasi Rasio Apel dan Jeruk -->
+                                    <text x="40" y="20" font-size="12" text-anchor="middle" fill="#333">Apel</text>
+                                    <circle cx="40" cy="40" r="10" fill="#ef4444"/>
+                                    <circle cx="40" cy="65" r="10" fill="#ef4444"/>
+                                    <circle cx="40" cy="90" r="10" fill="#ef4444"/>
+                                    
+                                    <text x="140" y="20" font-size="12" text-anchor="middle" fill="#333">Jeruk</text>
+                                    <circle cx="140" cy="40" r="10" fill="#f59e0b"/>
+                                    <circle cx="140" cy="65" r="10" fill="#f59e0b"/>
+                                    
+                                    <path d="M70,65 L110,65" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrow)"/>
+                                    <defs>
+                                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                                            <path d="M0,0 L0,6 L9,3 z" fill="#3b82f6" />
+                                        </marker>
+                                    </defs>
+                                    <text x="90" y="60" font-size="12" text-anchor="middle" fill="#3b82f6" font-weight="bold">3 : 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Rasio adalah cara untuk membandingkan dua kuantitas atau lebih. Rasio menunjukkan berapa kali suatu kuantitas terdapat dalam kuantitas lain. <span class="translation">Ratio is a way to compare two or more quantities. Ratio shows how many times one quantity is contained in another.</span></p>
+                            </div>
+                        </div>
+                        <p>Sebagai contoh, pada gambar di atas, perbandingan jumlah apel dengan jeruk adalah 3 berbanding 2, ditulis sebagai \( 3 : 2 \). <span class="translation">For example, in the image above, the ratio of apples to oranges is 3 to 2, written as \( 3 : 2 \).</span></p>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Penyederhanaan Rasio</h2>
+                        <p class="translation">Simplifying Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex items-center">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <!-- Penyederhanaan Rasio 4:2 jadi 2:1 -->
+                                    <rect x="10" y="20" width="20" height="60" fill="#10b981" rx="3"/>
+                                    <rect x="35" y="30" width="20" height="50" fill="#10b981" rx="3"/>
+                                    <rect x="60" y="40" width="20" height="40" fill="#10b981" rx="3"/>
+                                    <rect x="85" y="50" width="20" height="30" fill="#10b981" rx="3"/>
+                                    <text x="50" y="95" font-size="12" text-anchor="middle" fill="#333">4</text>
+                                    
+                                    <rect x="110" y="30" width="20" height="50" fill="#3b82f6" rx="3"/>
+                                    <rect x="130" y="40" width="15" height="40" fill="#3b82f6" rx="3"/>
+                                    <text x="125" y="95" font-size="12" text-anchor="middle" fill="#333">2</text>
+
+                                    <path d="M75,10 L75,0" stroke="#333" stroke-width="2"/>
+                                    <text x="75" y="-2" font-size="10" text-anchor="middle" fill="#ef4444" font-weight="bold">Bagi 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Rasio dapat disederhanakan dengan membagi semua bagian dengan Faktor Persekutuan Terbesar (FPB). Rasio \( 4 : 2 \) disederhanakan menjadi \( 2 : 1 \) dengan membagi keduanya dengan 2. <span class="translation">A ratio can be simplified by dividing all parts by the Greatest Common Factor (GCF). The ratio \( 4 : 2 \) is simplified to \( 2 : 1 \) by dividing both by 2.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Rasio Bagian terhadap Total</h2>
+                        <p class="translation">Part-to-Total Ratio</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Pie chart 3:2 -->
+                                    <circle cx="70" cy="50" r="40" fill="#8b5cf6"/>
+                                    <path d="M70,50 L70,10 A40,40 0 0,1 108,70 Z" fill="#fbbf24" stroke="white" stroke-width="2"/>
+                                    <text x="55" y="45" font-size="12" fill="white" text-anchor="middle">3</text>
+                                    <text x="85" y="65" font-size="12" fill="#333" text-anchor="middle">2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Rasio juga bisa menyatakan bagian terhadap keseluruhan. Jika rasio apel dan jeruk adalah \( 3 : 2 \), maka total buah adalah 5 bagian. Rasio apel terhadap total buah adalah \( 3 : 5 \). <span class="translation">Ratio can also express part to whole. If the ratio of apples to oranges is \( 3 : 2 \), the total fruit is 5 parts. The ratio of apples to total fruit is \( 3 : 5 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Rasio dalam Resep Masakan</h2>
+                        <p class="translation">Ratios in Cooking Recipes</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Panci dengan cairan -->
+                                    <path d="M30,30 L30,80 Q30,90 40,90 L100,90 Q110,90 110,80 L110,30 Z" fill="none" stroke="#333" stroke-width="3"/>
+                                    <path d="M30,30 L110,30" stroke="#333" stroke-width="3"/>
+                                    <path d="M32,50 L108,50 L105,85 L35,85 Z" fill="#10b981" opacity="0.5"/>
+                                    <text x="70" y="70" font-size="12" text-anchor="middle" fill="#333">Air : Gula = 4 : 1</text>
+                                </svg>
+                            </div>
+                            <p>Dalam membuat sirup, kita mencampur air dan gula dengan rasio tertentu, misalnya 4 gelas air untuk 1 gelas gula. Rasio memastikan rasa sirup selalu konsisten. <span class="translation">In making syrup, we mix water and sugar in a certain ratio, for example, 4 glasses of water to 1 glass of sugar. Ratio ensures the syrup's taste is always consistent.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Skala pada Peta</h2>
+                        <p class="translation">Map Scales</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Peta sederhana -->
+                                    <rect x="10" y="10" width="120" height="80" fill="#e0f2fe" stroke="#333" stroke-width="2"/>
+                                    <path d="M20,20 L120,80" stroke="#ef4444" stroke-width="3"/>
+                                    <circle cx="20" cy="20" r="4" fill="#333"/>
+                                    <circle cx="120" cy="80" r="4" fill="#333"/>
+                                    <text x="60" y="50" font-size="10" text-anchor="middle" fill="#ef4444" font-weight="bold">1 cm : 10 km</text>
+                                </svg>
+                            </div>
+                            <p>Skala peta adalah rasio antara jarak pada peta dengan jarak sebenarnya di lapangan. Jika skala 1:100.000, berarti 1 cm di peta mewakili 100.000 cm di dunia nyata. <span class="translation">Map scale is the ratio between distance on the map and actual distance on the ground. If the scale is 1:100,000, it means 1 cm on the map represents 100,000 cm in the real world.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Perbandingan Bahan Bangunan</h2>
+                        <p class="translation">Ratio of Building Materials</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Semen, Pasir, Kerikil -->
+                                    <path d="M20,50 L20,90 L60,90 L60,50 Z" fill="#fbbf24" stroke="#333"/>
+                                    <text x="40" y="75" font-size="10" text-anchor="middle">Semen</text>
+                                    <path d="M60,50 L60,90 L110,90 L110,50 Z" fill="#a16207" stroke="#333"/>
+                                    <text x="85" y="75" font-size="10" text-anchor="middle">Pasir</text>
+                                    <text x="70" y="40" font-size="14" fill="#8b5cf6" text-anchor="middle" font-weight="bold">1 : 3</text>
+                                </svg>
+                            </div>
+                            <p>Dalam konstruksi, mencampur semen dan pasir membutuhkan rasio yang tepat agar beton kuat. Rasio semen terhadap pasir seringkali 1 banding 3. <span class="translation">In construction, mixing cement and sand requires the right ratio to make concrete strong. The ratio of cement to sand is often 1 to 3.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+            
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">FPB dan KPK dalam Rasio</h2>
+                        <p class="translation">GCF and LCM in Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <!-- Ilustrasi FPB (Faktor Persekutuan Terbesar) -->
+                                    <circle cx="50" cy="50" r="35" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                                    <circle cx="90" cy="50" r="35" fill="none" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="35" y="55" font-size="14" fill="#3b82f6">12</text>
+                                    <text x="100" y="55" font-size="14" fill="#ef4444">18</text>
+                                    <text x="65" y="55" font-size="14" fill="#8b5cf6" font-weight="bold">6</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Untuk menyederhanakan rasio, kita gunakan Faktor Persekutuan Terbesar (FPB). FPB dari 12 dan 18 adalah 6. Maka rasio \( 12 : 18 \) disederhanakan menjadi \( 2 : 3 \). <span class="translation">To simplify ratios, we use the Greatest Common Factor (GCF). The GCF of 12 and 18 is 6. So the ratio \( 12 : 18 \) simplifies to \( 2 : 3 \).</span></p>
+                                <p class="mt-2">Sebaliknya, KPK digunakan saat kita ingin menyamakan bagian pada dua rasio yang berbeda untuk membandingkannya. <span class="translation">Conversely, LCM is used when we want to equalize parts in two different ratios to compare them.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Pecahan dan Rasio</h2>
+                        <p class="translation">Fractions and Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Ilustrasi Pecahan diubah ke Rasio -->
+                                    <rect x="10" y="20" width="80" height="60" fill="#10b981" rx="3"/>
+                                    <rect x="10" y="20" width="60" height="60" fill="#3b82f6" rx="3" opacity="0.5"/>
+                                    <text x="50" y="90" font-size="12" text-anchor="middle" fill="#333">3/4</text>
+                                    
+                                    <path d="M95,50 L115,50" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+                                    <defs>
+                                        <marker id="arrow2" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                                            <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                                        </marker>
+                                    </defs>
+                                    <text x="125" y="55" font-size="14" text-anchor="middle" fill="#ef4444" font-weight="bold">3:4</text>
+                                </svg>
+                            </div>
+                            <p>Pecahan pada dasarnya adalah bentuk rasio. Pecahan \( \frac{3}{4} \) berarti kita membandingkan 3 bagian terhadap total 4 bagian, yang ekuivalen dengan rasio \( 3 : 4 \). <span class="translation">Fractions are essentially a form of ratio. The fraction \( \frac{3}{4} \) means comparing 3 parts to a total of 4 parts, equivalent to the ratio \( 3 : 4 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Rasio Nilai Uang</h2>
+                        <p class="translation">Ratio of Money Values</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Uang Koin dan Kertas -->
+                                    <circle cx="40" cy="50" r="20" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <text x="40" y="55" font-size="14" text-anchor="middle" font-weight="bold">2K</text>
+                                    
+                                    <rect x="80" y="30" width="50" height="30" fill="#10b981" rx="2" stroke="#333"/>
+                                    <text x="105" y="50" font-size="12" text-anchor="middle" fill="white" font-weight="bold">1K</text>
+                                    
+                                    <text x="70" y="90" font-size="12" text-anchor="middle" fill="#8b5cf6" font-weight="bold">2 : 1</text>
+                                </svg>
+                            </div>
+                            <p>Rasio dapat membandingkan nilai, bukan hanya kuantitas fisik. Jika Andi memiliki uang Rp 2.000 dan Budi Rp 1.000, rasio uang Andi terhadap Budi adalah \( 2000 : 1000 \), yang disederhanakan menjadi \( 2 : 1 \). <span class="translation">Ratios can compare value, not just physical quantity. If Andi has Rp 2,000 and Budi has Rp 1,000, the ratio of Andi's money to Budi's is \( 2000 : 1000 \), simplified to \( 2 : 1 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Membagi Nilai dalam Rasio</h2>
+                        <p class="translation">Dividing Values in a Ratio</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="150" height="100" viewBox="0 0 150 100">
+                                    <!-- Permen dibagi 3:2 -->
+                                    <rect x="10" y="40" width="130" height="20" fill="#e5e7eb" stroke="#333"/>
+                                    <rect x="10" y="40" width="78" height="20" fill="#3b82f6"/>
+                                    <rect x="88" y="40" width="52" height="20" fill="#ef4444"/>
+                                    <text x="49" y="55" font-size="14" text-anchor="middle" fill="white" font-weight="bold">3</text>
+                                    <text x="114" y="55" font-size="14" text-anchor="middle" fill="white" font-weight="bold">2</text>
+                                    <text x="75" y="80" font-size="12" text-anchor="middle" fill="#333">Total 5 bagian</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika kita harus membagi sejumlah nilai (misal Rp 50.000) dalam rasio \( 3 : 2 \), kitajumlahkan bagian rasio terlebih dahulu: \( 3 + 2 = 5 \) bagian. <span class="translation">If we must divide a value (e.g., Rp 50,000) in the ratio \( 3 : 2 \), we first sum the ratio parts: \( 3 + 2 = 5 \) parts.</span></p>
+                                <p class="mt-2">Nilai per bagian adalah total nilai dibagi total bagian: \( \frac{50000}{5} = 10000 \). <span class="translation">Value per part is total value divided by total parts: \( \frac{50000}{5} = 10000 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Rasio Berurutan</h2>
+                        <p class="translation">Continuous Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Tiga bejana berisi cairan A, B, C -->
+                                    <rect x="10" y="30" width="30" height="60" fill="#10b981" rx="2"/>
+                                    <rect x="45" y="20" width="30" height="70" fill="#3b82f6" rx="2"/>
+                                    <rect x="80" y="40" width="30" height="50" fill="#8b5cf6" rx="2"/>
+                                    <text x="25" y="100" font-size="10" text-anchor="middle">A</text>
+                                    <text x="60" y="100" font-size="10" text-anchor="middle">B</text>
+                                    <text x="95" y="100" font-size="10" text-anchor="middle">C</text>
+                                    <text x="120" y="60" font-size="12" text-anchor="middle" fill="#ef4444" font-weight="bold">1:2:3</text>
+                                </svg>
+                            </div>
+                            <p>Rasio tidak selalu hanya melibatkan dua kuantitas. Rasio berurutan melibatkan tiga atau lebih kuantitas, seperti perbandingan volume air di tiga bejana yang berbentuk \( 1 : 2 : 3 \). <span class="translation">Ratios don't always involve only two quantities. Continuous ratios involve three or more quantities, like comparing the volume of water in three vessels as \( 1 : 2 : 3 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+                
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Rasio yang Ekuivalen</h2>
+                        <p class="translation">Equivalent Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="130" height="100" viewBox="0 0 130 100">
+                                    <!-- Timbangan Seimbang -->
+                                    <path d="M65,20 L65,80" stroke="#333" stroke-width="2"/>
+                                    <path d="M20,40 L110,40" stroke="#333" stroke-width="2"/>
+                                    <rect x="5" y="35" width="30" height="10" fill="#8b5cf6" rx="2"/>
+                                    <text x="20" y="30" font-size="12" text-anchor="middle">1 : 2</text>
+                                    <rect x="95" y="35" width="30" height="10" fill="#10b981" rx="2"/>
+                                    <text x="110" y="30" font-size="12" text-anchor="middle">2 : 4</text>
+                                    <polygon points="55,80 75,80 70,90 60,90" fill="#333"/>
+                                </svg>
+                            </div>
+                            <p>Dua rasio dikatakan ekuivalen jika mereka memiliki nilai perbandingan yang sama. Rasio \( 1 : 2 \) ekuivalen dengan \( 2 : 4 \) karena jika bagian pertama dikali 2, bagian kedua juga dikali 2. <span class="translation">Two ratios are equivalent if they have the same comparison value. The ratio \( 1 : 2 \) is equivalent to \( 2 : 4 \) because if the first part is multiplied by 2, the second part is also multiplied by 2.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Rasio Kecepatan dan Waktu</h2>
+                        <p class="translation">Ratio of Speed and Time</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="120" height="100" viewBox="0 0 120 100">
+                                    <!-- Dua mobil balap -->
+                                    <rect x="10" y="50" width="40" height="20" fill="#3b82f6" rx="3"/>
+                                    <circle cx="20" cy="70" r="5" fill="#333"/>
+                                    <circle cx="40" cy="70" r="5" fill="#333"/>
+                                    <text x="30" y="90" font-size="10" text-anchor="middle">Mobil A</text>
+                                    
+                                    <rect x="70" y="30" width="40" height="20" fill="#ef4444" rx="3"/>
+                                    <circle cx="80" cy="50" r="5" fill="#333"/>
+                                    <circle cx="100" cy="50" r="5" fill="#333"/>
+                                    <text x="90" y="25" font-size="10" text-anchor="middle">Mobil B</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kecepatan adalah jarak tempuh dibagi waktu. Jika Mobil A menempuh 120 km dalam 2 jam, dan Mobil B menempuh 180 km dalam 3 jam, rasio kecepatan mereka adalah \( \frac{120}{2} : \frac{180}{3} = 60 : 60 \), yang berarti kecepatannya sama. <span class="translation">Speed is distance divided by time. If Car A travels 120 km in 2 hours, and Car B travels 180 km in 3 hours, their speed ratio is \( \frac{120}{2} : \frac{180}{3} = 60 : 60 \), meaning their speeds are the same.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Rasio dan Persentase</h2>
+                        <p class="translation">Ratios and Percentages</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Grid 10x10 persentase -->
+                                    <rect x="20" y="10" width="100" height="80" fill="none" stroke="#333"/>
+                                    <rect x="20" y="10" width="25" height="80" fill="#10b981"/>
+                                    <rect x="45" y="10" width="25" height="80" fill="#10b981" opacity="0.6"/>
+                                    <text x="70" y="55" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">25%</text>
+                                    <text x="70" y="100" font-size="10" text-anchor="middle" fill="#333">1 : 3</text>
+                                </svg>
+                            </div>
+                            <p>Rasio dapat dikonversi menjadi persentase. Rasio \( 1 : 3 \) berarti 1 bagian dari total 4 bagian. Untuk mengubahnya ke persentase, hitung \( \frac{1}{4} \times 100\% = 25\% \). <span class="translation">Ratios can be converted to percentages. A ratio of \( 1 : 3 \) means 1 part out of 4 total parts. To convert to percentage, calculate \( \frac{1}{4} \times 100\% = 25\% \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Menemukan Nilai yang Hilang</h2>
+                        <p class="translation">Finding the Missing Value</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="130" height="100" viewBox="0 0 130 100">
+                                    <!-- Timbangan dengan tanda tanya -->
+                                    <path d="M65,20 L65,80" stroke="#333" stroke-width="2"/>
+                                    <path d="M20,40 L110,40" stroke="#333" stroke-width="2"/>
+                                    <rect x="5" y="35" width="30" height="10" fill="#8b5cf6" rx="2"/>
+                                    <text x="20" y="30" font-size="12" text-anchor="middle">3</text>
+                                    <rect x="95" y="35" width="30" height="10" fill="#10b981" rx="2"/>
+                                    <text x="110" y="30" font-size="14" text-anchor="middle" fill="#ef4444" font-weight="bold">?</text>
+                                    <text x="65" y="15" font-size="10" text-anchor="middle">3 : 4 = 9 : ?</text>
+                                </svg>
+                            </div>
+                            <p>Jika diketahui rasio \( 3 : 4 \) sama dengan \( 9 : x \), kita bisa mencari \( x \) dengan mengalikan silang: \( 3 \times x = 4 \times 9 \), sehingga \( 3x = 36 \) dan \( x = 12 \). <span class="translation">If the ratio \( 3 : 4 \) equals \( 9 : x \), we can find \( x \) by cross-multiplying: \( 3 \times x = 4 \times 9 \), thus \( 3x = 36 \) and \( x = 12 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+			
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-2">Rasio dalam Mekanika Gir</h2>
+                        <p class="translation">Ratios in Gear Mechanics</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-blue-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Dua Roda Gir -->
+                                    <circle cx="40" cy="50" r="30" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                    <circle cx="40" cy="50" r="5" fill="#3b82f6"/>
+                                    <path d="M40,20 L40,10 M40,90 L40,80 M10,50 L20,50 M60,50 L70,50 M20,30 L25,25 M60,70 L55,75 M20,70 L25,75 M60,30 L55,25" stroke="#3b82f6" stroke-width="2"/>
+                                    
+                                    <circle cx="105" cy="50" r="15" fill="none" stroke="#ef4444" stroke-width="3"/>
+                                    <circle cx="105" cy="50" r="3" fill="#ef4444"/>
+                                    <path d="M105,35 L105,30 M105,70 L105,65 M90,50 L95,50 M115,50 L120,50" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="72" y="55" font-size="10" text-anchor="middle" fill="#333">2:1</text>
+                                </svg>
+                            </div>
+                            <p>Pada sistem roda gigi (gir), rasio gigi menentukan perbandingan kecepatan putar. Jika gir besar memiliki 40 gigi dan gir kecil 20 gigi, rasio gigi adalah \( 40 : 20 = 2 : 1 \). Gir kecil akan berputar dua kali lebih cepat. <span class="translation">In a gear system, the gear ratio determines the speed of rotation. If the large gear has 40 teeth and the small gear 20, the ratio is \( 40 : 20 = 2 : 1 \). The small gear will rotate twice as fast.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Rasio Populasi</h2>
+                        <p class="translation">Population Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded">
+                                <svg width="140" height="100" viewBox="0 0 140 100">
+                                    <!-- Orang dewasa dan anak-anak -->
+                                    <circle cx="20" cy="30" r="8" fill="#10b981"/><rect x="14" y="38" width="12" height="20" fill="#10b981"/>
+                                    <circle cx="50" cy="30" r="8" fill="#10b981"/><rect x="44" y="38" width="12" height="20" fill="#10b981"/>
+                                    
+                                    <circle cx="90" cy="35" r="6" fill="#3b82f6"/><rect x="86" y="41" width="8" height="15" fill="#3b82f6"/>
+                                    <circle cx="110" cy="35" r="6" fill="#3b82f6"/><rect x="106" y="41" width="8" height="15" fill="#3b82f6"/>
+                                    <circle cx="130" cy="35" r="6" fill="#3b82f6"/><rect x="126" y="41" width="8" height="15" fill="#3b82f6"/>
+                                    
+                                    <text x="70" y="80" font-size="12" text-anchor="middle" fill="#8b5cf6" font-weight="bold">Dewasa : Anak = 2 : 3</text>
+                                </svg>
+                            </div>
+                            <p>Rasio digunakan dalam demografi untuk membandingkan kelompok populasi. Jika di sebuah taman terdapat 2 dewasa untuk setiap 3 anak-anak, rasio dewasa terhadap anak-anak adalah \( 2 : 3 \). <span class="translation">Ratios are used in demographics to compare population groups. If a park has 2 adults for every 3 children, the ratio of adults to children is \( 2 : 3 \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Rasio Finansial</h2>
+                        <p class="translation">Financial Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded">
+                                <svg width="130" height="100" viewBox="0 0 130 100">
+                                    <!-- Tabungan dan Investasi -->
+                                    <rect x="10" y="40" width="40" height="50" fill="#8b5cf6" rx="3"/>
+                                    <text x="30" y="70" font-size="20" text-anchor="middle" fill="white" font-weight="bold">$</text>
+                                    <text x="30" y="100" font-size="10" text-anchor="middle" fill="#333">Tabungan</text>
+                                    
+                                    <rect x="60" y="20" width="60" height="70" fill="#10b981" rx="3"/>
+                                    <text x="90" y="60" font-size="24" text-anchor="middle" fill="white" font-weight="bold">$$</text>
+                                    <text x="90" y="100" font-size="10" text-anchor="middle" fill="#333">Investasi</text>
+                                    
+                                    <text x="65" y="15" font-size="12" text-anchor="middle" fill="#ef4444" font-weight="bold">1 : 3</text>
+                                </svg>
+                            </div>
+                            <p>Dalam keuangan, rasio menentukan alokasi aset. Jika seseorang menyimpan uang dengan rasio tabungan terhadap investasi \( 1 : 3 \), ini berarti setiap Rp 1.000 yang ditabungkan, ia menginvestasikan Rp 3.000. <span class="translation">In finance, ratios determine asset allocation. If someone keeps money in a savings to investment ratio of \( 1 : 3 \), it means for every Rp 1,000 saved, Rp 3,000 is invested.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Konsolidasi & Refleksi</h2>
+                    <p class="translation">Consolidation & Reflection</p>
+                    <p>Anda telah menyelesaikan perjalanan belajar tentang Konsep Rasio. <span class="translation">You have finished the learning journey about the Concept of Ratio.</span></p>
+                    <p class="mt-2">Ingat, rasio adalah alat sederhana namun kuat untuk membandingkan hal-hal di dunia nyata, dari memasak hingga arsitektur. <span class="translation">Remember, ratio is a simple yet powerful tool for comparing things in the real world, from cooking to architecture.</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Pergi ke learn.algonova.id <span class="translation text-sm italic">Go to learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+
+            <!-- Pagination Bar -->
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Rasio: Konsep Rasio</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    <script>
+        // ====== MATH QUESTIONS DATA (PART 1) ======
+        const questions = {
+            // SPIRAL REVIEW WARM-UP TASKS
+            "w-task1": { type: "single", q: "Di sebuah kandang terdapat 6 ayam jantan dan 9 ayam betina. Berapakah rasio paling sederhana dari ayam jantan terhadap ayam betina?", q_trans: "In a pen, there are 6 roosters and 9 hens. What is the simplest ratio of roosters to hens?", opts: ["\\( 6 : 9 \\)", "\\( 2 : 3 \\)", "\\( 3 : 2 \\)", "\\( 9 : 6 \\)", "\\( 1 : 1 \\)"], ans: "\\( 2 : 3 \\)", exp: "Rasio awal adalah 6:9. Untuk menyederhanakan, cari FPB dari 6 dan 9, yaitu 3. Bagi kedua angka dengan 3, sehingga \\( 6:3 = 2 \\) dan \\( 9:3 = 3 \\). Hasilnya \\( 2:3 \\).", exp_trans: "Initial ratio is 6:9. To simplify, find GCF of 6 and 9, which is 3. Divide both by 3, getting \\( 2:3 \\)." },
+            "w-task2": { type: "complex", q: "Perhatikan pernyataan berikut tentang rasio! Manakah pernyataan yang BENAR?", q_trans: "Consider the following statements about ratios! Which statements are TRUE?", opts: ["Rasio adalah perbandingan dua kuantitas atau lebih", "Rasio \\( 5 : 10 \\) dapat disederhanakan menjadi \\( 1 : 2 \\)", "Rasio \\( 3 : 4 \\) berarti total bagian adalah 3", "Rasio selalu ditulis dalam bentuk pecahan"], ans: [0, 1], exp: "Pernyataan 1 dan 2 benar. Pernyataan 3 salah karena total bagian dari \\( 3:4 \\) adalah \\( 3+4=7 \\). Pernyataan 4 salah, rasio bisa ditulis dengan tanda titik dua (a:b) atau pecahan (a/b).", exp_trans: "Statements 1 and 2 are true. Statement 3 is false (total is 7). Statement 4 is false (ratio can use colon)." },
+            "w-task3": { type: "fill", q: "Sebuah kelas memiliki 15 siswa laki-laki dan 20 siswa perempuan. Berapa bagian siswa laki-laki terhadap total siswa di kelas? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis dalam format rasio tanpa spasi, misal: 3:7)</span>", q_trans: "A class has 15 boys and 20 girls. What is the ratio of boys to the total students? <br><span class='text-sm text-gray-500'>(Short Answer - Write in ratio format without spaces, e.g., 3:7)</span>", ans: "3:7", exp: "Total siswa = 15 + 20 = 35. Rasio laki-laki terhadap total = \\( 15 : 35 \\). Sederhanakan dengan membagi 5 (FPB 15 dan 35) menjadi \\( 3 : 7 \\).", exp_trans: "Total students = 35. Ratio of boys to total = \\( 15:35 \\), simplified to \\( 3:7 \\)." },
+            "w-task4": { type: "single", q: "Andi mempunyai 8 kelereng merah dan 12 kelereng biru. Rasio yang ekuivalen dengan rasio kelereng merah terhadap biru adalah...", q_trans: "Andi has 8 red marbles and 12 blue marbles. The ratio equivalent to the ratio of red to blue marbles is...", opts: ["\\( 2 : 3 \\)", "\\( 3 : 2 \\)", "\\( 4 : 6 \\)", "\\( 8 : 12 \\)", "Baik \\( 2 : 3 \\) maupun \\( 4 : 6 \\)"], ans: "Baik \\( 2 : 3 \\) maupun \\( 4 : 6 \\)", exp: "Rasio awal 8:12. FPB 4. Disederhanakan jadi 2:3. Jika 2:3 dikali 2, dapat 4:6. Jadi keduanya ekuivalen.", exp_trans: "Initial 8:12. Simplified to 2:3. If 2:3 is multiplied by 2, we get 4:6. Both are equivalent." },
+            "w-task5": { type: "fill", q: "Jika rasio uang Sisi terhadap Dito adalah \\( 4 : 5 \\), dan selisih uang mereka adalah Rp 10.000, berapakah uang Sisi? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja tanpa titik)</span>", q_trans: "If the ratio of Sisi's money to Dito's is \\( 4 : 5 \\), and their difference is Rp 10,000, how much is Sisi's money? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only without dots)</span>", ans: "40000", exp: "Selisih bagian = \\( 5 - 4 = 1 \\) bagian. 1 bagian = Rp 10.000. Uang Sisi = 4 bagian = \\( 4 \\times 10.000 = 40.000 \\).", exp_trans: "Difference in parts = 1. 1 part = Rp 10,000. Sisi's money = 4 parts = Rp 40,000." },
+            "w-task6": { type: "tf_table", q: "Tentukan Benar atau Salah untuk pernyataan berikut mengenai rasio ekuivalen!", q_trans: "Determine True or False for the following statements regarding equivalent ratios!", opts: ["Rasio \\( 1 : 2 \\) ekuivalen dengan \\( 3 : 6 \\)", "Rasio \\( 5 : 10 \\) ekuivalen dengan \\( 2 : 4 \\)", "Rasio \\( 2 : 3 \\) ekuivalen dengan \\( 4 : 9 \\)", "Rasio \\( 10 : 20 \\) ekuivalen dengan \\( 1 : 2 \\)"], ans: ["B", "B", "S", "B"], exp: "1. B, \\( 1\\times3 : 2\\times3 = 3:6 \\). 2. B, keduanya disederhanakan jadi 1:2. 3. S, \\( 2\\times2=4 \\) tapi \\( 3\\times2=6 \\), bukan 9. 4. B, disederhanakan jadi 1:2.", exp_trans: "1. True. 2. True. 3. False (should be 4:6). 4. True." },
+            "w-task7": { type: "single", q: "Di toko buah, rasio jumlah apel, jeruk, dan pisang adalah \\( 2 : 3 : 4 \\). Jika jumlah apel adalah 20 buah, berapakah jumlah jeruk?", q_trans: "In a fruit shop, the ratio of apples, oranges, and bananas is \\( 2 : 3 : 4 \\). If there are 20 apples, how many oranges are there?", opts: ["\\( 20 \\text{ buah} \\)", "\\( 30 \\text{ buah} \\)", "\\( 40 \\text{ buah} \\)", "\\( 60 \\text{ buah} \\)", "\\( 90 \\text{ buah} \\)"], ans: "\\( 30 \\text{ buah} \\)", exp: "Nilai 1 bagian = \\( 20 / 2 = 10 \\) buah. Jeruk memiliki 3 bagian, maka \\( 3 \\times 10 = 30 \\) buah.", exp_trans: "1 part = 10 fruits. Oranges have 3 parts, so 30 fruits." },
+            "w-task8": { type: "fill", q: "Sebuah peta memiliki skala 1 : 1.000.000. Jika jarak dua kota di peta adalah 5 cm, berapakah jarak sebenarnya dalam km? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A map has a scale of 1 : 1,000,000. If the map distance is 5 cm, what is the actual distance in km? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "50", exp: "Jarak sebenarnya = \\( 5 \\times 1.000.000 = 5.000.000 \\) cm. Ubah ke km dengan membagi 100.000, maka \\( 5.000.000 / 100.000 = 50 \\) km.", exp_trans: "Actual distance = 5,000,000 cm. Convert to km by dividing by 100,000, yielding 50 km." },
+            "w-task9": { type: "complex", q: "Rasio uang Budi dan Andi adalah \\( 3 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of Budi's and Andi's money is \\( 3 : 5 \\). Which statements are TRUE?", opts: ["Jika Andi memiliki Rp 50.000, Budi memiliki Rp 30.000", "Total uang mereka berjumlah Rp 80.000 jika Andi punya Rp 50.000", "Budi memiliki uang lebih banyak dari Andi", "Selisih uang mereka adalah 2 bagian"], ans: [0, 1, 3], exp: "Pernyataan 1 B (1 bagian=10.000, Budi 3x10.000=30.000). 2 B (30.000+50.000=80.000). 3 S (Budi 3 bagian, Andi 5 bagian, Andi lebih banyak). 4 B (5-3=2).", exp_trans: "1 True. 2 True. 3 False (Andi has more). 4 True." },
+            "w-task10": { type: "tf_table", q: "Mengenai rasio \\( 4 : 6 \\), tentukan Benar atau Salah dari pernyataan berikut!", q_trans: "Regarding the ratio \\( 4 : 6 \\), determine True or False for the following statements!", opts: ["Rasio tersebut dapat disederhanakan menjadi \\( 2 : 3 \\)", "Total bagian dari rasio tersebut adalah 10", "Nilai pecahan dari rasio tersebut adalah \\( \\frac{2}{3} \\)", "Rasio tersebut ekuivalen dengan \\( 8 : 12 \\)"], ans: ["B", "B", "B", "B"], exp: "1. B, dibagi 2. 2. B, 4+6=10. 3. B, 4/6 disederhanakan jadi 2/3. 4. B, 2:3 dikali 4 jadi 8:12.", exp_trans: "1. True. 2. True. 3. True. 4. True." },
+
+            // INTRODUCTION & REAL-WORLD TASKS
+            "i-task1": { type: "fill", q: "Resep kue membutuhkan rasio tepung dan gula \\( 4 : 1 \\). Jika Budi menggunakan 200 gram tepung, berapa gram gula yang dibutuhkan? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A recipe requires a flour to sugar ratio of \\( 4 : 1 \\). If Budi uses 200g of flour, how many grams of sugar are needed? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "50", exp: "Nilai 1 bagian = \\( 200 / 4 = 50 \\) gram. Gula adalah 1 bagian, jadi 50 gram.", exp_trans: "1 part = 50g. Sugar is 1 part, so 50g." },
+            "i-task2": { type: "single", q: "Pada skala peta 1 : 500.000, jarak kota A dan B adalah 4 cm. Berapakah jarak sebenarnya?", q_trans: "On a map scale of 1 : 500,000, the distance between city A and B is 4 cm. What is the actual distance?", opts: ["\\( 2 \\text{ km} \\)", "\\( 20 \\text{ km} \\)", "\\( 200 \\text{ km} \\)", "\\( 2.000 \\text{ m} \\)", "\\( 50 \\text{ km} \\)"], ans: "\\( 20 \\text{ km} \\)", exp: "Jarak = \\( 4 \\times 500.000 = 2.000.000 \\) cm. Ubah ke km: \\( 2.000.000 / 100.000 = 20 \\) km.", exp_trans: "Distance = 2,000,000 cm. Convert to km: 20 km." },
+            "i-task3": { type: "tf_table", q: "Untuk membuat beton, rasio semen : pasir : kerikil adalah \\( 1 : 2 : 3 \\). Tentukan Benar atau Salah dari pernyataan berikut!", q_trans: "To make concrete, the ratio of cement : sand : gravel is \\( 1 : 2 : 3 \\). Determine True or False for the following statements!", opts: ["Total bagian campuran adalah 6", "Semen adalah \\( \\frac{1}{6} \\) bagian dari total campuran", "Jika semen 10 kg, pasir yang dibutuhkan 30 kg", "Jika kerikil 30 kg, pasir yang dibutuhkan 20 kg"], ans: ["B", "B", "S", "B"], exp: "1. B (1+2+3=6). 2. B (semen 1 dari 6). 3. S (semen 10, pasir harusnya 20). 4. B (kerikil 30 berarti 1 bagian=10kg, pasir 2 bagian=20kg).", exp_trans: "1. True. 2. True. 3. False (sand should be 20). 4. True." },
+            "i-task4": { type: "complex", q: "Rasio uang Andi, Budi, dan Caca adalah \\( 2 : 3 : 5 \\). Manakah pernyataan yang BENAR jika total uang mereka Rp 100.000?", q_trans: "The ratio of Andi, Budi, and Caca's money is \\( 2 : 3 : 5 \\). Which statements are TRUE if their total money is Rp 100,000?", opts: ["Uang Andi adalah Rp 20.000", "Uang Caca adalah Rp 50.000", "Selisih uang Budi dan Caca adalah Rp 20.000", "Uang Budi lebih banyak dari Andi"], ans: [0, 1, 2, 3], exp: "1 bagian = 10.000. 1. B (Andi 2x10.000). 2. B (Caca 5x10.000). 3. B (50.000 - 30.000 = 20.000). 4. B (3 bagian > 2 bagian). Semua benar.", exp_trans: "1 part = 10,000. All statements are true." },
+            "i-task5": { type: "fill", q: "Sebuah mobil menempuh jarak 240 km dalam 4 jam. Berapa km/jam kecepatan rata-rata mobil tersebut? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A car travels 240 km in 4 hours. What is the average speed in km/h? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "60", exp: "Kecepatan = Jarak / Waktu = \\( 240 / 4 = 60 \\) km/jam.", exp_trans: "Speed = Distance / Time = 60 km/h." },
+            "i-task6": { type: "single", q: "Rasio luas kebun apel dan kebun jeruk adalah \\( 4 : 9 \\). Jika luas kebun apel 16 hektar, berapakah luas kebun jeruk?", q_trans: "The ratio of apple orchard to orange orchard is \\( 4 : 9 \\). If the apple orchard is 16 hectares, how large is the orange orchard?", opts: ["\\( 25 \\text{ ha} \\)", "\\( 36 \\text{ ha} \\)", "\\( 45 \\text{ ha} \\)", "\\( 64 \\text{ ha} \\)", "\\( 81 \\text{ ha} \\)"], ans: "\\( 36 \\text{ ha} \\)", exp: "1 bagian = \\( 16 / 4 = 4 \\) ha. Kebun jeruk = \\( 9 \\times 4 = 36 \\) ha.", exp_trans: "1 part = 4 ha. Orange orchard = 36 ha." },
+            "i-task7": { type: "fill", q: "Sebuah minuman dibuat dari sirup dan air dengan perbandingan 1 : 5. Jika Budi membuat 600 ml minuman, berapa ml sirup yang digunakan? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A drink is made of syrup and water in a 1 : 5 ratio. If Budi makes 600 ml of drink, how many ml of syrup is used? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "100", exp: "Total bagian = 1 + 5 = 6. Nilai 1 bagian = \\( 600 / 6 = 100 \\) ml. Sirut adalah 1 bagian = 100 ml.", exp_trans: "Total parts = 6. 1 part = 100 ml. Syrup is 100 ml." },
+            "i-task8": { type: "tf_table", q: "Skala pada denah rumah adalah 1 : 200. Tentukan Benar atau Salah!", q_trans: "The scale on a house plan is 1 : 200. Determine True or False!", opts: ["1 cm di denah mewakili 200 cm di aslinya", "Panjang kamar 4 cm di denah berarti 8 m di aslinya", "Lebar kamar 3 cm di denah berarti 60 m di aslinya", "Jika asli 10 m, di denah digambar 5 cm"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B (4x200=800cm=8m). 3. S (3x200=600cm=6m). 4. B (10m=1000cm, 1000/200=5cm).", exp_trans: "1. True. 2. True. 3. False (should be 6m). 4. True." },
+            "i-task9": { type: "single", q: "Sebuah pekerjaan dapat diselesaikan oleh 6 orang dalam 8 hari. Jika dikerjakan oleh 12 orang, berapa hari pekerjaan itu selesai?", q_trans: "A job can be done by 6 people in 8 days. If done by 12 people, how many days will it take?", opts: ["\\( 4 \\text{ hari} \\)", "\\( 6 \\text{ hari} \\)", "\\( 10 \\text{ hari} \\)", "\\( 12 \\text{ hari} \\)", "\\( 16 \\text{ hari} \\)"], ans: "\\( 4 \\text{ hari} \\)", exp: "Perbandingan berbalik nilai. \\( 6 \\times 8 = 12 \\times t \\). \\( 48 = 12t \\). \\( t = 4 \\) hari.", exp_trans: "Inverse proportion. 48 = 12t. t = 4 days." },
+            "i-task10": { type: "complex", q: "Rasio panjang dan lebar sebuah persegi panjang adalah \\( 3 : 2 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of length to width of a rectangle is \\( 3 : 2 \\). Which statements are TRUE?", opts: ["Jika lebar 10 cm, panjangnya 15 cm", "Keliling persegi panjang dapat dibagi menjadi 10 bagian yang sama", "Luas persegi panjang adalah \\( 6 \\) satuan luas per bagian kuadrat", "Jika keliling 50 cm, panjangnya 20 cm"], ans: [0, 1, 2], exp: "1 bagian = 5. 1. B (Panjang 3x5=15). 2. B (3+2+3+2=10 bagian keliling). 3. B (Panjang 3, lebar 2, luas 6). 4. S (Keliling 50 = 10 bagian, 1 bagian=5, panjang=15. Bukan 20).", exp_trans: "Statements 1, 2, and 3 are true. Statement 4 is false (Length should be 15)." },
+
+            // REVIEW OF PRIOR KNOWLEDGE TASKS
+            "r-task1": { type: "fill", q: "Sederhanakan rasio \\( 24 : 36 \\) menggunakan FPB. <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis format rasio tanpa spasi, misal: 2:3)</span>", q_trans: "Simplify the ratio \\( 24 : 36 \\) using GCF. <br><span class='text-sm text-gray-500'>(Short Answer - Write ratio without spaces, e.g., 2:3)</span>", ans: "2:3", exp: "FPB dari 24 dan 36 adalah 12. \\( 24/12 = 2 \\), \\( 36/12 = 3 \\). Hasilnya \\( 2:3 \\).", exp_trans: "GCF of 24 and 36 is 12. Result is 2:3." },
+            "r-task2": { type: "tf_table", q: "Mengenai FPB dan KPK dalam menyederhanakan dan menyamakan rasio, tentukan Benar atau Salah!", q_trans: "Regarding GCF and LCM in simplifying and equalizing ratios, determine True or False!", opts: ["FPB digunakan untuk menyederhanakan rasio", "KPK digunakan untuk menyamakan bagian bawah pada pecahan rasio", "FPB dari 10 dan 15 adalah 5", "KPK dari 3 dan 4 adalah 7"], ans: ["B", "B", "B", "S"], exp: "1 B, 2 B, 3 B. 4 S, KPK 3 dan 4 adalah 12.", exp_trans: "1, 2, 3 True. 4 False (LCM is 12)." },
+			"r-task3": { type: "single", q: "Pecahan \\( \\frac{3}{5} \\) jika ditulis sebagai rasio bagian terhadap bagian yang lain (sisanya) adalah...", q_trans: "The fraction \\( \\frac{3}{5} \\) if written as a ratio of part to another part (the remainder) is...", opts: ["\\( 3 : 5 \\)", "\\( 3 : 2 \\)", "\\( 5 : 3 \\)", "\\( 5 : 2 \\)", "\\( 2 : 3 \\)"], ans: "\\( 3 : 2 \\)", exp: "Pecahan 3/5 berarti 3 bagian dari total 5. Sisa bagiannya adalah 5 - 3 = 2. Maka rasio bagian terhadap sisanya adalah 3 : 2.", exp_trans: "Fraction 3/5 means 3 parts out of 5 total. The remainder is 5 - 3 = 2. So the ratio of part to remainder is 3:2." },
+            "r-task4": { type: "fill", q: "Rasio uang Andi dan Budi adalah \\( 4 : 7 \\). Jika Andi memiliki Rp 20.000, berapakah uang Budi? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of Andi's and Budi's money is \\( 4 : 7 \\). If Andi has Rp 20,000, how much is Budi's money? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "35000", exp: "1 bagian = 20.000 / 4 = 5.000. Uang Budi = 7 bagian = 7 x 5.000 = 35.000.", exp_trans: "1 part = 5,000. Budi = 7 parts = 35,000." },
+            "r-task5": { type: "complex", q: "Manakah pernyataan yang BENAR mengenai hubungan pecahan dan rasio?", q_trans: "Which statements are TRUE regarding the relationship between fractions and ratios?", opts: ["Pecahan \\( \\frac{2}{7} \\) sama dengan rasio \\( 2 : 5 \\) (bagian terhadap sisanya)", "Pecahan \\( \\frac{1}{4} \\) berarti rasio 1 banding 3 jika dibandingkan dengan sisanya", "Rasio \\( 3 : 8 \\) dapat ditulis sebagai pecahan \\( \\frac{3}{11} \\) untuk perbandingan terhadap total", "Pecahan \\( \\frac{5}{9} \\) berarti rasio 5 terhadap 4"], ans: [0, 1, 3], exp: "1. B (2 dari 7 total, sisanya 5, jadi 2:5). 2. B (1 dari 4 total, sisanya 3, jadi 1:3). 3. S (3:8 terhadap total adalah 3:11, bukan 3/8). 4. B (5 dari 9 total, sisanya 4).", exp_trans: "1, 2, 4 are true. 3 is false (fraction is 3/11)." },
+            "r-task6": { type: "tf_table", q: "Rasio uang A, B, dan C adalah \\( 2 : 3 : 4 \\). Tentukan Benar atau Salah!", q_trans: "The ratio of A, B, and C's money is \\( 2 : 3 : 4 \\). Determine True or False!", opts: ["Total bagian adalah 9", "Jika total uang Rp 90.000, A mendapat Rp 20.000", "Jika C mendapat Rp 40.000, B mendapat Rp 30.000", "A memiliki uang lebih banyak dari B"], ans: ["B", "B", "B", "S"], exp: "1 B. 2 B (90.000/9=10.000, A=20.000). 3 B (C=40.000 -> 1 bagian=10.000, B=3x10.000=30.000). 4 S (A 2 bagian, B 3 bagian).", exp_trans: "1, 2, 3 True. 4 False." },
+            "r-task7": { type: "single", q: "Rasio berat badan Andi dan Budi adalah \\( 5 : 6 \\). Jika Andi bobotnya 40 kg, berapa selisih berat badan mereka?", q_trans: "The ratio of Andi's and Budi's weight is \\( 5 : 6 \\). If Andi weighs 40 kg, what is the difference in their weight?", opts: ["\\( 6 \\text{ kg} \\)", "\\( 8 \\text{ kg} \\)", "\\( 10 \\text{ kg} \\)", "\\( 12 \\text{ kg} \\)", "\\( 48 \\text{ kg} \\)"], ans: "\\( 8 \\text{ kg} \\)", exp: "1 bagian = 40 / 5 = 8 kg. Selisih bagian = 6 - 5 = 1. Selisih berat = 1 x 8 = 8 kg.", exp_trans: "1 part = 8 kg. Difference in parts = 1. Weight difference = 8 kg." },
+            "r-task8": { type: "fill", q: "Jika rasio \\( 3 : 4 \\) sama dengan \\( x : 20 \\), berapakah nilai \\( x \\)? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "If the ratio \\( 3 : 4 \\) equals \\( x : 20 \\), what is the value of \\( x \\)? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "15", exp: "Kalikan silang: \\( 4x = 3 \\times 20 \\). \\( 4x = 60 \\). \\( x = 15 \\).", exp_trans: "Cross multiply: 4x = 60. x = 15." },
+            "r-task9": { type: "complex", q: "Rasio siswa laki-laki dan perempuan di kelas 7A adalah \\( 4 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of boys to girls in class 7A is \\( 4 : 5 \\). Which statements are TRUE?", opts: ["Rasio laki-laki terhadap total siswa adalah \\( 4 : 9 \\)", "Jika perempuan 25 orang, laki-laki 20 orang", "Selisih jumlah laki-laki dan perempuan adalah 1 bagian", "Jika total 36 siswa, laki-laki ada 16 orang"], ans: [0, 1, 2, 3], exp: "Semua pernyataan benar. 1 bagian=5. L=20, P=25. Total=45. 4+5=9. Laki=4/9. Selisih=1 bagian=5. Total 36 -> 1 bagian=4. L=16.", exp_trans: "All statements are true." },
+            "r-task10": { type: "tf_table", q: "Mengenai pecahan \\( \\frac{3}{8} \\), tentukan Benar atau Salah!", q_trans: "Regarding the fraction \\( \\frac{3}{8} \\), determine True or False!", opts: ["Rasio bagian terhadap total adalah \\( 3 : 8 \\)", "Rasio bagian terhadap sisa adalah \\( 3 : 5 \\)", "Jika total 40, bagian yang dimaksud adalah 15", "Jika bagian yang dimaksud 12, sisanya adalah 20"], ans: ["B", "B", "B", "B"], exp: "1. B. 2. B (8-3=5). 3. B (40x3/8=15). 4. B (3 bagian=12 -> 1 bagian=4. Sisa 5 bagian = 5x4=20).", exp_trans: "All true." },
+
+            // PROBLEM INTRODUCTION TASKS
+            "p-task1": { type: "fill", q: "Sebuah uang sebesar Rp 80.000 dibagi kepada Andi dan Budi dengan rasio \\( 3 : 5 \\). Berapakah uang Andi? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Rp 80,000 is divided between Andi and Budi in the ratio \\( 3 : 5 \\). How much is Andi's money? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "30000", exp: "Total bagian = 3 + 5 = 8. 1 bagian = 80.000 / 8 = 10.000. Andi = 3 x 10.000 = 30.000.", exp_trans: "Total parts = 8. 1 part = 10,000. Andi = 30,000." },
+            "p-task2": { type: "single", q: "Uang sebesar Rp 120.000 dibagi kepada Sinta, Dini, dan Eka dengan rasio \\( 1 : 2 : 3 \\). Berapakah uang Dini?", q_trans: "Rp 120,000 is divided among Sinta, Dini, and Eka in the ratio \\( 1 : 2 : 3 \\). How much is Dini's money?", opts: ["\\( Rp 20.000 \\)", "\\( Rp 40.000 \\)", "\\( Rp 60.000 \\)", "\\( Rp 80.000 \\)", "\\( Rp 100.000 \\)"], ans: "\\( Rp 40.000 \\)", exp: "Total bagian = 6. 1 bagian = 20.000. Dini = 2 bagian = 40.000.", exp_trans: "Total parts = 6. 1 part = 20,000. Dini = 40,000." },
+			"p-task3": { type: "complex", q: "Sebuah tali sepanjang 100 cm dipotong dengan rasio \\( 2 : 3 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "A 100 cm rope is cut in the ratio \\( 2 : 3 : 5 \\). Which statements are TRUE?", opts: ["Potongan terpendek adalah 20 cm", "Potongan terpanjang adalah 50 cm", "Selisih potongan terpanjang dan terpendek adalah 30 cm", "Potongan kedua (3 bagian) lebih panjang 10 cm dari potongan pertama"], ans: [0, 1, 2, 3], exp: "Total bagian = 10. 1 bagian = 10 cm. 1 B (2x10=20cm), 2 B (5x10=50cm), 3 B (50-20=30cm), 4 B (3x10=30cm dikurangi 2x10=20cm adalah 10cm). Semua pernyataan benar.", exp_trans: "Total parts = 10. 1 part = 10 cm. All statements are mathematically correct." },
+            "p-task4": { type: "fill", q: "Rasio umur Ayah dan Anak adalah \\( 5 : 1 \\). Jika selisih umur mereka 32 tahun, berapakah umur Ayah? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "The ratio of Father's to Son's age is \\( 5 : 1 \\). If their age difference is 32 years, what is Father's age? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "40", exp: "Selisih bagian = 5 - 1 = 4. 4 bagian = 32. 1 bagian = 8. Umur Ayah = 5 x 8 = 40.", exp_trans: "Difference = 4 parts = 32. 1 part = 8. Father = 5 x 8 = 40." },
+            "p-task5": { type: "tf_table", q: "Sebuah pewarna dibuat dari campuran merah, kuning, dan biru dengan rasio \\( 2 : 3 : 4 \\). Tentukan Benar atau Salah!", q_trans: "A dye is made from red, yellow, and blue with the ratio \\( 2 : 3 : 4 \\). Determine True or False!", opts: ["Warna kuning lebih banyak dari merah", "Total bagian adalah 9", "Jika biru 20 ml, merah 15 ml", "Jika total 180 ml, kuning 60 ml"], ans: ["B", "B", "S", "B"], exp: "1 B, 2 B. 3 S (1 bagian=5ml, merah=2x5=10ml, bukan 15). 4 B (1 bagian=20ml, kuning=3x20=60ml).", exp_trans: "1, 2, 4 True. 3 False (red should be 10ml)." },
+            "p-task6": { type: "single", q: "Jika rasio \\( x : y \\) adalah \\( 3 : 4 \\) dan \\( y : z \\) adalah \\( 8 : 9 \\), berapakah rasio \\( x : z \\)?", q_trans: "If the ratio \\( x : y \\) is \\( 3 : 4 \\) and \\( y : z \\) is \\( 8 : 9 \\), what is the ratio \\( x : z \\)?", opts: ["\\( 3 : 9 \\)", "\\( 2 : 3 \\)", "\\( 3 : 4 \\)", "\\( 8 : 9 \\)", "\\( 1 : 1 \\)"], ans: "\\( 2 : 3 \\)", exp: "Samakan y. \\( x:y = 6:8 \\). \\( y:z = 8:9 \\). Maka \\( x:z = 6:9 = 2:3 \\).", exp_trans: "Equalize y. x:y = 6:8. y:z = 8:9. So x:z = 6:9 = 2:3." },
+            "p-task7": { type: "fill", q: "Sebuah kebun berbentuk persegi panjang memiliki perbandingan panjang dan lebar \\( 7 : 4 \\). Jika kelilingnya 44 m, berapakah lebarnya? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A rectangular garden has a length to width ratio of \\( 7 : 4 \\). If perimeter is 44 m, what is the width? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "8", exp: "Keliling = 2(p+l). 2(7+4) = 22 bagian. 22 bagian = 44 m. 1 bagian = 2 m. Lebar = 4 x 2 = 8 m.", exp_trans: "Perimeter = 2(p+l). 22 parts = 44m. 1 part = 2m. Width = 4 x 2 = 8m." },
+            "p-task8": { type: "complex", q: "Rasio nilai ujian Matematika dan IPA Budi adalah \\( 4 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of Budi's Math and Science test scores is \\( 4 : 5 \\). Which statements are TRUE?", opts: ["Jika nilai Matematika 80, nilai IPA 100", "Selisih nilai adalah 1 bagian", "Total nilai jika Matematika 80 adalah 180", "Nilai IPA selalu lebih rendah dari Matematika"], ans: [0, 1, 2], exp: "1 B (1 bagian=20. IPA=5x20=100). 2 B. 3 B (80+100=180). 4 S (IPA lebih tinggi, 5 > 4).", exp_trans: "1, 2, 3 True. 4 False." },
+            "p-task9": { type: "tf_table", q: "Untuk membuat cat hijau, campuran cat biru dan kuning dengan rasio \\( 3 : 2 \\). Tentukan Benar atau Salah!", q_trans: "To make green paint, mix blue and yellow with ratio \\( 3 : 2 \\). Determine True or False!", opts: ["Biru lebih banyak dari kuning", "Total bagian cat adalah 5", "Jika biru 9 liter, kuning 6 liter", "Jika total cat 25 liter, kuning 10 liter"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B (1 bagian=3, kuning=2x3=6), 4 B (1 bagian=5, kuning=2x5=10).", exp_trans: "All true." },
+            "p-task10": { type: "fill", q: "Rasio uang Sisi, Dito, dan Rian adalah \\( 2 : 3 : 5 \\). Jika Rian memiliki Rp 25.000, berapakah total uang mereka bertiga? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "The ratio of Sisi, Dito, and Rian's money is \\( 2 : 3 : 5 \\). If Rian has Rp 25,000, what is their total money? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "50000", exp: "Rian = 5 bagian = 25.000. 1 bagian = 5.000. Total bagian = 2+3+5=10. Total uang = 10 x 5.000 = 50.000.", exp_trans: "Rian = 5 parts = 25,000. 1 part = 5,000. Total parts = 10. Total money = 50,000." }
+        };
+		
+        // ====== MATH QUESTIONS DATA (PART 2) ======
+        Object.assign(questions, {
+            // GUIDED PRACTICE TASKS
+            "g-task1": { type: "fill", q: "Mobil A menempuh 120 km dalam 2 jam, sedangkan Mobil B menempuh 180 km dalam 3 jam. Berapakah rasio kecepatan Mobil A terhadap Mobil B? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis format rasio tanpa spasi, misal: 1:1)</span>", q_trans: "Car A travels 120 km in 2 hours, while Car B travels 180 km in 3 hours. What is the speed ratio of Car A to Car B? <br><span class='text-sm text-gray-500'>(Short Answer - Ratio format without spaces, e.g., 1:1)</span>", ans: "1:1", exp: "Kecepatan A = 120/2 = 60 km/jam. Kecepatan B = 180/3 = 60 km/jam. Rasio = 60:60 = 1:1.", exp_trans: "Speed A = 60 km/h. Speed B = 60 km/h. Ratio = 1:1." },
+            "g-task2": { type: "single", q: "Rasio umur Ani dan Budi adalah \\( 4 : 5 \\). Jika selisih umur mereka adalah 4 tahun, berapakah umur Budi?", q_trans: "The ratio of Ani's and Budi's age is \\( 4 : 5 \\). If their age difference is 4 years, how old is Budi?", opts: ["\\( 16 \\text{ tahun} \\)", "\\( 20 \\text{ tahun} \\)", "\\( 24 \\text{ tahun} \\)", "\\( 25 \\text{ tahun} \\)", "\\( 40 \\text{ tahun} \\)"], ans: "\\( 20 \\text{ tahun} \\)", exp: "Selisih bagian = 5 - 4 = 1 bagian. 1 bagian = 4 tahun. Budi = 5 bagian = 5 x 4 = 20 tahun.", exp_trans: "Difference = 1 part = 4 years. Budi = 5 parts = 20 years." },
+            "g-task3": { type: "complex", q: "Rasio uang Andi dan Budi adalah \\( 3 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of Andi's and Budi's money is \\( 3 : 5 \\). Which statements are TRUE?", opts: ["Jika Budi Rp 50.000, Andi Rp 30.000", "Total uang jika Budi Rp 50.000 adalah Rp 80.000", "Andi memiliki uang lebih banyak dari Budi", "Selisih uang mereka adalah 2 bagian"], ans: [0, 1, 3], exp: "1 bagian = 10.000. 1 B, 2 B, 3 S (Andi 3 bagian, Budi 5 bagian), 4 B.", exp_trans: "1, 2, 4 are true." },
+            "g-task4": { type: "fill", q: "Rasio \\( 1 : 3 \\) diubah menjadi persentase adalah... <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja tanpa tanda %)</span>", q_trans: "The ratio \\( 1 : 3 \\) converted to percentage is... <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only without %)</span>", ans: "25", exp: "Total bagian = 4. Pecahan = 1/4. Persentase = (1/4) x 100% = 25%.", exp_trans: "Total parts = 4. Fraction = 1/4. Percentage = 25%." },
+            "g-task5": { type: "tf_table", q: "Sebuah tabungan dan investasi memiliki rasio \\( 2 : 5 \\). Tentukan Benar atau Salah!", q_trans: "Savings and investment have a ratio of \\( 2 : 5 \\). Determine True or False!", opts: ["Total bagian adalah 7", "Tabungan adalah \\( \\frac{2}{7} \\) dari total", "Jika investasi Rp 50.000, tabungan Rp 25.000", "Persentase investasi adalah sekitar 71%"], ans: ["B", "B", "S", "B"], exp: "1 B, 2 B. 3 S (1 bagian=10.000, tabungan=20.000). 4 B (5/7 x 100% = 71.4%).", exp_trans: "1, 2, 4 True. 3 False (savings is 20,000)." },
+            "g-task6": { type: "single", q: "Jika rasio \\( x : y \\) adalah \\( 2 : 3 \\) dan \\( y : z \\) adalah \\( 6 : 7 \\), berapakah rasio \\( x : z \\)?", q_trans: "If \\( x : y \\) is \\( 2 : 3 \\) and \\( y : z \\) is \\( 6 : 7 \\), what is \\( x : z \\)?", opts: ["\\( 2 : 7 \\)", "\\( 4 : 7 \\)", "\\( 12 : 21 \\)", "\\( 2 : 6 \\)", "\\( 3 : 7 \\)"], ans: "\\( 4 : 7 \\)", exp: "Samakan y. KPK 3 dan 6 adalah 6. x:y = 4:6. y:z = 6:7. Maka x:z = 4:7.", exp_trans: "Equalize y. x:y = 4:6. y:z = 6:7. So x:z = 4:7." },
+            "g-task7": { type: "fill", q: "Jika rasio \\( 3 : 4 \\) sama dengan \\( 9 : x \\), berapakah nilai \\( x \\)? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "If ratio \\( 3 : 4 \\) equals \\( 9 : x \\), what is \\( x \\)? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "12", exp: "Kalikan silang: 3x = 36. x = 12.", exp_trans: "Cross multiply: 3x = 36. x = 12." },
+            "g-task8": { type: "complex", q: "Rasio panjang dan lebar persegi panjang adalah \\( 3 : 2 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of length to width of a rectangle is \\( 3 : 2 \\). Which statements are TRUE?", opts: ["Jika lebar 10 cm, panjang 15 cm", "Keliling persegi panjang adalah 10 bagian", "Luas persegi panjang adalah 6 satuan luas per bagian kuadrat", "Jika keliling 40 cm, panjang 12 cm"], ans: [0, 1, 2, 3], exp: "1 bagian = 5. 1 B (P=15), 2 B (3+2+3+2=10), 3 B (P=3, L=2, Luas=6), 4 B (10 bagian=40 -> 1 bagian=4. P=3x4=12).", exp_trans: "All statements are true." },
+            "g-task9": { type: "tf_table", q: "Rasio uang A, B, C adalah \\( 2 : 3 : 4 \\). Tentukan Benar atau Salah!", q_trans: "The ratio of A, B, C's money is \\( 2 : 3 : 4 \\). Determine True or False!", opts: ["Total bagian adalah 9", "Jika total Rp 90.000, A mendapat Rp 20.000", "Jika C Rp 40.000, B Rp 30.000", "A memiliki uang lebih banyak dari B"], ans: ["B", "B", "B", "S"], exp: "1 B, 2 B, 3 B, 4 S (A 2 bagian, B 3 bagian).", exp_trans: "1, 2, 3 True. 4 False." },
+            "g-task10": { type: "single", q: "Rasio siswa laki-laki dan perempuan di kelas adalah \\( 4 : 5 \\). Jika jumlah perempuan 25 orang, berapakah jumlah laki-laki?", q_trans: "The ratio of boys to girls is \\( 4 : 5 \\). If there are 25 girls, how many boys are there?", opts: ["\\( 16 \\text{ siswa} \\)", "\\( 20 \\text{ siswa} \\)", "\\( 24 \\text{ siswa} \\)", "\\( 30 \\text{ siswa} \\)", "\\( 45 \\text{ siswa} \\)"], ans: "\\( 20 \\text{ siswa} \\)", exp: "1 bagian = 25 / 5 = 5. Laki-laki = 4 x 5 = 20.", exp_trans: "1 part = 5. Boys = 4 x 5 = 20." },
+
+            // INDEPENDENT PRACTICE TASKS
+            "ind-task1": { type: "fill", q: "Sebuah mesin memiliki roda gigi besar (40 gigi) dan kecil (20 gigi). Jika roda gigi kecil berputar 10 kali, berapa kali roda gigi besar berputar? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A machine has a large gear (40 teeth) and a small gear (20 teeth). If the small gear rotates 10 times, how many times does the large gear rotate? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "5", exp: "Rasio putar = 20:40 = 1:2 (kecil:besar). Jika kecil 10, besar = 10/2 = 5 kali.", exp_trans: "Rotation ratio = 1:2. If small is 10, large is 5." },
+            "ind-task2": { type: "single", q: "Di sebuah taman, rasio dewasa dan anak-anak adalah \\( 2 : 3 \\). Jika ada 18 dewasa, berapakah jumlah anak-anak?", q_trans: "In a park, the ratio of adults to children is \\( 2 : 3 \\). If there are 18 adults, how many children are there?", opts: ["\\( 24 \\text{ anak} \\)", "\\( 27 \\text{ anak} \\)", "\\( 30 \\text{ anak} \\)", "\\( 36 \\text{ anak} \\)", "\\( 45 \\text{ anak} \\)"], ans: "\\( 27 \\text{ anak} \\)", exp: "1 bagian = 18 / 2 = 9. Anak-anak = 3 x 9 = 27.", exp_trans: "1 part = 9. Children = 3 x 9 = 27." },
+            "ind-task3": { type: "complex", q: "Rasio tabungan dan investasi adalah \\( 1 : 3 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of savings to investment is \\( 1 : 3 \\). Which statements are TRUE?", opts: ["Tabungan adalah 25% dari total", "Investasi 3 kali lipat tabungan", "Jika tabungan Rp 100.000, investasi Rp 300.000", "Total uang jika investasi Rp 300.000 adalah Rp 500.000"], ans: [0, 1, 2], exp: "Total bagian 4. 1. B (1/4 = 25%). 2. B (3 bagian = 3x tabungan). 3. B (1 bagian=100.000 -> investasi 300.000). 4. S (Jika investasi 300.000, tabungan 100.000. Total = 400.000, bukan 500.000).", exp_trans: "Statements 1, 2, 3 are true. Statement 4 is false (Total is 400,000)." },
+            "ind-task4": { type: "fill", q: "Minuman terdiri dari sirup dan air rasio 1:5. Jika sirup 50 ml, berapa ml total minuman? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Drink consists of syrup and water ratio 1:5. If syrup is 50 ml, how many ml is the total drink? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "300", exp: "1 bagian = 50 ml. Total bagian = 1 + 5 = 6. Total = 6 x 50 = 300 ml.", exp_trans: "1 part = 50 ml. Total parts = 6. Total = 300 ml." },
+            "ind-task5": { type: "tf_table", q: "Rasio panjang dan lebar \\( 3 : 2 \\). Tentukan Benar atau Salah!", q_trans: "Ratio of length and width \\( 3 : 2 \\). Determine True or False!", opts: ["Jika lebar 10 cm, panjang 15 cm", "Keliling adalah 10 bagian", "Luas adalah 6 satuan per bagian kuadrat", "Jika keliling 40 cm, panjang 12 cm"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B (3+2+3+2=10), 3 B (P=3, L=2 -> 6), 4 B (10 bagian=40 -> 1=4. P=3x4=12).", exp_trans: "All true." },
+            "ind-task6": { type: "single", q: "Rasio kecepatan A dan B adalah \\( 3 : 2 \\). Jika A 60 km/jam, berapa kecepatan B?", q_trans: "The speed ratio of A to B is \\( 3 : 2 \\). If A is 60 km/h, what is B's speed?", opts: ["\\( 30 \\text{ km/jam} \\)", "\\( 40 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 90 \\text{ km/jam} \\)", "\\( 120 \\text{ km/jam} \\)"], ans: "\\( 40 \\text{ km/jam} \\)", exp: "1 bagian = 60 / 3 = 20. B = 2 x 20 = 40 km/jam.", exp_trans: "1 part = 20. B = 2 x 20 = 40 km/h." },
+            "ind-task7": { type: "fill", q: "Rasio uang Andi dan Budi \\( 4 : 7 \\). Jika Budi Rp 35.000, berapa uang Andi? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of Andi's and Budi's money \\( 4 : 7 \\). If Budi is Rp 35,000, how much is Andi's? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "20000", exp: "1 bagian = 35.000 / 7 = 5.000. Andi = 4 x 5.000 = 20.000.", exp_trans: "1 part = 5,000. Andi = 20,000." },
+            "ind-task8": { type: "complex", q: "Rasio A, B, C adalah \\( 2 : 3 : 4 \\). Manakah pernyataan yang BENAR?", q_trans: "Ratio of A, B, C is \\( 2 : 3 : 4 \\). Which statements are TRUE?", opts: ["Total bagian adalah 9", "Jika total 900, C adalah 400", "Jika B 300, A adalah 200", "C memiliki nilai 2 kali A"], ans: [0, 1, 2, 3], exp: "1 bagian = 100. 1 B, 2 B (4x100=400), 3 B (3x100=300, 2x100=200), 4 B (4 bagian = 2x2 bagian).", exp_trans: "All true." },
+            "ind-task9": { type: "tf_table", q: "Skala peta 1 : 500.000. Tentukan Benar atau Salah!", q_trans: "Map scale 1 : 500,000. Determine True or False!", opts: ["1 cm di peta = 5 km di aslinya", "4 cm di peta = 20 km di aslinya", "Jarak asli 50 km digambar 10 cm", "Skala ini menunjukkan jarak di peta lebih kecil dari aslinya"], ans: ["B", "B", "B", "B"], exp: "1 B (500.000 cm = 5 km), 2 B (4x5km = 20 km), 3 B (50 km = 5.000.000 cm / 500.000 = 10 cm), 4 B.", exp_trans: "All true." },
+            "ind-task10": { type: "single", q: "Rasio gaji A dan B adalah \\( 5 : 4 \\). Jika selisih gaji Rp 200.000, berapakah gaji B?", q_trans: "The ratio of A's and B's salary is \\( 5 : 4 \\). If the difference is Rp 200,000, what is B's salary?", opts: ["\\( Rp 600.000 \\)", "\\( Rp 800.000 \\)", "\\( Rp 1.000.000 \\)", "\\( Rp 1.200.000 \\)", "\\( Rp 1.600.000 \\)"], ans: "\\( Rp 800.000 \\)", exp: "Selisih = 1 bagian = 200.000. B = 4 bagian = 4 x 200.000 = 800.000.", exp_trans: "Difference = 1 part = 200,000. B = 4 parts = 800,000." },
+
+            // TASK 1: KONSEP DASAR RASIO
+            "t1-task1": { type: "single", q: "Di kelas 7A, terdapat 12 siswa yang menyukai matematika dan 16 siswa menyukai sains. Rasio siswa yang menyukai matematika terhadap sains adalah...", q_trans: "In class 7A, 12 students like math and 16 like science. The ratio of students who like math to science is...", opts: ["\\( 12 : 16 \\)", "\\( 3 : 4 \\)", "\\( 4 : 3 \\)", "\\( 16 : 12 \\)", "\\( 3 : 7 \\)"], ans: "\\( 3 : 4 \\)", exp: "Rasio awal 12:16. FPB 4. 12/4=3, 16/4=4. Hasil 3:4.", exp_trans: "Initial 12:16. GCF 4. Result 3:4." },
+            "t1-task2": { type: "fill", q: "Terdapat 10 bebek dan 15 ayam. Rasio bebek terhadap total hewan adalah... <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis format rasio tanpa spasi)</span>", q_trans: "There are 10 ducks and 15 chickens. The ratio of ducks to total animals is... <br><span class='text-sm text-gray-500'>(Short Answer - Ratio format without spaces)</span>", ans: "2:5", exp: "Total = 25. Rasio 10:25. FPB 5. Hasil 2:5.", exp_trans: "Total = 25. Ratio 10:25. GCF 5. Result 2:5." },
+            "t1-task3": { type: "complex", q: "Rasio siswa laki-laki dan perempuan adalah \\( 4 : 5 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of boys to girls is \\( 4 : 5 \\). Which statements are TRUE?", opts: ["Laki-laki adalah \\( \\frac{4}{9} \\) dari total", "Total bagian adalah 9", "Selisih laki-laki dan perempuan adalah 1 bagian", "Perempuan lebih sedikit dari laki-laki"], ans: [0, 1, 2], exp: "1 B, 2 B, 3 B, 4 S (perempuan 5 bagian, laki-laki 4 bagian).", exp_trans: "1, 2, 3 are true." },
+            "t1-task4": { type: "tf_table", q: "Rasio \\( 6 : 8 \\). Tentukan Benar atau Salah!", q_trans: "Ratio \\( 6 : 8 \\). Determine True or False!", opts: ["Dapat disederhanakan menjadi \\( 3 : 4 \\)", "Total bagian adalah 14", "Pecahan dari rasio ini adalah \\( \\frac{3}{4} \\)", "Ekuivalen dengan \\( 12 : 16 \\)"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B, 4 B (3:4 x 4 = 12:16).", exp_trans: "All true." },
+            "t1-task5": { type: "single", q: "Rasio uang Andi dan Budi adalah \\( 2 : 3 \\). Jika Andi Rp 10.000, berapakah uang Budi?", q_trans: "The ratio of Andi's and Budi's money is \\( 2 : 3 \\). If Andi has Rp 10,000, how much is Budi's?", opts: ["\\( Rp 10.000 \\)", "\\( Rp 15.000 \\)", "\\( Rp 20.000 \\)", "\\( Rp 25.000 \\)", "\\( Rp 30.000 \\)"], ans: "\\( Rp 15.000 \\)", exp: "1 bagian = 5.000. Budi 3 bagian = 15.000.", exp_trans: "1 part = 5,000. Budi = 15,000." },
+            "t1-task6": { type: "fill", q: "Rasio apel dan jeruk adalah \\( 3 : 5 \\). Jika jeruk 25 buah, berapakah jumlah apel? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of apples to oranges is \\( 3 : 5 \\). If oranges are 25, how many apples? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "15", exp: "1 bagian = 5. Apel = 3 x 5 = 15.", exp_trans: "1 part = 5. Apples = 15." },
+            "t1-task7": { type: "complex", q: "Rasio A : B : C = \\( 1 : 2 : 3 \\). Manakah pernyataan yang BENAR?", q_trans: "Ratio A : B : C = \\( 1 : 2 : 3 \\). Which statements are TRUE?", opts: ["Total bagian adalah 6", "Jika A 10, C 30", "Jika B 20, A 10", "C memiliki nilai 2 kali B"], ans: [0, 1, 2], exp: "1. B (1+2+3=6). 2. B (1 bagian=10, C=3x10=30). 3. B (B=20 -> 1 bagian=10, A=10). 4. S (C=3, B=2. 3 adalah 1.5 kali 2, bukan 2 kali).", exp_trans: "1, 2, 3 are true. 4 is false (C is 1.5 times B)." },
+            "t1-task8": { type: "tf_table", q: "Rasio \\( 5 : 10 \\). Tentukan Benar atau Salah!", q_trans: "Ratio \\( 5 : 10 \\). Determine True or False!", opts: ["Disederhanakan menjadi \\( 1 : 2 \\)", "Total bagian 15", "Persentase bagian pertama terhadap total adalah \\( 33.3\\% \\)", "Ekuivalen dengan \\( 10 : 20 \\)"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B (5/15 = 1/3 = 33.3%), 4 B.", exp_trans: "All true." },
+            "t1-task9": { type: "single", q: "Rasio kecepatan A dan B adalah \\( 4 : 3 \\). Jika A 80 km/jam, berapa kecepatan B?", q_trans: "Speed ratio A to B is \\( 4 : 3 \\). If A is 80 km/h, what is B's speed?", opts: ["\\( 40 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 80 \\text{ km/jam} \\)", "\\( 100 \\text{ km/jam} \\)", "\\( 120 \\text{ km/jam} \\)"], ans: "\\( 60 \\text{ km/jam} \\)", exp: "1 bagian = 20. B = 3 x 20 = 60.", exp_trans: "1 part = 20. B = 60." },
+            "t1-task10": { type: "fill", q: "Skala peta 1:1000. Jika jarak asli 5000 cm, berapa cm di peta? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Map scale 1:1000. If actual distance is 5000 cm, how many cm on map? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "5", exp: "Di peta = Asli / Skala = 5000 / 1000 = 5 cm.", exp_trans: "Map = Actual / Scale = 5 cm." },
+
+            // TASK 2: RASIO EKUIVALEN
+            "t2-task1": { type: "single", q: "Manakah rasio yang ekuivalen dengan \\( 2 : 3 \\)?", q_trans: "Which ratio is equivalent to \\( 2 : 3 \\)?", opts: ["\\( 4 : 5 \\)", "\\( 4 : 6 \\)", "\\( 6 : 8 \\)", "\\( 3 : 2 \\)", "\\( 1 : 2 \\)"], ans: "\\( 4 : 6 \\)", exp: "2:3 dikali 2 menjadi 4:6.", exp_trans: "2:3 multiplied by 2 is 4:6." },
+            "t2-task2": { type: "fill", q: "Rasio \\( 5 : 15 \\) disederhanakan menjadi... <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis format rasio tanpa spasi)</span>", q_trans: "Ratio \\( 5 : 15 \\) simplified is... <br><span class='text-sm text-gray-500'>(Short Answer - Ratio format without spaces)</span>", ans: "1:3", exp: "FPB 5. 5/5=1, 15/5=3. Hasil 1:3.", exp_trans: "GCF 5. Result 1:3." },
+            "t2-task3": { type: "complex", q: "Rasio \\( 3 : 4 \\). Manakah pernyataan yang BENAR?", q_trans: "Ratio \\( 3 : 4 \\). Which statements are TRUE?", opts: ["Ekuivalen dengan \\( 6 : 8 \\)", "Total bagian 7", "Ekuivalen dengan \\( 9 : 12 \\)", "Ekuivalen dengan \\( 12 : 16 \\)"], ans: [0, 1, 2, 3], exp: "Semua benar. 3x2:4x2=6:8. 3+4=7. 3x3:4x3=9:12. 3x4:4x4=12:16.", exp_trans: "All true." },
+            "t2-task4": { type: "tf_table", q: "Mengenai rasio ekuivalen, tentukan Benar atau Salah!", q_trans: "Regarding equivalent ratios, determine True or False!", opts: ["Rasio \\( 1 : 2 \\) ekuivalen dengan \\( 3 : 6 \\)", "Rasio \\( 5 : 10 \\) ekuivalen dengan \\( 2 : 4 \\)", "Rasio \\( 2 : 3 \\) ekuivalen dengan \\( 4 : 9 \\)", "Rasio \\( 10 : 20 \\) ekuivalen dengan \\( 1 : 2 \\)"], ans: ["B", "B", "S", "B"], exp: "1 B, 2 B, 3 S (2x2=4, 3x2=6 bukan 9), 4 B.", exp_trans: "1, 2, 4 True. 3 False." },
+            "t2-task5": { type: "single", q: "Jika \\( \\frac{x}{y} = \\frac{2}{5} \\), dan \\( y = 15 \\), berapakah \\( x \\)?", q_trans: "If \\( \\frac{x}{y} = \\frac{2}{5} \\), and \\( y = 15 \\), what is \\( x \\)?", opts: ["\\( 2 \\)", "\\( 3 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 10 \\)"], ans: "\\( 6 \\)", exp: "y 15 berarti dikali 3. x = 2 x 3 = 6.", exp_trans: "y is multiplied by 3. x = 6." },
+            "t2-task6": { type: "fill", q: "Rasio \\( 7 : 21 \\) disederhanakan menjadi... <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis format rasio tanpa spasi)</span>", q_trans: "Ratio \\( 7 : 21 \\) simplified is... <br><span class='text-sm text-gray-500'>(Short Answer - Ratio format without spaces)</span>", ans: "1:3", exp: "FPB 7. Hasil 1:3.", exp_trans: "GCF 7. Result 1:3." },
+            "t2-task7": { type: "complex", q: "Rasio \\( 4 : 6 \\). Manakah pernyataan yang BENAR?", q_trans: "Ratio \\( 4 : 6 \\). Which statements are TRUE?", opts: ["Dapat disederhanakan menjadi \\( 2 : 3 \\)", "Ekuivalen dengan \\( 8 : 12 \\)", "Total bagian adalah 10", "Pecahan dari rasio ini adalah \\( \\frac{2}{3} \\)"], ans: [0, 1, 2, 3], exp: "1 B, 2 B, 3 B (4+6=10), 4 B (4/6=2/3).", exp_trans: "All true." },
+            "t2-task8": { type: "tf_table", q: "Rasio \\( 6 : 9 \\). Tentukan Benar atau Salah!", q_trans: "Ratio \\( 6 : 9 \\). Determine True or False!", opts: ["Disederhanakan menjadi \\( 2 : 3 \\)", "Ekuivalen dengan \\( 12 : 18 \\)", "Total bagian 15", "Pecahan \\( \\frac{2}{3} \\)"], ans: ["B", "B", "B", "B"], exp: "Semua benar.", exp_trans: "All true." },
+            "t2-task9": { type: "single", q: "Rasio yang ekuivalen dengan \\( 5 : 4 \\) adalah...", q_trans: "The ratio equivalent to \\( 5 : 4 \\) is...", opts: ["\\( 10 : 8 \\)", "\\( 10 : 9 \\)", "\\( 4 : 5 \\)", "\\( 15 : 12 \\)", "Baik A maupun D"], ans: "Baik A maupun D", exp: "5:4 dikali 2 = 10:8. Dikali 3 = 15:12.", exp_trans: "5:4 x 2 = 10:8. x 3 = 15:12. Both are equivalent." },
+            "t2-task10": { type: "fill", q: "Jika rasio \\( 3 : 4 \\) sama dengan \\( x : 20 \\), berapakah \\( x \\)? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "If ratio \\( 3 : 4 \\) equals \\( x : 20 \\), what is \\( x \\)? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "15", exp: "4 x 5 = 20. x = 3 x 5 = 15.", exp_trans: "4 x 5 = 20. x = 15." },
+
+            // TASK 3: MEMBAGI NILAI DALAM RASIO
+            "t3-task1": { type: "single", q: "Sejumlah uang Rp 60.000 dibagi kepada Andi dan Budi dengan rasio \\( 1 : 3 \\). Berapakah uang Budi?", q_trans: "Rp 60,000 is divided between Andi and Budi with ratio \\( 1 : 3 \\). How much is Budi's money?", opts: ["\\( Rp 15.000 \\)", "\\( Rp 20.000 \\)", "\\( Rp 30.000 \\)", "\\( Rp 45.000 \\)", "\\( Rp 60.000 \\)"], ans: "\\( Rp 45.000 \\)", exp: "Total bagian 4. 1 bagian = 15.000. Budi = 3 x 15.000 = 45.000.", exp_trans: "Total parts 4. 1 part = 15,000. Budi = 45,000." },
+            "t3-task2": { type: "fill", q: "Tali sepanjang 80 cm dipotong dengan rasio \\( 3 : 5 \\). Berapa cm potongan terpanjang? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "An 80 cm rope is cut with ratio \\( 3 : 5 \\). How long is the longest piece? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "50", exp: "Total bagian 8. 1 bagian = 10 cm. Terpanjang = 5 x 10 = 50 cm.", exp_trans: "Total parts 8. 1 part = 10 cm. Longest = 50 cm." },
+            "t3-task3": { type: "complex", q: "Rp 120.000 dibagi dengan rasio \\( 2 : 3 : 1 \\). Manakah pernyataan yang BENAR?", q_trans: "Rp 120,000 is divided with ratio \\( 2 : 3 : 1 \\). Which statements are TRUE?", opts: ["Bagian pertama Rp 40.000", "Bagian kedua Rp 60.000", "Bagian ketiga Rp 20.000", "Total bagian adalah 7"], ans: [0, 1, 2], exp: "1 bagian = 20.000. 1 B (2x20k), 2 B (3x20k), 3 B (1x20k), 4 S (2+3+1=6).", exp_trans: "1, 2, 3 are true." },
+            "t3-task4": { type: "tf_table", q: "Sebuah warisan Rp 100.000.000 dibagi 2 anak dengan rasio \\( 2 : 3 \\). Tentukan Benar atau Salah!", q_trans: "An inheritance of Rp 100,000,000 is divided between 2 children with ratio \\( 2 : 3 \\). Determine True or False!", opts: ["Total bagian adalah 5", "1 bagian Rp 20.000.000", "Anak pertama Rp 40.000.000", "Anak kedua Rp 60.000.000"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B, 4 B.", exp_trans: "All true." },
+            "t3-task5": { type: "single", q: "Rasio umur A : B : C = \\( 1 : 2 : 3 \\). Jika total umur 60 tahun, berapakah umur C?", q_trans: "Age ratio A : B : C = \\( 1 : 2 : 3 \\). If total age is 60 years, how old is C?", opts: ["\\( 10 \\text{ tahun} \\)", "\\( 20 \\text{ tahun} \\)", "\\( 30 \\text{ tahun} \\)", "\\( 40 \\text{ tahun} \\)", "\\( 50 \\text{ tahun} \\)"], ans: "\\( 30 \\text{ tahun} \\)", exp: "Total bagian 6. 1 bagian = 10. C = 3 x 10 = 30.", exp_trans: "Total parts 6. 1 part = 10. C = 30." },
+            "t3-task6": { type: "fill", q: "Sebuah kebun seluas 400 m² dibagi untuk 3 orang dengan rasio \\( 1 : 1 : 2 \\). Berapa m² bagian terbesar? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A 400 m² garden is divided for 3 people with ratio \\( 1 : 1 : 2 \\). How many m² is the largest part? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "200", exp: "Total bagian 4. 1 bagian = 100. Terbesar = 2 x 100 = 200.", exp_trans: "Total parts 4. 1 part = 100. Largest = 200." },
+            "t3-task7": { type: "complex", q: "Rasio A : B = \\( 3 : 5 \\). Jika A 30, manakah pernyataan yang BENAR?", q_trans: "Ratio A : B = \\( 3 : 5 \\). If A is 30, which statements are TRUE?", opts: ["B 50", "Total 80", "Selisih 20", "B lebih kecil dari A"], ans: [0, 1, 2], exp: "1 bagian=10. 1 B (B=50), 2 B (30+50=80), 3 B (50-30=20), 4 S.", exp_trans: "1, 2, 3 are true." },
+            "t3-task8": { type: "tf_table", q: "100 buah dibagi rasio \\( 1 : 4 \\). Tentukan Benar atau Salah!", q_trans: "100 fruits divided ratio \\( 1 : 4 \\). Determine True or False!", opts: ["Total bagian 5", "Bagian pertama 20", "Bagian kedua 80", "Selisih 60"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B, 4 B (80-20=60).", exp_trans: "All true." },
+            "t3-task9": { type: "single", q: "Rasio uang Andi dan Budi \\( 7 : 5 \\). Jika total Rp 120.000, berapakah uang Andi?", q_trans: "Ratio of Andi's and Budi's money \\( 7 : 5 \\). If total is Rp 120,000, how much is Andi's?", opts: ["\\( Rp 50.000 \\)", "\\( Rp 60.000 \\)", "\\( Rp 70.000 \\)", "\\( Rp 80.000 \\)", "\\( Rp 90.000 \\)"], ans: "\\( Rp 70.000 \\)", exp: "Total bagian 12. 1 bagian = 10.000. Andi = 7 x 10.000 = 70.000.", exp_trans: "Total parts 12. 1 part = 10,000. Andi = 70,000." },
+            "t3-task10": { type: "fill", q: "Sebuah tabungan Rp 500.000 dibagi rasio \\( 1 : 3 : 6 \\). Berapa bagian terkecil? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Savings of Rp 500,000 divided ratio \\( 1 : 3 : 6 \\). How much is the smallest part? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "50000", exp: "Total bagian 10. 1 bagian = 50.000. Terkecil = 1 x 50.000 = 50.000.", exp_trans: "Total parts 10. 1 part = 50,000. Smallest = 50,000." },
+
+            // TASK 4: SOAL CERITA RASIO (UANG, UMUR, RESEP)
+            "t4-task1": { type: "single", q: "Rasio umur Andi dan Budi adalah \\( 4 : 1 \\). Jika Andi 20 tahun, berapakah umur Budi?", q_trans: "The ratio of Andi's and Budi's age is \\( 4 : 1 \\). If Andi is 20 years old, how old is Budi?", opts: ["\\( 4 \\text{ tahun} \\)", "\\( 5 \\text{ tahun} \\)", "\\( 10 \\text{ tahun} \\)", "\\( 16 \\text{ tahun} \\)", "\\( 24 \\text{ tahun} \\)"], ans: "\\( 5 \\text{ tahun} \\)", exp: "1 bagian = 20/4 = 5. Budi = 1 x 5 = 5 tahun.", exp_trans: "1 part = 5. Budi = 5 years." },
+            "t4-task2": { type: "fill", q: "Resep kue membutuhkan rasio tepung dan gula \\( 5 : 2 \\). Jika gula 100 gram, berapa gram tepung? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "A recipe requires flour and sugar ratio \\( 5 : 2 \\). If sugar is 100g, how many grams of flour? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "250", exp: "1 bagian = 50. Tepung = 5 x 50 = 250 gram.", exp_trans: "1 part = 50. Flour = 250g." },
+            "t4-task3": { type: "complex", q: "Rasio uang Sisi dan Dito adalah \\( 3 : 4 \\). Manakah pernyataan yang BENAR?", q_trans: "The ratio of Sisi's and Dito's money is \\( 3 : 4 \\). Which statements are TRUE?", opts: ["Jika Dito Rp 40.000, Sisi Rp 30.000", "Selisih uang mereka 1 bagian", "Dito memiliki uang lebih banyak", "Jika Sisi 30.000, total 70.000"], ans: [0, 1, 2, 3], exp: "1 bagian = 10.000. 1 B, 2 B, 3 B, 4 B (30+40=70).", exp_trans: "All true." },
+            "t4-task4": { type: "tf_table", q: "Rasio gigi gir A dan B adalah \\( 2 : 3 \\). Tentukan Benar atau Salah!", q_trans: "The ratio of gear A and B teeth is \\( 2 : 3 \\). Determine True or False!", opts: ["Gir A lebih sedikit giginya", "Jika A 20 gigi, B 30 gigi", "Jika B 30 gigi, A 20 gigi", "Kecepatan gir A lebih lambat dari B"], ans: ["B", "B", "B", "S"], exp: "1 B, 2 B, 3 B, 4 S (gir kecil A berputar lebih cepat).", exp_trans: "1, 2, 3 True. 4 False (A is faster)." },
+            "t4-task5": { type: "single", q: "Rasio populasi kucing dan anjing adalah \\( 3 : 5 \\). Jika anjing 50 ekor, berapakah kucing?", q_trans: "The ratio of cats to dogs is \\( 3 : 5 \\). If dogs are 50, how many cats?", opts: ["\\( 20 \\text{ ekor} \\)", "\\( 25 \\text{ ekor} \\)", "\\( 30 \\text{ ekor} \\)", "\\( 35 \\text{ ekor} \\)", "\\( 45 \\text{ ekor} \\)"], ans: "\\( 30 \\text{ ekor} \\)", exp: "1 bagian = 10. Kucing = 3 x 10 = 30.", exp_trans: "1 part = 10. Cats = 30." },
+            "t4-task6": { type: "fill", q: "Rasio panjang dan lebar \\( 5 : 3 \\). Jika lebar 15 cm, berapa keliling persegi panjang? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of length and width \\( 5 : 3 \\). If width is 15 cm, what is the perimeter? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "80", exp: "1 bagian = 5. P = 25, L = 15. K = 2(25+15) = 2(40) = 80 cm.", exp_trans: "1 part = 5. P=25, L=15. Perimeter = 80 cm." },
+            "t4-task7": { type: "complex", q: "Rasio A : B : C = \\( 1 : 2 : 4 \\). Manakah pernyataan yang BENAR?", q_trans: "Ratio A : B : C = \\( 1 : 2 : 4 \\). Which statements are TRUE?", opts: ["Total bagian 7", "Jika A 10, C 40", "Jika B 20, A 10", "C 2 kali B"], ans: [0, 1, 2, 3], exp: "Semua benar. 1 bagian=10. Total=7. C=40. B=20->A=10. C(4)=2xB(2).", exp_trans: "All true." },
+            "t4-task8": { type: "tf_table", q: "Rasio uang A dan B \\( 5 : 3 \\). Tentukan Benar atau Salah!", q_trans: "Ratio of A's and B's money \\( 5 : 3 \\). Determine True or False!", opts: ["A lebih banyak dari B", "Selisih 2 bagian", "Jika A 50, B 30", "Total jika A 50 adalah 80"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B, 4 B.", exp_trans: "All true." },
+            "t4-task9": { type: "single", q: "Rasio kecepatan A dan B adalah \\( 5 : 4 \\). Jika A 100 km/jam, berapa kecepatan B?", q_trans: "The speed ratio of A to B is \\( 5 : 4 \\). If A is 100 km/h, what is B's speed?", opts: ["\\( 60 \\text{ km/jam} \\)", "\\( 70 \\text{ km/jam} \\)", "\\( 80 \\text{ km/jam} \\)", "\\( 90 \\text{ km/jam} \\)", "\\( 100 \\text{ km/jam} \\)"], ans: "\\( 80 \\text{ km/jam} \\)", exp: "1 bagian = 20. B = 4 x 20 = 80.", exp_trans: "1 part = 20. B = 80." },
+            "t4-task10": { type: "fill", q: "Skala peta 1:2000. Jika jarak di peta 3 cm, berapa meter jarak aslinya? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Map scale 1:2000. If map distance is 3 cm, how many meters is the actual distance? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "60", exp: "Asli = 3 x 2000 = 6000 cm = 60 meter.", exp_trans: "Actual = 6000 cm = 60 m." },
+
+            // TASK 5: SOAL CERITA LANJUTAN (JARAK, WAKTU, SKALA)
+            "t5-task1": { type: "single", q: "Mobil menempuh 180 km dalam 3 jam. Berapa kecepatan rata-ratanya?", q_trans: "A car travels 180 km in 3 hours. What is its average speed?", opts: ["\\( 50 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 70 \\text{ km/jam} \\)", "\\( 80 \\text{ km/jam} \\)", "\\( 90 \\text{ km/jam} \\)"], ans: "\\( 60 \\text{ km/jam} \\)", exp: "Kecepatan = 180 / 3 = 60 km/jam.", exp_trans: "Speed = 60 km/h." },
+            "t5-task2": { type: "fill", q: "Rasio tabungan dan investasi \\( 2 : 5 \\). Jika tabungan Rp 40.000, berapa investasinya? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of savings to investment \\( 2 : 5 \\). If savings is Rp 40,000, how much is investment? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "100000", exp: "1 bagian = 20.000. Investasi = 5 x 20.000 = 100.000.", exp_trans: "1 part = 20,000. Investment = 100,000." },
+            "t5-task3": { type: "complex", q: "Rasio A : B : C = \\( 2 : 3 : 5 \\). Total 100. Manakah pernyataan yang BENAR?", q_trans: "Ratio A : B : C = \\( 2 : 3 : 5 \\). Total 100. Which statements are TRUE?", opts: ["Total bagian 10", "1 bagian = 10", "A = 20", "C = 50"], ans: [0, 1, 2, 3], exp: "Semua benar. Total 10 bagian. 1 bagian = 10. A=20, C=50.", exp_trans: "All true." },
+            "t5-task4": { type: "tf_table", q: "Rasio \\( 4 : 5 \\). Tentukan Benar atau Salah!", q_trans: "Ratio \\( 4 : 5 \\). Determine True or False!", opts: ["Ekuivalen dengan \\( 8 : 10 \\)", "Total bagian 9", "Jika A 40, B 50", "B lebih kecil dari A"], ans: ["B", "B", "B", "S"], exp: "1 B, 2 B, 3 B, 4 S (B 5 bagian, A 4 bagian).", exp_trans: "1, 2, 3 True. 4 False." },
+            "t5-task5": { type: "single", q: "Skala peta 1:50000. Jarak di peta 4 cm. Berapa jarak asli dalam km?", q_trans: "Map scale 1:50000. Map distance is 4 cm. What is actual distance in km?", opts: ["\\( 1 \\text{ km} \\)", "\\( 2 \\text{ km} \\)", "\\( 3 \\text{ km} \\)", "\\( 4 \\text{ km} \\)", "\\( 5 \\text{ km} \\)"], ans: "\\( 2 \\text{ km} \\)", exp: "Asli = 4 x 50.000 = 200.000 cm = 2 km.", exp_trans: "Actual = 200,000 cm = 2 km." },
+            "t5-task6": { type: "fill", q: "Rasio uang A, B, C adalah \\( 3 : 2 : 1 \\). Jika total Rp 60.000, berapa uang A? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of A, B, C money is \\( 3 : 2 : 1 \\). If total is Rp 60,000, how much is A? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "30000", exp: "Total bagian 6. 1 bagian = 10.000. A = 3 x 10.000 = 30.000.", exp_trans: "Total parts 6. 1 part = 10,000. A = 30,000." },
+            "t5-task7": { type: "complex", q: "Rasio umur A : B = \\( 3 : 4 \\). Manakah pernyataan yang BENAR?", q_trans: "Age ratio A : B = \\( 3 : 4 \\). Which statements are TRUE?", opts: ["B lebih tua dari A", "Selisih umur 1 bagian", "Jika A 30 tahun, B 40 tahun", "Total umur jika A 30 adalah 70 tahun"], ans: [0, 1, 2, 3], exp: "Semua benar.", exp_trans: "All true." },
+            "t5-task8": { type: "tf_table", q: "Rasio \\( 6 : 4 \\). Tentukan Benar atau Salah!", q_trans: "Ratio \\( 6 : 4 \\). Determine True or False!", opts: ["Dapat disederhanakan menjadi \\( 3 : 2 \\)", "Ekuivalen dengan \\( 12 : 8 \\)", "Total bagian 10", "Nilai pecahan \\( \\frac{3}{2} \\)"], ans: ["B", "B", "B", "B"], exp: "1 B, 2 B, 3 B, 4 B (6/4 = 3/2).", exp_trans: "All true." },
+            "t5-task9": { type: "single", q: "Rasio kecepatan A dan B adalah \\( 2 : 3 \\). Jika B 90 km/jam, berapa kecepatan A?", q_trans: "The speed ratio of A to B is \\( 2 : 3 \\). If B is 90 km/h, what is A's speed?", opts: ["\\( 40 \\text{ km/jam} \\)", "\\( 50 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 70 \\text{ km/jam} \\)", "\\( 80 \\text{ km/jam} \\)"], ans: "\\( 60 \\text{ km/jam} \\)", exp: "1 bagian = 30. A = 2 x 30 = 60.", exp_trans: "1 part = 30. A = 60." },
+            "t5-task10": { type: "fill", q: "Rasio panjang dan lebar \\( 7 : 3 \\). Jika lebar 21 cm, berapa luas persegi panjang? <br><span class='text-sm text-gray-500'>(Isian Singkat - Tulis angka saja)</span>", q_trans: "Ratio of length and width \\( 7 : 3 \\). If width is 21 cm, what is the area? <br><span class='text-sm text-gray-500'>(Short Answer - Numbers only)</span>", ans: "1029", exp: "1 bagian = 7. P = 49, L = 21. Luas = 49 x 21 = 1029 cm².", exp_trans: "1 part = 7. P=49, L=21. Area = 1029 cm²." }
+        });
+
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-blue-100', 'text-blue-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-blue-100', 'text-blue-800', 'font-bold');
+                }
+            }
+            
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-blue-100 hover:bg-blue-200 text-blue-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-blue-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Latihan'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Centang pernyataan yang benar. / <span class="translation">*Check the correct statements.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Answer</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah untuk setiap pernyataan. / <span class="translation">*Determine True or False for each statement.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Answer</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().replace(/\s/g, '').replace(',', '.');
+                inputField.disabled = true;
+                isCorrect = (userVal === data.ans);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = userVal;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                // Ubah Array menjadi string agar bisa dicetak dan dibandingkan dengan benar
+                let sAnsStr = Array.isArray(studentAns) ? studentAns.join(', ') : studentAns;
+                let cAnsStr = Array.isArray(correctAns) ? correctAns.join(', ') : correctAns;
+                
+                let note = '❌';
+                if(sAnsStr === cAnsStr) { score++; note = '✔️'; }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${data.q.replace(/<[^>]+>/g, '')}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+        }
+
+        window.onload = () => {
+            renderTasks();
+            renderMath();
+            showSection('warmup');
+        };
+    </script>
+</body>
+</html>
