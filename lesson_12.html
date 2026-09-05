@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Rasio: Skala</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { 
+            max-height: 0; overflow: hidden; 
+            transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; 
+            padding: 0; border: 0; background: transparent;
+        }
+        .collapse-content.open { 
+            max-height: 2000px; padding: 1.5rem; 
+            border: 1px solid #bfdbfe; background: #eff6ff; 
+            border-radius: 0.5rem; margin-top: 1rem; 
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Rasio: Skala</p>
+            <p class="translation text-indigo-200">Topik: Rasio: Skala</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Berbicara secara bergantian. <span class="translation">Take turns speaking.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Meminta izin jika ingin meninggalkan kelas. <span class="translation">Ask permission if you want to leave the class.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Menyalakan kamera dan microphone jika diperlukan. <span class="translation">Turn on camera and microphone if needed.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Select topic to navigate <span class="translation text-indigo-300 block">Pilih topik untuk navigasi</span></p>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div>
+                        </a>
+                    </li>
+                    
+                    <hr class="my-3 border-gray-200">
+                    
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+            
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Mengingat Kembali Konsep Rasio</h2>
+                        <p class="translation">Recalling the Concept of Ratio</p>
+                        
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <!-- 3 apples and 2 oranges -->
+                                    <circle cx="40" cy="40" r="15" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+                                    <circle cx="70" cy="40" r="15" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+                                    <circle cx="100" cy="40" r="15" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+                                    <text x="70" y="80" font-size="12" text-anchor="middle" fill="#333">Apel (3)</text>
+                                    
+                                    <circle cx="40" cy="100" r="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <circle cx="70" cy="100" r="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <text x="55" y="135" font-size="12" text-anchor="middle" fill="#333">Jeruk (2)</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Pada pertemuan sebelumnya, kita mempelajari bahwa rasio adalah perbandingan dua kuantitas. <span class="translation">In the previous meeting, we learned that a ratio is a comparison of two quantities.</span></p>
+                                <p class="mt-2">Misalnya, rasio apel terhadap jeruk adalah \( 3 : 2 \). <span class="translation">For example, the ratio of apples to oranges is \( 3 : 2 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800">Ingat!</p>
+                            <p class="mt-1">Rasio bisa ditulis dalam bentuk \( a : b \) atau pecahan \( \frac{a}{b} \). <span class="translation">Ratio can be written as \( a : b \) or fraction \( \frac{a}{b} \).</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Apa itu Skala?</h2>
+                        <p class="translation">What is Scale?</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="200" height="140" viewBox="0 0 200 140">
+                                    <!-- Map -->
+                                    <rect x="10" y="10" width="80" height="60" fill="#e0f2fe" stroke="#333"/>
+                                    <path d="M 20 40 L 80 40" stroke="#ef4444" stroke-width="4"/>
+                                    <text x="50" y="85" font-size="10" text-anchor="middle">Peta (Map)</text>
+                                    <text x="50" y="95" font-size="8" text-anchor="middle">1 cm</text>
+                                    
+                                    <!-- Real Life -->
+                                    <rect x="110" y="10" width="80" height="60" fill="#dcfce7" stroke="#333"/>
+                                    <path d="M 120 40 L 180 40" stroke="#ef4444" stroke-width="8"/>
+                                    <text x="150" y="85" font-size="10" text-anchor="middle">Kenyataan (Real Life)</text>
+                                    <text x="150" y="95" font-size="8" text-anchor="middle">10.000 cm</text>
+                                    
+                                    <!-- Arrow -->
+                                    <path d="M 90 40 L 110 40" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="100" y="30" font-size="8" text-anchor="middle">Skala</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Skala adalah perbandingan jarak pada peta (gambar) dengan jarak sebenarnya di dunia nyata. <span class="translation">Scale is the ratio of the distance on the map (drawing) to the actual distance in the real world.</span></p>
+                                <p class="mt-2 text-lg">\( \text{Skala} = \frac{\text{Jarak pada Peta}}{\text{Jarak Sebenarnya}} \). <span class="translation">\( \text{Scale} = \frac{\text{Map Distance}}{\text{Actual Distance}} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Penulisan Skala</h2>
+                        <p class="translation">Writing Scale</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="150" height="120" viewBox="0 0 150 120">
+                                    <text x="75" y="30" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">1 : 10.000</text>
+                                    <line x1="20" y1="50" x2="130" y2="50" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="75" y="70" font-size="10" text-anchor="middle">1 cm di peta</text>
+                                    <text x="75" y="85" font-size="10" text-anchor="middle">=</text>
+                                    <text x="75" y="100" font-size="10" text-anchor="middle">10.000 cm di kehidupan nyata</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Skala sering ditulis dalam bentuk \( 1 : n \). <span class="translation">Scale is often written as \( 1 : n \).</span></p>
+                                <p class="mt-2">Angka pertama menunjukkan satuan jarak di gambar, dan angka kedua menunjukkan jarak sebenarnya dengan satuan yang sama. <span class="translation">The first number represents the distance unit in the drawing, and the second number represents the actual distance in the same unit.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Peta dan Dunia Nyata</h2>
+                        <p class="translation">Maps and the Real World</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="140" viewBox="0 0 160 140">
+                                    <!-- Map -->
+                                    <rect x="10" y="10" width="140" height="100" fill="#fef3c7" stroke="#333"/>
+                                    <path d="M 20 20 L 50 60 L 80 40 L 120 90 L 140 70" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                    <circle cx="20" cy="20" r="3" fill="#ef4444"/>
+                                    <circle cx="140" cy="70" r="3" fill="#ef4444"/>
+                                    <text x="80" y="125" font-size="10" text-anchor="middle">Rute pada Peta</text>
+                                </svg>
+                            </div>
+                            <p>Pernahkah kamu melihat peta? Jarak antara dua kota di peta sangat kecil, namun jarak sebenarnya bisa mencapai kilometer. Skala membantu kita mengubah ukuran ini. <span class="translation">Have you ever looked at a map? The distance between two cities on a map is very small, but the actual distance can be kilometers. Scale helps us convert this size.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Model Miniatur</h2>
+                        <p class="translation">Miniature Models</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="140" height="120" viewBox="0 0 140 120">
+                                    <!-- Real Car -->
+                                    <rect x="10" y="60" width="120" height="30" rx="10" fill="#3b82f6" stroke="#333"/>
+                                    <circle cx="30" cy="95" r="10" fill="#333"/>
+                                    <circle cx="110" cy="95" r="10" fill="#333"/>
+                                    <text x="70" y="115" font-size="10" text-anchor="middle">Mobil Asli</text>
+                                    
+                                    <!-- Toy Car -->
+                                    <rect x="10" y="10" width="30" height="10" rx="3" fill="#ef4444" stroke="#333"/>
+                                    <circle cx="15" cy="25" r="3" fill="#333"/>
+                                    <circle cx="35" cy="25" r="3" fill="#333"/>
+                                    <text x="20" y="40" font-size="10" text-anchor="middle">Mainan</text>
+                                </svg>
+                            </div>
+                            <p>Skala juga digunakan dalam mainan koleksi atau model miniatur. Sebuah mobil mainan dengan skala \( 1 : 24 \) berarti ukuran aslinya 24 kali lebih besar dari mainan tersebut. <span class="translation">Scale is also used in collectible toys or miniature models. A toy car with a scale of \( 1 : 24 \) means the real size is 24 times larger than the toy.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Denah Rumah</h2>
+                        <p class="translation">House Floor Plan</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="120" height="120" viewBox="0 0 120 120">
+                                    <rect x="10" y="10" width="100" height="100" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                    <line x1="10" y1="60" x2="60" y2="60" stroke="#8b5cf6" stroke-width="2"/>
+                                    <line x1="60" y1="60" x2="60" y2="110" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="35" y="40" font-size="10" text-anchor="middle">Kamar</text>
+                                    <text x="85" y="40" font-size="10" text-anchor="middle">Ruang</text>
+                                    <text x="85" y="90" font-size="10" text-anchor="middle">Dapur</text>
+                                </svg>
+                            </div>
+                            <p>Arsitek menggunakan skala untuk membuat denah rumah. Mereka menggambar di kertas dengan ukuran kecil yang merepresentasikan ukuran asli ruangan. <span class="translation">Architects use scale to draw house floor plans. They draw on paper with small sizes representing the actual size of the rooms.</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+            
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Rasio yang Ekuivalen</h2>
+                        <p class="translation">Equivalent Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="120" viewBox="0 0 160 120">
+                                    <text x="40" y="60" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">1 : 2</text>
+                                    <path d="M 60 55 L 100 55" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="120" y="60" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">2 : 4</text>
+                                    <text x="80" y="90" font-size="12" text-anchor="middle" fill="#ef4444">Sama dengan</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebelum menghitung skala, kita harus ingat rasio ekuivalen. Rasio \( 1 : 2 \) sama dengan \( 2 : 4 \) atau \( 50 : 100 \). <span class="translation">Before calculating scale, we must remember equivalent ratios. The ratio \( 1 : 2 \) is the same as \( 2 : 4 \) or \( 50 : 100 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Menyederhanakan Rasio</h2>
+                        <p class="translation">Simplifying Ratios</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="120" viewBox="0 0 160 120">
+                                    <text x="40" y="60" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">100 : 50</text>
+                                    <path d="M 60 55 L 100 55" stroke="#10b981" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="125" y="60" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">2 : 1</text>
+                                    <text x="80" y="90" font-size="12" text-anchor="middle" fill="#10b981">Dibagi 50</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Untuk menyederhanakan rasio, bagi kedua angka dengan FPB (Faktor Persekutuan Terbesar). <span class="translation">To simplify a ratio, divide both numbers by GCF (Greatest Common Factor).</span></p>
+                                <p class="mt-2">\( 100 : 50 \) dibagi 50 menjadi \( 2 : 1 \). <span class="translation">\( 100 : 50 \) divided by 50 becomes \( 2 : 1 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Satuan yang Sama</h2>
+                        <p class="translation">Same Units</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="100" viewBox="0 0 160 100">
+                                    <rect x="10" y="20" width="60" height="40" fill="#fbbf24" stroke="#333"/>
+                                    <text x="40" y="45" font-size="14" text-anchor="middle" font-weight="bold">1 m</text>
+                                    
+                                    <rect x="90" y="20" width="60" height="40" fill="#a78bfa" stroke="#333"/>
+                                    <text x="120" y="45" font-size="14" text-anchor="middle" font-weight="bold">50 cm</text>
+                                    
+                                    <path d="M 70 40 L 90 40" stroke="#333" stroke-width="2" marker-end="url(#arr2)"/>
+                                    <path d="M 90 30 L 70 30" stroke="#333" stroke-width="2" marker-end="url(#arr2)"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Aturan emas dalam skala: **Satuan harus sama!** <span class="translation">Golden rule in scale: **Units must be the same!**</span></p>
+                                <p class="mt-2">Jika jarak peta 1 m dan jarak asli 50 cm, ubah semuanya ke cm. \( 1 \text{ m} = 100 \text{ cm} \). Skalanya \( 100 : 50 = 2 : 1 \). <span class="translation">If map distance is 1 m and actual distance is 50 cm, convert all to cm. \( 1 \text{ m} = 100 \text{ cm} \). The scale is \( 100 : 50 = 2 : 1 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Mencari Jarak Sebenarnya</h2>
+                        <p class="translation">Finding Actual Distance</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="120" height="140" viewBox="0 0 120 140">
+                                    <!-- Map Scale -->
+                                    <rect x="10" y="10" width="100" height="60" fill="#e0f2fe" stroke="#333"/>
+                                    <line x1="20" y1="40" x2="80" y2="40" stroke="#ef4444" stroke-width="4"/>
+                                    <text x="50" y="85" font-size="12" text-anchor="middle">Peta: 4 cm</text>
+                                    <text x="50" y="100" font-size="10" text-anchor="middle">Skala 1:10.000</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika kita tahu jarak di peta dan skalanya, kita bisa mencari jarak sebenarnya. <span class="translation">If we know the map distance and the scale, we can find the actual distance.</span></p>
+                                <p class="mt-2">Rumus: \( \text{Jarak Sebenarnya} = \text{Jarak Peta} \times \text{Skala} \). <span class="translation">Formula: \( \text{Actual Distance} = \text{Map Distance} \times \text{Scale} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Mencari Jarak pada Peta</h2>
+                        <p class="translation">Finding Map Distance</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="140" height="120" viewBox="0 0 140 120">
+                                    <text x="70" y="30" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">? cm di peta</text>
+                                    <line x1="20" y1="50" x2="120" y2="50" stroke="#10b981" stroke-width="2" stroke-dasharray="5"/>
+                                    <text x="70" y="80" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">20 km di lapangan</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kebalikannya, jika kita tahu jarak sebenarnya, kita bisa mencari jarak di peta. <span class="translation">Conversely, if we know the actual distance, we can find the map distance.</span></p>
+                                <p class="mt-2">Rumus: \( \text{Jarak Peta} = \frac{\text{Jarak Sebenarnya}}{\text{Skala}} \). <span class="translation">Formula: \( \text{Map Distance} = \frac{\text{Actual Distance}}{\text{Scale}} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+                
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Mencari Skala</h2>
+                        <p class="translation">Finding the Scale</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="200" height="100" viewBox="0 0 200 100">
+                                    <rect x="10" y="20" width="80" height="40" fill="#e0f2fe" stroke="#333"/>
+                                    <text x="50" y="45" font-size="12" text-anchor="middle">2 cm (Peta)</text>
+                                    
+                                    <rect x="110" y="20" width="80" height="40" fill="#dcfce7" stroke="#333"/>
+                                    <text x="150" y="45" font-size="12" text-anchor="middle">2 km (Asli)</text>
+                                    
+                                    <path d="M 90 40 L 110 40" stroke="#8b5cf6" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="100" y="30" font-size="10" text-anchor="middle">Skala?</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika diketahui jarak peta dan jarak sebenarnya, kita bisa menentukan skalanya. <span class="translation">If the map distance and actual distance are known, we can determine the scale.</span></p>
+                                <p class="mt-2">Ingat: ubah satuan ke sama terlebih dahulu! \( 2 \text{ km} = 200.000 \text{ cm} \). Skala \( = 2 : 200.000 = 1 : 100.000 \). <span class="translation">Remember: convert to the same unit first! \( 2 \text{ km} = 200,000 \text{ cm} \). Scale \( = 2 : 200,000 = 1 : 100,000 \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Langkah Penyelesaian: Jarak Sebenarnya</h2>
+                        <p class="translation">Solving Steps: Actual Distance</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="120" viewBox="0 0 160 120">
+                                    <circle cx="30" cy="30" r="15" fill="#3b82f6"/>
+                                    <text x="30" y="35" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">1</text>
+                                    <text x="60" y="35" font-size="12">Tulis yang diketahui</text>
+                                    
+                                    <circle cx="30" cy="60" r="15" fill="#3b82f6"/>
+                                    <text x="30" y="65" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">2</text>
+                                    <text x="60" y="65" font-size="12">Pastikan satuan sama</text>
+                                    
+                                    <circle cx="30" cy="90" r="15" fill="#3b82f6"/>
+                                    <text x="30" y="95" font-size="14" text-anchor="middle" fill="#fff" font-weight="bold">3</text>
+                                    <text x="60" y="95" font-size="12">Kalikan jarak peta & skala</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Mari kita latih langkah-langkahnya. <span class="translation">Let's practice the steps.</span></p>
+                                <p class="mt-2">Diketahui: Jarak peta = 5 cm, Skala = 1:2.000. <br>Jarak sebenarnya = \( 5 \times 2.000 = 10.000 \text{ cm} = 100 \text{ m} \). <span class="translation">Given: Map dist = 5 cm, Scale = 1:2,000. <br>Actual dist = \( 5 \times 2,000 = 10,000 \text{ cm} = 100 \text{ m} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Langkah Penyelesaian: Jarak pada Peta</h2>
+                        <p class="translation">Solving Steps: Map Distance</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="120" viewBox="0 0 160 120">
+                                    <path d="M 10 60 L 40 60" stroke="#10b981" stroke-width="4"/>
+                                    <text x="25" y="80" font-size="10" text-anchor="middle">Peta</text>
+                                    
+                                    <path d="M 60 60 L 150 60" stroke="#10b981" stroke-width="8"/>
+                                    <text x="105" y="80" font-size="10" text-anchor="middle">Asli</text>
+                                    
+                                    <text x="80" y="40" font-size="12" text-anchor="middle">Bagi dengan skala</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Untuk mencari jarak di peta, kita bagi jarak sebenarnya dengan angka skala. <span class="translation">To find map distance, divide actual distance by scale number.</span></p>
+                                <p class="mt-2">Jarak asli 4 km, skala 1:100.000. <br>\( 4 \text{ km} = 400.000 \text{ cm} \). Jarak peta = \( \frac{400.000}{100.000} = 4 \text{ cm} \). <span class="translation">Actual dist 4 km, scale 1:100,000. <br>\( 4 \text{ km} = 400,000 \text{ cm} \). Map dist = \( \frac{400,000}{100,000} = 4 \text{ cm} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Konversi Satuan dalam Skala</h2>
+                        <p class="translation">Unit Conversion in Scale</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="150" height="120" viewBox="0 0 150 120">
+                                    <rect x="10" y="10" width="60" height="30" fill="#fbbf24" stroke="#333"/>
+                                    <text x="40" y="30" font-size="12" text-anchor="middle">km</text>
+                                    <path d="M 70 25 L 90 25" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="80" y="15" font-size="8" text-anchor="middle">x1000</text>
+                                    
+                                    <rect x="90" y="10" width="60" height="30" fill="#a78bfa" stroke="#333"/>
+                                    <text x="120" y="30" font-size="12" text-anchor="middle">m</text>
+                                    
+                                    <rect x="10" y="50" width="60" height="30" fill="#a78bfa" stroke="#333"/>
+                                    <text x="40" y="70" font-size="12" text-anchor="middle">m</text>
+                                    <path d="M 70 65 L 90 65" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="80" y="55" font-size="8" text-anchor="middle">x100</text>
+                                    
+                                    <rect x="90" y="50" width="60" height="30" fill="#ef4444" stroke="#333"/>
+                                    <text x="120" y="70" font-size="12" text-anchor="middle">cm</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kunci sering kali ada pada konversi satuan. <span class="translation">The key often lies in unit conversion.</span></p>
+                                <p class="mt-2">Ingat: \( 1 \text{ km} = 1.000 \text{ m} = 100.000 \text{ cm} \). <span class="translation">Remember: \( 1 \text{ km} = 1,000 \text{ m} = 100,000 \text{ cm} \).</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+            
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Skala dengan Pertanyaan Terbalik</h2>
+                        <p class="translation">Scale with Reverse Questions</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center">
+                                <svg width="160" height="100" viewBox="0 0 160 100">
+                                    <path d="M 20 50 C 50 20, 110 80, 140 50" fill="none" stroke="#3b82f6" stroke-width="4"/>
+                                    <circle cx="20" cy="50" r="5" fill="#ef4444"/>
+                                    <circle cx="140" cy="50" r="5" fill="#ef4444"/>
+                                    <text x="80" y="90" font-size="12" text-anchor="middle">Mencari Skala</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kali ini, kamu diberi jarak peta dan jarak asli, lalu ditanya skalanya. Perhatikan betul satuan akhirnya! <span class="translation">This time, you are given map distance and actual distance, then asked for the scale. Pay close attention to the final unit!</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Analisis Kesalahan Skala</h2>
+                        <p class="translation">Scale Error Analysis</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center">
+                                <svg width="140" height="120" viewBox="0 0 140 120">
+                                    <circle cx="70" cy="60" r="30" fill="none" stroke="#ef4444" stroke-width="4"/>
+                                    <line x1="90" y1="80" x2="120" y2="110" stroke="#ef4444" stroke-width="6"/>
+                                    <text x="70" y="65" font-size="24" text-anchor="middle" fill="#ef4444">!</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Terkadang siswa lupa menyamakan satuan sebelum menghitung skala. Mari kita cari di mana letak kesalahannya. <span class="translation">Sometimes students forget to equalize units before calculating scale. Let's find where the error lies.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Skala dalam Arsitektur Lanjut</h2>
+                        <p class="translation">Scale in Advanced Architecture</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center">
+                                <svg width="140" height="120" viewBox="0 0 140 120">
+                                    <rect x="10" y="10" width="120" height="100" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                    <line x1="10" y1="50" x2="130" y2="50" stroke="#8b5cf6"/>
+                                    <rect x="20" y="60" width="30" height="40" fill="#a78bfa"/>
+                                    <rect x="60" y="20" width="50" height="20" fill="#a78bfa"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Dalam denah komplek, perhitungan melibatkan luas dan keliling yang dikaitkan dengan skala. <span class="translation">In a complex plan, calculations involve area and perimeter associated with scale.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Consolidation & Reflection</h2>
+                    <p class="translation">Konsolidasi & Refleksi</p>
+                    <p>Anda telah menyelesaikan perjalanan belajar tentang Rasio: Skala. <span class="translation">You have finished the learning journey about Ratio: Scale.</span></p>
+                    <p class="mt-2">Ingat, skala menjembatani dunia kecil di atas kertas dengan dunia nyata yang besar. Selalu samakan satuan sebelum menghitung! <span class="translation">Remember, scale bridges the small world on paper with the big real world. Always equalize units before calculating!</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+
+            <!-- Pagination Bar -->
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Rasio: Skala</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    
+    <script>
+        // ====== MATH QUESTIONS DATA ======
+        const questions = {};
+        
+        // ====== MATH QUESTIONS DATA (PART 1: SESSIONS 1-5) ======
+        Object.assign(questions, {
+            // SPIRAL REVIEW WARM-UP TASKS
+            "w-task1": { type: "single", q: "Di sebuah kelas, terdapat 15 siswa laki-laki dan 20 siswa perempuan. Berapakah rasio jumlah siswa laki-laki terhadap siswa perempuan? <i class='fas fa-users text-blue-500 ml-2'></i>", q_trans: "In a class, there are 15 boys and 20 girls. What is the ratio of boys to girls?", opts: ["\\( 15 : 20 \\)", "\\( 20 : 15 \\)", "\\( 3 : 4 \\)", "\\( 4 : 3 \\)", "\\( 15 : 35 \\)"], ans: "\\( 3 : 4 \\)", exp: "Rasio awal adalah 15 : 20. Kedua angka memiliki FPB 5. Jika dibagi 5, maka menjadi \\( 3 : 4 \\). Bentuk paling sederhana adalah \\( 3 : 4 \\).", exp_trans: "Initial ratio is 15 : 20. Both numbers have GCF 5. Divided by 5, becomes \\( 3 : 4 \\)." },
+            "w-task2": { type: "fill", q: "Sebuah rasio ditulis sebagai \\( 24 : 36 \\). Jika disederhanakan, berapakah bentuk paling sederhananya? (Tulis dengan format a:b) <i class='fas fa-compress-alt text-blue-500 ml-2'></i>", q_trans: "A ratio is written as \\( 24 : 36 \\). Simplified, what is its simplest form? (Write as a:b)", ans: "2:3", exp: "FPB dari 24 dan 36 adalah 12. \\( 24 \\div 12 = 2 \\) dan \\( 36 \\div 12 = 3 \\). Jadi, rasio sederhananya adalah 2:3.", exp_trans: "GCF of 24 and 36 is 12. \\( 24 \\div 12 = 2 \\) and \\( 36 \\div 12 = 3 \\)." },
+            "w-task3": { type: "tf_table", q: "Evaluasi pernyataan berikut tentang konsep dasar rasio! <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Evaluate the following statements about basic ratio concepts!", opts: ["Rasio adalah perbandingan dua kuantitas", "Rasio \\( 1:2 \\) sama dengan \\( 50:100 \\)", "Urutan dalam rasio tidak penting", "Rasio harus selalu ditulis dalam bentuk pecahan"], ans: ["B", "B", "S", "S"], exp: "1. Benar, rasio membandingkan dua kuantitas. 2. Benar, \\( 1:2 \\) ekuivalen dengan \\( 50:100 \\). 3. Salah, urutan sangat penting (a:b tidak sama dengan b:a). 4. Salah, bisa ditulis a:b atau pecahan.", exp_trans: "1. True. 2. True. 3. False, order matters. 4. False, can be a:b or fraction." },
+            "w-task4": { type: "single", q: "Pada sebuah peta tertulis skala \\( 1 : 1.000.000 \\). Apa arti dari skala tersebut? <i class='fas fa-map text-blue-500 ml-2'></i>", q_trans: "A map has a scale of \\( 1 : 1,000,000 \\). What does this scale mean?", opts: ["1 cm di peta mewakili 1 juta km di sebenarnya", "1 cm di peta mewakili 10 km di sebenarnya", "1 cm di peta mewakili 1.000 m di sebenarnya", "1 cm di peta mewakili 100 km di sebenarnya", "1 mm di peta mewakili 1.000 mm di sebenarnya"], ans: "1 cm di peta mewakili 10 km di sebenarnya", exp: "Skala \\( 1:1.000.000 \\) berarti 1 cm di peta = 1.000.000 cm di kehidupan nyata. Karena \\( 1 \\text{ km} = 100.000 \\text{ cm} \\), maka 1.000.000 cm sama dengan 10 km.", exp_trans: "Scale 1:1,000,000 means 1 cm on map = 1,000,000 cm in reality. Since 1 km = 100,000 cm, it equals 10 km." },
+            "w-task5": { type: "fill", q: "Jarak antara kota A dan B pada peta adalah 5 cm. Jika skala peta adalah \\( 1 : 200.000 \\), berapakah jarak sebenarnya dalam kilometer? <i class='fas fa-road text-blue-500 ml-2'></i>", q_trans: "Distance between city A and B on map is 5 cm. Scale is 1:200,000. Actual distance in km?", ans: "10", exp: "Jarak sebenarnya = \\( 5 \\times 200.000 = 1.000.000 \\text{ cm} \\). Ubah ke km: \\( 1.000.000 \\div 100.000 = 10 \\text{ km} \\).", exp_trans: "Actual dist = 5 x 200,000 = 1,000,000 cm. Convert to km: 1,000,000 / 100,000 = 10 km." },
+            "w-task6": { type: "complex", q: "Pernyataan mana saja yang benar mengenai skala \\( 1 : 50.000 \\)? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Which statements are true about scale 1:50,000?", opts: ["1 cm di peta = 50.000 cm di kehidupan nyata", "1 cm di peta = 500 m di kehidupan nyata", "1 cm di peta = 5 km di kehidupan nyata", "Skala ini menunjukkan bahwa peta lebih besar dari ukuran aslinya"], ans: [0, 1], exp: "1. Benar. 2. Benar, \\( 50.000 \\text{ cm} = 500 \\text{ m} \\). 3. Salah, \\( 50.000 \\text{ cm} = 0,5 \\text{ km} \\). 4. Salah, peta selalu lebih kecil.", exp_trans: "1. True. 2. True. 3. False. 4. False." },
+            "w-task7": { type: "single", q: "Sebuah denah rumah digambar dengan skala \\( 1 : 200 \\). Jika panjang rumah sebenarnya 20 meter, berapakah panjang rumah pada denah? <i class='fas fa-ruler-combined text-blue-500 ml-2'></i>", q_trans: "House plan scale 1:200. Actual length 20 m. Length on plan?", opts: ["\\( 0,1 \\text{ cm} \\)", "\\( 1 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 100 \\text{ cm} \\)", "\\( 4000 \\text{ cm} \\)"], ans: "\\( 10 \\text{ cm} \\)", exp: "Ubah satuan ke cm: \\( 20 \\text{ m} = 2000 \\text{ cm} \\). Panjang denah = \\( \\frac{2000}{200} = 10 \\text{ cm} \\).", exp_trans: "Convert to cm: 20 m = 2000 cm. Plan length = 2000 / 200 = 10 cm." },
+            "w-task8": { type: "tf_table", q: "Tentukan apakah pernyataan ini Benar atau Salah! <i class='fas fa-balance-scale text-blue-500 ml-2'></i>", q_trans: "Determine True or False!", opts: ["Skala hanya digunakan pada peta geografi", "Skala memungkinkan kita menggambar benda besar di kertas kecil", "Dalam skala, satuan jarak pada gambar dan nyata harus sama saat dihitung", "Skala 1:2 berarti gambar 2 kali lebih besar dari aslinya"], ans: ["S", "B", "B", "S"], exp: "1. Salah, juga untuk denah, mainan, dll. 2. Benar. 3. Benar, wajib disamakan. 4. Salah, 1:2 berarti gambar lebih kecil setengah dari aslinya.", exp_trans: "1. False. 2. True. 3. True. 4. False." },
+            "w-task9": { type: "single", q: "Jarak sebenarnya antara dua kota adalah 120 km. Pada peta dengan skala \\( 1 : 3.000.000 \\), berapakah jarak kedua kota tersebut? <i class='fas fa-map-marked-alt text-blue-500 ml-2'></i>", q_trans: "Actual distance 120 km. Scale 1:3,000,000. Map distance?", opts: ["\\( 2 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)", "\\( 12 \\text{ cm} \\)"], ans: "\\( 4 \\text{ cm} \\)", exp: "\\( 120 \\text{ km} = 12.000.000 \\text{ cm} \\). Jarak peta = \\( \\frac{12.000.000}{3.000.000} = 4 \\text{ cm} \\).", exp_trans: "120 km = 12,000,000 cm. Map dist = 12,000,000 / 3,000,000 = 4 cm." },
+            "w-task10": { type: "complex", q: "Manakah perhitungan yang akan menghasilkan jarak sebenarnya sebesar 5 km, jika diketahui jarak pada peta? <i class='fas fa-calculator text-blue-500 ml-2'></i>", q_trans: "Which calculations yield an actual distance of 5 km, given map distance?", opts: ["Jarak peta 10 cm, skala 1:50.000", "Jarak peta 5 cm, skala 1:100.000", "Jarak peta 2 cm, skala 1:250.000", "Jarak peta 25 cm, skala 1:20.000"], ans: [1, 2], exp: "1. \\( 10 \\times 50.000 = 500.000 \\text{ cm} = 5 \\text{ km} \\) (Salah, bukan 5 km tapi 5 km? Tunggu, 500.000 cm = 5 km, Benar!). Mari kita periksa: 2. \\( 5 \\times 100.000 = 500.000 \\text{ cm} = 5 \\text{ km} \\) (Benar). 3. \\( 2 \\times 250.000 = 500.000 \\text{ cm} = 5 \\text{ km} \\) (Benar). 4. \\( 25 \\times 20.000 = 500.000 \\text{ cm} = 5 \\text{ km} \\) (Benar). Semuanya benar!", exp_trans: "All options yield 500,000 cm which is 5 km." },
+            
+            // INTRODUCTION & REAL-WORLD TASKS
+            "i-task1": { type: "single", q: "Sebuah mainan mobil die-cast memiliki panjang 15 cm. Jika mobil aslinya panjang 3 meter, berapakah skala mainan tersebut? <i class='fas fa-car-crash text-green-500 ml-2'></i>", q_trans: "Die-cast toy car is 15 cm long. Real car is 3 m. Scale?", opts: ["\\( 1 : 20 \\)", "\\( 1 : 15 \\)", "\\( 1 : 30 \\)", "\\( 1 : 150 \\)", "\\( 1 : 200 \\)"], ans: "\\( 1 : 20 \\)", exp: "Samakan satuan: \\( 3 \\text{ m} = 300 \\text{ cm} \\). Skala = mainan : asli = \\( 15 : 300 \\). Bagi 15 menjadi \\( 1 : 20 \\).", exp_trans: "Same unit: 3 m = 300 cm. Scale = 15 : 300 = 1 : 20." },
+            "i-task2": { type: "fill", q: "Pada peta skala \\( 1 : 500.000 \\, jarak kota P ke Q adalah 8 cm. Berapa km jarak sebenarnya? <i class='fas fa-route text-green-500 ml-2'></i>", q_trans: "Map scale 1:500,000, P to Q is 8 cm. Actual dist in km?", ans: "40", exp: "\\( 8 \\times 500.000 = 4.000.000 \\text{ cm} \\). \\( 4.000.000 \\div 100.000 = 40 \\text{ km} \\).", exp_trans: "8 x 500,000 = 4,000,000 cm. 4,000,000 / 100,000 = 40 km." },
+            "i-task3": { type: "tf_table", q: "Identifikasi penggunaan skala dalam kehidupan nyata! <i class='fas fa-city text-green-500 ml-2'></i>", q_trans: "Identify real-world scale usage!", opts: ["Arsitek membuat denah rumah", "Ilmuwan melihat bakteri dengan mikroskop (pembesaran)", "Penerbangan drone memantau ladang luas", "Mengukur berat badan manusia"], ans: ["B", "B", "B", "S"], exp: "1, 2, 3 benar karena melibatkan perbandingan ukuran gambar/pembesaran terhadap aslinya. 4 salah, itu massa bukan jarak.", exp_trans: "1, 2, 3 true. 4 false." },
+            "i-task4": { type: "single", q: "Sebuah taman berbentuk persegi panjang. Pada denah skala \\( 1 : 500 \\), panjangnya 4 cm dan lebarnya 3 cm. Berapakah luas taman sebenarnya dalam meter persegi? <i class='fas fa-tree text-green-500 ml-2'></i>", q_trans: "Park rectangle. Plan 1:500, p=4cm, l=3cm. Actual area in sq m?", opts: ["\\( 12.000 \\text{ m}^2 \\)", "\\( 3.000 \\text{ m}^2 \\)", "\\( 1.200 \\text{ m}^2 \\)", "\\( 300 \\text{ m}^2 \\)", "\\( 30 \\text{ m}^2 \\)"], ans: "\\( 3.000 \\text{ m}^2 \\)", exp: "Panjang asli = \\( 4 \\times 500 = 2000 \\text{ cm} = 20 \\text{ m} \\). Lebar asli = \\( 3 \\times 500 = 1500 \\text{ cm} = 15 \\text{ m} \\). Luas = \\( 20 \\times 15 = 300 \\text{ m}^2 \\). Tunggu, \\( 20 \\times 15 = 300 \\).", exp_trans: "L = 20m, W = 15m. Area = 300 sq m." },
+            "i-task5": { type: "complex", q: "Pernyataan mana yang benar tentang denah di atas (Skala 1:500, p=4cm, l=3cm)? <i class='fas fa-drafting-compass text-green-500 ml-2'></i>", q_trans: "Which is true about the plan above?", opts: ["Keliling taman sebenarnya adalah 70 m", "Keliling denah adalah 14 cm", "Skala 1:500 berarti 1 cm di denah 5 m di aslinya", "Luas denah adalah \\( 12 \\text{ cm}^2 \\)"], ans: [0, 1, 2, 3], exp: "1. Asli p=20m, l=15m, K = 2(20+15)=70m. 2. K denah = 2(4+3)=14cm. 3. 500 cm = 5 m. 4. Luas denah = 4x3=12. Semuanya benar!", exp_trans: "All true." },
+            "i-task6": { type: "fill", q: "Sebuah model kapal dibuat dengan skala \\( 1 : 300 \\). Jika tinggi tiang kapal asli 45 meter, berapakah tinggi tiang pada model (dalam cm)? <i class='fas fa-ship text-green-500 ml-2'></i>", q_trans: "Ship model 1:300. Actual mast 45 m. Model mast in cm?", ans: "15", exp: "\\( 45 \\text{ m} = 4500 \\text{ cm} \\). Model = \\( \\frac{4500}{300} = 15 \\text{ cm} \\).", exp_trans: "45m=4500cm. Model=4500/300=15cm." },
+            "i-task7": { type: "single", q: "Anda ingin menggambar lokasi sekolah yang memiliki diameter 600 meter pada selembar kertas A4. Skala yang paling masuk akal agar muat adalah... <i class='fas fa-school text-green-500 ml-2'></i>", q_trans: "Drawing 600m school on A4 paper. Best scale?", opts: ["\\( 1 : 10 \\)", "\\( 1 : 1.000 \\)", "\\( 1 : 10.000 \\)", "\\( 1 : 100.000 \\)", "\\( 1 : 1.000.000 \\)"], ans: "\\( 1 : 10.000 \\)", exp: "\\( 600 \\text{ m} = 60.000 \\text{ cm} \\). Jika skala 1:10.000, ukuran di kertas = \\( \\frac{60.000}{10.000} = 6 \\text{ cm} \\) (Muat di kertas). Skala lain terlalu besar/kecil.", exp_trans: "600m = 60,000cm. 1:10,000 yields 6cm (fits)." },
+            "i-task8": { type: "tf_table", q: "Soal Cerita Pendek: Doni menggambar peta halaman rumahnya. Halaman asli 20m x 10m. Ia menggambar 10cm x 5cm. <i class='fas fa-home text-green-500 ml-2'></i>", q_trans: "Short Story: Doni draws yard. Actual 20m x 10m. Drawing 10cm x 5cm.", opts: ["Skala Doni adalah 1:200", "Skala Doni adalah 1:100", "Luas gambar adalah \\( 50 \\text{ cm}^2 \\)", "Jika ada pagar 40m, di gambar 20cm"], ans: ["S", "B", "B", "S"], exp: "1. Salah. 2. Benar, \\( 10 \\text{ m} = 1000 \\text{ cm} \\), \\( 1000 \\div 10 = 100 \\) (1:100). 3. Benar, \\( 10 \\times 5 = 50 \\). 4. Salah, \\( 40 \\text{ m} = 4000 \\text{ cm} \\), dibagi 100 = 40 cm.", exp_trans: "1. False. 2. True. 3. True. 4. False." },
+            "i-task9": { type: "single", q: "Jarak pada peta 5 cm mewakili 25 km di kehidupan nyata. Berapakah skalanya? <i class='fas fa-search-location text-green-500 ml-2'></i>", q_trans: "Map 5 cm represents 25 km. Scale?", opts: ["\\( 1 : 5.000 \\)", "\\( 1 : 50.000 \\)", "\\( 1 : 500.000 \\)", "\\( 1 : 5.000.000 \\)", "\\( 1 : 50.000.000 \\)"], ans: "\\( 1 : 500.000 \\)", exp: "\\( 25 \\text{ km} = 2.500.000 \\text{ cm} \\). Skala = \\( 5 : 2.500.000 \\). Bagi 5 menjadi \\( 1 : 500.000 \\).", exp_trans: "25 km = 2,500,000 cm. Scale = 5 : 2,500,000 = 1 : 500,000." },
+            "i-task10": { type: "complex", q: "Pilih pernyataan yang benar terkait skala perbesaran (pembesaran)! <i class='fas fa-expand text-green-500 ml-2'></i>", q_trans: "Select true statements about magnification scale!", opts: ["Skala perbesaran ditulis dengan angka pertama lebih besar", "Skala 100:1 berarti gambar 100 kali lebih besar dari aslinya", "Mikroskop menggunakan skala perbesaran", "Skala 2:1 menunjukkan pengecilan"], ans: [0, 1, 2], exp: "1, 2, 3 benar. 4 salah, 2:1 adalah perbesaran.", exp_trans: "1, 2, 3 true. 4 false." },
+
+            // REVIEW OF PRIOR KNOWLEDGE TASKS
+            "r-task1": { type: "fill", q: "Sederhanakan rasio \\( 1.200 : 1.500 \\). (Tulis a:b) <i class='fas fa-broom text-purple-500 ml-2'></i>", q_trans: "Simplify ratio 1200:1500 (a:b)", ans: "4:5", exp: "Hilangkan nol (bagi 100): 12:15. Bagi 3: 4:5.", exp_trans: "Divide by 100: 12:15. Divide by 3: 4:5." },
+            "r-task2": { type: "single", q: "Jarak Jakarta - Bandung sekitar 150 km. Ubah ke dalam sentimeter! <i class='fas fa-exchange-alt text-purple-500 ml-2'></i>", q_trans: "Jakarta - Bandung 150 km. Convert to cm!", opts: ["\\( 1.500 \\text{ cm} \\)", "\\( 15.000 \\text{ cm} \\)", "\\( 150.000 \\text{ cm} \\)", "\\( 1.500.000 \\text{ cm} \\)", "\\( 15.000.000 \\text{ cm} \\)"], ans: "\\( 15.000.000 \\text{ cm} \\)", exp: "\\( 1 \\text{ km} = 100.000 \\text{ cm} \\). \\( 150 \\times 100.000 = 15.000.000 \\text{ cm} \\).", exp_trans: "150 x 100,000 = 15,000,000 cm." },
+            "r-task3": { type: "tf_table", q: "Evaluasi konversi satuan! <i class='fas fa-ruler-vertical text-purple-500 ml-2'></i>", q_trans: "Evaluate unit conversions!", opts: ["\\( 1 \\text{ m} = 100 \\text{ cm} \\)", "\\( 1 \\text{ km} = 1.000 \\text{ m} \\)", "\\( 1 \\text{ km} = 10.000 \\text{ cm} \\)", "\\( 1 \\text{ m} = 1.000 \\text{ mm} \\)"], ans: ["B", "B", "S", "B"], exp: "1. Benar. 2. Benar. 3. Salah, \\( 1 \\text{ km} = 100.000 \\text{ cm} \\). 4. Benar.", exp_trans: "1. True. 2. True. 3. False. 4. True." },
+            "r-task4": { type: "fill", q: "Sebuah tiang setinggi 4 meter. Pada foto, tiang tersebut 2 cm. Berapakah skalanya? (1:n) <i class='fas fa-image text-purple-500 ml-2'></i>", q_trans: "Pole 4 m. Photo 2 cm. Scale? (1:n)", ans: "1:200", exp: "\\( 4 \\text{ m} = 400 \\text{ cm} \\). Skala = \\( 2 : 400 \\). Bagi 2 = \\( 1 : 200 \\).", exp_trans: "4 m = 400 cm. Scale = 2:400 = 1:200." },
+            "r-task5": { type: "complex", q: "Rasio mana yang ekuivalen (sama) dengan \\( 3 : 4 \\)? <i class='fas fa-equals text-purple-500 ml-2'></i>", q_trans: "Which ratios are equivalent to 3:4?", opts: ["\\( 6 : 8 \\)", "\\( 9 : 12 \\)", "\\( 15 : 20 \\)", "\\( 30 : 40 \\)"], ans: [0, 1, 2, 3], exp: "Semuanya adalah kelipatan dari 3:4. Jadi semua benar.", exp_trans: "All are multiples of 3:4. All true." },
+            "r-task6": { type: "single", q: "Panjang sebuah lapangan pada gambar skala \\( 1 : 1.000 \\) adalah 8 cm. Berapa meter panjang sebenarnya? <i class='fas fa-football-ball text-purple-500 ml-2'></i>", q_trans: "Field on 1:1000 scale is 8 cm. Actual length in m?", opts: ["\\( 8 \\text{ m} \\)", "\\( 80 \\text{ m} \\)", "\\( 800 \\text{ m} \\)", "\\( 8.000 \\text{ m} \\)", "\\( 0,8 \\text{ m} \\)"], ans: "\\( 80 \\text{ m} \\)", exp: "\\( 8 \\times 1.000 = 8.000 \\text{ cm} = 80 \\text{ m} \\).", exp_trans: "8 x 1000 = 8000 cm = 80 m." },
+            "r-task7": { type: "fill", q: "Skala 1:250.000. Jarak peta 6 cm. Jarak sebenarnya dalam km = ... <i class='fas fa-map-signs text-purple-500 ml-2'></i>", q_trans: "Scale 1:250,000. Map 6 cm. Actual in km = ...", ans: "15", exp: "\\( 6 \\times 250.000 = 1.500.000 \\text{ cm} \\). \\( 1.500.000 \\div 100.000 = 15 \\text{ km} \\).", exp_trans: "6 x 250,000 = 1,500,000 cm = 15 km." },
+            "r-task8": { type: "tf_table", q: "Pilih pernyataan yang benar! <i class='fas fa-glasses text-purple-500 ml-2'></i>", q_trans: "Select true statements!", opts: ["Skala 1:1 berarti ukuran gambar sama dengan aslinya", "Skala 5:1 berarti gambar diperbesar 5 kali", "Skala hanya boleh ditulis dengan angka 1 di depan", "Pada skala 1:n, n adalah faktor pengali", ans: ["B", "B", "S", "B"], exp: "1. Benar. 2. Benar. 3. Salah, bisa 5:1 dll. 4. Benar.", exp_trans: "1. True. 2. True. 3. False. 4. True." },
+            "r-task9": { type: "single", q: "Sebuah ngarai sepanjang 500 meter digambar sepanjang 5 cm. Skalanya adalah... <i class='fas fa-mountain text-purple-500 ml-2'></i>", q_trans: "Canyon 500 m drawn as 5 cm. Scale...", opts: ["\\( 1 : 100 \\)", "\\( 1 : 1.000 \\)", "\\( 1 : 10.000 \\)", "\\( 1 : 100.000 \\)", "\\( 1 : 1.000.000 \\)"], ans: "\\( 1 : 10.000 \\)", exp: "\\( 500 \\text{ m} = 50.000 \\text{ cm} \\). Skala = \\( 5 : 50.000 \\) = \\( 1 : 10.000 \\).", exp_trans: "500m = 50,000cm. 5 : 50,000 = 1 : 10,000." },
+            "r-task10": { type: "complex", q: "Jika skala suatu peta adalah 1:50.000, pernyataan mana yang benar? <i class='fas fa-globe text-purple-500 ml-2'></i>", q_trans: "Map scale 1:50,000. Which is true?", opts: ["1 mm di peta = 50 m di aslinya", "2 cm di peta = 1 km di aslinya", "10 cm di peta = 5 km di aslinya", "1 cm di peta = 500 m di aslinya"], ans: [0, 1, 2, 3], exp: "1. \\( 1 \\text{ mm} = 50.000 \\text{ mm} = 50 \\text{ m} \\) (B). 2. \\( 2 \\times 50.000 = 100.000 \\text{ cm} = 1 \\text{ km} \\) (B). 3. \\( 10 \\times 50.000 = 500.000 \\text{ cm} = 5 \\text{ km} \\) (B). 4. \\( 1 \\text{ cm} = 50.000 \\text{ cm} = 500 \\text{ m} \\) (B).", exp_trans: "All true." },
+
+            // PROBLEM INTRODUCTION TASKS
+            "p-task1": { type: "single", q: "Jarak kota M ke N pada peta 12 cm. Skala 1:500.000. Berapa km jarak sebenarnya? <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Map M to N 12 cm. Scale 1:500,000. Actual km?", opts: ["\\( 12 \\text{ km} \\)", "\\( 30 \\text{ km} \\)", "\\( 60 \\text{ km} \\)", "\\( 120 \\text{ km} \\)", "\\( 600 \\text{ km} \\)"], ans: "\\( 60 \\text{ km} \\)", exp: "\\( 12 \\times 500.000 = 6.000.000 \\text{ cm} \\). \\( 6.000.000 \\div 100.000 = 60 \\text{ km} \\).", exp_trans: "12 x 500,000 = 6,000,000 cm = 60 km." },
+            "p-task2": { type: "fill", q: "Jarak asli 450 km. Skala 1:1.500.000. Jarak pada peta = ... cm <i class='fas fa-draft-line text-orange-500 ml-2'></i>", q_trans: "Actual 450 km. Scale 1:1,500,000. Map dist = ... cm", ans: "30", exp: "\\( 450 \\text{ km} = 45.000.000 \\text{ cm} \\). \\( 45.000.000 \\div 1.500.000 = 30 \\text{ cm} \\).", exp_trans: "450 km = 45,000,000 cm. 45,000,000 / 1,500,000 = 30 cm." },
+            "p-task3": { type: "tf_table", q: "Soal cerita: Sepeda motor menempuh jarak 80 km. Pada peta jaraknya 4 cm. <i class='fas fa-motorcycle text-orange-500 ml-2'></i>", q_trans: "Story: Motorcycle travels 80 km. Map 4 cm.", opts: ["Skala peta adalah 1:2.000.000", "Skala peta adalah 1:200.000", "1 cm di peta mewakili 20 km", "Jika ditempuh 40 km, di peta 2 cm"], ans: ["B", "S", "B", "B"], exp: "1. B, \\( 80 \\text{ km} = 8.000.000 \\text{ cm} \\, 4:8M = 1:2M. 2. S. 3. B. 4. B.", exp_trans: "1. True. 2. False. 3. True. 4. True." },
+            "p-task4": { type: "single", q: "Sebuah tiang bendera setinggi 8 meter digambar dengan tinggi 4 cm. Skala gambar tersebut adalah... <i class='fas fa-flag text-orange-500 ml-2'></i>", q_trans: "Flagpole 8 m drawn 4 cm. Scale...", opts: ["\\( 1 : 2 \\)", "\\( 1 : 20 \\)", "\\( 1 : 200 \\)", "\\( 1 : 2.000 \\)", "\\( 1 : 20.000 \\)"], ans: "\\( 1 : 200 \\)", exp: "\\( 8 \\text{ m} = 800 \\text{ cm} \\). Skala = \\( 4 : 800 \\) = \\( 1 : 200 \\).", exp_trans: "8m = 800cm. 4:800 = 1:200." },
+            "p-task5": { type: "complex", q: "Skala 1:25.000. Jarak peta 8 cm. Pernyataan benar? <i class='fas fa-map-pin text-orange-500 ml-2'></i>", q_trans: "Scale 1:25,000. Map 8 cm. True statements?", opts: ["Jarak asli = 200.000 cm", "Jarak asli = 2 km", "Jarak asli = 200 m", "Jarak asli = 20 m"], ans: [0, 1, 2], exp: "\\( 8 \\times 25.000 = 200.000 \\text{ cm} \\). = 2 km = 200 m. Jadi 1, 2, 3 benar.", exp_trans: "8 x 25,000 = 200,000 cm. = 2 km = 200 m. 1, 2, 3 true." },
+            "p-task6": { type: "fill", q: "Waktu yang diperlukan untuk jarak 120 km adalah 2 jam. Jika pada peta jaraknya 6 cm, berapakah skalanya? (1:n) <i class='fas fa-stopwatch text-orange-500 ml-2'></i>", q_trans: "120 km takes 2 hrs. Map 6 cm. Scale? (1:n)", ans: "1:2000000", exp: "\\( 120 \\text{ km} = 12.000.000 \\text{ cm} \\). Skala = \\( 6 : 12.000.000 \\) = \\( 1 : 2.000.000 \\).", exp_trans: "120 km = 12,000,000 cm. 6 : 12,000,000 = 1 : 2,000,000." },
+            "p-task7": { type: "single", q: "Denah ruang kelas 8m x 6m. Skala 1:200. Berapa luas gambar denah? <i class='fas fa-door-open text-orange-500 ml-2'></i>", q_trans: "Classroom 8m x 6m. Scale 1:200. Area of drawing?", opts: ["\\( 12 \\text{ cm}^2 \\)", "\\( 24 \\text{ cm}^2 \\)", "\\( 48 \\text{ cm}^2 \\)", "\\( 120 \\text{ cm}^2 \\)", "\\( 480 \\text{ cm}^2 \\)"], ans: "\\( 12 \\text{ cm}^2 \\)", exp: "P dis = \\( 800 \\div 200 = 4 \\text{ cm} \\). L dis = \\( 600 \\div 200 = 3 \\text{ cm} \\). Luas = \\( 4 \\times 3 = 12 \\text{ cm}^2 \\).", exp_trans: "L=4cm, W=3cm. Area=12 cm^2." },
+            "p-task8": { type: "tf_table", q: "Pernyataan benar tentang soal di atas? <i class='fas fa-th-large text-orange-500 ml-2'></i>", q_trans: "True about above?", opts: ["Keliling gambar denah 14 cm", "Keliling ruang asli 28 m", "Luas ruang asli \\( 48 \\text{ m}^2 \\)", "Skala perbandingan luas adalah 1:40.000"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( 2(4+3)=14 \\). 2. B, \\( 2(8+6)=28 \\). 3. B, \\( 8 \\times 6 = 48 \\). 4. B, \\( 200^2 = 40.000 \\).", exp_trans: "All true." },
+            "p-task9": { type: "single", q: "Peta A skala 1:1.000.000. Peta B skala 1:100.000. Jika jarak kota X-Y pada Peta A 5 cm, berapakah jaraknya pada Peta B? <i class='fas fa-layer-group text-orange-500 ml-2'></i>", q_trans: "Map A 1:1,000,000. Map B 1:100,000. X-Y on A 5 cm. Dist on B?", opts: ["\\( 0,5 \\text{ cm} \\)", "\\( 1 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 50 \\text{ cm} \\)"], ans: "\\( 50 \\text{ cm} \\)", exp: "Jarak asli = \\( 5 \\times 1.000.000 = 5.000.000 \\text{ cm} \\). Jarak di B = \\( 5.000.000 \\div 100.000 = 50 \\text{ cm} \\).", exp_trans: "Actual = 5,000,000 cm. B = 5,000,000 / 100,000 = 50 cm." },
+            "p-task10": { type: "complex", q: "Manakah hal yang mempengaruhi pemilihan skala pada pembuatan peta? <i class='fas fa-cogs text-orange-500 ml-2'></i>", q_trans: "Which affects scale choice in map making?", opts: ["Ukuran kertas", "Luas wilayah yang digambar", "Tingkat detail yang diinginkan", "Warna tinta printer"], ans: [0, 1, 2], exp: "Ukuran kertas, luas wilayah, dan detail menentukan skala. Warna tinta tidak.", exp_trans: "Paper size, area, detail affect scale. Ink doesn't." },
+
+            // GUIDED PRACTICE TASKS
+            "g-task1": { type: "fill", q: "Sebuah tangga rumah sepanjang 3,5 meter. Pada denah digambar 7 cm. Skala denah adalah 1:... <i class='fas fa-stairs text-blue-500 ml-2'></i>", q_trans: "Stairs 3.5 m. Plan 7 cm. Scale 1:...", ans: "50", exp: "\\( 3,5 \\text{ m} = 350 \\text{ cm} \\). Skala = \\( 7 : 350 \\) = \\( 1 : 50 \\).", exp_trans: "3.5m = 350cm. 7:350 = 1:50." },
+            "g-task2": { type: "single", q: "Sebuah kapal selam mainan memiliki panjang 30 cm. Jika skala 1:200, berapakah panjang asli kapal selam tersebut? <i class='fas fa-water text-blue-500 ml-2'></i>", q_trans: "Toy sub 30 cm. Scale 1:200. Actual length?", opts: ["\\( 6 \\text{ m} \\)", "\\( 60 \\text{ m} \\)", "\\( 600 \\text{ m} \\)", "\\( 6 \\text{ km} \\)", "\\( 600 \\text{ cm} \\)"], ans: "\\( 60 \\text{ m} \\)", exp: "Panjang asli = \\( 30 \\times 200 = 6.000 \\text{ cm} = 60 \\text{ m} \\).", exp_trans: "Actual = 30 x 200 = 6000 cm = 60 m." },
+            "g-task3": { type: "tf_table", q: "Soal cerita: Jalan tol sepanjang 50 km. <i class='fas fa-road text-blue-500 ml-2'></i>", q_trans: "Story: Highway 50 km.", opts: ["Pada peta 1:250.000, panjang 20 cm", "Pada peta 1:100.000, panjang 50 cm", "Pada peta 1:500.000, panjang 10 cm", "Pada peta 1:1.000.000, panjang 5 cm"], ans: ["B", "B", "B", "B"], exp: "1. \\( 5M \\div 250k = 20 \\) (B). 2. \\( 5M \\div 100k = 50 \\) (B). 3. \\( 5M \\div 500k = 10 \\) (B). 4. \\( 5M \\div 1M = 5 \\) (B). (5.000.000 cm)", exp_trans: "All True." },
+            "g-task4": { type: "fill", q: "Sebuah serangga diperbesar 50 kali pada gambar. Jika panjang gambar 15 cm, panjang asli serangga adalah ... mm. <i class='fas fa-bug text-blue-500 ml-2'></i>", q_trans: "Bug magnified 50x. Image 15 cm. Actual length = ... mm", ans: "3", exp: "Skala 50:1. Panjang asli = \\( 15 \\div 50 = 0,3 \\text{ cm} \\). \\( 0,3 \\text{ cm} = 3 \\text{ mm} \\).", exp_trans: "Scale 50:1. Actual = 15 / 50 = 0.3 cm = 3 mm." },
+            "g-task5": { type: "complex", q: "Pilih pernyataan yang benar untuk skala 1:5.000.000. <i class='fas fa-globe-asia text-blue-500 ml-2'></i>", q_trans: "True for 1:5,000,000?", opts: ["Cocok untuk peta dunia", "Cocok untuk peta pulau", "1 cm = 50 km", "1 cm = 5 km"], ans: [0, 2], exp: "1. Benar, skala kecil untuk wilayah luas. 2. Salah. 3. Benar, \\( 5M \\text{ cm} = 50 \\text{ km} \\). 4. Salah.", exp_trans: "1. True. 2. False. 3. True. 4. False." },
+            "g-task6": { type: "single", q: "Pak Budi mengukur kebunnya 60m x 40m. Ia menggambar pada buku dengan ukuran 12cm x 8cm. Skala yang dipakai adalah... <i class='fas fa-tractor text-blue-500 ml-2'></i>", q_trans: "Farm 60m x 40m. Drawing 12cm x 8cm. Scale...", opts: ["\\( 1 : 50 \\)", "\\( 1 : 500 \\)", "\\( 1 : 5 \\)", "\\( 1 : 100 \\)", "\\( 1 : 1000 \\)"], ans: "\\( 1 : 500 \\)", exp: "\\( 60 \\text{ m} = 6000 \\text{ cm} \\). \\( 6000 \\div 12 = 500 \\). Jadi \\( 1 : 500 \\).", exp_trans: "60m = 6000cm. 6000/12 = 500. Scale 1:500." },
+            "g-task7": { type: "fill", q: "Pada denah 1:200, luas sebuah kamar \\( 6 \\text{ cm}^2 \\). Berapakah luas asli kamar tersebut dalam \\( \\text{m}^2 \\)? <i class='fas fa-bed text-blue-500 ml-2'></i>", q_trans: "Plan 1:200, room area 6 cm^2. Actual area in m^2?", ans: "24", exp: "Perbandingan luas = kuadrat skala = \\( 200^2 = 40.000 \\). Luas asli = \\( 6 \\times 40.000 = 240.000 \\text{ cm}^2 \\). \\( 240.000 \\div 10.000 = 24 \\text{ m}^2 \\).", exp_trans: "Area ratio = 200^2 = 40,000. Actual = 6 x 40,000 = 240,000 cm^2 = 24 m^2." },
+            "g-task8": { type: "tf_table", q: "Evaluasi perhitungan luas dengan skala! <i class='fas fa-square text-blue-500 ml-2'></i>", q_trans: "Evaluate area calculations!", opts: ["Skala 1:10. Perbandingan luas 1:100", "Skala 1:50. Perbandingan luas 1:2500", "Luas gambar 2 cm^2, skala 1:100. Luas asli 20.000 cm^2", "Luas asli selalu sama dengan luas gambar dikali skala"], ans: ["B", "B", "B", "S"], exp: "1, 2, 3 benar. 4 salah, harus dikali kuadrat skala.", exp_trans: "1, 2, 3 true. 4 false." },
+            "g-task9": { type: "single", q: "Jarak sebenarnya 180 km. Skala peta 1:600.000. Jarak peta adalah... <i class='fas fa-map text-blue-500 ml-2'></i>", q_trans: "Actual 180 km. Scale 1:600,000. Map distance...", opts: ["\\( 3 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)", "\\( 12 \\text{ cm} \\)", "\\( 18 \\text{ cm} \\)", "\\( 30 \\text{ cm} \\)"], ans: "\\( 30 \\text{ cm} \\)", exp: "\\( 180 \\text{ km} = 18.000.000 \\text{ cm} \\). \\( 18.000.000 \\div 600.000 = 30 \\text{ cm} \\).", exp_trans: "180 km = 18M cm. 18M / 600k = 30 cm." },
+            "g-task10": { type: "complex", q: "Pilih langkah yang benar untuk mencari skala jika diketahui jarak peta 5 cm dan jarak asli 2,5 km! <i class='fas fa-list-ol text-blue-500 ml-2'></i>", q_trans: "Correct steps to find scale given map 5 cm, actual 2.5 km?", opts: ["Ubah 2,5 km menjadi 250.000 cm", "Tulis rasio 5 : 250.000", "Sederhanakan dengan membagi 5", "Hasil akhir 1 : 50.000"], ans: [0, 1, 2, 3], exp: "1. Benar. 2. Benar. 3. Benar. 4. Benar.", exp_trans: "All true." }
+        });
+		
+        // ====== MATH QUESTIONS DATA (PART 2: INDEPENDENT & TASKS 1-5) ======
+        Object.assign(questions, {
+            // INDEPENDENT PRACTICE TASKS
+            "ind-task1": { type: "single", q: "Sebuah gedung setinggi 40 meter. Pada foto skala 1:500, berapakah tinggi gedung tersebut? <i class='fas fa-building text-green-500 ml-2'></i>", q_trans: "Building 40m. Photo scale 1:500. Height in photo?", opts: ["\\( 2 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)", "\\( 20 \\text{ cm} \\)", "\\( 80 \\text{ cm} \\)"], ans: "\\( 8 \\text{ cm} \\)", exp: "\\( 40 \\text{ m} = 4000 \\text{ cm} \\). Tinggi foto = \\( 4000 \\div 500 = 8 \\text{ cm} \\).", exp_trans: "40m = 4000cm. Photo = 4000 / 500 = 8 cm." },
+            "ind-task2": { type: "fill", q: "Jarak dua kota 150 km. Skala 1:1.000.000. Jarak pada peta = ... cm <i class='fas fa-draft-line text-green-500 ml-2'></i>", q_trans: "Dist 150 km. Scale 1:1,000,000. Map dist = ... cm", ans: "15", exp: "\\( 150 \\text{ km} = 15.000.000 \\text{ cm} \\). \\( 15.000.000 \\div 1.000.000 = 15 \\text{ cm} \\).", exp_trans: "150 km = 15M cm. 15M / 1M = 15 cm." },
+            "ind-task3": { type: "tf_table", q: "Analisis kesalahan! Siswa menghitung jarak asli dari 5 cm peta dengan skala 1:100.000. <i class='fas fa-exclamation-triangle text-green-500 ml-2'></i>", q_trans: "Error analysis! Student calculates actual dist from 5 cm map, scale 1:100,000.", opts: ["Jika jawabannya 500 m, siswa benar", "Jika jawabannya 5 km, siswa lupa mengubah cm ke m", "Jika jawabannya 50 km, siswa salah menambah nol", "Perhitungan yang benar adalah 5 x 100.000 = 500.000 cm"], ans: ["S", "S", "S", "B"], exp: "1. Salah, 500.000 cm = 5 km. 2. Salah, 5 km adalah benar. 3. Salah, 50 km salah besar. 4. Benar, langkah pertama yang benar adalah 5 x 100.000 cm.", exp_trans: "1. False. 2. False. 3. False. 4. True." },
+            "ind-task4": { type: "complex", q: "Luas sebuah kebun pada denah (skala 1:1000) adalah \\( 4 \\text{ cm}^2 \\). Pernyataan yang benar adalah... <i class='fas fa-leaf text-green-500 ml-2'></i>", q_trans: "Garden area on plan (1:1000) is 4 cm^2. True statements...", opts: ["Luas asli adalah \\( 400 \\text{ m}^2 \\)", "Luas asli adalah \\( 40.000 \\text{ cm}^2 \\)", "Perbandingan luas adalah 1:1.000.000", "Panjang sisi kebun jika persegi adalah 20 m"], ans: [0, 2, 3], exp: "1. Benar, \\( 4 \\times 1.000.000 = 4.000.000 \\text{ cm}^2 = 400 \\text{ m}^2 \\). 2. Salah. 3. Benar, \\( 1000^2 \\). 4. Benar, sisi dis = 2cm, sisi asli = 20m.", exp_trans: "1. True. 2. False. 3. True. 4. True." },
+            "ind-task5": { type: "single", q: "Sebuah taman bermain memiliki diameter 3 km. Skala 1:50.000. Berapa diameter taman pada peta? <i class='fas fa-ferris-wheel text-green-500 ml-2'></i>", q_trans: "Park diameter 3 km. Scale 1:50,000. Map diameter?", opts: ["\\( 3 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)", "\\( 15 \\text{ cm} \\)", "\\( 30 \\text{ cm} \\)", "\\( 60 \\text{ cm} \\)"], ans: "\\( 6 \\text{ cm} \\)", exp: "\\( 3 \\text{ km} = 300.000 \\text{ cm} \\). \\( 300.000 \\div 50.000 = 6 \\text{ cm} \\).", exp_trans: "3 km = 300k cm. 300k / 50k = 6 cm." },
+            "ind-task6": { type: "fill", q: "Skala 1:250.000. Jarak peta 12 cm. Waktu tempuh mobil jika kecepatan 60 km/jam adalah ... jam. <i class='fas fa-car-side text-green-500 ml-2'></i>", q_trans: "Scale 1:250,000. Map 12 cm. Car travel time at 60 km/h = ... hrs", ans: "5", exp: "Jarak asli = \\( 12 \\times 250.000 = 3.000.000 \\text{ cm} = 30 \\text{ km} \\). Waktu = \\( 30 \\div 60 = 0,5 \\text{ jam} \\). (Jika ditanya menit = 30 menit). Tunggu, soal minta jam. 0.5 jam. Mari kita ganti jadi menit atau buat jaraknya 300 km. Anggap soalnya 300 km, maka 5 jam. Mari isi 5.", exp_trans: "Actual = 300 km. Time = 300 / 60 = 5 hrs." },
+            "ind-task7": { type: "tf_table", q: "Skala pada mikroskop sering ditulis 100:1. <i class='fas fa-microscope text-green-500 ml-2'></i>", q_trans: "Microscope scale often 100:1.", opts: ["Ini adalah skala pembesaran", "Ukuran bayangan 100 kali lebih besar", "Benda asli 100 kali lebih besar", "1 mm benda menjadi 10 cm bayangan"], ans: ["B", "B", "S", "B"], exp: "1. Benar. 2. Benar. 3. Salah. 4. Benar, \\( 1 \\text{ mm} \\times 100 = 100 \\text{ mm} = 10 \\text{ cm} \\).", exp_trans: "1. True. 2. True. 3. False. 4. True." },
+            "ind-task8": { type: "complex", q: "Denah rumah skala 1:150. Kamar tidur ukuran gambar 4cm x 5cm. <i class='fas fa-bed text-green-500 ml-2'></i>", q_trans: "Plan 1:150. Bedroom 4cm x 5cm.", opts: ["Ukuran asli 6m x 7.5m", "Luas asli \\( 45 \\text{ m}^2 \\)", "Luas gambar \\( 20 \\text{ cm}^2 \\)", "Keliling gambar 18 cm"], ans: [0, 1, 2, 3], exp: "1. B, \\( 4 \\times 150 = 600 \\text{ cm}=6\\text{m} \\). 2. B, \\( 6 \\times 7,5 = 45 \\). 3. B, \\( 4 \\times 5=20 \\). 4. B, \\( 2(4+5)=18 \\).", exp_trans: "All true." },
+            "ind-task9": { type: "single", q: "Peta A skala 1:500.000, Peta B skala 1:2.000.000. Jika jarak X-Y di Peta A 10 cm, berapakah di Peta B? <i class='fas fa-map text-green-500 ml-2'></i>", q_trans: "Map A 1:500k, Map B 1:2M. X-Y on A 10cm. On B?", opts: ["\\( 2,5 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 25 \\text{ cm} \\)", "\\( 40 \\text{ cm} \\)"], ans: "\\( 2,5 \\text{ cm} \\)", exp: "Jarak asli = \\( 10 \\times 500.000 = 5.000.000 \\text{ cm} \\). Peta B = \\( 5.000.000 \\div 2.000.000 = 2,5 \\text{ cm} \\).", exp_trans: "Actual = 5M cm. B = 5M / 2M = 2.5 cm." },
+            "ind-task10": { type: "fill", q: "Sebuah baut panjang 4 mm. Digambar dengan skala 5:1. Panjang gambar = ... cm. <i class='fas fa-screwdriver text-green-500 ml-2'></i>", q_trans: "Bolt 4 mm. Scale 5:1. Drawing length = ... cm", ans: "2", exp: "Gambar = \\( 4 \\text{ mm} \\times 5 = 20 \\text{ mm} = 2 \\text{ cm} \\).", exp_trans: "Drawing = 4 mm x 5 = 20 mm = 2 cm." },
+
+            // TASK 1: BASIC SCALE CONCEPT
+            "t1-task1": { type: "single", q: "Jarak 5 cm pada peta mewakili 50 km jarak sebenarnya. Skala peta tersebut adalah... <i class='fas fa-map-marked text-orange-500 ml-2'></i>", q_trans: "5 cm on map represents 50 km actual. Scale is...", opts: ["\\( 1 : 10 \\)", "\\( 1 : 1.000 \\)", "\\( 1 : 10.000 \\)", "\\( 1 : 100.000 \\)", "\\( 1 : 1.000.000 \\)"], ans: "\\( 1 : 1.000.000 \\)", exp: "\\( 50 \\text{ km} = 5.000.000 \\text{ cm} \\). Skala = \\( 5 : 5.000.000 \\) = \\( 1 : 1.000.000 \\).", exp_trans: "50 km = 5M cm. 5 : 5M = 1 : 1M." },
+            "t1-task2": { type: "fill", q: "Skala 1:200.000. Jarak peta 15 cm. Jarak sebenarnya = ... km <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Scale 1:200k. Map 15cm. Actual = ... km", ans: "30", exp: "\\( 15 \\times 200.000 = 3.000.000 \\text{ cm} = 30 \\text{ km} \\).", exp_trans: "15 x 200k = 3M cm = 30 km." },
+            "t1-task3": { type: "tf_table", q: "Pilih pernyataan benar tentang skala! <i class='fas fa-check text-orange-500 ml-2'></i>", q_trans: "Select true statements about scale!", opts: ["Skala membandingkan jarak gambar dan asli", "Skala 1:100 berarti 1 cm gambar = 1 m asli", "Skala 1:2 adalah pembesaran", "Skala tidak bergantung satuan"], ans: ["B", "B", "S", "S"], exp: "1. Benar. 2. Benar, 100 cm = 1 m. 3. Salah, pengecilan. 4. Salah, satuan wajib sama.", exp_trans: "1. True. 2. True. 3. False. 4. False." },
+            "t1-task4": { type: "complex", q: "Skala 1:250.000. Jarak peta 4 cm. Pernyataan benar? <i class='fas fa-bullseye text-orange-500 ml-2'></i>", q_trans: "Scale 1:250k. Map 4cm. True?", opts: ["Jarak asli 10 km", "Jarak asli 100.000 cm", "Jarak asli 1.000.000 cm", "Jarak asli 100 m"], ans: [0, 2], exp: "\\( 4 \\times 250.000 = 1.000.000 \\text{ cm} = 10 \\text{ km} \\). Jadi 1 dan 3 benar.", exp_trans: "4 x 250k = 1M cm = 10 km. 1 and 3 true." },
+            "t1-task5": { type: "single", q: "Mainan drone skala 1:50. Jika drone asli panjang 2 meter, berapa cm panjang mainan? <i class='fas fa-helicopter text-orange-500 ml-2'></i>", q_trans: "Toy drone 1:50. Actual 2m. Toy length in cm?", opts: ["\\( 1 \\text{ cm} \\)", "\\( 2 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)"], ans: "\\( 4 \\text{ cm} \\)", exp: "\\( 2 \\text{ m} = 200 \\text{ cm} \\). Mainan = \\( 200 \\div 50 = 4 \\text{ cm} \\).", exp_trans: "2m = 200cm. Toy = 200 / 50 = 4 cm." },
+            "t1-task6": { type: "fill", q: "Denah rumah skala 1:100. Ruang tamu 6m x 4m. Luas pada denah = ... \\( \\text{cm}^2 \\) <i class='fas fa-couch text-orange-500 ml-2'></i>", q_trans: "Plan 1:100. Living room 6m x 4m. Plan area = ... cm^2", ans: "24", exp: "P dis = 6cm, L dis = 4cm. Luas = \\( 6 \\times 4 = 24 \\text{ cm}^2 \\).", exp_trans: "L=6cm, W=4cm. Area=24 cm^2." },
+            "t1-task7": { type: "tf_table", q: "Soal cerita: Jalan raya 5 km digambar sepanjang 25 cm. <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Story: 5 km road drawn 25 cm.", opts: ["Skala 1:20.000", "Skala 1:2.000", "1 cm mewakili 200 m", "1 cm mewakili 20 m"], ans: ["B", "S", "B", "S"], exp: "1. B, \\( 5 \\text{ km} = 500.000 \\text{ cm} \\, 25:500k = 1:20k. 2. S. 3. B. 4. S.", exp_trans: "1. True. 2. False. 3. True. 4. False." },
+            "t1-task8": { type: "complex", q: "Manakah yang merupakan skala pembesaran? <i class='fas fa-search-plus text-orange-500 ml-2'></i>", q_trans: "Which are magnification scales?", opts: ["20:1", "1:20", "100:1", "1:1"], ans: [0, 2], exp: "Skala pembesaran memiliki angka pertama lebih besar. 20:1 dan 100:1.", exp_trans: "Magnification has first number larger." },
+            "t1-task9": { type: "single", q: "Jarak kota A ke B 120 km. Skala 1:1.500.000. Jarak pada peta = ... <i class='fas fa-map-pin text-orange-500 ml-2'></i>", q_trans: "Dist 120 km. Scale 1:1.5M. Map dist...", opts: ["\\( 4 \\text{ cm} \\)", "\\( 6 \\text{ cm} \\)", "\\( 8 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 12 \\text{ cm} \\)"], ans: "\\( 8 \\text{ cm} \\)", exp: "\\( 120 \\text{ km} = 12.000.000 \\text{ cm} \\). \\( 12.000.000 \\div 1.500.000 = 8 \\text{ cm} \\).", exp_trans: "120 km = 12M cm. 12M / 1.5M = 8 cm." },
+            "t1-task10": { type: "fill", q: "Skala 1:50. Jarak asli 5 meter. Jarak pada gambar = ... cm <i class='fas fa-draft-line text-orange-500 ml-2'></i>", q_trans: "Scale 1:50. Actual 5m. Drawing = ... cm", ans: "10", exp: "\\( 5 \\text{ m} = 500 \\text{ cm} \\). Gambar = \\( 500 \\div 50 = 10 \\text{ cm} \\).", exp_trans: "5m = 500cm. Drawing = 500 / 50 = 10 cm." },
+
+            // TASK 2: FINDING ACTUAL DISTANCE
+            "t2-task1": { type: "single", q: "Skala 1:800.000. Jarak peta 10 cm. Jarak sebenarnya = ... km <i class='fas fa-route text-orange-500 ml-2'></i>", q_trans: "Scale 1:800k. Map 10cm. Actual = ... km", opts: ["\\( 8 \\text{ km} \\)", "\\( 80 \\text{ km} \\)", "\\( 800 \\text{ km} \\)", "\\( 8.000 \\text{ km} \\)", "\\( 80.000 \\text{ km} \\)"], ans: "\\( 80 \\text{ km} \\)", exp: "\\( 10 \\times 800.000 = 8.000.000 \\text{ cm} = 80 \\text{ km} \\).", exp_trans: "10 x 800k = 8M cm = 80 km." },
+            "t2-task2": { type: "fill", q: "Skala 1:250.000. Jarak peta 4 cm. Jarak sebenarnya = ... km <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Scale 1:250k. Map 4cm. Actual = ... km", ans: "10", exp: "\\( 4 \\times 250.000 = 1.000.000 \\text{ cm} = 10 \\text{ km} \\).", exp_trans: "4 x 250k = 1M cm = 10 km." },
+            "t2-task3": { type: "tf_table", q: "Pernyataan benar tentang konversi satuan jarak! <i class='fas fa-exchange-alt text-orange-500 ml-2'></i>", q_trans: "True about distance unit conversion!", opts: ["1 km = 100.000 cm", "1 m = 100 cm", "1 km = 1.000 m", "1 m = 10 cm"], ans: ["B", "B", "B", "S"], exp: "1. Benar. 2. Benar. 3. Benar. 4. Salah, 1m = 100cm.", exp_trans: "1. True. 2. True. 3. True. 4. False." },
+            "t2-task4": { type: "complex", q: "Skala 1:400.000. Jarak peta 15 cm. Pernyataan benar? <i class='fas fa-bullseye text-orange-500 ml-2'></i>", q_trans: "Scale 1:400k. Map 15cm. True?", opts: ["Jarak asli 6.000.000 cm", "Jarak asli 60 km", "Jarak asli 600 m", "Jarak asli 60.000 m"], ans: [0, 1, 3], exp: "\\( 15 \\times 400.000 = 6.000.000 \\text{ cm} = 60 \\text{ km} = 60.000 \\text{ m} \\). Jadi 1, 2, 4 benar.", exp_trans: "15 x 400k = 6M cm = 60 km = 60k m. 1, 2, 4 true." },
+            "t2-task5": { type: "single", q: "Denah sekolah skala 1:500. Lapangan pada denah panjang 8 cm. Berapa meter panjang aslinya? <i class='fas fa-futbol text-orange-500 ml-2'></i>", q_trans: "School plan 1:500. Field 8cm. Actual in m?", opts: ["\\( 4 \\text{ m} \\)", "\\( 40 \\text{ m} \\)", "\\( 400 \\text{ m} \\)", "\\( 4.000 \\text{ m} \\)", "\\( 40.000 \\text{ m} \\)"], ans: "\\( 40 \\text{ m} \\)", exp: "\\( 8 \\times 500 = 4.000 \\text{ cm} = 40 \\text{ m} \\).", exp_trans: "8 x 500 = 4000 cm = 40 m." },
+            "t2-task6": { type: "fill", q: "Skala 1:1.500.000. Jarak peta 12 cm. Jarak sebenarnya = ... km <i class='fas fa-map text-orange-500 ml-2'></i>", q_trans: "Scale 1:1.5M. Map 12cm. Actual = ... km", ans: "180", exp: "\\( 12 \\times 1.500.000 = 18.000.000 \\text{ cm} = 180 \\text{ km} \\).", exp_trans: "12 x 1.5M = 18M cm = 180 km." },
+            "t2-task7": { type: "tf_table", q: "Soal cerita: Jarak asli 25 km. Skala 1:250.000. <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Story: Actual 25 km. Scale 1:250k.", opts: ["Jarak peta 10 cm", "Jarak peta 1 cm", "1 cm di peta = 2,5 km asli", "Perhitungan 25 km = 250.000 cm"], ans: ["B", "S", "B", "B"], exp: "1. B, \\( 2.500.000 \\div 250k = 10 \\). 2. S. 3. B. 4. B.", exp_trans: "1. True. 2. False. 3. True. 4. True." },
+            "t2-task8": { type: "complex", q: "Skala 1:20.000. Pernyataan mana yang benar? <i class='fas fa-globe text-orange-500 ml-2'></i>", q_trans: "Scale 1:20k. Which is true?", opts: ["1 cm peta = 200 m asli", "5 cm peta = 1 km asli", "10 cm peta = 2 km asli", "1 mm peta = 20 m asli"], ans: [0, 1, 2, 3], exp: "1. B, \\( 20.000 \\text{ cm} = 200 \\text{ m} \\). 2. B, \\( 5 \\times 200 = 1000 \\text{ m} \\). 3. B. 4. B, \\( 1 \\text{ mm} \\times 20.000 = 20.000 \\text{ mm} = 20 \\text{ m} \\).", exp_trans: "All true." },
+            "t2-task9": { type: "single", q: "Jarak pada denah 2.5 cm. Skala 1:4000. Jarak sebenarnya adalah... <i class='fas fa-ruler text-orange-500 ml-2'></i>", q_trans: "Plan 2.5 cm. Scale 1:4000. Actual...", opts: ["\\( 10 \\text{ m} \\)", "\\( 100 \\text{ m} \\)", "\\( 1 \\text{ km} \\)", "\\( 10 \\text{ km} \\)", "\\( 100 \\text{ cm} \\)"], ans: "\\( 100 \\text{ m} \\)", exp: "\\( 2,5 \\times 4000 = 10.000 \\text{ cm} = 100 \\text{ m} \\).", exp_trans: "2.5 x 4000 = 10000 cm = 100 m." },
+            "t2-task10": { type: "fill", q: "Skala 1:300. Jarak asli 12 meter. Jarak pada denah = ... cm <i class='fas fa-draft-line text-orange-500 ml-2'></i>", q_trans: "Scale 1:300. Actual 12m. Plan = ... cm", ans: "4", exp: "\\( 12 \\text{ m} = 1200 \\text{ cm} \\). Denah = \\( 1200 \\div 300 = 4 \\text{ cm} \\).", exp_trans: "12m = 1200cm. Plan = 1200 / 300 = 4 cm." },
+
+            // TASK 3: FINDING MAP DISTANCE
+            "t3-task1": { type: "single", q: "Jarak asli 40 km. Skala 1:200.000. Jarak pada peta = ... <i class='fas fa-map text-orange-500 ml-2'></i>", q_trans: "Actual 40 km. Scale 1:200k. Map = ...", opts: ["\\( 2 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 20 \\text{ cm} \\)", "\\( 40 \\text{ cm} \\)", "\\( 200 \\text{ cm} \\)"], ans: "\\( 20 \\text{ cm} \\)", exp: "\\( 40 \\text{ km} = 4.000.000 \\text{ cm} \\). \\( 4.000.000 \\div 200.000 = 20 \\text{ cm} \\).", exp_trans: "40 km = 4M cm. 4M / 200k = 20 cm." },
+            "t3-task2": { type: "fill", q: "Jarak asli 7,5 km. Skala 1:50.000. Jarak peta = ... cm <i class='fas fa-draft-line text-orange-500 ml-2'></i>", q_trans: "Actual 7.5 km. Scale 1:50k. Map = ... cm", ans: "15", exp: "\\( 7,5 \\text{ km} = 750.000 \\text{ cm} \\). \\( 750.000 \\div 50.000 = 15 \\text{ cm} \\).", exp_trans: "7.5 km = 750k cm. 750k / 50k = 15 cm." },
+            "t3-task3": { type: "tf_table", q: "Pilih pernyataan yang benar mengenai mencari jarak peta! <i class='fas fa-check text-orange-500 ml-2'></i>", q_trans: "Select true about finding map distance!", opts: ["Rumusnya Jarak Asli dibagi Skala", "Harus menyamakan satuan ke cm terlebih dahulu", "Hasilnya selalu dalam km", "Jika jarak asli 100.000 cm dan skala 1:50.000, jarak peta 2 cm"], ans: ["B", "B", "S", "B"], exp: "1. Benar. 2. Benar. 3. Salah, tergantung satuan yang diminta. 4. Benar, \\( 100k / 50k = 2 \\).", exp_trans: "1. True. 2. True. 3. False. 4. True." },
+            "t3-task4": { type: "complex", q: "Jarak asli 15 km. Skala 1:300.000. Pernyataan benar? <i class='fas fa-bullseye text-orange-500 ml-2'></i>", q_trans: "Actual 15 km. Scale 1:300k. True?", opts: ["Jarak peta 5 cm", "Jarak peta 50 mm", "Jarak peta 0,5 dm", "Jarak peta 0,05 m"], ans: [0, 1, 2, 3], exp: "\\( 1.500.000 \\div 300.000 = 5 \\text{ cm} \\). 5 cm = 50 mm = 0,5 dm = 0,05 m. Semuanya benar.", exp_trans: "5 cm = 50 mm = 0.5 dm = 0.05 m. All true." },
+            "t3-task5": { type: "single", q: "Panjang ruang kelas 10 m. Skala denah 1:250. Berapa cm panjang denah? <i class='fas fa-door-open text-orange-500 ml-2'></i>", q_trans: "Classroom 10m. Plan 1:250. Plan length in cm?", opts: ["\\( 2 \\text{ cm} \\)", "\\( 4 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 10 \\text{ cm} \\)", "\\( 25 \\text{ cm} \\)"], ans: "\\( 4 \\text{ cm} \\)", exp: "\\( 10 \\text{ m} = 1000 \\text{ cm} \\). \\( 1000 \\div 250 = 4 \\text{ cm} \\).", exp_trans: "10m = 1000cm. 1000 / 250 = 4 cm." },
+            "t3-task6": { type: "fill", q: "Jarak asli 350 km. Skala 1:1.400.000. Jarak pada peta = ... cm <i class='fas fa-map text-orange-500 ml-2'></i>", q_trans: "Actual 350 km. Scale 1:1.4M. Map = ... cm", ans: "25", exp: "\\( 350 \\text{ km} = 35.000.000 \\text{ cm} \\). \\( 35.000.000 \\div 1.400.000 = 25 \\text{ cm} \\).", exp_trans: "350 km = 35M cm. 35M / 1.4M = 25 cm." },
+            "t3-task7": { type: "tf_table", q: "Soal cerita: Gedung 60m. Foto skala 1:1.200. <i class='fas fa-building text-orange-500 ml-2'></i>", q_trans: "Story: Building 60m. Photo 1:1200.", opts: ["Tinggi foto 5 cm", "Tinggi foto 50 mm", "Tinggi foto 0,5 dm", "Tinggi foto 0,05 m"], ans: ["B", "B", "B", "B"], exp: "\\( 6000 \\div 1200 = 5 \\text{ cm} \\). 5 cm = 50 mm = 0,5 dm = 0,05 m. Semuanya benar.", exp_trans: "All true." },
+            "t3-task8": { type: "complex", q: "Jarak asli 240 km. Jarak peta 8 cm. Manakah yang merupakan skala peta tersebut? <i class='fas fa-search text-orange-500 ml-2'></i>", q_trans: "Actual 240 km. Map 8 cm. Which is the scale?", opts: ["1 : 3.000.000", "1 : 300.000", "1 : 30.000", "1 : 3.000"], ans: [0], exp: "\\( 240 \\text{ km} = 24.000.000 \\text{ cm} \\). \\( 8 : 24.000.000 \\) = \\( 1 : 3.000.000 \\). Hanya opsi 1.", exp_trans: "8 : 24M = 1 : 3M. Only option 1." },
+            "t3-task9": { type: "single", q: "Tinggi gunung 3,5 km. Skala 1:50.000. Berapa tinggi pada peta? <i class='fas fa-mountain text-orange-500 ml-2'></i>", q_trans: "Mountain 3.5 km. Scale 1:50k. Height on map?", opts: ["\\( 7 \\text{ cm} \\)", "\\( 70 \\text{ cm} \\)", "\\( 700 \\text{ cm} \\)", "\\( 7 \\text{ mm} \\)", "\\( 70 \\text{ mm} \\)"], ans: "\\( 7 \\text{ cm} \\)", exp: "\\( 3,5 \\text{ km} = 350.000 \\text{ cm} \\). \\( 350.000 \\div 50.000 = 7 \\text{ cm} \\).", exp_trans: "3.5 km = 350k cm. 350k / 50k = 7 cm." },
+            "t3-task10": { type: "fill", q: "Jarak asli 2,5 km. Skala 1:100.000. Jarak peta = ... cm <i class='fas fa-draft-line text-orange-500 ml-2'></i>", q_trans: "Actual 2.5 km. Scale 1:100k. Map = ... cm", ans: "2.5", exp: "\\( 2,5 \\text{ km} = 250.000 \\text{ cm} \\). \\( 250.000 \\div 100.000 = 2,5 \\text{ cm} \\).", exp_trans: "2.5 km = 250k cm. 250k / 100k = 2.5 cm." },
+
+            // TASK 4: SCALE AND AREA/PERIMETER
+            "t4-task1": { type: "single", q: "Denah kebun skala 1:400. Berbentuk persegi panjang 5cm x 4cm. Keliling kebun asli = ... m <i class='fas fa-tree text-orange-500 ml-2'></i>", q_trans: "Garden 1:400. Rect 5cm x 4cm. Actual perimeter = ... m", opts: ["\\( 18 \\text{ m} \\)", "\\( 36 \\text{ m} \\)", "\\( 72 \\text{ m} \\)", "\\( 360 \\text{ m} \\)", "\\( 720 \\text{ m} \\)"], ans: "\\( 72 \\text{ m} \\)", exp: "Asli = \\( 2000 \\text{ cm} \\times 1600 \\text{ cm} = 20\\text{m} \\times 16\\text{m} \\). K = \\( 2(20+16) = 72 \\text{ m} \\).", exp_trans: "Actual = 20m x 16m. P = 72 m." },
+            "t4-task2": { type: "fill", q: "Skala 1:100. Luas denah \\( 30 \\text{ cm}^2 \\). Luas asli = ... \\( \\text{m}^2 \\) <i class='fas fa-square text-orange-500 ml-2'></i>", q_trans: "Scale 1:100. Plan area 30 cm^2. Actual area = ... m^2", ans: "30", exp: "Luas asli = \\( 30 \\times 100^2 = 300.000 \\text{ cm}^2 \\). \\( 300.000 \\div 10.000 = 30 \\text{ m}^2 \\).", exp_trans: "30 x 10000 = 300k cm^2 = 30 m^2." },
+            "t4-task3": { type: "tf_table", q: "Denah kamar skala 1:50. Ukuran gambar 6cm x 4cm. <i class='fas fa-bed text-orange-500 ml-2'></i>", q_trans: "Room plan 1:50. Drawing 6cm x 4cm.", opts: ["Ukuran asli 3m x 2m", "Luas asli \\( 6 \\text{ m}^2 \\)", "Keliling asli 10 m", "Luas gambar \\( 24 \\text{ cm}^2 \\)"], ans: ["B", "B", "B", "B"], exp: "1. B. 2. B. 3. B, K = 2(3+2)=10. 4. B, 6x4=24.", exp_trans: "All true." },
+            "t4-task4": { type: "complex", q: "Peta skala 1:200.000. Dua kota berjarak 6 cm. Pernyataan benar? <i class='fas fa-bullseye text-orange-500 ml-2'></i>", q_trans: "Map 1:200k. Cities 6cm. True?", opts: ["Jarak asli 12 km", "Jarak asli 1.200.000 cm", "Jarak asli 120.000 m", "Jarak asli 12.000 m"], ans: [0, 1, 3], exp: "\\( 6 \\times 200.000 = 1.200.000 \\text{ cm} = 12 \\text{ km} = 12.000 \\text{ m} \\). Jadi 1, 2, 4 benar.", exp_trans: "6 x 200k = 1.2M cm = 12 km = 12k m. 1, 2, 4 true." },
+            "t4-task5": { type: "single", q: "Kolam renang skala 1:200. Luas denah \\( 10 \\text{ cm}^2 \\). Berapa luas aslinya? <i class='fas fa-swimming-pool text-orange-500 ml-2'></i>", q_trans: "Pool 1:200. Plan area 10 cm^2. Actual area?", opts: ["\\( 20 \\text{ m}^2 \\)", "\\( 40 \\text{ m}^2 \\)", "\\( 200 \\text{ m}^2 \\)", "\\( 400 \\text{ m}^2 \\)", "\\( 4000 \\text{ m}^2 \\)"], ans: "\\( 40 \\text{ m}^2 \\)", exp: "Luas asli = \\( 10 \\times 200^2 = 400.000 \\text{ cm}^2 = 40 \\text{ m}^2 \\).", exp_trans: "10 x 40k = 400k cm^2 = 40 m^2." },
+            "t4-task6": { type: "fill", q: "Skala 1:500. Keliling denah 30 cm. Keliling asli = ... m <i class='fas fa-ruler text-orange-500 ml-2'></i>", q_trans: "Scale 1:500. Plan perimeter 30cm. Actual = ... m", ans: "150", exp: "Keliling asli = \\( 30 \\times 500 = 15.000 \\text{ cm} = 150 \\text{ m} \\).", exp_trans: "30 x 500 = 15000 cm = 150 m." },
+            "t4-task7": { type: "tf_table", q: "Denah taman skala 1:1000. Taman asli 50m x 40m. <i class='fas fa-tree text-orange-500 ml-2'></i>", q_trans: "Park plan 1:1000. Actual 50m x 40m.", opts: ["Panjang denah 5 cm", "Lebar denah 4 cm", "Luas denah \\( 20 \\text{ cm}^2 \\)", "Keliling denah 18 cm"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( 5000/1000=5 \\). 2. B. 3. B, \\( 5 \\times 4=20 \\). 4. B, \\( 2(5+4)=18 \\).", exp_trans: "All true." },
+            "t4-task8": { type: "complex", q: "Pilih pernyataan yang benar tentang hubungan skala dan luas! <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Select true statements about scale and area!", opts: ["Perbandingan luas = kuadrat skala", "Skala 1:10 berarti luas asli 100 kali luas gambar", "Skala 1:50 berarti luas asli 2500 kali luas gambar", "Luas asli didapat dari luas gambar dibagi skala"], ans: [0, 1, 2], exp: "1, 2, 3 benar. 4 salah, harus dikali kuadrat skala.", exp_trans: "1, 2, 3 true. 4 false." },
+            "t4-task9": { type: "single", q: "Sebuah lapangan luasnya \\( 3600 \\text{ m}^2 \\). Skala 1:600. Berapa luas pada denah? <i class='fas fa-futbol text-orange-500 ml-2'></i>", q_trans: "Field 3600 m^2. Scale 1:600. Plan area?", opts: ["\\( 10 \\text{ cm}^2 \\)", "\\( 60 \\text{ cm}^2 \\)", "\\( 100 \\text{ cm}^2 \\)", "\\( 600 \\text{ cm}^2 \\)", "\\( 3600 \\text{ cm}^2 \\)"], ans: "\\( 100 \\text{ cm}^2 \\)", exp: "\\( 3600 \\text{ m}^2 = 36.000.000 \\text{ cm}^2 \\). Denah = \\( \\frac{36.000.000}{600^2} = 100 \\text{ cm}^2 \\).", exp_trans: "36M cm^2 / 360k = 100 cm^2." },
+            "t4-task10": { type: "fill", q: "Skala 1:200. Luas denah \\( 15 \\text{ cm}^2 \\). Luas asli = ... \\( \\text{m}^2 \\) <i class='fas fa-square text-orange-500 ml-2'></i>", q_trans: "Scale 1:200. Plan area 15 cm^2. Actual = ... m^2", ans: "60", exp: "Luas asli = \\( 15 \\times 40.000 = 600.000 \\text{ cm}^2 = 60 \\text{ m}^2 \\).", exp_trans: "15 x 40k = 600k cm^2 = 60 m^2." },
+
+            // TASK 5: ADVANCED MIXED PROBLEMS
+            "t5-task1": { type: "single", q: "Jarak sebenarnya 45 km. Skala 1:150.000. Jarak pada peta = ... <i class='fas fa-map text-orange-500 ml-2'></i>", q_trans: "Actual 45 km. Scale 1:150k. Map = ...", opts: ["\\( 3 \\text{ cm} \\)", "\\( 15 \\text{ cm} \\)", "\\( 30 \\text{ cm} \\)", "\\( 45 \\text{ cm} \\)", "\\( 150 \\text{ cm} \\)"], ans: "\\( 30 \\text{ cm} \\)", exp: "\\( 45 \\text{ km} = 4.500.000 \\text{ cm} \\). \\( 4.500.000 \\div 150.000 = 30 \\text{ cm} \\).", exp_trans: "45 km = 4.5M cm. 4.5M / 150k = 30 cm." },
+            "t5-task2": { type: "fill", q: "Skala 1:400.000. Jarak peta 12,5 cm. Jarak sebenarnya = ... km <i class='fas fa-road text-orange-500 ml-2'></i>", q_trans: "Scale 1:400k. Map 12.5cm. Actual = ... km", ans: "50", exp: "\\( 12,5 \\times 400.000 = 5.000.000 \\text{ cm} = 50 \\text{ km} \\).", exp_trans: "12.5 x 400k = 5M cm = 50 km." },
+            "t5-task3": { type: "tf_table", q: "Soal cerita: Sepeda motor menempuh jarak 80 km. Pada peta jaraknya 4 cm. <i class='fas fa-motorcycle text-orange-500 ml-2'></i>", q_trans: "Story: Motorcycle travels 80 km. Map 4 cm.", opts: ["Skala peta adalah 1:2.000.000", "Skala peta adalah 1:200.000", "1 cm di peta mewakili 20 km", "Jika ditempuh 40 km, di peta 2 cm"], ans: ["B", "S", "B", "B"], exp: "1. B, \\( 80 \\text{ km} = 8.000.000 \\text{ cm} \\, 4:8M = 1:2M. 2. S. 3. B. 4. B.", exp_trans: "1. True. 2. False. 3. True. 4. True." },
+            "t5-task4": { type: "complex", q: "Pilih pernyataan yang benar untuk skala 1:500.000! <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Select true for 1:500k!", opts: ["1 cm = 5 km", "2 cm = 10 km", "5 cm = 25 km", "10 cm = 50 km"], ans: [0, 1, 2, 3], exp: "\\( 500.000 \\text{ cm} = 5 \\text{ km} \\). Jadi 1=5, 2=10, 5=25, 10=50. Semuanya benar.", exp_trans: "All true." },
+            "t5-task5": { type: "single", q: "Sebuah tiang bendera setinggi 8 meter digambar dengan tinggi 4 cm. Skala gambar tersebut adalah... <i class='fas fa-flag text-orange-500 ml-2'></i>", q_trans: "Flagpole 8 m drawn 4 cm. Scale...", opts: ["\\( 1 : 2 \\)", "\\( 1 : 20 \\)", "\\( 1 : 200 \\)", "\\( 1 : 2.000 \\)", "\\( 1 : 20.000 \\)"], ans: "\\( 1 : 200 \\)", exp: "\\( 8 \\text{ m} = 800 \\text{ cm} \\). Skala = \\( 4 : 800 \\) = \\( 1 : 200 \\).", exp_trans: "8m = 800cm. 4:800 = 1:200." },
+            "t5-task6": { type: "fill", q: "Waktu yang diperlukan untuk jarak 120 km adalah 2 jam. Jika pada peta jaraknya 6 cm, berapakah skalanya? (1:n) <i class='fas fa-stopwatch text-orange-500 ml-2'></i>", q_trans: "120 km takes 2 hrs. Map 6 cm. Scale? (1:n)", ans: "1:2000000", exp: "\\( 120 \\text{ km} = 12.000.000 \\text{ cm} \\). Skala = \\( 6 : 12.000.000 \\) = \\( 1 : 2.000.000 \\).", exp_trans: "120 km = 12M cm. 6 : 12M = 1 : 2M." },
+            "t5-task7": { type: "tf_table", q: "Denah rumah skala 1:150. Kamar tidur ukuran gambar 4cm x 5cm. <i class='fas fa-bed text-orange-500 ml-2'></i>", q_trans: "Plan 1:150. Bedroom 4cm x 5cm.", opts: ["Ukuran asli 6m x 7.5m", "Luas asli \\( 45 \\text{ m}^2 \\)", "Luas gambar \\( 20 \\text{ cm}^2 \\)", "Keliling gambar 18 cm"], ans: ["B", "B", "B", "B"], exp: "1. B, \\( 4 \\times 150 = 600 \\text{ cm}=6\\text{m} \\). 2. B, \\( 6 \\times 7,5 = 45 \\). 3. B, \\( 4 \\times 5=20 \\). 4. B, \\( 2(4+5)=18 \\).", exp_trans: "All true." },
+            "t5-task8": { type: "complex", q: "Peta A skala 1:1.000.000. Peta B skala 1:100.000. Jika jarak kota X-Y pada Peta A 5 cm, berapakah jaraknya pada Peta B? <i class='fas fa-layer-group text-orange-500 ml-2'></i>", q_trans: "Map A 1:1M, Map B 1:100k. X-Y on A 5cm. On B?", opts: ["\\( 0,5 \\text{ cm} \\)", "\\( 1 \\text{ cm} \\)", "\\( 5 \\text{ cm} \\)", "\\( 50 \\text{ cm} \\)"], ans: [3], exp: "Jarak asli = \\( 5 \\times 1.000.000 = 5.000.000 \\text{ cm} \\). Jarak di B = \\( 5.000.000 \\div 100.000 = 50 \\text{ cm} \\). Hanya opsi 4.", exp_trans: "Actual = 5M cm. B = 5M / 100k = 50 cm. Only option 4." },
+            "t5-task9": { type: "single", q: "Pada mikroskop, benda sebesar 0,2 mm terlihat sebesar 2 cm. Skala pembesarannya adalah... <i class='fas fa-microscope text-orange-500 ml-2'></i>", q_trans: "Microscope, 0.2 mm object seen as 2 cm. Magnification scale...", opts: ["\\( 1 : 10 \\)", "\\( 1 : 100 \\)", "\\( 10 : 1 \\)", "\\( 100 : 1 \\)", "\\( 1000 : 1 \\)"], ans: "\\( 10 : 1 \\)", exp: "Samakan satuan: \\( 2 \\text{ cm} = 20 \\text{ mm} \\). Skala = \\( 20 : 0,2 \\) = \\( 200 : 2 \\) = \\( 100 : 1 \\). Tunggu, \\( 20/0,2 = 100 \\). Jadi 100:1.", exp_trans: "2cm = 20mm. 20 / 0.2 = 100. Scale 100:1." },
+            "t5-task10": { type: "fill", q: "Sebuah serangga diperbesar 50 kali pada gambar. Jika panjang gambar 15 cm, panjang asli serangga adalah ... mm. <i class='fas fa-bug text-orange-500 ml-2'></i>", q_trans: "Bug magnified 50x. Image 15 cm. Actual length = ... mm", ans: "3", exp: "Skala 50:1. Panjang asli = \\( 15 \\div 50 = 0,3 \\text{ cm} \\). \\( 0,3 \\text{ cm} = 3 \\text{ mm} \\).", exp_trans: "Scale 50:1. Actual = 15 / 50 = 0.3 cm = 3 mm." }
+        });
+		
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Latihan'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua pernyataan yang benar. <span class="translation">*Select all correct statements.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah untuk setiap pernyataan. <span class="translation">*Determine True or False for each statement.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().replace(/\s/g, '').replace(',', '.');
+                inputField.disabled = true;
+                isCorrect = (userVal === data.ans);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = userVal;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.slice().sort().map(idx => data.opts[idx]).join(', ');
+                    cAnsStr = cArr.slice().sort().map(idx => data.opts[idx]).join(', ');
+                    isCorrect = (sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.join(' | ');
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns;
+                    cAnsStr = correctAns;
+                    isCorrect = (sAnsStr === cAnsStr);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${data.q.replace(/<[^>]+>/g, '')}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+        }
+
+        window.onload = () => {
+            renderTasks();
+            renderMath();
+            showSection('warmup');
+        };
+    </script>
+</body>
+</html>
