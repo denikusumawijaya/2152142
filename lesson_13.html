@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Rasio: Laju Perubahan Satuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; padding: 0; border: 0; background: transparent; }
+        .collapse-content.open { max-height: 2000px; padding: 1.5rem; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 0.5rem; margin-top: 1rem; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <marker id="arr1" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Rasio - Laju Perubahan Satuan</p>
+            <p class="translation text-indigo-200">Topic: Ratio - Rate of Unit Change</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Class Rules <br><span class="translation text-gray-500">Aturan Kelas</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Berbicara secara bergantian. <span class="translation">Take turns speaking.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Meminta izin jika ingin meninggalkan kelas. <span class="translation">Ask permission if you want to leave the class.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Menyalakan kamera dan microphone jika diperlukan. <span class="translation">Turn on camera and microphone if needed.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Select topic to navigate <span class="translation text-indigo-300 block">Pilih topik untuk navigasi</span></p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup">
+                            <div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro">
+                            <div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review">
+                            <div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem">
+                            <div class="font-semibold text-sm text-gray-800">Problem Introduction</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided">
+                            <div class="font-semibold text-sm text-gray-800">Guided Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent">
+                            <div class="font-semibold text-sm text-gray-800">Independent Practice</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation">
+                            <div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div>
+                            <div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div>
+                        </a>
+                    </li>
+                    <hr class="my-3 border-gray-200">
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5">
+                            <div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div>
+                            <div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Mengingat Kembali: Konsep Rasio <i class="fas fa-scale-balanced text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Recall: The Concept of Ratio</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="50" cy="70" r="30" fill="#3b82f6" opacity="0.7"/>
+                                    <text x="50" y="75" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold">3</text>
+                                    <text x="90" y="75" font-size="20" fill="#333" text-anchor="middle">:</text>
+                                    <circle cx="130" cy="70" r="20" fill="#ef4444" opacity="0.7"/>
+                                    <text x="130" y="75" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold">2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Pada pertemuan sebelumnya, kita telah mempelajari rasio. Rasio adalah perbandingan dua kuantitas dengan satuan yang sama. Misalnya, rasio apel dan jeruk adalah \( 3:2 \). <span class="translation">In the previous meeting, we learned about ratios. A ratio is a comparison of two quantities with the same unit. For example, the ratio of apples to oranges is \( 3:2 \).</span></p>
+                                <p class="mt-2">Rasio bisa ditulis dalam bentuk pecahan, \( \frac{3}{2} \). Jika kita melipatgandakan kedua bilangan dengan faktor yang sama, nilainya tetap. <span class="translation">A ratio can be written as a fraction, \( \frac{3}{2} \). If we multiply both numbers by the same factor, the value remains the same.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Sifat Rasio</p>
+                            <p class="mt-1">Rasio senilai berarti jika kita mengalikan atau membagi kedua suku dengan bilangan yang sama, rasio tidak berubah. <span class="translation">Equivalent ratios mean that if we multiply or divide both terms by the same number, the ratio doesn't change.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( a : b = ka : kb \) untuk \( k \neq 0 \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Memahami Konsep Laju <i class="fas fa-gauge-high text-green-400 ml-2"></i></h2>
+                        <p class="translation">Understanding the Concept of Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="100" width="140" height="10" fill="#333"/>
+                                    <path d="M 40 100 L 40 60 L 80 60 L 80 100" fill="none" stroke="#10b981" stroke-width="3"/>
+                                    <circle cx="60" cy="50" r="10" fill="#10b981"/>
+                                    <text x="100" y="70" font-size="12" fill="#10b981">60 km/jam</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sekarang, kita masuk ke *Laju (Rate)*. Laju adalah perbandingan dua kuantitas dengan **satuan yang berbeda**. Contohnya, mobil menempuh \( 60 \text{ km} \) dalam \( 1 \text{ jam} \). <span class="translation">Now, we move on to Rate. A rate is a comparison of two quantities with **different units**. For example, a car travels \( 60 \text{ km} \) in \( 1 \text{ hour} \).</span></p>
+                                <p class="mt-2">Laju sering ditulis dengan tanda "/", seperti \( \text{km/jam} \) atau \( \text{meter/sekon} \). <span class="translation">Rates are often written with a "/", like \( \text{km/h} \) or \( \text{m/s} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Beda Rasio dan Laju</p>
+                            <p class="mt-1">Jika satuan sama (apel:apel), itu rasio. Jika satuan beda (km:jam), itu laju. <span class="translation">If units are the same (apples:apples), it's a ratio. If units differ (km:hour), it's a rate.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Laju} = \frac{\text{Perubahan Kuantitas A}}{\text{Perubahan Kuantitas B}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Laju Satuan (Unit Rate) <i class="fas fa-tag text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Unit Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="40" y="30" width="100" height="80" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="90" y="60" font-size="14" text-anchor="middle" fill="#333">Rp 20.000</text>
+                                    <text x="90" y="85" font-size="12" text-anchor="middle" fill="#666">Untuk 4 buah</text>
+                                    <path d="M 90 100 L 90 120 M 80 120 L 100 120 M 85 110 L 90 120 L 95 110" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="130" y="130" font-size="10" text-anchor="middle" fill="#ef4444" font-weight="bold">Rp 5.000/buah</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Laju Satuan (Unit Rate) adalah laju yang disederhanakan sehingga penyebutnya bernilai \( 1 \). Contoh: Jika 4 buah apel berharga Rp 20.000, maka harga satunya adalah Rp 5.000 per buah. <span class="translation">A Unit Rate is a rate simplified so that the denominator is \( 1 \). Example: If 4 apples cost Rp 20,000, then the unit rate is Rp 5,000 per apple.</span></p>
+                                <p class="mt-2">Ini sangat berguna untuk membandingkan harga atau kecepatan secara adil. <span class="translation">This is very useful for comparing prices or speeds fairly.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Mencari Unit Rate</p>
+                            <p class="mt-1">Bagi pembilang dan penyebut dengan angka di penyebut agar penyebut menjadi 1. <span class="translation">Divide both numerator and denominator by the denominator to make it 1.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Unit Rate} = \frac{\text{Total Nilai}}{\text{Total Jumlah}} \div \text{Total Jumlah} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Koneksi Dunia Nyata: Penukaran Mata Uang <i class="fas fa-money-bill-transfer text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Real-World Connection: Currency Exchange</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="60" cy="70" r="25" fill="#f59e0b" stroke="#333" stroke-width="2"/>
+                                    <text x="60" y="75" font-size="20" fill="#333" text-anchor="middle" font-weight="bold">$</text>
+                                    <path d="M 90 70 L 120 70 M 110 60 L 120 70 L 110 80" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                                    <rect x="125" y="50" width="40" height="40" rx="5" fill="#ef4444" stroke="#333" stroke-width="2"/>
+                                    <text x="145" y="75" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold">Rp</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Ketika kamu bepergian ke luar negeri, kamu harus menukar uang. Laju perubahan satuan di sini disebut **kurs**. Misalnya, \( \$1 = \text{Rp} 15.500 \). <span class="translation">When traveling abroad, you must exchange money. The rate of unit change here is called the exchange rate. For example, \( \$1 = \text{Rp} 15,500 \).</span></p>
+                                <p class="mt-2">Jika kamu punya \$10, maka nilainya dalam Rupiah adalah \( 10 \times 15.500 = \text{Rp} 155.000 \). <span class="translation">If you have \$10, its value in Rupiah is \( 10 \times 15,500 = \text{Rp} 155,000 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Perkalian Lintas Satuan</p>
+                            <p class="mt-1">Untuk mengubah satuan asing ke satuan lokal, kalikan jumlah dengan nilai tukar (kurs). <span class="translation">To convert foreign units to local units, multiply the amount by the exchange rate.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Nilai Lokal} = \text{Jumlah Asing} \times \text{Kurs} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Konsumsi Bahan Bakar <i class="fas fa-gas-pump text-green-400 ml-2"></i></h2>
+                        <p class="translation">Fuel Consumption</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="50" y="20" width="80" height="120" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <rect x="50" y="60" width="80" height="80" fill="#10b981" opacity="0.5"/>
+                                    <text x="90" y="100" font-size="12" text-anchor="middle" fill="#333" font-weight="bold">5 Liter</text>
+                                    <text x="90" y="140" font-size="10" text-anchor="middle" fill="#666">Untuk 50 km</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Mobil Deni menghabiskan 5 liter bensin untuk menempuh jarak 50 km. Berapa liter bensin yang dibutuhkan untuk 1 km? <span class="translation">Deni's car consumes 5 liters of fuel to travel 50 km. How many liters of fuel are needed for 1 km?</span></p>
+                                <p class="mt-2">Ini adalah laju konsumsi bahan bakar: \( \frac{5 \text{ liter}}{50 \text{ km}} = \frac{1 \text{ liter}}{10 \text{ km}} \). Artinya, 1 liter untuk 10 km. <span class="translation">This is the fuel consumption rate: \( \frac{5 \text{ liters}}{50 \text{ km}} = \frac{1 \text{ liter}}{10 \text{ km}} \). Meaning, 1 liter for 10 km.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Efisiensi Bahan Bakar</p>
+                            <p class="mt-1">Semakin kecil nilai liter per km, semakin hemat bahan bakar mobil tersebut. <span class="translation">The smaller the liter per km value, the more fuel-efficient the car is.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Laju Konsumsi} = \frac{\text{Total Liter}}{\text{Total km}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Kecepatan Kendaraan <i class="fas fa-car-side text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Vehicle Speed</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M 20 100 L 40 80 L 60 80 L 90 70 L 140 70 L 160 80 L 160 100" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <circle cx="50" cy="100" r="10" fill="#333"/>
+                                    <circle cx="130" cy="100" r="10" fill="#333"/>
+                                    <text x="90" y="60" font-size="12" text-anchor="middle" fill="#8b5cf6" font-weight="bold">80 km/jam</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kecepatan adalah laju perubahan jarak terhadap waktu. Jika sepeda motor melaju dengan kecepatan 80 km/jam, berapa km yang ditempuh dalam 3 jam? <span class="translation">Speed is the rate of change of distance with respect to time. If a motorcycle travels at 80 km/h, how many km are covered in 3 hours?</span></p>
+                                <p class="mt-2">Rumusnya adalah \( \text{Jarak} = \text{Kecepatan} \times \text{Waktu} \). Maka, \( 80 \times 3 = 240 \text{ km} \). <span class="translation">The formula is \( \text{Distance} = \text{Speed} \times \text{Time} \). So, \( 80 \times 3 = 240 \text{ km} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Segitiga S-W-J</p>
+                            <p class="mt-1">Tutup yang kamu cari. Cari Jarak? Kalikan S dengan W. Cari Waktu? Bagi Jarak dengan S. <span class="translation">Cover what you're looking for. Find Distance? Multiply S and T. Find Time? Divide Distance by S.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( v = \frac{s}{t} \implies s = v \times t \implies t = \frac{s}{v} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Dari Rasio ke Laju <i class="fas fa-arrow-right-arrow-left text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">From Ratio to Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="50" width="60" height="60" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="50" y="85" font-size="12" text-anchor="middle" fill="#333">Rasio</text>
+                                    <text x="50" y="100" font-size="10" text-anchor="middle" fill="#666">2 : 3</text>
+                                    <path d="M 90 80 L 120 80 M 110 70 L 120 80 L 110 90" stroke="#333" stroke-width="2" fill="none"/>
+                                    <rect x="130" y="50" width="40" height="60" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="150" y="85" font-size="12" text-anchor="middle" fill="#333">Laju</text>
+                                    <text x="150" y="100" font-size="10" text-anchor="middle" fill="#666">2 m/s</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Rasio adalah "berapa kali", sedangkan Laju adalah "berapa satuan per satuan lain". Rasio 2:3 berarti 2 bagian apel untuk 3 bagian jeruk. Laju \( 2 \text{ m/s} \) berarti 2 meter per 1 sekon. <span class="translation">Ratio is "how many times", while Rate is "how many units per other unit". Ratio 2:3 means 2 parts apple to 3 parts orange. Rate \( 2 \text{ m/s} \) means 2 meters per 1 second.</span></p>
+                                <p class="mt-2">Pemahaman rasio sangat krusial karena laju pada dasarnya adalah rasio dengan satuan berbeda. <span class="translation">Understanding ratio is crucial because rate is essentially a ratio with different units.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Perhatikan Satuan!</p>
+                            <p class="mt-1">Tulis selalu satuan di belakang angka saat menghitung laju. Ini membedakannya dari rasio biasa. <span class="translation">Always write units behind numbers when calculating rate. This distinguishes it from a plain ratio.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Laju} = \frac{\text{Nilai A (Satuan A)}}{\text{Nilai B (Satuan B)}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Skala dan Kecepatan pada Peta <i class="fas fa-map text-green-400 ml-2"></i></h2>
+                        <p class="translation">Scale and Speed on Maps</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="220" height="120" viewBox="0 0 220 120">
+                                    <rect x="10" y="10" width="200" height="100" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <path d="M 30 30 L 100 80 L 180 40" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                    <circle cx="30" cy="30" r="4" fill="#ef4444"/>
+                                    <circle cx="180" cy="40" r="4" fill="#ef4444"/>
+                                    <text x="100" y="110" font-size="10" text-anchor="middle" fill="#333">Skala 1:100.000</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Di pertemuan sebelumnya, kita belajar skala. Jika skala peta \( 1:100.000 \), maka 1 cm di peta = 100.000 cm = 1 km di dunia nyata. <span class="translation">In the previous meeting, we learned scale. If map scale is \( 1:100,000 \), then 1 cm on map = 100,000 cm = 1 km in real life.</span></p>
+                                <p class="mt-2">Jika jarak peta 5 cm, maka jarak sebenarnya adalah 5 km. Jika ditempuh dalam 1 jam, kecepatannya adalah 5 km/jam. <span class="translation">If map distance is 5 cm, real distance is 5 km. If traveled in 1 hour, speed is 5 km/h.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Konversi Satuan Panjang</p>
+                            <p class="mt-1">Ingat: \( 1 \text{ km} = 1000 \text{ m} = 100.000 \text{ cm} \). Gunakan ini untuk menyatukan satuan skala. <span class="translation">Remember: \( 1 \text{ km} = 1000 \text{ m} = 100,000 \text{ cm} \). Use this to unify scale units.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Jarak Nyata} = \text{Jarak Peta} \times \text{Skala} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Perbandingan Senilai dalam Laju <i class="fas fa-equals text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Proportional Comparison in Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="130" viewBox="0 0 200 130">
+                                    <text x="40" y="40" font-size="14" fill="#333">2 liter</text>
+                                    <text x="40" y="60" font-size="12" fill="#666">= Rp 10.000</text>
+                                    <text x="140" y="40" font-size="14" fill="#333">4 liter</text>
+                                    <text x="140" y="60" font-size="12" fill="#666">= Rp ?</text>
+                                    <path d="M 80 50 L 120 50 M 110 40 L 120 50 L 110 60" stroke="#8b5cf6" stroke-width="2" fill="none"/>
+                                    <text x="100" y="100" font-size="12" text-anchor="middle" fill="#ef4444" font-weight="bold">x2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Laju menggunakan konsep perbandingan senilai. Jika 2 liter bensin berharga Rp 10.000, maka 4 liter (dua kalinya) berharga \( 2 \times \text{Rp} 10.000 = \text{Rp} 20.000 \). <span class="translation">Rate uses the concept of equivalent proportion. If 2 liters of fuel cost Rp 10,000, then 4 liters (double the amount) cost \( 2 \times \text{Rp} 10,000 = \text{Rp} 20,000 \).</span></p>
+                                <p class="mt-2">Kunci: kalikan atau bagi kedua kuantitas dengan bilangan yang sama. <span class="translation">Key: multiply or divide both quantities by the same number.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Cross-Multiplication</p>
+                            <p class="mt-1">Jika \( \frac{a}{b} = \frac{c}{d} \), maka \( a \times d = b \times c \). Ini jalan pintas menyelesaikan laaju. <span class="translation">If \( \frac{a}{b} = \frac{c}{d} \), then \( a \times d = b \times c \). This is a shortcut to solve rates.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{a}{b} = \frac{ka}{kb} \implies a \times kb = b \times ka \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+            
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Soal Cerita Kecepatan <i class="fas fa-route text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Speed Word Problem</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="40" cy="70" r="15" fill="#3b82f6"/>
+                                    <text x="40" y="75" font-size="12" fill="#fff" text-anchor="middle">A</text>
+                                    <path d="M 50 70 L 120 70" stroke="#333" stroke-width="2" stroke-dasharray="5"/>
+                                    <circle cx="140" cy="70" r="15" fill="#ef4444"/>
+                                    <text x="140" y="75" font-size="12" fill="#fff" text-anchor="middle">B</text>
+                                    <text x="85" y="60" font-size="10" text-anchor="middle" fill="#666">120 km</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Deni bersepeda dari kota A ke kota B yang berjarak 120 km dalam waktu 3 jam. Berapa kecepatan rata-rata Deni? <span class="translation">Deni cycles from city A to city B, 120 km apart, in 3 hours. What is Deni's average speed?</span></p>
+                                <p class="mt-2">Gunakan rumus laju kecepatan: \( v = \frac{s}{t} = \frac{120 \text{ km}}{3 \text{ jam}} = 40 \text{ km/jam} \). <span class="translation">Use the speed rate formula: \( v = \frac{s}{t} = \frac{120 \text{ km}}{3 \text{ hours}} = 40 \text{ km/h} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Kecepatan Rata-rata</p>
+                            <p class="mt-1">Kecepatan rata-rata BUKAN rata-rata dua kecepatan, melainkan total jarak dibagi total waktu. <span class="translation">Average speed is NOT the average of two speeds, but total distance divided by total time.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( v_{\text{rata}} = \frac{s_{\text{total}}}{t_{\text{total}}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Mencari Harga Satuan <i class="fas fa-shopping-cart text-green-400 ml-2"></i></h2>
+                        <p class="translation">Finding Unit Price</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="130" viewBox="0 0 200 130">
+                                    <path d="M 50 80 L 150 80 L 140 120 L 60 120 Z" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <circle cx="80" cy="60" r="10" fill="#ef4444"/>
+                                    <circle cx="120" cy="50" r="10" fill="#ef4444"/>
+                                    <text x="100" y="40" font-size="10" text-anchor="middle" fill="#333">3 kg = Rp 45.000</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Di pasar, 3 kg apel dijual seharga Rp 45.000. Berapa harga 1 kg apel tersebut? <span class="translation">At the market, 3 kg of apples are sold for Rp 45,000. What is the price of 1 kg of apples?</span></p>
+                                <p class="mt-2">Ini adalah laju harga per berat: \( \frac{\text{Rp} 45.000}{3 \text{ kg}} = \text{Rp} 15.000/\text{kg} \). <span class="translation">This is the rate of price per weight: \( \frac{\text{Rp} 45,000}{3 \text{ kg}} = \text{Rp} 15,000/\text{kg} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Membagi Total</p>
+                            <p class="mt-1">Untuk mencari harga satuan, selalu bagi total harga dengan total jumlah barang. <span class="translation">To find the unit price, always divide the total price by the total amount of goods.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Harga Satuan} = \frac{\text{Total Harga}}{\text{Total Jumlah}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Debit Air <i class="fas fa-faucet-drip text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Water Flow Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="30" y="20" width="40" height="20" fill="#8b5cf6"/>
+                                    <path d="M 50 40 L 50 60 L 60 70 L 50 80 L 50 120" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                    <path d="M 52 85 L 48 85 L 50 90 Z" fill="#3b82f6"/>
+                                    <text x="100" y="70" font-size="12" fill="#8b5cf6">10 L / menit</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Debit adalah laju aliran air. Jika keran mengeluarkan 10 liter air setiap menit, berapa liter air yang keluar dalam 5 menit? <span class="translation">Discharge is the rate of water flow. If a tap releases 10 liters of water every minute, how many liters come out in 5 minutes?</span></p>
+                                <p class="mt-2">Laju debit \( = \frac{10 \text{ L}}{1 \text{ menit}} \). Maka, dalam 5 menit = \( 10 \times 5 = 50 \text{ L} \). <span class="translation">Discharge rate \( = \frac{10 \text{ L}}{1 \text{ minute}} \). So, in 5 minutes = \( 10 \times 5 = 50 \text{ L} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Debit = Volume / Waktu</p>
+                            <p class="mt-1">Pastikan satuan volume (L, m³) dan waktu (sekon, menit, jam) sudah konsisten sebelum menghitung. <span class="translation">Ensure volume (L, m³) and time (second, minute, hour) units are consistent before calculating.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( Q = \frac{V}{t} \implies V = Q \times t \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Konversi Satuan Kecepatan (km/jam ke m/s) <i class="fas fa-exchange-alt text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Speed Unit Conversion (km/h to m/s)</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="130" viewBox="0 0 180 130">
+                                    <rect x="10" y="40" width="70" height="50" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="45" y="70" font-size="14" text-anchor="middle" fill="#333">36 km/jam</text>
+                                    <path d="M 85 65 L 115 65 M 105 55 L 115 65 L 105 75" stroke="#333" stroke-width="2"/>
+                                    <rect x="120" y="40" width="60" height="50" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="150" y="70" font-size="14" text-anchor="middle" fill="#333">? m/s</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Bagaimana mengubah \( 36 \text{ km/jam} \) menjadi \( \text{m/s} \)? <span class="translation">How to convert \( 36 \text{ km/h} \) to \( \text{m/s} \)?</span></p>
+                                <p class="mt-2">\( 1 \text{ km} = 1000 \text{ m} \) dan \( 1 \text{ jam} = 3600 \text{ sekon} \). Maka, \( 36 \text{ km/jam} = \frac{36 \times 1000}{3600} = \frac{36000}{3600} = 10 \text{ m/s} \). <span class="translation">Then, \( 36 \text{ km/h} = \frac{36 \times 1000}{3600} = \frac{36000}{3600} = 10 \text{ m/s} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Jalan Pintas Konversi</p>
+                            <p class="mt-1">Untuk km/jam ke m/s, bagi dengan \( 3.6 \). Untuk m/s ke km/jam, kali dengan \( 3.6 \). <span class="translation">For km/h to m/s, divide by \( 3.6 \). For m/s to km/h, multiply by \( 3.6 \).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{m/s} = \frac{\text{km/jam}}{3.6} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Laju Kecepatan Arus <i class="fas fa-water text-green-400 ml-2"></i></h2>
+                        <p class="translation">Current Flow Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="120" viewBox="0 0 200 120">
+                                    <path d="M 20 60 Q 50 40 80 60 T 140 60 T 200 60" fill="none" stroke="#10b981" stroke-width="3"/>
+                                    <path d="M 20 80 Q 50 60 80 80 T 140 80 T 200 80" fill="none" stroke="#10b981" stroke-width="2" opacity="0.5"/>
+                                    <path d="M 150 40 L 180 60 L 150 80" fill="none" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="120" y="30" font-size="12" text-anchor="middle" fill="#333">Perahu 20 km/jam</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebuah perahu bergerak melawan arus. Kecepatan perahu di air tenang 20 km/jam, kecepatan arus 4 km/jam. Berapa kecepatan perahu melawan arus? <span class="translation">A boat moves against the current. Boat speed in still water is 20 km/h, current speed is 4 km/h. What is the boat's speed against the current?</span></p>
+                                <p class="mt-2">Melawan arus berarti mengurangi: \( 20 - 4 = 16 \text{ km/jam} \). <span class="translation">Against the current means subtracting: \( 20 - 4 = 16 \text{ km/h} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Arah Arus</p>
+                            <p class="mt-1">Melawan arus: kurangi kecepatan. Mengikuti arus: tambah kecepatan. <span class="translation">Against current: subtract speed. With current: add speed.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( v_{\text{melawan}} = v_{\text{perahu}} - v_{\text{arus}} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Laju Gabungan Pekerjaan <i class="fas fa-people-group text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Combined Work Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="60" cy="50" r="15" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <rect x="45" y="65" width="30" height="40" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="60" y="120" font-size="10" text-anchor="middle" fill="#666">A: 4 jam</text>
+                                    <circle cx="120" cy="50" r="15" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <rect x="105" y="65" width="30" height="40" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="120" y="120" font-size="10" text-anchor="middle" fill="#666">B: 6 jam</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika A bisa mengecat tembok dalam 4 jam, dan B dalam 6 jam, berapa lama jika mereka bekerja sama? <span class="translation">If A can paint a wall in 4 hours, and B in 6 hours, how long if they work together?</span></p>
+                                <p class="mt-2">Laju A = \( \frac{1}{4} \) pekerjaan/jam. Laju B = \( \frac{1}{6} \) pekerjaan/jam. Laju gabungan = \( \frac{1}{4} + \frac{1}{6} = \frac{5}{12} \). Maka waktu = \( \frac{12}{5} = 2.4 \) jam. <span class="translation">A's rate = \( \frac{1}{4} \) job/h. B's rate = \( \frac{1}{6} \) job/h. Combined = \( \frac{1}{4} + \frac{1}{6} = \frac{5}{12} \). So time = \( \frac{12}{5} = 2.4 \) hours.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Laju Kerja = 1 / Waktu</p>
+                            <p class="mt-1">Jumlahkan laju (1/waktu) mereka, lalu balikkan hasilnya untuk mendapatkan waktu bersama. <span class="translation">Sum their rates (1/time), then invert the result to get the combined time.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \frac{1}{t_{\text{gabungan}}} = \frac{1}{t_A} + \frac{1}{t_B} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Kecepatan Rata-rata Perjalanan <i class="fas fa-stopwatch text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Average Travel Speed</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="130" viewBox="0 0 180 130">
+                                    <path d="M 20 100 A 40 40 0 0 1 100 100" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                                    <line x1="60" y1="100" x2="60" y2="80" stroke="#ef4444" stroke-width="2"/>
+                                    <circle cx="60" cy="100" r="5" fill="#333"/>
+                                    <text x="60" y="70" font-size="10" text-anchor="middle" fill="#ef4444">60 km/j</text>
+                                    <text x="60" y="115" font-size="10" text-anchor="middle" fill="#333">0 detik</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Deni berlari ke sekolah dengan kecepatan 6 m/s, lalu pulang berjalan kaki dengan kecepatan 2 m/s. Jika jarak sekolah 600 m, berapa kecepatan rata-ratanya? <span class="translation">Deni runs to school at 6 m/s, then walks home at 2 m/s. If school is 600 m away, what is the average speed?</span></p>
+                                <p class="mt-2">Waktu perg = \( 600/6 = 100 \) s. Waktu pulang = \( 600/2 = 300 \) s. Total jarak = 1200 m. Total waktu = 400 s. Kecepatan rata-rata = \( \frac{1200}{400} = 3 \text{ m/s} \). <span class="translation">Time there = \( 600/6 = 100 \) s. Time back = \( 600/2 = 300 \) s. Total distance = 1200 m. Total time = 400 s. Average speed = \( \frac{1200}{400} = 3 \text{ m/s} \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Jangan Ditengah!</p>
+                            <p class="mt-1">Kecepatan rata-rata bukan \( \frac{6+2}{2} = 4 \). Harus gunakan total jarak dan total waktu. <span class="translation">Average speed is not \( \frac{6+2}{2} = 4 \). Must use total distance and total time.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( v_{\text{rata}} = \frac{s_1 + s_2}{t_1 + t_2} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Laju Produksi Pabrik <i class="fas fa-industry text-green-400 ml-2"></i></h2>
+                        <p class="translation">Factory Production Rate</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="200" height="120" viewBox="0 0 200 120">
+                                    <rect x="30" y="50" width="140" height="70" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <rect x="50" y="20" width="20" height="30" fill="#10b981"/>
+                                    <rect x="90" y="20" width="20" height="30" fill="#10b981"/>
+                                    <rect x="130" y="20" width="20" height="30" fill="#10b981"/>
+                                    <path d="M 160 40 L 180 40 L 180 50 L 160 50" fill="#8b5cf6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebuah pabrik memproduksi 500 botol minuman dalam 2 jam. Jika pabrik beroperasi 8 jam, berapa total botol yang dihasilkan? <span class="translation">A factory produces 500 bottles in 2 hours. If the factory operates for 8 hours, how many total bottles are produced?</span></p>
+                                <p class="mt-2">Laju produksi = \( \frac{500}{2} = 250 \) botol/jam. Dalam 8 jam: \( 250 \times 8 = 2000 \) botol. <span class="translation">Production rate = \( \frac{500}{2} = 250 \) bottles/hour. In 8 hours: \( 250 \times 8 = 2000 \) bottles.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Cari Satuan Waktu Dulu</p>
+                            <p class="mt-1">Pecahkan masalah laju produksi dengan mencari hasil per jam (atau per menit) dulu, baru kalikan. <span class="translation">Solve production rate problems by finding output per hour (or minute) first, then multiply.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \text{Total} = \frac{\text{Produksi}}{\text{Waktu dasar}} \times \text{Total Waktu} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Densitas (Massa Jenis) <i class="fas fa-weight-hanging text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Density</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="160" height="140" viewBox="0 0 160 140">
+                                    <rect x="40" y="40" width="80" height="80" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="80" y="85" font-size="12" text-anchor="middle" fill="#666">2 m³</text>
+                                    <path d="M 100 30 L 120 10 L 140 30 L 120 50 Z" fill="#ef4444" opacity="0.8"/>
+                                    <text x="120" y="25" font-size="10" text-anchor="middle" fill="#fff">6 ton</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Densitas adalah laju massa per volume. Jika 2 m³ beton memiliki massa 6 ton, berapa densitasnya? <span class="translation">Density is the rate of mass per volume. If 2 m³ of concrete has a mass of 6 tons, what is its density?</span></p>
+                                <p class="mt-2">Densitas \( = \frac{6 \text{ ton}}{2 \text{ m}^3} = 3 \text{ ton/m}^3 \). <span class="translation">Density \( = \frac{6 \text{ tons}}{2 \text{ m}^3} = 3 \text{ tons/m}^3 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Tricks: Rumus Densitas</p>
+                            <p class="mt-1">Densitas menggambarkan beratnya setiap satuan volume benda. Semakin besar, semakin berat per volumenya. <span class="translation">Density describes the weight of each unit volume of an object. The larger it is, the heavier it is per volume.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> To The Point Formula: \( \rho = \frac{m}{V} \)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Konsolidasi & Refleksi</h2>
+                    <p class="translation">Consolidation & Reflection</p>
+                    <p>Anda telah menguasai Rasio: Laju Perubahan Satuan! Konsep laju kecepatan, harga satuan, dan konversi unit akan sangat berguna dalam kehidupan sehari-hari. <span class="translation">You have mastered Ratio: Rate of Unit Change! The concepts of speed, unit price, and unit conversion will be very useful in everyday life.</span></p>
+                    <p class="mt-2">Teruslah berlatih soal cerita untuk memperkuat intuisi matematika Anda. <span class="translation">Keep practicing word problems to strengthen your mathematical intuition.</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Go to learn.algonova.id <span class="translation text-sm italic">Pergi ke learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Rasio - Laju Perubahan Satuan</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+    <script>
+        // ====== MATH QUESTIONS DATA (PART 1: WARMUP, INTRO, REVIEW, PROBLEM, GUIDED, INDEPENDENT) ======
+        const questions = {};
+        Object.assign(questions, {
+            // SPIRAL REVIEW WARM-UP
+            "w-task1": { type: "single", q: "Sebuah kantong berisi 3 permen mint dan 5 permen kopi. Bagaimana cara menuliskan rasio permen mint terhadap total permen di dalam kantong? <i class='fas fa-candy-cane text-blue-500 ml-2'></i>", q_trans: "A bag contains 3 mints and 5 candies. How to write the ratio of mints to total candies?", opts: ["\\( 3:5 \\)", "\\( 3:8 \\)", "\\( 5:3 \\)", "\\( 8:3 \\)", "\\( 5:8 \\)"], ans: "\\( 3:8 \\)", exp: "Total permen = 3 (mint) + 5 (kopi) = 8. Rasio permen mint terhadap total permen adalah 3:8.", exp_trans: "Total candies = 3 (mint) + 5 (coffee) = 8. Ratio of mints to total is 3:8." },
+            "w-task2": { type: "fill", q: "Mobil Budi menempuh jarak 120 km dalam waktu 2 jam. Berapa kecepatan rata-rata mobil Budi (dalam km/jam)? <i class='fas fa-car-side text-blue-500 ml-2'></i>", q_trans: "Budi's car travels 120 km in 2 hours. What is the average speed (in km/h)?", ans: "60", exp: "Kecepatan = Jarak / Waktu = 120 km / 2 jam = 60 km/jam.", exp_trans: "Speed = Distance / Time = 120 km / 2 hours = 60 km/h." },
+            "w-task3": { type: "tf_table", q: "Evaluasi pernyataan berikut tentang rasio dan laju. <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluate the following statements about ratio and rate.", opts: ["Rasio membandingkan dua kuantitas dengan satuan yang sama", "Laju membandingkan dua kuantitas dengan satuan yang berbeda", "Kecepatan (km/jam) adalah contoh rasio", "Harga per buah (Rp/buah) adalah contoh laju"], ans: ["B", "B", "S", "B"], exp: "1. B, rasio satuan sama. 2. B, laju satuan beda. 3. S, kecepatan adalah laju. 4. B, harga per buah adalah laju.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "w-task4": { type: "single", q: "Jika 4 kg jeruk dijual seharga Rp 20.000, berapakah harga 1 kg jeruk tersebut? <i class='fas fa-weight-hanging text-blue-500 ml-2'></i>", q_trans: "If 4 kg of oranges cost Rp 20,000, what is the price of 1 kg?", opts: ["\\( \\text{Rp} 4.000 \\)", "\\( \\text{Rp} 5.000 \\)", "\\( \\text{Rp} 6.000 \\)", "\\( \\text{Rp} 8.000 \\)", "\\( \\text{Rp} 10.000 \\)"], ans: "\\( \\text{Rp} 5.000 \\)", exp: "Harga satuan = Total Harga / Jumlah = Rp 20.000 / 4 kg = Rp 5.000 per kg.", exp_trans: "Unit price = Total Price / Amount = Rp 20,000 / 4 kg = Rp 5,000 per kg." },
+            "w-task5": { type: "complex", q: "Manakah dari pernyataan berikut yang merupakan LAJU (Rate)? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Which of the following is a RATE?", opts: ["3 apel untuk 2 anak", "\\( 60 \\text{ km/jam} \\)", "\\( 5 \\text{ liter air} \\)", "\\( \\text{Rp} 2.000/\\text{gram} \\)"], ans: [1, 3], exp: "Laju memiliki satuan yang berbeda. 60 km/jam (jarak/waktu) dan Rp 2000/gram (harga/berat) adalah laju.", exp_trans: "Rate has different units. 60 km/h and Rp 2000/g are rates." },
+            "w-task6": { type: "fill", q: "Sebuah keran air mengeluarkan 15 liter air setiap menit. Berapa liter air yang keluar dalam 4 menit? <i class='fas fa-faucet-drip text-blue-500 ml-2'></i>", q_trans: "A tap releases 15 liters per minute. How many liters in 4 minutes?", ans: "60", exp: "Total volume = Laju Debit x Waktu = 15 L/menit x 4 menit = 60 liter.", exp_trans: "Total volume = Rate x Time = 15 L/min x 4 min = 60 liters." },
+            "w-task7": { type: "single", q: "Toko A menjual 5 buku seharga Rp 25.000. Toko B menjual 3 buku seharga Rp 15.000. Manakah yang menawarkan harga satuan yang lebih murah? <i class='fas fa-store text-blue-500 ml-2'></i>", q_trans: "Store A sells 5 books for Rp 25,000. Store B sells 3 books for Rp 15,000. Which offers a cheaper unit price?", opts: ["Toko A", "Toko B", "Harga sama", "Tidak bisa ditentukan", "Toko A jika beli 10 buku"], ans: "Harga sama", exp: "Toko A: 25000 / 5 = Rp 5000/buku. Toko B: 15000 / 3 = Rp 5000/buku. Harga satuan sama-sama Rp 5.000.", exp_trans: "Store A: 5000/book. Store B: 5000/book. Unit price is the same." },
+            "w-task8": { type: "tf_table", q: "Pilih pernyataan yang benar tentang laju perubahan satuan. <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Select true statements about rate of unit change.", opts: ["Laju selalu memiliki penyebut 1", "Mencari harga satuan adalah contoh laju perubahan", "Konversi mata uang termasuk dalam penerapan laju", "Kecepatan dihitung dengan Jarak dikali Waktu"], ans: ["S", "B", "B", "S"], exp: "1. S, itu adalah unit rate (laju satuan). 2. B. 3. B. 4. S, kecepatan = jarak dibagi waktu.", exp_trans: "1. S. 2. B. 3. B. 4. S." },
+            "w-task9": { type: "single", q: "Jika \\( 1 \\text{ USD} = \\text{Rp} 15.000 \\), berapa nilai Rp 60.000 jika ditukar ke USD? <i class='fas fa-money-bill-transfer text-blue-500 ml-2'></i>", q_trans: "If 1 USD = Rp 15,000, how much is Rp 60,000 in USD?", opts: ["\\( 2 \\text{ USD} \\)", "\\( 3 \\text{ USD} \\)", "\\( 4 \\text{ USD} \\)", "\\( 5 \\text{ USD} \\)", "\\( 6 \\text{ USD} \\)"], ans: "\\( 4 \\text{ USD} \\)", exp: "Nilai USD = Rupiah / Kurs = 60000 / 15000 = 4 USD.", exp_trans: "USD Value = Rupiah / Rate = 60000 / 15000 = 4 USD." },
+            "w-task10": { type: "complex", q: "Manakah perhitungan yang BENAR untuk mencari laju satuan (unit rate)? <i class='fas fa-brain text-blue-500 ml-2'></i>", q_trans: "Which calculations are CORRECT for finding unit rate?", opts: ["\\( \\frac{\\text{Rp} 40.000}{4 \\text{ kg}} = \\text{Rp} 10.000/\\text{kg} \\)", "\\( \\frac{120 \\text{ km}}{2 \\text{ jam}} = 60 \\text{ km/jam} \\)", "\\( \\frac{3 \\text{ apel}}{5 \\text{ jeruk}} = 0.6 \\text{ apel/jeruk} \\)", "\\( \\frac{60 \\text{ liter}}{1 \\text{ menit}} = 60 \\text{ menit/liter} \\)"], ans: [0, 1, 2], exp: "1. B, 40000/4 = 10000. 2. B, 120/2 = 60. 3. B, membandingkan apel per jeruk. 4. S, seharusnya 60 liter/menit.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+
+            // INTRODUCTION & REAL-WORLD
+            "i-task1": { type: "single", q: "Ayah membeli 2 liter bensin seharga Rp 20.000. Berapakah harga 1 liter bensin tersebut? <i class='fas fa-gas-pump text-green-500 ml-2'></i>", q_trans: "Father buys 2 liters of fuel for Rp 20,000. What is the price per liter?", opts: ["\\( \\text{Rp} 5.000 \\)", "\\( \\text{Rp} 8.000 \\)", "\\( \\text{Rp} 10.000 \\)", "\\( \\text{Rp} 12.000 \\)", "\\( \\text{Rp} 15.000 \\)"], ans: "\\( \\text{Rp} 10.000 \\)", exp: "Harga satuan = 20000 / 2 = Rp 10.000 per liter.", exp_trans: "Unit price = 20000 / 2 = Rp 10,000 per liter." },
+            "i-task2": { type: "fill", q: "Sebuah sepeda motor melaju dengan kecepatan 40 km/jam. Berapa jarak yang ditempuh dalam waktu 3 jam? <i class='fas fa-motorcycle text-green-500 ml-2'></i>", q_trans: "A motorcycle travels at 40 km/h. How far does it go in 3 hours?", ans: "120", exp: "Jarak = Kecepatan x Waktu = 40 km/jam x 3 jam = 120 km.", exp_trans: "Distance = Speed x Time = 40 km/h x 3 h = 120 km." },
+            "i-task3": { type: "tf_table", q: "Analisis pernyataan berikut tentang skala pada peta. <i class='fas fa-map text-green-500 ml-2'></i>", q_trans: "Analyze statements about map scale.", opts: ["Skala 1:1000 berarti 1 cm di peta = 1000 cm di nyata", "Skala membandingkan jarak peta dengan jarak nyata", "Skala adalah bentuk laju perubahan satuan", "Jika jarak nyata 500m dan skala 1:10000, jarak peta 50cm"], ans: ["B", "B", "S", "S"], exp: "1. B. 2. B. 3. S, skala adalah rasio karena satuan sama (cm:cm). 4. S, 500m = 50000cm. 50000/10000 = 5cm.", exp_trans: "1. B. 2. B. 3. S, scale is a ratio because units are the same. 4. S, 50000/10000 = 5cm." },
+            "i-task4": { type: "single", q: "Andi mengetik 300 kata dalam 5 menit. Berapa laju mengetik Andi per menit? <i class='fas fa-keyboard text-green-500 ml-2'></i>", q_trans: "Andi types 300 words in 5 minutes. What is the typing rate per minute?", opts: ["\\( 30 \\text{ kata/menit} \\)", "\\( 50 \\text{ kata/menit} \\)", "\\( 60 \\text{ kata/menit} \\)", "\\( 75 \\text{ kata/menit} \\)", "\\( 1500 \\text{ kata/menit} \\)"], ans: "\\( 60 \\text{ kata/menit} \\)", exp: "Laju mengetik = Total kata / Waktu = 300 / 5 = 60 kata/menit.", exp_trans: "Typing rate = Total words / Time = 300 / 5 = 60 words/min." },
+            "i-task5": { type: "complex", q: "Pilih situasi yang merepresentasikan LAJU (Rate). <i class='fas fa-check-double text-green-500 ml-2'></i>", q_trans: "Select situations that represent a RATE.", opts: ["3 siswa laki-laki dan 4 siswa perempuan", "Harga 3 buku adalah Rp 30.000", "Mobil melaju 80 km setiap jam", "Pompa air mengalir 10 liter per sekon"], ans: [2, 3], exp: "1. S, rasio. 2. S, ini pernyataan harga total, bukan laju. 3. B, satuan berbeda. 4. B, satuan berbeda.", exp_trans: "1. S. 2. S. 3. B. 4. B." },
+            "i-task6": { type: "fill", q: "Jika 5 buah penghapus berharga Rp 10.000, maka 8 buah penghapus berharga... <i class='fas fa-eraser text-green-500 ml-2'></i>", q_trans: "If 5 erasers cost Rp 10,000, then 8 erasers cost...", ans: "16000", exp: "Harga satuan = 10000 / 5 = 2000. Harga 8 buah = 2000 x 8 = 16000.", exp_trans: "Unit price = 2000. Price for 8 = 16000." },
+            "i-task7": { type: "single", q: "Deni berlari menempuh jarak 100 meter dalam waktu 10 sekon. Berapa kecepatan lari Deni? <i class='fas fa-person-running text-green-500 ml-2'></i>", q_trans: "Deni runs 100 meters in 10 seconds. What is his running speed?", opts: ["\\( 10 \\text{ m/s} \\)", "\\( 20 \\text{ m/s} \\)", "\\( 1000 \\text{ m/s} \\)", "\\( 90 \\text{ m/s} \\)", "\\( 5 \\text{ m/s} \\)"], ans: "\\( 10 \\text{ m/s} \\)", exp: "Kecepatan = Jarak / Waktu = 100 m / 10 s = 10 m/s.", exp_trans: "Speed = Distance / Time = 100 m / 10 s = 10 m/s." },
+            "i-task8": { type: "tf_table", q: "Hubungan antara jarak, kecepatan, dan waktu. <i class='fas fa-clipboard-list text-green-500 ml-2'></i>", q_trans: "Relationship between distance, speed, and time.", opts: ["Waktu = Jarak / Kecepatan", "Jarak = Kecepatan x Waktu", "Kecepatan = Waktu / Jarak", "Laju kecepatan berbanding terbalik dengan waktu jika jarak tetap"], ans: ["B", "B", "S", "B"], exp: "1. B, rumus benar. 2. B, rumus benar. 3. S, seharusnya Kecepatan = Jarak / Waktu. 4. B, v = s/t, jika s tetap, v dan t berbanding terbalik.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "i-task9": { type: "single", q: "Sebuah mesin pabrik menghasilkan 120 kotak sabun dalam 3 jam. Jika mesin bekerja 8 jam, berapa kotak sabun yang dihasilkan? <i class='fas fa-industry text-green-500 ml-2'></i>", q_trans: "A machine produces 120 boxes in 3 hours. If it works 8 hours, how many boxes?", opts: ["\\( 240 \\)", "\\( 320 \\)", "\\( 360 \\)", "\\( 400 \\)", "\\( 960 \\)"], ans: "\\( 320 \\)", exp: "Laju produksi = 120 / 3 = 40 kotak/jam. Dalam 8 jam = 40 x 8 = 320 kotak.", exp_trans: "Rate = 40 boxes/h. In 8 h = 320 boxes." },
+            "i-task10": { type: "complex", q: "Pilih cara yang benar untuk menemukan biaya total jika diketahui laju dan jumlah. <i class='fas fa-check-circle text-green-500 ml-2'></i>", q_trans: "Select correct ways to find total cost given rate and amount.", opts: ["Total Biaya = Laju Biaya x Jumlah", "Jika 1 kg = Rp 10.000, maka 3 kg = Rp 30.000", "Total Biaya = Jumlah / Laju Biaya", "Jika 1 liter = Rp 5.000, maka 4 liter = Rp 20.000"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, Total Biaya = Laju x Jumlah. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+
+            // REVIEW OF PRIOR KNOWLEDGE
+            "r-task1": { type: "single", q: "Skala pada peta adalah 1:200.000. Jika jarak kota A dan B di peta adalah 5 cm, berapakah jarak sebenarnya? <i class='fas fa-map-location text-purple-500 ml-2'></i>", q_trans: "Map scale is 1:200,000. If map distance is 5 cm, what is real distance?", opts: ["\\( 1 \\text{ km} \\)", "\\( 5 \\text{ km} \\)", "\\( 10 \\text{ km} \\)", "\\( 20 \\text{ km} \\)", "\\( 50 \\text{ km} \\)"], ans: "\\( 10 \\text{ km} \\)", exp: "Jarak Nyata = 5 x 200.000 = 1.000.000 cm. Karena 1 km = 100.000 cm, maka 1.000.000 cm = 10 km.", exp_trans: "Real distance = 1,000,000 cm = 10 km." },
+            "r-task2": { type: "fill", q: "Sebuah peta memiliki skala 1:50. Jarak sebenarnya antara dua desa adalah 250 meter. Berapa cm jarak kedua desa di peta? <i class='fas fa-draw-polygon text-purple-500 ml-2'></i>", q_trans: "Map scale 1:50. Real distance is 250 meters. How many cm on map?", ans: "500", exp: "Jarak peta = Jarak Nyata / Skala. 250 m = 25.000 cm. 25.000 / 50 = 500 cm.", exp_trans: "Map dist = 25000 cm / 50 = 500 cm." },
+            "r-task3": { type: "tf_table", q: "Pernyataan tentang rasio senilai. <i class='fas fa-list-ul text-purple-500 ml-2'></i>", q_trans: "Statements about equivalent ratios.", opts: ["Rasio 2:3 sama dengan 4:6", "Rasio 5:7 sama dengan 10:14", "Rasio 1:4 sama dengan 2:5", "Rasio senilai didapat dengan menambah/mengurangi kedua suku"], ans: ["B", "B", "S", "S"], exp: "1. B. 2. B. 3. S, seharusnya 2:8. 4. S, didapat dengan mengalikan/membagi.", exp_trans: "1. B. 2. B. 3. S. 4. S." },
+            "r-task4": { type: "single", q: "Jika \\( \\frac{3}{4} = \\frac{x}{20} \\), berapakah nilai \\( x \\)? <i class='fas fa-equals text-purple-500 ml-2'></i>", q_trans: "If \\( \\frac{3}{4} = \\frac{x}{20} \\), what is \\( x \\)?", opts: ["\\( 5 \\)", "\\( 10 \\)", "\\( 15 \\)", "\\( 20 \\)", "\\( 60 \\)"], ans: "\\( 15 \\)", exp: "Cross-multiplication: 3 x 20 = 4 x. 60 = 4x. x = 60 / 4 = 15.", exp_trans: "x = 15." },
+            "r-task5": { type: "complex", q: "Manakah pasangan rasio yang senilai dengan 2:5? <i class='fas fa-check-double text-purple-500 ml-2'></i>", q_trans: "Which pairs are equivalent to 2:5?", opts: ["\\( 4:10 \\)", "\\( 6:15 \\)", "\\( 8:20 \\)", "\\( 10:25 \\)"], ans: [0, 1, 2, 3], exp: "Semuanya adalah hasil perkalian 2:5 dengan 2, 3, 4, dan 5 secara berurutan. Semuanya benar.", exp_trans: "All are multiples of 2:5. All are correct." },
+            "r-task6": { type: "fill", q: "Sebuah mobil menempuh 120 km dalam 2 jam. Dengan kecepatan yang sama, berapa km yang ditempuh dalam 5 jam? <i class='fas fa-route text-purple-500 ml-2'></i>", q_trans: "A car travels 120 km in 2 hours. At same speed, how far in 5 hours?", ans: "300", exp: "Kecepatan = 120/2 = 60 km/jam. Dalam 5 jam = 60 x 5 = 300 km.", exp_trans: "Speed = 60 km/h. In 5 h = 300 km." },
+            "r-task7": { type: "single", q: "Tukang cat A bisa mengecat tembok dalam 6 hari, sedangkan tukang B dalam 12 hari. Jika bekerja sama, berapa hari pekerjaan selesai? <i class='fas fa-paint-roller text-purple-500 ml-2'></i>", q_trans: "Painter A finishes in 6 days, B in 12 days. Together, how many days?", opts: ["\\( 2 \\text{ hari} \\)", "\\( 3 \\text{ hari} \\)", "\\( 4 \\text{ hari} \\)", "\\( 5 \\text{ hari} \\)", "\\( 9 \\text{ hari} \\)"], ans: "\\( 4 \\text{ hari} \\)", exp: "Laju A = 1/6, Laju B = 1/12. Laju gabungan = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4. Maka waktu = 4 hari.", exp_trans: "Combined rate = 1/4. Time = 4 days." },
+            "r-task8": { type: "tf_table", q: "Evaluasi pernyataan tentang skala dan laju. <i class='fas fa-clipboard-check text-purple-500 ml-2'></i>", q_trans: "Evaluate statements about scale and rate.", opts: ["Skala adalah perbandingan jarak peta dengan jarak sebenarnya", "Laju adalah perbandingan dua kuantitas berbeda satuan", "Semakin besar skala peta (misal 1:1000 ke 1:100), detail semakin sedikit", "Kecepatan adalah contoh laju perubahan satuan"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, skala 1:100 lebih besar detailnya daripada 1:1000. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "r-task9": { type: "single", q: "Sebuah toko menjual 3 baju seharga Rp 150.000. Jika Sinta ingin membeli 5 baju, berapa uang yang harus ia bayar? <i class='fas fa-shirt text-purple-500 ml-2'></i>", q_trans: "A store sells 3 shirts for Rp 150,000. If Sinta wants 5 shirts, how much?", opts: ["\\( \\text{Rp} 200.000 \\)", "\\( \\text{Rp} 250.000 \\)", "\\( \\text{Rp} 300.000 \\)", "\\( \\text{Rp} 450.000 \\)", "\\( \\text{Rp} 500.000 \\)"], ans: "\\( \\text{Rp} 250.000 \\)", exp: "Harga 1 baju = 150.000 / 3 = 50.000. Harga 5 baju = 50.000 x 5 = 250.000.", exp_trans: "Unit price = 50,000. Price for 5 = 250,000." },
+            "r-task10": { type: "complex", q: "Pilih rumus matematika yang benar terkait perbandingan dan laju. <i class='fas fa-check-circle text-purple-500 ml-2'></i>", q_trans: "Select correct math formulas regarding ratio and rate.", opts: ["\\( \\text{Jarak Nyata} = \\text{Jarak Peta} \\times \\text{Skala} \\)", "\\( \\text{Kecepatan} = \\frac{\\text{Jarak}}{\\text{Waktu}} \\)", "\\( \\text{Waktu} = \\frac{\\text{Kecepatan}}{\\text{Jarak}} \\)", "\\( \\text{Harga Total} = \\text{Harga Satuan} \\times \\text{Jumlah} \\)"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, Waktu = Jarak / Kecepatan. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+
+            // PROBLEM INTRODUCTION
+            "p-task1": { type: "single", q: "Sebuah kereta api berangkat dari stasiun A pukul 08.00 dan tiba di stasiun B pukul 10.30. Jarak A ke B adalah 150 km. Berapa kecepatan rata-rata kereta api tersebut? <i class='fas fa-train text-orange-500 ml-2'></i>", q_trans: "A train departs A at 08:00 and arrives B at 10:30. Distance 150 km. Average speed?", opts: ["\\( 50 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 75 \\text{ km/jam} \\)", "\\( 100 \\text{ km/jam} \\)", "\\( 120 \\text{ km/jam} \\)"], ans: "\\( 60 \\text{ km/jam} \\)", exp: "Waktu tempuh = 10.30 - 08.00 = 2,5 jam. Kecepatan = 150 / 2,5 = 60 km/jam.", exp_trans: "Time = 2.5 h. Speed = 60 km/h." },
+            "p-task2": { type: "fill", q: "Deni membeli 4 kg gula pasir seharga Rp 28.000. Tentukan harga 1 kg gula pasir tersebut! <i class='fas fa-cubes text-orange-500 ml-2'></i>", q_trans: "Deni buys 4 kg sugar for Rp 28,000. Price per kg?", ans: "7000", exp: "Harga satuan = 28.000 / 4 = Rp 7.000 per kg.", exp_trans: "Unit price = Rp 7,000 per kg." },
+            "p-task3": { type: "tf_table", q: "Sebuah drum berisi 200 liter air. Keran dibuka dan air mengalir dengan debit 10 liter/menit. <i class='fas fa-droplet text-orange-500 ml-2'></i>", q_trans: "A drum holds 200 L. Tap flows at 10 L/min.", opts: ["Air akan habis dalam 20 menit", "Laju air adalah 10 L/menit", "Dalam 5 menit, air berkurang 100 liter", "Jika debit dilipatduakan, air habis dalam 10 menit"], ans: ["B", "B", "S", "B"], exp: "1. B, 200/10 = 20. 2. B. 3. S, 5 menit x 10 = 50 liter. 4. B, 200/20 = 10 menit.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "p-task4": { type: "single", q: "Sebuah balok logam bermassa 600 gram memiliki volume \\( 100 \\text{ cm}^3 \\). Berapakah densitas (massa jenis) balok tersebut? <i class='fas fa-cube text-orange-500 ml-2'></i>", q_trans: "A metal block mass 600g has volume 100 cm³. Density?", opts: ["\\( 4 \\text{ g/cm}^3 \\)", "\\( 5 \\text{ g/cm}^3 \\)", "\\( 6 \\text{ g/cm}^3 \\)", "\\( 60 \\text{ g/cm}^3 \\)", "\\( 6000 \\text{ g/cm}^3 \\)"], ans: "\\( 6 \\text{ g/cm}^3 \\)", exp: "Densitas = Massa / Volume = 600 / 100 = 6 g/cm³.", exp_trans: "Density = 600 / 100 = 6 g/cm³." },
+            "p-task5": { type: "complex", q: "Pilih pernyataan yang benar untuk soal cerita berikut: 'Mobil Budi menempuh 240 km dalam 4 jam, sedangkan mobil Andi menempuh 180 km dalam 3 jam.' <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Select true statements: Budi's car 240km in 4h, Andi's car 180km in 3h.", opts: ["Kecepatan Budi adalah 60 km/jam", "Kecepatan Andi adalah 50 km/jam", "Budi lebih cepat dari Andi", "Keduanya memiliki kecepatan yang sama"], ans: [0, 3], exp: "Budi: 240/4 = 60 km/j. Andi: 180/3 = 60 km/j. Jadi keduanya sama.", exp_trans: "Both are 60 km/h. They are equal." },
+            "p-task6": { type: "fill", q: "Jika \\( 1 \\text{ liter} = 1000 \\text{ ml} \\), maka 2,5 liter sama dengan... ml. <i class='fas fa-flask text-orange-500 ml-2'></i>", q_trans: "If 1 L = 1000 ml, 2.5 L is ... ml.", ans: "2500", exp: "2,5 x 1000 = 2500 ml.", exp_trans: "2.5 x 1000 = 2500 ml." },
+            "p-task7": { type: "single", q: "Sebuah pekerjaan dapat diselesaikan oleh 8 orang dalam 6 hari. Jika pekerja ditambah menjadi 12 orang (dengan asumsi laju kerja sama), berapa hari pekerjaan akan selesai? <i class='fas fa-people-carry-box text-orange-500 ml-2'></i>", q_trans: "A job is done by 8 men in 6 days. If 12 men work, how many days?", opts: ["\\( 3 \\text{ hari} \\)", "\\( 4 \\text{ hari} \\)", "\\( 5 \\text{ hari} \\)", "\\( 8 \\text{ hari} \\)", "\\( 9 \\text{ hari} \\)"], ans: "\\( 4 \\text{ hari} \\)", exp: "Perbandingan berbalik nilai. 8 x 6 = 12 x t. 48 = 12t. t = 4 hari.", exp_trans: "Inverse proportion. t = 4 days." },
+            "p-task8": { type: "tf_table", q: "Konversi satuan kecepatan. <i class='fas fa-exchange-alt text-orange-500 ml-2'></i>", q_trans: "Speed unit conversion.", opts: ["\\( 36 \\text{ km/jam} = 10 \\text{ m/s} \\)", "\\( 72 \\text{ km/jam} = 20 \\text{ m/s} \\)", "\\( 10 \\text{ m/s} = 36 \\text{ km/jam} \\)", "\\( 1 \\text{ m/s} = 3,6 \\text{ km/jam} \\)"], ans: ["B", "B", "B", "B"], exp: "Rumus: km/jam dibagi 3,6 = m/s. m/s dikali 3,6 = km/jam. Semuanya benar.", exp_trans: "All are correct based on 3.6 multiplier." },
+            "p-task9": { type: "single", q: "Toko X menjual 2 kg beras seharga Rp 14.000. Toko Y menjual 5 kg beras seharga Rp 35.000. Berapa selisih harga per kg antara Toko X dan Toko Y? <i class='fas fa-store-slash text-orange-500 ml-2'></i>", q_trans: "Store X: 2kg Rp 14,000. Store Y: 5kg Rp 35,000. Difference in unit price?", opts: ["\\( \\text{Rp} 0 \\)", "\\( \\text{Rp} 500 \\)", "\\( \\text{Rp} 1.000 \\)", "\\( \\text{Rp} 2.000 \\)", "\\( \\text{Rp} 7.000 \\)"], ans: "\\( \\text{Rp} 0 \\)", exp: "Toko X: 14000/2 = 7000/kg. Toko Y: 35000/5 = 7000/kg. Selisihnya 0.", exp_trans: "X: 7000/kg. Y: 7000/kg. Diff is 0." },
+            "p-task10": { type: "complex", q: "Manakah yang merupakan langkah yang benar dalam menyelesaikan soal: 'Jika 3 cat air berharga Rp 9.000, berapa harga 7 cat air?' <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Correct steps: If 3 paints cost Rp 9,000, how much for 7?", opts: ["Mencari harga satuan: 9000 / 3 = 3000", "Mencari total harga: 3000 x 7 = 21000", "Mencari rasio: 3/7 = 9000/x", "Harga 7 cat air adalah Rp 21.000"], ans: [0, 1, 2, 3], exp: "Semua adalah langkah dan hasil yang benar.", exp_trans: "All are correct steps and results." },
+
+            // GUIDED PRACTICE
+            "g-task1": { type: "single", q: "Jika seekor burung merpati terbang dengan kecepatan 20 m/s, berapakah kecepatannya dalam satuan km/jam? <i class='fas fa-dove text-blue-500 ml-2'></i>", q_trans: "A pigeon flies at 20 m/s. Speed in km/h?", opts: ["\\( 36 \\text{ km/jam} \\)", "\\( 50 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)", "\\( 72 \\text{ km/jam} \\)", "\\( 100 \\text{ km/jam} \\)"], ans: "\\( 72 \\text{ km/jam} \\)", exp: "m/s ke km/jam = dikali 3,6. 20 x 3,6 = 72 km/jam.", exp_trans: "20 x 3.6 = 72 km/h." },
+            "g-task2": { type: "fill", q: "Sebuah perahu bergerak di sungai dengan kecepatan 15 km/jam melawan arus. Kecepatan arus sungai adalah 3 km/jam. Berapakah kecepatan perahu di air tenang? <i class='fas fa-sailboat text-blue-500 ml-2'></i>", q_trans: "Boat moves 15 km/h against current. Current is 3 km/h. Speed in still water?", ans: "18", exp: "V_perahu = V_melawan + V_arus = 15 + 3 = 18 km/jam.", exp_trans: "V_boat = 15 + 3 = 18 km/h." },
+            "g-task3": { type: "tf_table", q: "Analisis kecepatan perahu di sungai. <i class='fas fa-water text-blue-500 ml-2'></i>", q_trans: "Analyze boat speed in river.", opts: ["Kecepatan melawan arus = V_perahu - V_arus", "Kecepatan mengikuti arus = V_perahu + V_arus", "Jika V_perahu 10 dan V_arus 2, melawan arus = 12", "Jika V_perahu 10 dan V_arus 2, mengikuti arus = 12"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, melawan arus berarti kurang: 10-2=8. 4. B, mengikuti berarti tambah: 12.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "g-task4": { type: "single", q: "Jika 6 pekerja bisa menyelesaikan sebuah proyek dalam 12 hari, maka jika pekerja dikurangi menjadi 4 orang, berapa lama proyek tersebut akan selesai? <i class='fas fa-helmet-safety text-blue-500 ml-2'></i>", q_trans: "6 workers finish in 12 days. If reduced to 4 workers, how many days?", opts: ["\\( 8 \\text{ hari} \\)", "\\( 16 \\text{ hari} \\)", "\\( 18 \\text{ hari} \\)", "\\( 20 \\text{ hari} \\)", "\\( 24 \\text{ hari} \\)"], ans: "\\( 18 \\text{ hari} \\)", exp: "Perbandingan berbalik nilai: 6 x 12 = 4 x t. 72 = 4t. t = 18 hari.", exp_trans: "Inverse proportion: t = 18 days." },
+            "g-task5": { type: "complex", q: "Pilih situasi yang merupakan perbandingan berbalik nilai. <i class='fas fa-arrow-right-arrow-left text-blue-500 ml-2'></i>", q_trans: "Select inverse proportion situations.", opts: ["Jumlah pekerja dan waktu penyelesaian", "Kecepatan kendaraan dan waktu tempuh (jarak tetap)", "Jumlah barang dan total harga", "Banyaknya keran yang dibuka dan waktu mengisi kolam"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, perbandingan senilai. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "g-task6": { type: "fill", q: "Pompa A dapat mengisi kolam dalam 4 jam. Pompa B dalam 6 jam. Jika dipakai bersama-sama, berapa jam kolam akan penuh? <i class='fas fa-pump text-blue-500 ml-2'></i>", q_trans: "Pump A fills in 4h. Pump B in 6h. Together?", ans: "2.4", exp: "Laju A=1/4, Laju B=1/6. Gabungan=1/4+1/6=3/12+2/12=5/12. Waktu=12/5=2,4 jam.", exp_trans: "Combined rate 5/12. Time = 2.4 h." },
+            "g-task7": { type: "single", q: "Seekor semut berjalan dengan kecepatan 2 cm/s. Berapa meter yang ditempuh semut tersebut dalam waktu 1 menit (60 sekon)? <i class='fas fa-bug text-blue-500 ml-2'></i>", q_trans: "Ant walks 2 cm/s. How many meters in 1 min?", opts: ["\\( 12 \\text{ meter} \\)", "\\( 120 \\text{ meter} \\)", "\\( 1,2 \\text{ meter} \\)", "\\( 0,2 \\text{ meter} \\)", "\\( 2 \\text{ meter} \\)"], ans: "\\( 1,2 \\text{ meter} \\)", exp: "Jarak = 2 cm/s x 60 s = 120 cm. 120 cm = 1,2 meter.", exp_trans: "Distance = 120 cm = 1.2 m." },
+            "g-task8": { type: "tf_table", q: "Analisis kecepatan rata-rata. <i class='fas fa-gauge text-blue-500 ml-2'></i>", q_trans: "Analyze average speed.", opts: ["Total jarak = Kecepatan rata-rata x Total waktu", "Jika jarak tetap, makin cepat makin sedikit waktunya", "Kecepatan rata-rata adalah rata-rata dari kecepatan awal dan akhir", "Total waktu = Total jarak / Kecepatan rata-rata"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, kecuali jika waktu yang ditempuh sama. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "g-task9": { type: "single", q: "Sebuah sepeda motor melaju dari kota P ke Q sejauh 80 km dalam 2 jam, lalu Q ke R sejauh 60 km dalam 1,5 jam. Berapakah kecepatan rata-rata perjalanan tersebut? <i class='fas fa-motorcycle text-blue-500 ml-2'></i>", q_trans: "Bike goes P to Q (80km, 2h), then Q to R (60km, 1.5h). Average speed?", opts: ["\\( 35 \\text{ km/jam} \\)", "\\( 40 \\text{ km/jam} \\)", "\\( 45 \\text{ km/jam} \\)", "\\( 50 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)"], ans: "\\( 40 \\text{ km/jam} \\)", exp: "Total Jarak = 80 + 60 = 140 km. Total Waktu = 2 + 1,5 = 3,5 jam. V_rata = 140 / 3,5 = 40 km/jam.", exp_trans: "Total dist 140 km, total time 3.5 h. Avg = 40 km/h." },
+            "g-task10": { type: "complex", q: "Pilih rumus yang benar terkait laju dan perbandingan. <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Select correct formulas.", opts: ["\\( \\text{m/s} = \\frac{\\text{km/jam}}{3,6} \\)", "\\( \\text{Debit} = \\frac{\\text{Volume}}{\\text{Waktu}} \\)", "\\( \\text{Waktu gabungan} = \\frac{1}{t_1} + \\frac{1}{t_2} \\)", "\\( \\text{Densitas} = \\frac{\\text{Massa}}{\\text{Volume}} \\)"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, laju gabungan = 1/t1 + 1/t2, Waktu = 1 / (laju gabungan). 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+
+            // INDEPENDENT PRACTICE
+            "ind-task1": { type: "single", q: "Sebuah drum air berkapasitas 600 liter. Jika keran dibuka dengan debit 5 liter/menit, berapa jam waktu yang dibutuhkan untuk penuh? <i class='fas fa-drum text-green-500 ml-2'></i>", q_trans: "Drum holds 600 L. Tap rate 5 L/min. Time in hours?", opts: ["\\( 1 \\text{ jam} \\)", "\\( 1,5 \\text{ jam} \\)", "\\( 2 \\text{ jam} \\)", "\\( 2,5 \\text{ jam} \\)", "\\( 3 \\text{ jam} \\)"], ans: "\\( 2 \\text{ jam} \\)", exp: "Waktu = Volume / Debit = 600 / 5 = 120 menit. 120 menit = 2 jam.", exp_trans: "Time = Volume / Discharge = 600 / 5 = 120 min = 2 hours." },
+            "ind-task2": { type: "fill", q: "Sebuah pabrik sepatu menghasilkan 400 pasang sepatu dalam 8 jam. Berapa pasang sepatu yang dihasilkan dalam 1 jam? <i class='fas fa-shoe-prints text-green-500 ml-2'></i>", q_trans: "Factory makes 400 shoes in 8 hours. How many in 1 hour?", ans: "50", exp: "Laju produksi = 400 / 8 = 50 pasang/jam.", exp_trans: "Rate = 50 pairs/h." },
+            "ind-task3": { type: "tf_table", q: "Sebuah benda bermassa 200 gram memiliki volume \\( 50 \\text{ cm}^3 \\). <i class='fas fa-cube text-green-500 ml-2'></i>", q_trans: "Object mass 200g, volume 50 cm³.", opts: ["Densitas benda adalah 4 g/cm³", "Jika volume dilipatduakan menjadi 100 cm³, densitas menjadi 2 g/cm³", "Jika massa dilipatduakan tanpa mengubah volume, densitas menjadi 8 g/cm³", "Densitas dihitung dengan Massa x Volume"], ans: ["B", "B", "B", "S"], exp: "1. B, 200/50=4. 2. B, massa sama, volume 2x lipat, densitas 1/2x. 3. B, massa 2x lipat, volume sama, densitas 2x. 4. S, Massa / Volume.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "ind-task4": { type: "single", q: "Jarak antara kota A dan B pada peta adalah 4 cm. Jika jarak sebenarnya adalah 12 km, berapakah skala peta tersebut? <i class='fas fa-map text-green-500 ml-2'></i>", q_trans: "Map distance 4 cm. Real distance 12 km. Scale?", opts: ["\\( 1:300 \\)", "\\( 1:3.000 \\)", "\\( 1:30.000 \\)", "\\( 1:300.000 \\)", "\\( 1:3.000.000 \\)"], ans: "\\( 1:300.000 \\)", exp: "12 km = 1.200.000 cm. Skala = Jarak Peta / Jarak Nyata = 4 / 1.200.000 = 1 / 300.000.", exp_trans: "12 km = 1,200,000 cm. Scale = 1:300,000." },
+            "ind-task5": { type: "complex", q: "Pernyataan mana yang benar tentang konversi satuan? <i class='fas fa-check-double text-green-500 ml-2'></i>", q_trans: "True statements about unit conversion?", opts: ["\\( 1 \\text{ kg} = 1000 \\text{ gram} \\)", "\\( 1 \\text{ m} = 100 \\text{ cm} \\)", "\\( 1 \\text{ km} = 1000 \\text{ m} \\)", "\\( 1 \\text{ jam} = 3600 \\text{ sekon} \\)"], ans: [0, 1, 2, 3], exp: "Semuanya adalah konversi satuan standar yang benar.", exp_trans: "All are correct standard conversions." },
+            "ind-task6": { type: "fill", q: "Mobil Andi melaju dengan kecepatan 72 km/jam. Berapa jarak (dalam meter) yang ditempuh Andi dalam waktu 30 sekon? <i class='fas fa-car text-green-500 ml-2'></i>", q_trans: "Car speed 72 km/h. Distance (m) in 30 s?", ans: "600", exp: "72 km/jam = 72 / 3,6 = 20 m/s. Jarak = 20 m/s x 30 s = 600 meter.", exp_trans: "72 km/h = 20 m/s. Dist = 20 x 30 = 600 m." },
+            "ind-task7": { type: "single", q: "Sebuah pekerjaan dapat diselesaikan dalam 20 hari oleh 15 pekerja. Jika diinginkan pekerjaan selesai dalam 10 hari, berapa pekerja tambahan yang dibutuhkan? <i class='fas fa-user-plus text-green-500 ml-2'></i>", q_trans: "Job done in 20 days by 15 men. To finish in 10 days, how many extra men?", opts: ["\\( 5 \\text{ orang} \\)", "\\( 10 \\text{ orang} \\)", "\\( 15 \\text{ orang} \\)", "\\( 20 \\text{ orang} \\)", "\\( 30 \\text{ orang} \\)"], ans: "\\( 15 \\text{ orang} \\)", exp: "15 x 20 = P x 10. 300 = 10P. P = 30 orang. Tambahan = 30 - 15 = 15 orang.", exp_trans: "Need 30 men. Extra = 15." },
+            "ind-task8": { type: "tf_table", q: "Hubungan antara waktu, pekerja, dan pekerjaan. <i class='fas fa-people-group text-green-500 ml-2'></i>", q_trans: "Relationship of time, workers, work.", opts: ["Pekerja dan waktu berbanding terbalik", "Pekerjaan dan waktu berbanding lurus", "Jika pekerja dikurangi, waktu bertambah", "Jika waktu dipersingkat, pekerja harus dikurangi"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, pekerja harus ditambah.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "ind-task9": { type: "single", q: "Toko Maju Jaya menjual 1 kg gula seharga Rp 14.000. Toko Sumber Rejeki menjual 2 kg gula seharga Rp 26.000. Berapa hemat uang yang didapat jika membeli 4 kg gula di Toko Sumber Rejeki dibandingkan Toko Maju Jaya? <i class='fas fa-hand-holding-dollar text-green-500 ml-2'></i>", q_trans: "Store A: Rp 14,000/kg. Store B: 2kg for Rp 26,000. Savings for 4kg at Store B?", opts: ["\\( \\text{Rp} 2.000 \\)", "\\( \\text{Rp} 4.000 \\)", "\\( \\text{Rp} 8.000 \\)", "\\( \\text{Rp} 12.000 \\)", "\\( \\text{Rp} 20.000 \\)"], ans: "\\( \\text{Rp} 4.000 \\)", exp: "Harga A 4kg = 14.000 x 4 = 56.000. Harga B 4kg = 26.000 x 2 = 52.000. Hemat = 56.000 - 52.000 = 4.000.", exp_trans: "A = 56k. B = 52k. Save = 4k." },
+            "ind-task10": { type: "complex", q: "Pernyataan yang benar tentang kecepatan dan jarak. <i class='fas fa-check-circle text-green-500 ml-2'></i>", q_trans: "True statements about speed and distance.", opts: ["Jika kecepatan dilipatduakan, waktu tempuh setengahnya (jarak tetap)", "Jika kecepatan 60 km/jam, dalam 10 menit menempuh 10 km", "Mobil A 80 km/jam lebih lambat dari Mobil B 25 m/s", "Konversi 25 m/s ke km/jam adalah 90 km/jam"], ans: [0, 1, 2, 3], exp: "1. B, kecepatan dan waktu berbanding terbalik. 2. B, 10 menit = 1/6 jam. 60 x 1/6 = 10 km. 3. B, 80 km/jam = 22,2 m/s, sedangkan 25 m/s = 90 km/jam. Jadi mobil A lebih lambat. 4. B, 25 x 3,6 = 90. Semua pernyataan benar.", exp_trans: "1. B, 2. B, 3. B, 4. B. All statements are true." }
+        });
+        // ====== MATH QUESTIONS DATA (PART 2: TASK 1 - TASK 5) ======
+        Object.assign(questions, {
+            // TASK 1: Konsep Dasar Laju & Rasio Senilai
+            "t1-task1": { type: "single", q: "Andra mengetik sebuah dokumen sebanyak 450 kata dalam waktu 9 menit. Berapakah laju mengetik Andra per menit? <i class='fas fa-keyboard text-orange-500 ml-2'></i>", q_trans: "Andra types a 450-word document in 9 minutes. What is his typing rate per minute?", opts: ["\\( 45 \\text{ kata/menit} \\)", "\\( 50 \\text{ kata/menit} \\)", "\\( 55 \\text{ kata/menit} \\)", "\\( 60 \\text{ kata/menit} \\)", "\\( 90 \\text{ kata/menit} \\)"], ans: "\\( 50 \\text{ kata/menit} \\)", exp: "Laju mengetik = Total kata / Total waktu = 450 / 9 = 50 kata/menit.", exp_trans: "Typing rate = Total words / Total time = 450 / 9 = 50 words/min." },
+            "t1-task2": { type: "fill", q: "Sebuah toko elektronik menjual 4 buah powerbank seharga Rp 200.000. Berapakah harga 1 buah powerbank tersebut? <i class='fas fa-battery-full text-orange-500 ml-2'></i>", q_trans: "A store sells 4 powerbanks for Rp 200,000. What is the price of 1 powerbank?", ans: "50000", exp: "Harga satuan = Total harga / Jumlah = 200.000 / 4 = Rp 50.000.", exp_trans: "Unit price = Total price / Amount = 200,000 / 4 = Rp 50,000." },
+            "t1-task3": { type: "tf_table", q: "Pilih pernyataan yang benar tentang rasio dan laju. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Select true statements about ratio and rate.", opts: ["Laju adalah perbandingan dua kuantitas dengan satuan berbeda", "Rasio adalah perbandingan dua kuantitas dengan satuan yang sama", "Harga per buah adalah contoh rasio", "Kecepatan dalam km/jam adalah contoh laju"], ans: ["B", "B", "S", "B"], exp: "1. B, laju satuan beda. 2. B, rasio satuan sama. 3. S, harga per buah adalah laju. 4. B, kecepatan adalah laju.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t1-task4": { type: "single", q: "Sebuah bus pariwisata menempuh jarak 240 km dalam waktu 3 jam. Berapakah kecepatan rata-rata bus tersebut? <i class='fas fa-bus text-orange-500 ml-2'></i>", q_trans: "A tour bus travels 240 km in 3 hours. What is the average speed?", opts: ["\\( 60 \\text{ km/jam} \\)", "\\( 70 \\text{ km/jam} \\)", "\\( 80 \\text{ km/jam} \\)", "\\( 90 \\text{ km/jam} \\)", "\\( 120 \\text{ km/jam} \\)"], ans: "\\( 80 \\text{ km/jam} \\)", exp: "Kecepatan = Jarak / Waktu = 240 km / 3 jam = 80 km/jam.", exp_trans: "Speed = Distance / Time = 240 km / 3 h = 80 km/h." },
+            "t1-task5": { type: "complex", q: "Manakah dari contoh berikut yang merupakan LAJU (Rate)? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Which of the following is a RATE?", opts: ["3 siswa laki-laki untuk 4 siswi perempuan", "Debit air 10 liter per sekon", "Kecepatan 60 km per jam", "Harga buku Rp 5.000 per buku"], ans: [1, 2, 3], exp: "Laju memiliki satuan yang berbeda. Liter/sekon, km/jam, dan Rp/buku adalah laju. Opsi 1 adalah rasio karena satuan siswa sama.", exp_trans: "Rate has different units. L/s, km/h, and Rp/book are rates. Option 1 is a ratio." },
+            "t1-task6": { type: "fill", q: "Jika harga 1 kg apel adalah Rp 25.000, berapakah harga 6 kg apel tersebut? <i class='fas fa-apple-whole text-orange-500 ml-2'></i>", q_trans: "If 1 kg of apples costs Rp 25,000, how much is 6 kg?", ans: "150000", exp: "Total Harga = Harga Satuan x Jumlah = 25.000 x 6 = Rp 150.000.", exp_trans: "Total Price = Unit Price x Amount = 25,000 x 6 = Rp 150,000." },
+            "t1-task7": { type: "single", q: "Sebuah kendaraan bergerak dengan kecepatan 54 km/jam. Berapakah kecepatannya jika dinyatakan dalam meter per sekon (m/s)? <i class='fas fa-exchange-alt text-orange-500 ml-2'></i>", q_trans: "A vehicle moves at 54 km/h. What is its speed in m/s?", opts: ["\\( 10 \\text{ m/s} \\)", "\\( 15 \\text{ m/s} \\)", "\\( 18 \\text{ m/s} \\)", "\\( 20 \\text{ m/s} \\)", "\\( 54 \\text{ m/s} \\)"], ans: "\\( 15 \\text{ m/s} \\)", exp: "Konversi km/jam ke m/s = dibagi 3,6. 54 / 3,6 = 15 m/s.", exp_trans: "Convert km/h to m/s = divide by 3.6. 54 / 3.6 = 15 m/s." },
+            "t1-task8": { type: "tf_table", q: "Pilih rumus yang benar terkait laju perubahan satuan. <i class='fas fa-clipboard-list text-orange-500 ml-2'></i>", q_trans: "Select correct formulas regarding rate of unit change.", opts: ["Kecepatan = Jarak / Waktu", "Jarak = Kecepatan x Waktu", "Waktu = Kecepatan / Jarak", "Laju = Total Nilai / Total Jumlah"], ans: ["B", "B", "S", "B"], exp: "1. B, rumus benar. 2. B, rumus benar. 3. S, Waktu = Jarak / Kecepatan. 4. B, rumus umum laju.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t1-task9": { type: "single", q: "Skala pada sebuah peta adalah 1:500.000. Jika jarak kota A dan B di peta adalah 4 cm, berapakah jarak sebenarnya? <i class='fas fa-map text-orange-500 ml-2'></i>", q_trans: "Map scale is 1:500,000. If map distance is 4 cm, what is real distance?", opts: ["\\( 2 \\text{ km} \\)", "\\( 5 \\text{ km} \\)", "\\( 10 \\text{ km} \\)", "\\( 20 \\text{ km} \\)", "\\( 50 \\text{ km} \\)"], ans: "\\( 20 \\text{ km} \\)", exp: "Jarak Nyata = 4 x 500.000 = 2.000.000 cm = 20 km.", exp_trans: "Real dist = 2,000,000 cm = 20 km." },
+            "t1-task10": { type: "complex", q: "Manakah langkah yang benar untuk mencari harga satuan? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Which are correct steps to find unit price?", opts: ["Bagi total harga dengan total jumlah barang", "Jika 3 buku Rp 30.000, maka 1 buku Rp 10.000", "Kalikan harga dengan jumlah barang", "Bandingkan harga dengan jumlah dalam bentuk pecahan"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, itu mencari total. 4. B, bentuk pecahan adalah langkah matematisnya.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+
+            // TASK 2: Kecepatan, Jarak, dan Waktu
+            "t2-task1": { type: "single", q: "Sebuah pesawat terbang dari Jakarta ke Bali dengan kecepatan rata-rata 600 km/jam. Jarak Jakarta-Bali adalah 600 km. Berapa menit waktu yang dibutuhkan? <i class='fas fa-plane text-orange-500 ml-2'></i>", q_trans: "A plane flies Jakarta to Bali at 600 km/h. Distance is 600 km. How many minutes needed?", opts: ["\\( 30 \\text{ menit} \\)", "\\( 45 \\text{ menit} \\)", "\\( 60 \\text{ menit} \\)", "\\( 90 \\text{ menit} \\)", "\\( 120 \\text{ menit} \\)"], ans: "\\( 60 \\text{ menit} \\)", exp: "Waktu = Jarak / Kecepatan = 600 / 600 = 1 jam = 60 menit.", exp_trans: "Time = Dist / Speed = 1 h = 60 min." },
+            "t2-task2": { type: "fill", q: "Andi bersepeda selama 2 menit dengan kecepatan 20 m/s. Berapa meter jarak yang ditempuh Andi? <i class='fas fa-bicycle text-orange-500 ml-2'></i>", q_trans: "Andi cycles for 2 minutes at 20 m/s. How many meters did he cover?", ans: "2400", exp: "2 menit = 120 sekon. Jarak = Kecepatan x Waktu = 20 m/s x 120 s = 2400 meter.", exp_trans: "2 min = 120 s. Dist = 20 x 120 = 2400 m." },
+            "t2-task3": { type: "tf_table", q: "Analisis kecepatan rata-rata. <i class='fas fa-gauge-high text-orange-500 ml-2'></i>", q_trans: "Analyze average speed.", opts: ["Kecepatan rata-rata didapat dari Total Jarak dibagi Total Waktu", "Jika kecepatan diperlambat, waktu tempuh bertambah", "Kecepatan rata-rata selalu sama dengan kecepatan awal", "Total waktu = Total jarak / Kecepatan rata-rata"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, tidak selalu. 4. B, ini penurunan rumus yang benar.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t2-task4": { type: "single", q: "Mobil Tuan Budi melaju dengan kecepatan 90 km/jam selama 2,5 jam. Berapa km jarak yang sudah ditempuh? <i class='fas fa-car-side text-orange-500 ml-2'></i>", q_trans: "Mr. Budi's car travels at 90 km/h for 2.5 hours. How many km covered?", opts: ["\\( 150 \\text{ km} \\)", "\\( 175 \\text{ km} \\)", "\\( 200 \\text{ km} \\)", "\\( 225 \\text{ km} \\)", "\\( 250 \\text{ km} \\)"], ans: "\\( 225 \\text{ km} \\)", exp: "Jarak = Kecepatan x Waktu = 90 x 2,5 = 225 km.", exp_trans: "Dist = Speed x Time = 90 x 2.5 = 225 km." },
+            "t2-task5": { type: "complex", q: "Pilih rumus yang benar untuk mencari Waktu (t). <i class='fas fa-stopwatch text-orange-500 ml-2'></i>", q_trans: "Select correct formulas to find Time (t).", opts: ["\\( t = \\frac{s}{v} \\)", "\\( t = \\frac{\\text{Jarak}}{\\text{Kecepatan}} \\)", "\\( t = v \\times s \\)", "\\( t = \\frac{\\text{Total Jarak}}{\\text{Kecepatan Rata-rata}} \\)"], ans: [0, 1, 3], exp: "1. B, notasi benar. 2. B, bahasa indonesia benar. 3. S, salah. 4. B, benar untuk rata-rata.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t2-task6": { type: "fill", q: "Sebuah sepeda motor bergerak dengan kecepatan 15 m/s. Berapakah kecepatannya dalam satuan km/jam? <i class='fas fa-motorcycle text-orange-500 ml-2'></i>", q_trans: "A motorcycle moves at 15 m/s. What is its speed in km/h?", ans: "54", exp: "Konversi m/s ke km/jam = dikali 3,6. 15 x 3,6 = 54 km/jam.", exp_trans: "Convert m/s to km/h = multiply by 3.6. 15 x 3.6 = 54 km/h." },
+            "t2-task7": { type: "single", q: "Rani berlari ke selatan sejauh 100 meter dalam 20 sekon, lalu kembali ke utara sejauh 100 meter dalam 30 sekon. Berapakah kecepatan rata-rata Rani? <i class='fas fa-person-running text-orange-500 ml-2'></i>", q_trans: "Rani runs south 100m in 20s, then returns north 100m in 30s. Average speed?", opts: ["\\( 2 \\text{ m/s} \\)", "\\( 3 \\text{ m/s} \\)", "\\( 4 \\text{ m/s} \\)", "\\( 5 \\text{ m/s} \\)", "\\( 6 \\text{ m/s} \\)"], ans: "\\( 4 \\text{ m/s} \\)", exp: "Total Jarak = 100 + 100 = 200 m. Total Waktu = 20 + 30 = 50 s. V_rata = 200 / 50 = 4 m/s.", exp_trans: "Total dist 200m, total time 50s. Avg = 4 m/s." },
+            "t2-task8": { type: "tf_table", q: "Perahu bermesin bergerak di sungai. <i class='fas fa-water text-orange-500 ml-2'></i>", q_trans: "A motorboat moves in a river.", opts: ["Kecepatan melawan arus = V_perahu - V_arus", "Kecepatan mengikuti arus = V_perahu + V_arus", "Jika V_perahu 10 km/j dan V_arus 2 km/j, maka melawan arus 12 km/j", "Jika V_perahu 10 km/j dan V_arus 2 km/j, maka mengikuti arus 12 km/j"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, melawan arus dikurangi: 10-2=8. 4. B, mengikuti arus ditambah: 10+2=12.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t2-task9": { type: "single", q: "Sebuah kolam berisi 6000 liter air. Jika air dialirkan keluar dengan debit 20 liter/menit, berapa jam waktu yang dibutuhkan hingga kolam kosong? <i class='fas fa-droplet text-orange-500 ml-2'></i>", q_trans: "A pool holds 6000 L. Water drains at 20 L/min. How many hours to empty?", opts: ["\\( 1 \\text{ jam} \\)", "\\( 2 \\text{ jam} \\)", "\\( 5 \\text{ jam} \\)", "\\( 10 \\text{ jam} \\)", "\\( 20 \\text{ jam} \\)"], ans: "\\( 5 \\text{ jam} \\)", exp: "Waktu = Volume / Debit = 6000 / 20 = 300 menit. 300 menit / 60 = 5 jam.", exp_trans: "Time = Volume / Discharge = 6000 / 20 = 300 min = 5 hours." },
+            "t2-task10": { type: "complex", q: "Manakah pernyataan yang benar tentang konversi satuan kecepatan? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "True statements about speed conversion?", opts: ["Jika kecepatan dilipatduakan, waktu tempuh menjadi setengahnya (jarak tetap)", "Jika kecepatan 60 km/jam, dalam 10 menit menempuh 10 km", "Mobil A 80 km/jam lebih lambat dari Mobil B 25 m/s", "Konversi 20 m/s ke km/jam adalah 72 km/jam"], ans: [0, 1, 2, 3], exp: "1. B, kecepatan dan waktu berbanding terbalik. 2. B, 10 menit = 1/6 jam. 60 x 1/6 = 10 km. 3. B, 80 km/jam = 22,2 m/s, sedangkan 25 m/s = 90 km/jam. Jadi mobil A lebih lambat. 4. B, 20 x 3,6 = 72. Semua pernyataan benar.", exp_trans: "1. B, 2. B, 3. B, 4. B. All statements are true." },
+
+            // TASK 3: Skala dan Denyitas (Densitas)
+            "t3-task1": { type: "single", q: "Jarak antara kota A dan B pada peta adalah 5 cm. Jika jarak sebenarnya adalah 15 km, berapakah skala peta tersebut? <i class='fas fa-map-location text-orange-500 ml-2'></i>", q_trans: "Map distance is 5 cm. Real distance is 15 km. What is the scale?", opts: ["\\( 1:300 \\)", "\\( 1:3.000 \\)", "\\( 1:30.000 \\)", "\\( 1:300.000 \\)", "\\( 1:3.000.000 \\)"], ans: "\\( 1:300.000 \\)", exp: "15 km = 1.500.000 cm. Skala = 5 / 1.500.000 = 1 / 300.000.", exp_trans: "15 km = 1,500,000 cm. Scale = 1:300,000." },
+            "t3-task2": { type: "fill", q: "Sebuah peta berskala 1:2.000. Jarak kota P dan Q di peta adalah 3 cm. Berapa meter jarak sebenarnya? <i class='fas fa-ruler text-orange-500 ml-2'></i>", q_trans: "Map scale 1:2,000. Map distance is 3 cm. Real distance in meters?", ans: "60", exp: "Jarak Nyata = 3 x 2.000 = 6.000 cm = 60 meter.", exp_trans: "Real dist = 6,000 cm = 60 m." },
+            "t3-task3": { type: "tf_table", q: "Analisis skala pada peta. <i class='fas fa-list-ol text-orange-500 ml-2'></i>", q_trans: "Analyze map scale.", opts: ["Skala adalah perbandingan jarak peta dengan jarak nyata", "Semakin kecil angka di belakang skala (misal 1:10 ke 1:1), detail semakin banyak", "Skala 1:1000 berarti 1 cm di peta mewakili 10 meter di nyata", "Untuk mencari jarak nyata, bagi jarak peta dengan skala"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, 1000 cm = 10 m. 4. S, kalikan, bukan bagi.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t3-task4": { type: "single", q: "Sebuah benda berbentuk balok memiliki massa 300 gram dan volume \\( 50 \\text{ cm}^3 \\). Berapakah densitas (massa jenis) benda tersebut? <i class='fas fa-cube text-orange-500 ml-2'></i>", q_trans: "A block has mass 300g and volume 50 cm³. What is its density?", opts: ["\\( 3 \\text{ g/cm}^3 \\)", "\\( 5 \\text{ g/cm}^3 \\)", "\\( 6 \\text{ g/cm}^3 \\)", "\\( 15 \\text{ g/cm}^3 \\)", "\\( 150 \\text{ g/cm}^3 \\)"], ans: "\\( 6 \\text{ g/cm}^3 \\)", exp: "Densitas = Massa / Volume = 300 / 50 = 6 g/cm³.", exp_trans: "Density = Mass / Vol = 300 / 50 = 6 g/cm³." },
+            "t3-task5": { type: "complex", q: "Manakah pernyataan yang benar tentang densitas? <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "True statements about density?", opts: ["Densitas = Massa / Volume", "Densitas dipengaruhi oleh jenis benda", "Jika volume bertambah dan massa tetap, densitas bertambah", "Satuan densitas bisa g/cm³"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, densitas berkurang. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t3-task6": { type: "fill", q: "Sebuah logam memiliki densitas 4 g/cm³. Jika massanya 100 gram, berapakah volume logam tersebut (dalam cm³)? <i class='fas fa-weight-hanging text-orange-500 ml-2'></i>", q_trans: "Metal density is 4 g/cm³. Mass is 100g. Volume in cm³?", ans: "25", exp: "Volume = Massa / Densitas = 100 / 4 = 25 cm³.", exp_trans: "Vol = Mass / Density = 100 / 4 = 25 cm³." },
+            "t3-task7": { type: "single", q: "Denah sebuah rumah berskala 1:100. Jika kamar tidur pada denah berukuran 4 cm x 5 cm, berapakah luas kamar tidur sebenarnya? <i class='fas fa-house text-orange-500 ml-2'></i>", q_trans: "House blueprint scale 1:100. Bedroom is 4cm x 5cm. Real area?", opts: ["\\( 20 \\text{ m}^2 \\)", "\\( 200 \\text{ m}^2 \\)", "\\( 2 \\text{ m}^2 \\)", "\\( 50 \\text{ m}^2 \\)", "\\( 100 \\text{ m}^2 \\)"], ans: "\\( 20 \\text{ m}^2 \\)", exp: "Ukuran nyata = 400 cm x 500 cm = 4 m x 5 m. Luas = 4 x 5 = 20 m².", exp_trans: "Real size = 4m x 5m. Area = 20 m²." },
+            "t3-task8": { type: "tf_table", q: "Evaluasi rumus skala dan densitas. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluate scale and density formulas.", opts: ["Skala = Jarak Peta / Jarak Nyata", "Densitas = Massa / Volume", "Volume = Densitas / Massa", "Jarak Nyata = Jarak Peta x Skala"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, Volume = Massa / Densitas. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t3-task9": { type: "single", q: "Logam A memiliki densitas 5 g/cm³, sedangkan Logam B memiliki densitas 8 g/cm³. Jika keduanya bervolume sama, manakah pernyataan yang benar? <i class='fas fa-scale-balanced text-orange-500 ml-2'></i>", q_trans: "Metal A density 5 g/cm³, Metal B density 8 g/cm³. Same volume. Which is true?", opts: ["Massa A lebih besar dari B", "Massa B lebih besar dari A", "Massa A sama dengan B", "Massa tidak bisa ditentukan", "Logam B lebih ringan"], ans: "Massa B lebih besar dari A", exp: "Karena volume sama, massa sebanding dengan densitas. Densitas B lebih besar, maka massanya lebih besar.", exp_trans: "Same volume, mass is proportional to density. B is denser, so B is heavier." },
+            "t3-task10": { type: "complex", q: "Pilih langkah yang benar untuk menyelesaikan soal: 'Mencari jarak sebenarnya jika peta 5 cm dan skala 1:50.000'. <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Correct steps to find real distance: map 5cm, scale 1:50,000.", opts: ["Kalikan jarak peta dengan skala", "\\( 5 \\text{ cm} \\times 50.000 \\)", "Bagi hasil dengan 100.000 untuk mengubah ke km", "Jarak nyata adalah 2,5 km"], ans: [0, 1, 2, 3], exp: "5 x 50.000 = 250.000 cm. 250.000 / 100.000 = 2,5 km. Semua benar.", exp_trans: "5 x 50,000 = 250,000 cm = 2.5 km. All correct." },
+
+            // TASK 4: Perbandingan Berbalik Nilai (Pekerjaan & Arus)
+            "t4-task1": { type: "single", q: "Sebuah pekerjaan dapat diselesaikan oleh 10 pekerja dalam waktu 6 hari. Jika pekerja dikurangi menjadi 5 orang, berapa hari pekerjaan akan selesai? <i class='fas fa-people-group text-orange-500 ml-2'></i>", q_trans: "A job is done by 10 men in 6 days. If reduced to 5 men, how many days?", opts: ["\\( 3 \\text{ hari} \\)", "\\( 6 \\text{ hari} \\)", "\\( 10 \\text{ hari} \\)", "\\( 12 \\text{ hari} \\)", "\\( 15 \\text{ hari} \\)"], ans: "\\( 12 \\text{ hari} \\)", exp: "Perbandingan berbalik nilai. 10 x 6 = 5 x t. 60 = 5t. t = 12 hari.", exp_trans: "Inverse proportion. t = 12 days." },
+            "t4-task2": { type: "fill", q: "8 orang dapat menyelesaikan tugas dalam 12 hari. Jika tugas ingin diselesaikan dalam 6 hari, berapa orang yang dibutuhkan? <i class='fas fa-user-plus text-orange-500 ml-2'></i>", q_trans: "8 men finish in 12 days. To finish in 6 days, how many men?", ans: "16", exp: "8 x 12 = P x 6. 96 = 6P. P = 16 orang.", exp_trans: "8 x 12 = P x 6. P = 16." },
+            "t4-task3": { type: "tf_table", q: "Analisis perbandingan berbalik nilai. <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Analyze inverse proportion.", opts: ["Jumlah pekerja berbanding terbalik dengan waktu", "Jika harga naik, jumlah barang yang bisa dibeli turun", "Jika kecepatan naik, waktu tempuh turun", "Jika jumlah pekerja naik, waktu penyelesaian naik"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, waktu turun.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t4-task4": { type: "single", q: "Tukang A bisa mengecat tembok dalam 4 hari. Tukang B dalam 12 hari. Jika mereka bekerja sama, berapa hari pekerjaan selesai? <i class='fas fa-paint-roller text-orange-500 ml-2'></i>", q_trans: "Painter A finishes in 4 days, B in 12. Together?", opts: ["\\( 2 \\text{ hari} \\)", "\\( 3 \\text{ hari} \\)", "\\( 4 \\text{ hari} \\)", "\\( 5 \\text{ hari} \\)", "\\( 8 \\text{ hari} \\)"], ans: "\\( 3 \\text{ hari} \\)", exp: "Laju A = 1/4, Laju B = 1/12. Gabungan = 1/4 + 1/12 = 3/12 + 1/12 = 4/12 = 1/3. Waktu = 3 hari.", exp_trans: "Rate A=1/4, B=1/12. Combined = 1/3. Time = 3 days." },
+            "t4-task5": { type: "complex", q: "Pilih rumus yang benar untuk laju kerja gabungan. <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Correct formulas for combined work rate.", opts: ["\\( \\frac{1}{t_{gabungan}} = \\frac{1}{t_1} + \\frac{1}{t_2} \\)", "\\( t_{gabungan} = t_1 + t_2 \\)", "\\( t_{gabungan} = \\frac{t_1 \\times t_2}{t_1 + t_2} \\) (untuk 2 pekerja)", "\\( \\text{Laju Kerja} = \\frac{1}{\\text{Waktu}} \\)"], ans: [0, 2, 3], exp: "1. B. 2. S, bukan ditambah. 3. B, rumus cepat gabungan 2 pekerja. 4. B.", exp_trans: "1. B. 2. S. 3. B. 4. B." },
+            "t4-task6": { type: "fill", q: "Pompa A dapat mengisi kolam dalam 8 jam. Pompa B dalam 8 jam. Jika bekerja bersama, berapa jam kolam akan penuh? <i class='fas fa-pump text-orange-500 ml-2'></i>", q_trans: "Pump A fills in 8h. Pump B in 8h. Together?", ans: "4", exp: "1/8 + 1/8 = 2/8 = 1/4. Waktu = 4 jam.", exp_trans: "1/8 + 1/8 = 1/4. Time = 4 hours." },
+            "t4-task7": { type: "single", q: "Pompa X mengisi kolam dalam 6 jam. Pompa Y dalam 3 jam. Jika dipakai bersama, berapa jam kolam penuh? <i class='fas fa-fill-drip text-orange-500 ml-2'></i>", q_trans: "Pump X fills in 6h. Pump Y in 3h. Together?", opts: ["\\( 1 \\text{ jam} \\)", "\\( 1,5 \\text{ jam} \\)", "\\( 2 \\text{ jam} \\)", "\\( 2,5 \\text{ jam} \\)", "\\( 4,5 \\text{ jam} \\)"], ans: "\\( 2 \\text{ jam} \\)", exp: "1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2. Waktu = 2 jam.", exp_trans: "1/6 + 1/3 = 1/2. Time = 2 hours." },
+            "t4-task8": { type: "tf_table", q: "Pernyataan tentang laju kerja. <i class='fas fa-clipboard-list text-orange-500 ml-2'></i>", q_trans: "Statements about work rate.", opts: ["Jika laju pekerja ditambah, waktu selesai lebih cepat", "Pekerja yang lebih lambat memiliki laju 1/waktu yang lebih besar", "Laju gabungan selalu menghasilkan waktu yang lebih cepat", "Waktu gabungan = 1 / Laju Gabungan"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, laju lebih kecil. 3. B. 4. B, rumus benar.", exp_trans: "1. B. 2. S. 3. B. 4. B." },
+            "t4-task9": { type: "single", q: "15 pekerja dapat menyelesaikan proyek dalam 10 hari. Namun, setelah bekerja 4 hari, 5 pekerja sakit dan pulang. Berapa hari tambahan waktu yang dibutuhkan sisa pekerja untuk menyelesaikan proyek? <i class='fas fa-helmet-safety text-orange-500 ml-2'></i>", q_trans: "15 men finish in 10 days. After 4 days, 5 men leave. How many EXTRA days needed?", opts: ["\\( 4,5 \\text{ hari} \\)", "\\( 6 \\text{ hari} \\)", "\\( 7,5 \\text{ hari} \\)", "\\( 9 \\text{ hari} \\)", "\\( 10 \\text{ hari} \\)"], ans: "\\( 9 \\text{ hari} \\)", exp: "Total pekerjaan = 15 x 10 = 150 HK. 4 hari pertama = 15 x 4 = 60 HK. Sisa = 90 HK. Sisa pekerja = 10 orang. Waktu = 90 / 10 = 9 hari tambahan.", exp_trans: "Total work = 150 MD. 4 days = 60 MD. Remaining = 90 MD. Men = 10. Time = 90 / 10 = 9 extra days." },
+            "t4-task10": { type: "complex", q: "Manakah yang merupakan contoh perbandingan berbalik nilai? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Which are examples of inverse proportion?", opts: ["Jumlah pekerja dan waktu pengerjaan", "Kecepatan kendaraan dan waktu tempuh", "Jumlah barang yang dibeli dan total harga", "Banyaknya keran yang dibuka dan waktu mengisi tandon"], ans: [0, 1, 3], exp: "1. B. 2. B. 3. S, ini senilai. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+
+            // TASK 5: Mastery - Soal Cerita Kompleks
+            "t5-task1": { type: "single", q: "Sebuah mobil berangkat dari kota A pukul 07.00 menuju kota B dengan kecepatan 60 km/jam. Jarak A ke B adalah 150 km. Pukul berapa mobil tersebut tiba di kota B? <i class='fas fa-route text-orange-500 ml-2'></i>", q_trans: "A car departs A at 07:00 to B at 60 km/h. Distance 150 km. What time does it arrive?", opts: ["\\( 08.30 \\)", "\\( 09.00 \\)", "\\( 09.30 \\)", "\\( 10.00 \\)", "\\( 10.30 \\)"], ans: "\\( 09.30 \\)", exp: "Waktu = 150 / 60 = 2,5 jam. 2,5 jam dari 07.00 adalah 09.30.", exp_trans: "Time = 2.5 h. 07:00 + 2.5 h = 09:30." },
+            "t5-task2": { type: "fill", q: "Kurs 1 USD adalah Rp 15.500. Jika seseorang menukar 200 USD ke Rupiah, berapa Rupiah yang akan diterima? <i class='fas fa-money-bill text-orange-500 ml-2'></i>", q_trans: "1 USD = Rp 15,500. If someone exchanges 200 USD, how much Rupiah?", ans: "3100000", exp: "Nilai Rupiah = 200 x 15.500 = Rp 3.100.000.", exp_trans: "Rupiah = 200 x 15,500 = Rp 3,100,000." },
+            "t5-task3": { type: "tf_table", q: "Analisis laju kebutuhan sehari-hari. <i class='fas fa-cart-shopping text-orange-500 ml-2'></i>", q_trans: "Analyze daily rate needs.", opts: ["Membeli barang secara grosir biasanya menurunkan harga satuan", "Laju mengetik 60 kata/menit berarti 1 kata per sekon", "Kecepatan 1 m/s lebih lambat dari 1 km/jam", "Konsumsi 1 liter bensin untuk 10 km berarti 10 km/liter"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B, 60/60 = 1. 3. S, 1 m/s = 3,6 km/j, lebih cepat. 4. B.", exp_trans: "1. B. 2. B. 3. S. 4. B." },
+            "t5-task4": { type: "single", q: "Mobil Deni memiliki konsumsi bahan bakar 1:15 (1 liter untuk 15 km). Jika Deni ingin bepergian sejauh 75 km, berapa minimal liter bensin yang harus ada di tangki? <i class='fas fa-gas-pump text-orange-500 ml-2'></i>", q_trans: "Deni's car consumption is 1:15 (1L for 15km). To travel 75 km, min liters?", opts: ["\\( 3 \\text{ liter} \\)", "\\( 4 \\text{ liter} \\)", "\\( 5 \\text{ liter} \\)", "\\( 6 \\text{ liter} \\)", "\\( 15 \\text{ liter} \\)"], ans: "\\( 5 \\text{ liter} \\)", exp: "Bensin = Jarak / Laju Konsumsi = 75 km / 15 km/liter = 5 liter.", exp_trans: "Fuel = Dist / Rate = 75 / 15 = 5 L." },
+            "t5-task5": { type: "complex", q: "Pilih pernyataan yang benar terkait efisiensi. <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Select true statements regarding efficiency.", opts: ["Semakin besar km/liter, semakin hemat bahan bakar", "Semakin kecil liter/km, semakin hemat bahan bakar", "1 knot adalah 1 mil laut per jam", "Hemat bahan bakar berarti laju konsumsi bertambah"], ans: [0, 1, 2], exp: "1. B. 2. B. 3. B, benar. 4. S, laju konsumsi berkurang.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t5-task6": { type: "fill", q: "Sebuah pabrik sepatu memproduksi 2000 pasang sepatu dalam 8 jam. Jika pabrik beroperasi 10 jam, berapa pasang sepatu yang dihasilkan? <i class='fas fa-shoe-prints text-orange-500 ml-2'></i>", q_trans: "Factory makes 2000 shoes in 8h. In 10h, how many shoes?", ans: "2500", exp: "Laju = 2000 / 8 = 250 pasang/jam. Dalam 10 jam = 250 x 10 = 2500 pasang.", exp_trans: "Rate = 250 shoes/h. In 10 h = 2500 shoes." },
+            "t5-task7": { type: "single", q: "Rani berangkat ke sekolah dengan kecepatan 40 km/jam. Pulang sekolah, karena hujan, ia menempuh kecepatan 20 km/jam. Jika jarak sekolah ke rumah tetap, berapakah kecepatan rata-rata perjalanan Rani? <i class='fas fa-house-chimney text-orange-500 ml-2'></i>", q_trans: "Rani goes to school at 40 km/h. Returns at 20 km/h. Same distance. Average speed?", opts: ["\\( 25 \\text{ km/jam} \\)", "\\( 26,67 \\text{ km/jam} \\)", "\\( 30 \\text{ km/jam} \\)", "\\( 35 \\text{ km/jam} \\)", "\\( 60 \\text{ km/jam} \\)"], ans: "\\( 26,67 \\text{ km/jam} \\)", exp: "Misal jarak S. Waktu pergi = S/40. Waktu pulang = S/20. V_rata = 2S / (S/40 + S/20) = 2S / (3S/40) = 80/3 = 26,67 km/jam.", exp_trans: "V_avg = 2*v1*v2 / (v1+v2) = 2*40*20 / 60 = 1600/60 = 26.67 km/h." },
+            "t5-task8": { type: "tf_table", q: "Analisis perbandingan senilai dan berbalik nilai. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Analyze direct and inverse proportion.", opts: ["Perbandingan senilai: nilai bertambah bersamaan", "Perbandingan berbalik nilai: nilai bertambah, nilai lain berkurang", "Skala peta adalah contoh perbandingan senilai", "Waktu dan kecepatan (jarak tetap) adalah perbandingan senilai"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, peta bertambah nyata bertambah. 4. S, berbalik nilai.", exp_trans: "1. B. 2. B. 3. B. 4. S." },
+            "t5-task9": { type: "single", q: "Sebuah AC berdaya 2000 Watt dinyalakan selama 5 jam. Jika tarif listrik Rp 1.500 per kWh, berapa biaya listrik yang dikeluarkan? <i class='fas fa-plug-circle-bolt text-orange-500 ml-2'></i>", q_trans: "A 2000W AC is on for 5h. Electricity is Rp 1,500/kWh. Cost?", opts: ["\\( \\text{Rp} 7.500 \\)", "\\( \\text{Rp} 10.000 \\)", "\\( \\text{Rp} 15.000 \\)", "\\( \\text{Rp} 30.000 \\)", "\\( \\text{Rp} 50.000 \\)"], ans: "\\( \\text{Rp} 15.000 \\)", exp: "Energi (kWh) = Daya (kW) x Waktu (jam) = 2 kW x 5 jam = 10 kWh. Biaya = 10 x 1500 = Rp 15.000.", exp_trans: "Energy = 2 kW x 5 h = 10 kWh. Cost = 10 x 1500 = Rp 15,000." },
+            "t5-task10": { type: "complex", q: "Pilih langkah yang benar untuk mencari kecepatan rata-rata perjalanan dua tahap. <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Correct steps to find average speed of a two-stage trip.", opts: ["Hitung jarak masing-masing tahap", "Hitung waktu masing-masing tahap", "Jumlahkan kedua jarak dan kedua waktu", "Bagi total waktu dengan total jarak"], ans: [0, 1, 2], exp: "1. B, 2. B, 3. B, 4. S, yang benar adalah bagi total jarak dengan total waktu.", exp_trans: "1. B, 2. B, 3. B, 4. S. Correct is divide total distance by total time." }
+        });
+        
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Exercise'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua pernyataan yang benar. <span class="translation">*Select all correct statements.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah untuk setiap pernyataan. <span class="translation">*Determine True or False for each statement.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().replace(/[^\d,-]/g, '').replace(/\./g, '').replace(',', '.'); // Hapus semua karakter kecuali angka, koma, minus. Hapus titik, ubah koma jadi titik.
+                let correctAns = data.ans.toString().toLowerCase().replace(/\s/g, '');
+                inputField.disabled = true;
+                isCorrect = (userVal === correctAns);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = userVal;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.length > 0 ? cArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    isCorrect = (sArr.length > 0 && sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.join(' | ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.length > 0 && sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns || 'Tidak Dijawab';
+                    cAnsStr = correctAns;
+                    isCorrect = (sAnsStr === cAnsStr);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                let qText = data.q.replace(/<[^>]+>/g, '');
+                if (data.type === 'tf_table') {
+                    qText += " | Statements: " + data.opts.map((opt, idx) => `${idx+1}. ${opt}`).join(" ; ");
+                }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${qText}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            if (typeof renderMathInElement === 'undefined') return;
+            
+            const target = document.querySelector('.content-section.active') || document.body;
+            try {
+                renderMathInElement(target, {
+                    delimiters: [
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            } catch(e) {
+                console.error("KaTeX rendering error:", e);
+            }
+        }
+
+        window.onload = () => {
+            renderTasks();
+            setTimeout(() => {
+                showSection('warmup');
+                renderMath();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
