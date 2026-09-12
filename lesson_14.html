@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Unsur Bentuk Aljabar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+        .prompt-box { max-width: 650px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; text-align: left; }
+        .prompt-box p { width: 100%; }
+        .prompt-box img { width: 100%; height: auto; max-width: 300px; display: block; margin-top: 0.5rem; }
+        .translation { font-style: italic; font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; display: block; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .option-btn { transition: all 0.2s; }
+        .option-btn:hover { transform: translateX(5px); }
+        .collapse-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s, border 0.4s, background 0.4s; padding: 0; border: 0; background: transparent; }
+        .collapse-content.open { max-height: 2000px; padding: 1.5rem; border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 0.5rem; margin-top: 1rem; }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; box-sizing: border-box; }
+            .no-print { display: none !important; }
+            #printArea table { table-layout: fixed; width: 100%; font-size: 9px; }
+            #printArea td, #printArea th { word-wrap: break-word; padding: 2px !important; }
+            @page { size: A4; margin: 5mm; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <marker id="arr1" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-4 flex justify-between items-center shadow-md no-print shrink-0 z-50">
+        <div>
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p class="text-sm">Topic: Algebraic Forms - Elements of Algebraic Forms</p>
+            <p class="translation text-indigo-200">Topik: Bentuk Aljabar - Unsur-Unsur Bentuk Aljabar</p>
+        </div>
+        <div>
+            <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-bold py-2 px-4 rounded flex items-center gap-2">
+                <i class="fas fa-gavel"></i> Class Rules
+            </button>
+        </div>
+    </header>
+
+    <!-- Modal Class Rules -->
+    <div id="classRulesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg p-6 w-80 max-w-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-indigo-600">Aturan Kelas <br><span class="translation text-gray-500">Class Rules</span></h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-comments text-indigo-500 mt-1"></i>
+                    <div>Berbicara secara bergantian. <span class="translation">Take turns speaking.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-door-open text-indigo-500 mt-1"></i>
+                    <div>Meminta izin jika ingin meninggalkan kelas. <span class="translation">Ask permission if you want to leave the class.</span></div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i class="fas fa-video text-indigo-500 mt-1"></i>
+                    <div>Menyalakan kamera dan microphone jika diperlukan. <span class="translation">Turn on camera and microphone if needed.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg no-print border-r border-gray-200 flex flex-col">
+            <div class="p-4 bg-indigo-600 text-white">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fas fa-book-open"></i> Class Agenda</h3>
+                <p class="text-xs text-indigo-200 mt-1">Pilih topik untuk navigasi <span class="translation text-indigo-300 block">Select topic to navigate</span></p>
+            </div>
+            <nav class="flex-1 overflow-y-auto p-2">
+                <ul class="space-y-1">
+                    <li><a href="javascript:void(0)" onclick="showSection('warmup')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="warmup"><div class="font-semibold text-sm text-gray-800">Spiral Review Warm-up</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:00 - 00:10</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('intro')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="intro"><div class="font-semibold text-sm text-gray-800">Introduction & Real-World</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:10 - 00:15</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('review')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="review"><div class="font-semibold text-sm text-gray-800">Review of Prior Knowledge</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:15 - 00:20</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('problem')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="problem"><div class="font-semibold text-sm text-gray-800">Problem Introduction</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:20 - 00:30</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('guided')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="guided"><div class="font-semibold text-sm text-gray-800">Guided Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:30 - 00:45</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('independent')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="independent"><div class="font-semibold text-sm text-gray-800">Independent Practice</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:45 - 00:55</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('consolidation')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-indigo-50 hover:text-indigo-800 transition-colors cursor-pointer" data-section="consolidation"><div class="font-semibold text-sm text-gray-800">Consolidation & Reflection</div><div class="text-xs text-gray-500 flex items-center gap-1 mt-1"><i class="far fa-clock"></i> 00:55 - 01:00</div></a></li>
+                    <hr class="my-3 border-gray-200">
+                    <li><a href="javascript:void(0)" onclick="showSection('task1')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task1"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 1</div><div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task2')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task2"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 2</div><div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task3')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task3"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 3</div><div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task4')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task4"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 4</div><div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div></a></li>
+                    <li><a href="javascript:void(0)" onclick="showSection('task5')" class="sidebar-item block px-4 py-2 rounded-lg hover:bg-orange-50 hover:text-orange-800 transition-colors cursor-pointer" data-section="task5"><div class="font-bold text-sm text-indigo-800 flex items-center gap-2"><i class="fas fa-clipboard-list text-xs"></i> Task 5</div><div class="text-xs text-gray-500 mt-1">10 Multiple Choice</div></a></li>
+                </ul>
+            </nav>
+            <div class="p-4 bg-gray-50 border-t border-gray-200 text-center">
+                <p class="text-xs text-gray-500 font-medium">Math Tutoring System</p>
+                <p class="text-xs text-gray-400">by Deni</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <div id="contentScrollArea" class="flex-1 overflow-y-auto p-6">
+
+            <!-- ========================================== -->
+            <!-- SECTION: SPIRAL REVIEW WARM-UP             -->
+            <!-- ========================================== -->
+            <div id="warmup" class="content-section active">
+                <!-- PAGE 1: THEORY 1 -->
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Dari Rasio ke Variabel <i class="fas fa-scale-balanced text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">From Ratios to Variables</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="150" height="140" viewBox="0 0 150 140">
+                                    <rect x="10" y="20" width="40" height="40" rx="5" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                                    <text x="30" y="45" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">2x</text>
+                                    <rect x="60" y="20" width="40" height="40" rx="5" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+                                    <text x="80" y="45" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">2x</text>
+                                    <rect x="35" y="70" width="40" height="40" rx="5" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="55" y="95" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">3x</text>
+                                    <rect x="85" y="70" width="40" height="40" rx="5" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="105" y="95" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">3x</text>
+                                    <rect x="135" y="70" width="40" height="40" rx="5" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="155" y="95" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">3x</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Pada pertemuan sebelumnya, kita mempelajari rasio. Jika rasio apel dan jeruk adalah \( 2 : 3 \), kita bisa menulisnya sebagai \( 2x \) dan \( 3x \). <span class="translation">In the previous meeting, we learned about ratios. If the ratio of apples to oranges is \( 2 : 3 \), we can write it as \( 2x \) and \( 3x \).</span></p>
+                                <p class="mt-2">Huruf \( x \) di sini mewakili sebuah nilai yang belum diketahui, yang kita sebut sebagai <b>variabel</b>. Bentuk seperti \( 2x \) dan \( 3x \) adalah cikal bakal bentuk aljabar. <span class="translation">The letter \( x \) here represents an unknown value, which we call a <b>variable</b>. Forms like \( 2x \) and \( 3x \) are the origins of algebraic forms.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Jembatan Keledai</p>
+                            <p class="mt-1">Rasio (Ratio) berubah menjadi Aljabar (Algebra) dengan mengubah angka menjadi dikali variabel. <span class="translation">Ratio turns into Algebra by changing numbers to be multiplied by a variable.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Rasio \( a : b \) \(\implies\) ax dan bx.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="w-task1"></div>
+                <div class="page" data-page="3" data-task-id="w-task2"></div>
+                <div class="page" data-page="4" data-task-id="w-task3"></div>
+
+                <!-- PAGE 5: THEORY 2 -->
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Mengenal Bentuk Aljabar <i class="fas fa-shapes text-green-400 ml-2"></i></h2>
+                        <p class="translation">Recognizing Algebraic Forms</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="140" height="80" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="75" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">2x - 3y + 5</text>
+                                    <path d="M 30 90 L 60 90" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="45" y="105" font-size="10" text-anchor="middle" fill="#ef4444">Suku 1</text>
+                                    <path d="M 75 90 L 105 90" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="90" y="105" font-size="10" text-anchor="middle" fill="#ef4444">Suku 2</text>
+                                    <path d="M 120 90 L 150 90" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="135" y="105" font-size="10" text-anchor="middle" fill="#ef4444">Suku 3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Bentuk aljabar adalah bentuk matematika yang mengandung variabel (huruf) dan konstanta (angka) yang dihubungkan oleh operasi hitung (tambah, kurang, kali, bagi). <span class="translation">An algebraic form is a mathematical form that contains variables (letters) and constants (numbers) connected by arithmetic operations (add, subtract, multiply, divide).</span></p>
+                                <p class="mt-2">Contoh: \( 2x - 3y + 5 \). Bagian yang dipisahkan oleh tanda tambah atau kurang disebut <b>suku</b> (term). <span class="translation">Example: \( 2x - 3y + 5 \). The parts separated by a plus or minus sign are called <b>terms</b>.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Memotong Tanda</p>
+                            <p class="mt-1">Untuk menghitung jumlah suku, hitung berapa banyak bagian yang dipisahkan oleh tanda \( + \) atau \( - \). <span class="translation">To count the number of terms, count how many parts are separated by a \( + \) or \( - \) sign.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Jumlah Suku = Jumlah Tanda Operasi (+/-) + 1.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="w-task4"></div>
+                <div class="page" data-page="7" data-task-id="w-task5"></div>
+                <div class="page" data-page="8" data-task-id="w-task6"></div>
+
+                <!-- PAGE 9: THEORY 3 -->
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Variabel dan Konstanta <i class="fas fa-font text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Variables and Constants</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="80" font-size="30" text-anchor="middle" fill="#8b5cf6" font-weight="bold" font-style="italic">x</text>
+                                    <path d="M 60 70 L 80 70" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="100" y="80" font-size="30" text-anchor="middle" fill="#ef4444" font-weight="bold">8</text>
+                                    <text x="40" y="110" font-size="12" text-anchor="middle" fill="#666">Variabel</text>
+                                    <text x="100" y="110" font-size="12" text-anchor="middle" fill="#666">Konstanta</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Di dalam bentuk aljabar, ada dua unsur dasar: <b>Variabel</b> adalah simbol (huruf) pengganti nilai yang belum diketahui, misalnya \( x, y, p \). <b>Konstanta</b> adalah bilangan yang nilainya sudah pasti/tetap dan berdiri sendiri tanpa variabel. <span class="translation">In algebraic forms, there are two basic elements: <b>Variable</b> is a symbol (letter) replacing an unknown value, e.g., \( x, y, p \). <b>Constant</b> is a number whose value is fixed and stands alone without a variable.</span></p>
+                                <p class="mt-2">Pada \( 3x + 7 \), \( x \) adalah variabel dan \( 7 \) adalah konstanta. <span class="translation">In \( 3x + 7 \), \( x \) is the variable and \( 7 \) is the constant.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Pengaman Konstan</p>
+                            <p class="mt-1">Jika sebuah angka tidak menempel pada huruf, itu adalah konstanta. Jika menempel pada huruf (seperti 3 pada \( 3x \)), itu adalah koefisien. <span class="translation">If a number is not attached to a letter, it is a constant. If it is attached to a letter (like 3 in \( 3x \)), it is a coefficient.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Variabel = Huruf, Konstanta = Angka menyendiri.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="w-task7"></div>
+                <div class="page" data-page="11" data-task-id="w-task8"></div>
+                <div class="page" data-page="12" data-task-id="w-task9"></div>
+                <div class="page" data-page="13" data-task-id="w-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INTRODUCTION & REAL-WORLD         -->
+            <!-- ========================================== -->
+            <div id="intro" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Harga Jajanan Sekolah <i class="fas fa-store text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">School Snack Prices</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="40" cy="60" r="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <text x="40" y="90" font-size="12" text-anchor="middle" fill="#333">Donat</text>
+                                    <text x="40" y="110" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">x</text>
+                                    
+                                    <rect x="80" y="50" width="20" height="20" fill="#a16207" stroke="#78350f" stroke-width="2"/>
+                                    <rect x="85" y="55" width="10" height="10" fill="#facc15"/>
+                                    <text x="90" y="90" font-size="12" text-anchor="middle" fill="#333">Roti</text>
+                                    <text x="90" y="110" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">2x+500</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Donat harganya \( x \) rupiah. Roti harganya \( 500 \) rupiah lebih mahal dari dua kali harga donat. Maka harga roti dalam bentuk aljabar adalah \( 2x + 500 \). <span class="translation">A donut costs \( x \) rupiahs. Bread costs \( 500 \) rupiahs more than twice the price of a donut. So the price of bread in algebraic form is \( 2x + 500 \).</span></p>
+                                <p class="mt-2">Di sini, \( x \) adalah variabel (harga donat), \( 2 \) adalah koefisien, dan \( 500 \) adalah konstanta. <span class="translation">Here, \( x \) is the variable (donut price), \( 2 \) is the coefficient, and \( 500 \) is the constant.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Terjemahkan Kata ke Simbol</p>
+                            <p class="mt-1">"Dua kali" berarti dikali \( 2 \). "Lebih mahal" atau "lebih dari" berarti ditambah (\( + \)). <span class="translation">"Twice" means multiplied by \( 2 \). "More expensive" or "more than" means plus (\( + \)).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( k \times \text{Variabel} + \text{Konstanta} \implies kp + c \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="i-task1"></div>
+                <div class="page" data-page="3" data-task-id="i-task2"></div>
+                <div class="page" data-page="4" data-task-id="i-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Keliling dan Luas Kebun <i class="fas fa-tractor text-green-400 ml-2"></i></h2>
+                        <p class="translation">Perimeter and Area of the Farm</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="30" y="30" width="120" height="80" fill="#bbf7d0" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="20" font-size="12" text-anchor="middle" fill="#333">Panjang: 2x+1</text>
+                                    <line x1="30" y1="30" x2="150" y2="30" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="10" y="75" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 10 75)">Lebar: x-2</text>
+                                    <line x1="30" y1="30" x2="30" y2="110" stroke="#ef4444" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Kebun pak Budi berbentuk persegi panjang dengan panjang \( (2x + 1) \) meter dan lebar \( (x - 2) \) meter. Bentuk aljabar sering digunakan dalam geometri untuk menyatakan ukuran yang belum pasti. <span class="translation">Mr. Budi's farm is rectangular with a length of \( (2x + 1) \) meters and a width of \( (x - 2) \) meters. Algebraic forms are often used in geometry to represent uncertain measurements.</span></p>
+                                <p class="mt-2">Untuk mencari keliling, kita jumlahkan semua sisinya: \( 2 \times [(2x + 1) + (x - 2)] \). <span class="translation">To find the perimeter, we add all sides: \( 2 \times [(2x + 1) + (x - 2)] \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Selalu Gunakan Tanda Kurung</p>
+                            <p class="mt-1">Jika ukuran berbentuk aljabar (lebih dari satu suku), selalu bungkus dalam tanda kurung sebelum dioperasikan agar tidak salah hitung tanda. <span class="translation">If a measurement is an algebraic form (more than one term), always wrap it in parentheses before operating to avoid sign errors.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Keliling Persegi Panjang = \( 2 \times (p + l) \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="i-task4"></div>
+                <div class="page" data-page="7" data-task-id="i-task5"></div>
+                <div class="page" data-page="8" data-task-id="i-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Laju dan Kecepatan Kendaraan <i class="fas fa-car-side text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Vehicle Rate and Speed</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M 20 100 L 40 100 L 50 80 L 120 80 L 130 100 L 150 100 L 150 110 L 20 110 Z" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <circle cx="50" cy="110" r="8" fill="#333"/>
+                                    <circle cx="120" cy="110" r="8" fill="#333"/>
+                                    <text x="80" y="60" font-size="14" text-anchor="middle" fill="#333">Kecepatan: 3x - 5 km/jam</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebuah mobil melaju dengan kecepatan \( (3x - 5) \) km/jam. Jika mobil berjalan selama \( 2 \) jam, jarak yang ditempuh adalah kecepatan dikali waktu: \( 2 \times (3x - 5) \). <span class="translation">A car travels at a speed of \( (3x - 5) \) km/h. If the car travels for \( 2 \) hours, the distance covered is speed times time: \( 2 \times (3x - 5) \).</span></p>
+                                <p class="mt-2">Ini menunjukkan bahwa laju perubahan (rate) dari pertemuan sebelumnya juga bisa diekspresikan dalam bentuk aljabar! <span class="translation">This shows that the rate of change from the previous meeting can also be expressed in algebraic form!</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Ingat Rumus Fisika Dasar</p>
+                            <p class="mt-1">Jarak (\( s \)), Kecepatan (\( v \)), dan Waktu (\( t \)) memiliki hubungan \( s = v \times t \). Jika salah satu berbentuk aljabar, kalikan seperti biasa. <span class="translation">Distance (\( s \)), Speed (\( v \)), and Time (\( t \)) have the relationship \( s = v \times t \). If one is algebraic, just multiply as usual.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Jarak = Kecepatan \( \times \) Waktu.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="i-task7"></div>
+                <div class="page" data-page="11" data-task-id="i-task8"></div>
+                <div class="page" data-page="12" data-task-id="i-task9"></div>
+                <div class="page" data-page="13" data-task-id="i-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: REVIEW OF PRIOR KNOWLEDGE         -->
+            <!-- ========================================== -->
+            <div id="review" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Operasi Hitung Bilangan ke Aljabar <i class="fas fa-calculator text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Arithmetic Operations to Algebra</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="40" y="40" font-size="18" text-anchor="middle" fill="#333">3 + 4 = 7</text>
+                                    <path d="M 60 45 L 80 45" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="110" y="40" font-size="18" text-anchor="middle" fill="#3b82f6" font-weight="bold">3x + 4x = 7x</text>
+                                    
+                                    <text x="40" y="90" font-size="18" text-anchor="middle" fill="#333">5 - 2 = 3</text>
+                                    <path d="M 60 95 L 80 95" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="110" y="90" font-size="18" text-anchor="middle" fill="#10b981" font-weight="bold">5p - 2p = 3p</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebelumnya kita mengerjakan \( 3 + 4 = 7 \). Di aljabar, jika variabelnya sama, konsepnya sama persis: \( 3x + 4x = 7x \). Ini disebut penjumlahan suku sejenis. <span class="translation">Previously we calculated \( 3 + 4 = 7 \). In algebra, if the variables are the same, the concept is exactly the same: \( 3x + 4x = 7x \). This is called adding like terms.</span></p>
+                                <p class="mt-2">Jika variabelnya berbeda, misalnya \( 3x + 4y \), maka tidak bisa dijumlahkan dan tetap menjadi \( 3x + 4y \). <span class="translation">If the variables are different, e.g., \( 3x + 4y \), they cannot be added and remain \( 3x + 4y \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Anggap Seperti Buah</p>
+                            <p class="mt-1">Anggap \( x \) sebagai apel dan \( y \) sebagai jeruk. 3 apel + 4 apel = 7 apel. Tapi 3 apel + 4 jeruk tetap 3 apel + 4 jeruk. <span class="translation">Treat \( x \) as apples and \( y \) as oranges. 3 apples + 4 apples = 7 apples. But 3 apples + 4 oranges remain 3 apples + 4 oranges.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( ax + bx = (a+b)x \) (Suku Sejenis).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="r-task1"></div>
+                <div class="page" data-page="3" data-task-id="r-task2"></div>
+                <div class="page" data-page="4" data-task-id="r-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Pangkat dalam Aljabar <i class="fas fa-superscript text-green-400 ml-2"></i></h2>
+                        <p class="translation">Exponents in Algebra</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="40" width="40" height="40" rx="3" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <text x="40" y="65" font-size="14" text-anchor="middle" fill="#333">x</text>
+                                    <text x="55" y="50" font-size="12" text-anchor="middle" fill="#ef4444">2</text>
+                                    <path d="M 70 60 L 100 60" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="120" y="65" font-size="14" text-anchor="middle" fill="#333">x²</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika sebuah variabel dikalikan dengan dirinya sendiri, kita gunakan pangkat. \( x \times x = x^2 \). Ini berbeda dengan \( x + x = 2x \). <span class="translation">If a variable is multiplied by itself, we use an exponent. \( x \times x = x^2 \). This is different from \( x + x = 2x \).</span></p>
+                                <p class="mt-2">Dalam bentuk aljabar \( 3x^2 \), angka \( 3 \) adalah koefisien, \( x \) adalah variabel, dan \( 2 \) adalah pangkat (eksponen). <span class="translation">In the algebraic form \( 3x^2 \), the number \( 3 \) is the coefficient, \( x \) is the variable, and \( 2 \) is the exponent.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Bedakan Perkalian dan Penjumlahan</p>
+                            <p class="mt-1">Perkalian variabel yang sama menambah pangkat (\( x \cdot x = x^2 \)), sedangkan penjumlahan variabel yang sama menambah koefisien (\( x + x = 2x \)). <span class="translation">Multiplying the same variable increases the exponent (\( x \cdot x = x^2 \)), while adding the same variable increases the coefficient (\( x + x = 2x \)).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( x \cdot x = x^2 \), \( x + x = 2x \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="r-task4"></div>
+                <div class="page" data-page="7" data-task-id="r-task5"></div>
+                <div class="page" data-page="8" data-task-id="r-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Bilangan Negatif dalam Aljabar <i class="fas fa-minus text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Negative Numbers in Algebra</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <line x1="90" y1="20" x2="90" y2="120" stroke="#333" stroke-width="2"/>
+                                    <circle cx="60" cy="70" r="10" fill="#ef4444"/>
+                                    <text x="60" y="100" font-size="12" text-anchor="middle" fill="#333">-x</text>
+                                    <circle cx="120" cy="70" r="10" fill="#10b981"/>
+                                    <text x="120" y="100" font-size="12" text-anchor="middle" fill="#333">+x</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Tanda minus di depan bentuk aljabar sangat penting! Pada bentuk \( -5x \), koefisiennya adalah \( -5 \), bukan \( 5 \). <span class="translation">The minus sign in front of the algebraic form is very important! In the form \( -5x \), the coefficient is \( -5 \), not \( 5 \).</span></p>
+                                <p class="mt-2">Saat menjumlahkan, \( 3x - 5x \) sama dengan \( 3x + (-5)x = -2x \). <span class="translation">When adding, \( 3x - 5x \) is the same as \( 3x + (-5)x = -2x \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Tarik Tanda Minus</p>
+                            <p class="mt-1">Selalu ikutkan tanda ke koefisien. Tanda \( - \) adalah bagian dari angka di depannya, bukan sekadar pengurangan. <span class="translation">Always include the sign with the coefficient. The \( - \) sign is part of the number in front of it, not just subtraction.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( ax - bx = (a-b)x \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="r-task7"></div>
+                <div class="page" data-page="11" data-task-id="r-task8"></div>
+                <div class="page" data-page="12" data-task-id="r-task9"></div>
+                <div class="page" data-page="13" data-task-id="r-task10"></div>
+            </div>
+            
+            <!-- ========================================== -->
+            <!-- SECTION: PROBLEM INTRODUCTION              -->
+            <!-- ========================================== -->
+            <div id="problem" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Mengidentifikasi Unsur Aljabar <i class="fas fa-magnifying-glass text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Identifying Algebraic Elements</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="20" width="140" height="100" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="90" y="70" font-size="24" text-anchor="middle" fill="#333" font-weight="bold">4x² - 7y + 9</text>
+                                    <line x1="30" y1="80" x2="60" y2="80" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="45" y="100" font-size="12" text-anchor="middle" fill="#ef4444">Suku 1</text>
+                                    <line x1="70" y1="80" x2="110" y2="80" stroke="#10b981" stroke-width="2"/>
+                                    <text x="90" y="100" font-size="12" text-anchor="middle" fill="#10b981">Suku 2</text>
+                                    <line x1="120" y1="80" x2="150" y2="80" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="135" y="100" font-size="12" text-anchor="middle" fill="#8b5cf6">Suku 3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Mari kita bedah bentuk aljabar \( 4x^2 - 7y + 9 \). <span class="translation">Let's dissect the algebraic form \( 4x^2 - 7y + 9 \).</span></p>
+                                <p class="mt-2">Bentuk ini memiliki 3 suku: \( 4x^2 \), \( -7y \), dan \( 9 \). <br>Variabelnya adalah \( x \) dan \( y \). <br>Koefisien dari \( x^2 \) adalah \( 4 \), dan koefisien dari \( y \) adalah \( -7 \). <br>Konstantanya adalah \( 9 \). <span class="translation">This form has 3 terms: \( 4x^2 \), \( -7y \), and \( 9 \). The variables are \( x \) and \( y \). The coefficient of \( x^2 \) is \( 4 \), and the coefficient of \( y \) is \( -7 \). The constant is \( 9 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Bedah Per Suku</p>
+                            <p class="mt-1">Saat ditanya unsur aljabar, tulis dulu semua sukunya secara terpisah. Setelah itu, identifikasi unsur dari masing-masing suku. <span class="translation">When asked about algebraic elements, first write down all the terms separately. After that, identify the elements of each term.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Suku = Koefisien \( \times \) Variabel \( ^{\text{pangkat}} \) (atau Konstanta).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="p-task1"></div>
+                <div class="page" data-page="3" data-task-id="p-task2"></div>
+                <div class="page" data-page="4" data-task-id="p-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Suku Sejenis dan Tidak Sejenis <i class="fas fa-link-slash text-green-400 ml-2"></i></h2>
+                        <p class="translation">Like and Unlike Terms</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="30" width="30" height="30" rx="3" fill="#86efac" stroke="#10b981" stroke-width="2"/>
+                                    <rect x="55" y="30" width="30" height="30" rx="3" fill="#86efac" stroke="#10b981" stroke-width="2"/>
+                                    <text x="50" y="80" font-size="14" text-anchor="middle" fill="#333">3x + 2x</text>
+                                    <text x="50" y="100" font-size="12" text-anchor="middle" fill="#10b981">Sejenis</text>
+                                    
+                                    <circle cx="125" cy="45" r="15" fill="#fca5a5" stroke="#ef4444" stroke-width="2"/>
+                                    <rect x="140" y="30" width="30" height="30" rx="3" fill="#86efac" stroke="#10b981" stroke-width="2"/>
+                                    <text x="135" y="80" font-size="14" text-anchor="middle" fill="#333">4y + 2x</text>
+                                    <text x="135" y="100" font-size="12" text-anchor="middle" fill="#ef4444">Tidak Sejenis</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Dua suku disebut <b>sejenis</b> jika memiliki variabel dan pangkat yang sama. Contoh: \( 3x \) dan \( -2x \). <span class="translation">Two terms are called <b>like terms</b> if they have the same variable and exponent. Example: \( 3x \) and \( -2x \).</span></p>
+                                <p class="mt-2">Dua suku disebut <b>tidak sejenis</b> jika variabel atau pangkatnya berbeda. Contoh: \( 3x \) dan \( 4y \), atau \( 2x \) dan \( 2x^2 \). <span class="translation">Two terms are called <b>unlike terms</b> if their variables or exponents differ. Example: \( 3x \) and \( 4y \), or \( 2x \) and \( 2x^2 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Abaikan Koefisien</p>
+                            <p class="mt-1">Untuk mengecek apakah suku sejenis, abaikan angka di depannya (koefisien). Cukup bandingkan variabel dan pangkatnya saja. <span class="translation">To check if terms are like terms, ignore the numbers in front (coefficients). Just compare the variables and their exponents.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Sejenis jika Variabel \( ^{\text{pangkat}} \) sama.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="p-task4"></div>
+                <div class="page" data-page="7" data-task-id="p-task5"></div>
+                <div class="page" data-page="8" data-task-id="p-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Koefisien Nol dan Satu <i class="fas fa-1 text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Zero and One Coefficients</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <text x="50" y="60" font-size="24" text-anchor="middle" fill="#8b5cf6" font-weight="bold">x</text>
+                                    <path d="M 70 55 L 90 55" stroke="#333" stroke-width="2" marker-end="url(#arr1)"/>
+                                    <text x="110" y="60" font-size="24" text-anchor="middle" fill="#333">1x</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Jika sebuah variabel berdiri sendiri tanpa angka di depannya, seperti \( x \) atau \( -y \), maka koefisiennya bukan 0, melainkan \( 1 \) (atau \( -1 \) untuk \( -y \)). <span class="translation">If a variable stands alone without a number in front, like \( x \) or \( -y \), its coefficient is not 0, but \( 1 \) (or \( -1 \) for \( -y \)).</span></p>
+                                <p class="mt-2">Ini karena \( 1 \times x = x \). Angka 1 biasanya tidak ditulis dalam matematika. <span class="translation">This is because \( 1 \times x = x \). The number 1 is usually not written in mathematics.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Bayangkan Angka 1</p>
+                            <p class="mt-1">Saat melihat huruf sendirian, bayangkan ada angka 1 invisible (tidak terlihat) di depannya. Ini sangat membantu saat menghitung operasi. <span class="translation">When you see a letter standing alone, imagine an invisible number 1 in front of it. This helps a lot when calculating operations.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( x = 1x \), \( -x = -1x \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="p-task7"></div>
+                <div class="page" data-page="11" data-task-id="p-task8"></div>
+                <div class="page" data-page="12" data-task-id="p-task9"></div>
+                <div class="page" data-page="13" data-task-id="p-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: GUIDED PRACTICE                   -->
+            <!-- ========================================== -->
+            <div id="guided" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Menghitung Banyak Suku <i class="fas fa-list-ol text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Counting Number of Terms</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="20" width="140" height="100" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="90" y="70" font-size="18" text-anchor="middle" fill="#333">2a - 5b + 3c - 7</text>
+                                    <line x1="30" y1="80" x2="50" y2="80" stroke="#ef4444" stroke-width="2"/>
+                                    <line x1="60" y1="80" x2="80" y2="80" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="90" y1="80" x2="110" y2="80" stroke="#8b5cf6" stroke-width="2"/>
+                                    <line x1="120" y1="80" x2="140" y2="80" stroke="#f59e0b" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Hitung berapa banyak suku dalam bentuk aljabar \( 2a - 5b + 3c - 7 \). <span class="translation">Count how many terms are in the algebraic form \( 2a - 5b + 3c - 7 \).</span></p>
+                                <p class="mt-2">Kita lihat tanda \( + \) dan \( - \) yang memisahkan: \( 2a \), \( -5b \), \( 3c \), dan \( -7 \). Jadi ada 4 suku. <span class="translation">We see the \( + \) and \( - \) signs separating: \( 2a \), \( -5b \), \( 3c \), and \( -7 \). So there are 4 terms.</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Tanda Tanya</p>
+                            <p class="mt-1">Gunakan jari atau tarik garis bawah pada setiap tanda \( + \) atau \( - \). Jumlah suku adalah jumlah tanda operasi tersebut ditambah 1. <span class="translation">Use your fingers or underline each \( + \) or \( - \) sign. The number of terms is the number of those operation signs plus 1.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Jumlah Suku = Banyaknya (Tanda + atau -) + 1.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="g-task1"></div>
+                <div class="page" data-page="3" data-task-id="g-task2"></div>
+                <div class="page" data-page="4" data-task-id="g-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Soal Cerita: Umur dan Aljabar <i class="fas fa-user-clock text-green-400 ml-2"></i></h2>
+                        <p class="translation">Word Problem: Age and Algebra</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <circle cx="50" cy="40" r="15" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                                    <text x="50" y="45" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">A</text>
+                                    <text x="50" y="80" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">x</text>
+                                    
+                                    <circle cx="130" cy="40" r="15" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+                                    <text x="130" y="45" font-size="12" text-anchor="middle" fill="#fff" font-weight="bold">B</text>
+                                    <text x="130" y="80" font-size="14" text-anchor="middle" fill="#333" font-weight="bold">2x + 3</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Umur Andi adalah \( x \) tahun. Umur Budi 3 tahun lebih tua dari dua kali umur Andi. Maka umur Budi dalam bentuk aljabar adalah \( 2x - 3 \). <span class="translation">Andi's age is \( x \) years. Budi's age is 3 years younger than twice Andi's age. So Budi's age in algebraic form is \( 2x - 3 \).</span></p>
+                                <p class="mt-2">"Dua kali umur Andi" = \( 2x \). "3 tahun lebih tua/lebih muda"... perhatikan kata "lebih muda" berarti dikurang \( 3 \). <span class="translation">"Twice Andi's age" = \( 2x \). "3 years older/younger"... note that "younger" means minus \( 3 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Bedah Kalimat Soal</p>
+                            <p class="mt-1">Baca perlahan, ganti kata "x kali" dengan perkalian, "lebih dari/tambah" dengan \( + \), "kurang dari/kurang" dengan \( - \). <span class="translation">Read slowly, replace "x times" with multiplication, "more than/plus" with \( + \), "less than/minus" with \( - \).</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( k \times \text{Variabel} \pm \text{Konstanta} \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="g-task4"></div>
+                <div class="page" data-page="7" data-task-id="g-task5"></div>
+                <div class="page" data-page="8" data-task-id="g-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Mengelompokkan Unsur <i class="fas fa-object-group text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Grouping Elements</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="20" width="60" height="100" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="50" y="70" font-size="14" text-anchor="middle" fill="#333">Variabel</text>
+                                    <text x="50" y="90" font-size="14" text-anchor="middle" fill="#8b5cf6" font-weight="bold">p, q, r</text>
+                                    
+                                    <rect x="100" y="20" width="60" height="100" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <text x="130" y="70" font-size="14" text-anchor="middle" fill="#333">Konstanta</text>
+                                    <text x="130" y="90" font-size="14" text-anchor="middle" fill="#3b82f6" font-weight="bold">5, -2, 9</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Diberikan bentuk aljabar \( 3p - 5 + 2q^2 - r + 9 \). Kita bisa mengelompokkan unsurnya. <span class="translation">Given the algebraic form \( 3p - 5 + 2q^2 - r + 9 \). We can group its elements.</span></p>
+                                <p class="mt-2">Variabelnya adalah \( p, q, r \). Konstantanya adalah \( -5 \) dan \( 9 \). <span class="translation">The variables are \( p, q, r \). The constants are \( -5 \) and \( 9 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Buat Tabel</p>
+                            <p class="mt-1">Jika bingung, buat 2 kolom di kertas coretan: kolom "Ada Huruf" dan kolom "Angka Saja". <span class="translation">If confused, make 2 columns on scratch paper: "Has Letters" and "Numbers Only".</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Variabel = Berhuruf, Konstanta = Angka murni.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="g-task7"></div>
+                <div class="page" data-page="11" data-task-id="g-task8"></div>
+                <div class="page" data-page="12" data-task-id="g-task9"></div>
+                <div class="page" data-page="13" data-task-id="g-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: INDEPENDENT PRACTICE               -->
+            <!-- ========================================== -->
+            <div id="independent" class="content-section">
+                <div class="page active" data-page="1">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-indigo-500">
+                        <h2 class="text-2xl font-bold text-indigo-600 mb-2">Soal Cerita Kompleks <i class="fas fa-book-open-reader text-indigo-400 ml-2"></i></h2>
+                        <p class="translation">Complex Word Problems</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-indigo-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="40" width="140" height="80" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+                                    <path d="M 40 80 L 50 60 L 60 80" fill="none" stroke="#333" stroke-width="2"/>
+                                    <circle cx="75" cy="70" r="10" fill="#fbbf24"/>
+                                    <path d="M 95 80 L 105 60 L 115 80" fill="none" stroke="#333" stroke-width="2"/>
+                                    <circle cx="130" cy="70" r="10" fill="#fbbf24"/>
+                                    <text x="90" y="110" font-size="12" text-anchor="middle" fill="#333">3x + 2</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Toko berlangganan sabun. Minggu pertama beli \( x \) sabun. Minggu kedua beli 2 buah lebih dari minggu pertama. Minggu ketiga beli 3 kali lipat minggu pertama. Total sabun yang dibeli? <span class="translation">A shop subscribes to soap. First week buys \( x \) soaps. Second week buys 2 more than the first week. Third week buys 3 times the first week. Total soaps bought?</span></p>
+                                <p class="mt-2">Minggu 1: \( x \)<br>Minggu 2: \( x + 2 \)<br>Minggu 3: \( 3x \)<br>Total: \( x + (x + 2) + 3x = 5x + 2 \). <span class="translation">Week 1: \( x \)<br>Week 2: \( x + 2 \)<br>Week 3: \( 3x \)<br>Total: \( x + (x + 2) + 3x = 5x + 2 \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Daftar Waktu / Peristiwa</p>
+                            <p class="mt-1">Pecah soal cerita panjang menjadi beberapa baris pendek per kejadian, baru disatukan di akhir. <span class="translation">Break down a long word problem into short lines per event, then combine them at the end.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Deskripsikan tiap kondisi \( \to \) Jumlahkan semuanya.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="2" data-task-id="ind-task1"></div>
+                <div class="page" data-page="3" data-task-id="ind-task2"></div>
+                <div class="page" data-page="4" data-task-id="ind-task3"></div>
+
+                <div class="page" data-page="5">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-green-500">
+                        <h2 class="text-2xl font-bold text-green-600 mb-2">Geometri Aljabar <i class="fas fa-shapes text-green-400 ml-2"></i></h2>
+                        <p class="translation">Algebraic Geometry</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-green-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <path d="M 30 110 L 30 40 L 100 110 Z" fill="#dcfce7" stroke="#10b981" stroke-width="2"/>
+                                    <line x1="30" y1="40" x2="30" y2="110" stroke="#ef4444" stroke-width="3"/>
+                                    <text x="15" y="80" font-size="12" text-anchor="middle" fill="#333" transform="rotate(-90 15 80)">Tinggi: 2x</text>
+                                    <line x1="30" y1="110" x2="100" y2="110" stroke="#3b82f6" stroke-width="3"/>
+                                    <text x="65" y="125" font-size="12" text-anchor="middle" fill="#333">Alas: x+5</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Sebuah segitiga siku-siku memiliki alas \( (x + 5) \) cm dan tinggi \( 2x \) cm. Kelilingnya membutuhkan sisi miring, tapi Luasnya bisa langsung dihitung! <span class="translation">A right triangle has a base of \( (x + 5) \) cm and a height of \( 2x \) cm. Its perimeter requires the hypotenuse, but its Area can be calculated directly!</span></p>
+                                <p class="mt-2">Luas = \( \frac{1}{2} \times \text{alas} \times \text{tinggi} = \frac{1}{2} \times (x + 5) \times 2x = x(x + 5) \). <span class="translation">Area = \( \frac{1}{2} \times \text{base} \times \text{height} = \frac{1}{2} \times (x + 5) \times 2x = x(x + 5) \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Kunci Kurung</p>
+                            <p class="mt-1">Selalu bungkus ukuran aljabar dalam tanda kurung sebelum dikalikan, agar koefisien tidak salah menyebar. <span class="translation">Always wrap algebraic measurements in parentheses before multiplying, so the coefficient doesn't spread incorrectly.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: Luas Segitiga = \( \frac{1}{2} \times a \times t \).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="6" data-task-id="ind-task4"></div>
+                <div class="page" data-page="7" data-task-id="ind-task5"></div>
+                <div class="page" data-page="8" data-task-id="ind-task6"></div>
+
+                <div class="page" data-page="9">
+                    <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-purple-500">
+                        <h2 class="text-2xl font-bold text-purple-600 mb-2">Menganalisis Koefisien dan Pangkat <i class="fas fa-microscope text-purple-400 ml-2"></i></h2>
+                        <p class="translation">Analyzing Coefficients and Exponents</p>
+                        <div class="flex gap-4 my-4 items-center">
+                            <div class="bg-purple-50 p-4 rounded flex justify-center shrink-0">
+                                <svg width="180" height="140" viewBox="0 0 180 140">
+                                    <rect x="20" y="40" width="140" height="60" rx="5" fill="#f3e8ff" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="70" y="80" font-size="24" text-anchor="middle" fill="#333" font-weight="bold">-5</text>
+                                    <text x="95" y="80" font-size="24" text-anchor="middle" fill="#8b5cf6" font-weight="bold" font-style="italic">y³</text>
+                                    <line x1="70" y1="85" x2="70" y2="110" stroke="#ef4444" stroke-width="2"/>
+                                    <text x="70" y="125" font-size="10" text-anchor="middle" fill="#ef4444">Koefisien</text>
+                                    <line x1="95" y1="85" x2="95" y2="110" stroke="#10b981" stroke-width="2"/>
+                                    <text x="95" y="125" font-size="10" text-anchor="middle" fill="#10b981">Variabel & Pangkat</text>
+                                </svg>
+                            </div>
+                            <div>
+                                <p>Pada suku \( -5y^3 \), unsur-unsurnya terbagi sangat jelas. <span class="translation">In the term \( -5y^3 \), the elements are clearly divided.</span></p>
+                                <p class="mt-2">- \( -5 \) adalah koefisien (termasuk tanda negatifnya). <br>- \( y \) adalah variabel. <br>- \( 3 \) adalah pangkat/eksponen dari variabel \( y \). <span class="translation">- \( -5 \) is the coefficient (including the negative sign). <br>- \( y \) is the variable. <br>- \( 3 \) is the exponent of the variable \( y \).</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <p class="font-bold text-yellow-800"><i class="fas fa-lightbulb mr-1"></i> Tips & Trik: Garis Bawah Pemisah</p>
+                            <p class="mt-1">Saat ujian, garis bawahi koefisien dengan warna merah, dan variabel dengan warna biru agar tidak tertukar. <span class="translation">During exams, underline the coefficient in red and the variable in blue so they don't get swapped.</span></p>
+                            <p class="mt-1 font-bold"><i class="fas fa-flag mr-1"></i> Rumus To The Point: \( c \cdot v^n \) (c=koefisien, v=variabel, n=pangkat).</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" data-page="10" data-task-id="ind-task7"></div>
+                <div class="page" data-page="11" data-task-id="ind-task8"></div>
+                <div class="page" data-page="12" data-task-id="ind-task9"></div>
+                <div class="page" data-page="13" data-task-id="ind-task10"></div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- SECTION: CONSOLIDATION & REFLECTION         -->
+            <!-- ========================================== -->
+            <div id="consolidation" class="content-section">
+                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Konsolidasi & Refleksi</h2>
+                    <p class="translation">Consolidation & Reflection</p>
+                    <p>Kerja bagus! Anda telah menguasai unsur-unsur bentuk aljabar (variabel, koefisien, konstanta, suku, dan suku sejenis). Ini adalah fondasi penting sebelum kita belajar operasi hitung pada bentuk aljabar di pertemuan berikutnya. <span class="translation">Excellent work! You have mastered the elements of algebraic forms (variables, coefficients, constants, terms, and like terms). This is an important foundation before we learn arithmetic operations on algebraic forms in the next meeting.</span></p>
+                    <p class="mt-2">Teruslah berlatih untuk langsung mengenali unsur-unsur ini secara instan saat melihat sebuah persamaan! <span class="translation">Keep practicing to instantly recognize these elements when you see an equation!</span></p>
+                    <a href="https://learn.algonova.id" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+                        Lanjut ke learn.algonova.id <span class="translation text-sm italic">Go to learn.algonova.id</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- TASK SECTIONS -->
+            <div id="task1" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t1-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t1-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t1-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t1-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t1-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t1-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t1-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t1-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t1-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t1-task10"></div></div>
+            </div>
+            <div id="task2" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t2-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t2-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t2-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t2-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t2-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t2-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t2-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t2-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t2-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t2-task10"></div></div>
+            </div>
+            <div id="task3" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t3-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t3-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t3-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t3-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t3-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t3-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t3-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t3-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t3-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t3-task10"></div></div>
+            </div>
+            <div id="task4" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t4-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t4-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t4-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t4-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t4-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t4-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t4-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t4-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t4-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t4-task10"></div></div>
+            </div>
+            <div id="task5" class="content-section">
+                <div class="page active" data-page="1"><div data-task-id="t5-task1"></div></div>
+                <div class="page" data-page="2"><div data-task-id="t5-task2"></div></div>
+                <div class="page" data-page="3"><div data-task-id="t5-task3"></div></div>
+                <div class="page" data-page="4"><div data-task-id="t5-task4"></div></div>
+                <div class="page" data-page="5"><div data-task-id="t5-task5"></div></div>
+                <div class="page" data-page="6"><div data-task-id="t5-task6"></div></div>
+                <div class="page" data-page="7"><div data-task-id="t5-task7"></div></div>
+                <div class="page" data-page="8"><div data-task-id="t5-task8"></div></div>
+                <div class="page" data-page="9"><div data-task-id="t5-task9"></div></div>
+                <div class="page" data-page="10"><div data-task-id="t5-task10"></div></div>
+            </div>
+            </div> <!-- Penutup #contentScrollArea -->
+            <div id="paginationBar" class="shrink-0 bg-white p-3 border-t border-gray-200 flex justify-center items-center gap-1 no-print z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"></div>
+        </main>
+    </div>
+    
+    <!-- Print Area -->
+    <div id="printArea" class="hidden p-8">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h1 class="text-xl font-bold">Math Tutoring by Deni</h1>
+            <p>Topic: Algebraic Forms - Elements of Algebraic Forms</p>
+            <div class="flex justify-around mt-4 text-sm">
+                <p>Name: ..............................</p>
+                <p>Date: ..............................</p>
+                <p>Task: <span id="printTaskNum">1</span></p>
+                <p>Score: <span id="printScore">0</span>/10</p>
+            </div>
+        </div>
+        <table class="w-full border-collapse border border-black text-sm">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-black p-1">No.</th>
+                    <th class="border border-black p-1">Question</th>
+                    <th class="border border-black p-1">Student Answer</th>
+                    <th class="border border-black p-1">Correct Answer</th>
+                    <th class="border border-black p-1">Note (❌/✔️)</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
+        <div class="mt-8 text-right">
+            <p>Checked by,</p>
+            <br><br>
+            <p class="font-bold">Deni</p>
+        </div>
+    </div>
+	
+    <script>
+        // ====== MATH QUESTIONS DATA ======
+        const questions = {};
+        Object.assign(questions, {
+            // SPIRAL REVIEW WARM-UP
+            "w-task1": { type: "single", q: "Pada bentuk aljabar \\( 4x - 5y + 7 \\), manakah yang merupakan variabel? <i class='fas fa-font text-blue-500 ml-2'></i>", q_trans: "In the algebraic form \\( 4x - 5y + 7 \\), which are the variables?", opts: ["\\( 4 \\text{ dan } 5 \\)", "\\( x \\text{ dan } y \\)", "\\( 7 \\)", "\\( 4x \\text{ dan } 5y \\)", "\\( x, y, \\text{ dan } 7 \\)"], ans: "\\( x \\text{ dan } y \\)", exp: "Variabel adalah simbol (huruf) pengganti nilai yang belum diketahui. Pada bentuk ini, hurufnya adalah \\( x \\) dan \\( y \\).", exp_trans: "Variables are symbols (letters) replacing unknown values. Here, the letters are \\( x \\) and \\( y \\)." },
+            "w-task2": { type: "fill", q: "Ubah rasio umur Andi dan Budi (\\( 3 : 4 \\)) ke dalam bentuk aljabar menggunakan variabel \\( p \\). Andi = ... <i class='fas fa-scale-balanced text-blue-500 ml-2'></i>", q_trans: "Convert the ratio of Andi and Budi's age (\\( 3 : 4 \\)) into algebraic form using variable \\( p \\). Andi = ...", ans: "3p", exp: "Rasio \\( 3 : 4 \\) ditulis sebagai \\( 3p \\) untuk Andi dan \\( 4p \\) untuk Budi, di mana \\( p \\) adalah variabel pembagi.", exp_trans: "Ratio \\( 3 : 4 \\) is written as \\( 3p \\) for Andi and \\( 4p \\) for Budi, where \\( p \\) is the dividing variable." },
+            "w-task3": { type: "tf_table", q: "Evaluasi pernyataan berikut tentang unsur bentuk aljabar \\( 2a - 8 \\). <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluate the following statements about the elements of the algebraic form \\( 2a - 8 \\).", opts: ["\\( a \\) adalah variabel", "\\( 2 \\) adalah koefisien", "\\( 8 \\) adalah konstanta", "Bentuk ini memiliki 1 suku"], ans: ["B", "B", "S", "S"], exp: "1. B, \\( a \\) huruf. 2. B, 2 angka di depan huruf. 3. S, konstantanya adalah \\( -8 \\). 4. S, memiliki 2 suku.", exp_trans: "1. T, \\( a \\) is letter. 2. T, 2 is number before letter. 3. F, constant is \\( -8 \\). 4. F, has 2 terms." },
+            "w-task4": { type: "single", q: "Berapa banyak suku yang ada pada bentuk aljabar \\( 3x^2 - 5x + 2xy - 7 \\)? <i class='fas fa-list-ol text-blue-500 ml-2'></i>", q_trans: "How many terms are in the algebraic form \\( 3x^2 - 5x + 2xy - 7 \\)?", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 4 \\)", exp: "Suku dipisahkan oleh tanda \\( + \\) atau \\( - \\). Bagiannya: \\( 3x^2 \\), \\( -5x \\), \\( 2xy \\), dan \\( -7 \\). Total 4 suku.", exp_trans: "Terms are separated by \\( + \\) or \\( - \\). Parts: \\( 3x^2 \\), \\( -5x \\), \\( 2xy \\), and \\( -7 \\). Total 4 terms." },
+            "w-task5": { type: "complex", q: "Manakah dari berikut yang merupakan bentuk aljabar yang valid? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Which of the following are valid algebraic forms?", opts: ["\\( 5x + 2y \\)", "\\( 100 \\)", "\\( -7a^2b \\)", "\\( x = 5 \\)"], ans: [0, 1, 2], exp: "Bentuk aljabar bisa berupa konstanta murni (100), variabel dikali konstanta, atau gabungan keduanya. Persamaan (\\( x=5 \\)) bukan sekadar bentuk aljabar, itu adalah persamaan.", exp_trans: "Algebraic forms can be pure constants, variables multiplied by constants, or combinations. An equation is not just an algebraic form." },
+            "w-task6": { type: "fill", q: "Diketahui rasio uang Ali dan Budi adalah \\( 2 : 5 \\). Jika uang Ali ditulis \\( 2x \\), berapakah uang Budi? (Format: ax) <i class='fas fa-money-bill-wave text-blue-500 ml-2'></i>", q_trans: "Given the ratio of Ali and Budi's money is \\( 2 : 5 \\). If Ali's money is \\( 2x \\), what is Budi's money?", ans: "5x", exp: "Rasio \\( 2 : 5 \\) berarti Ali berbanding Budi adalah \\( 2x : 5x \\). Maka uang Budi adalah \\( 5x \\).", exp_trans: "Ratio \\( 2 : 5 \\) means Ali to Budi is \\( 2x : 5x \\). So Budi's money is \\( 5x \\)." },
+            "w-task7": { type: "single", q: "Pada suku \\( -9p^2 \\), manakah yang merupakan koefisiennya? <i class='fas fa-hashtag text-blue-500 ml-2'></i>", q_trans: "In the term \\( -9p^2 \\), which is the coefficient?", opts: ["\\( 9 \\)", "\\( -9 \\)", "\\( p \\)", "\\( 2 \\)", "\\( -9p \\)"], ans: "\\( -9 \\)", exp: "Koefisien adalah angka (termasuk tanda) yang mengalikan variabel. Pada \\( -9p^2 \\), koefisiennya adalah \\( -9 \\).", exp_trans: "Coefficient is the number (including sign) multiplying the variable. In \\( -9p^2 \\), it is \\( -9 \\)." },
+            "w-task8": { type: "tf_table", q: "Evaluasi pernyataan tentang variabel, koefisien, dan konstanta. <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Evaluate statements about variables, coefficients, and constants.", opts: ["Variabel selalu berupa huruf", "Konstanta selalu bernilai positif", "Koefisien adalah bilangan pengali variabel", "Bentuk \\( x \\) memiliki koefisien 1"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, konstanta bisa negatif. 3. B. 4. B, \\( x \\) sama dengan \\( 1x \\).", exp_trans: "1. T. 2. F, constants can be negative. 3. T. 4. T, \\( x \\) is \\( 1x \\)." },
+            "w-task9": { type: "single", q: "Jika rasio tinggi Badu dan tinggi Siti adalah \\( 3 : 4 \\), dan selisih tinggi mereka adalah \\( 10 \\) cm, manakah persamaan yang benar? <i class='fas fa-ruler-vertical text-blue-500 ml-2'></i>", q_trans: "If the ratio of Badu and Siti's height is \\( 3 : 4 \\), and their difference is \\( 10 \\) cm, which equation is correct?", opts: ["\\( 3x + 4x = 10 \\)", "\\( 4x - 3x = 10 \\)", "\\( 4x - 3 = 10 \\)", "\\( x = 10 \\)", "\\( 3x = 4 \\)"], ans: "\\( 4x - 3x = 10 \\)", exp: "Tinggi Badu = \\( 3x \\), Siti = \\( 4x \\). Selisih berarti pengurangan, jadi \\( 4x - 3x = 10 \\).", exp_trans: "Badu's height = \\( 3x \\), Siti = \\( 4x \\). Difference means subtraction, so \\( 4x - 3x = 10 \\)." },
+            "w-task10": { type: "complex", q: "Manakah yang merupakan konstanta pada bentuk aljabar \\( 5x^3 - 2x + 7y - 11 \\)? <i class='fas fa-check-circle text-blue-500 ml-2'></i>", q_trans: "Which are the constants in the algebraic form \\( 5x^3 - 2x + 7y - 11 \\)?", opts: ["\\( 5 \\)", "\\( -2 \\)", "\\( 7 \\)", "\\( -11 \\)"], ans: [3], exp: "Konstanta adalah angka yang berdiri sendiri tanpa variabel. Hanya \\( -11 \\) yang tidak memiliki huruf di belakangnya.", exp_trans: "Constants are numbers standing alone without variables. Only \\( -11 \\) has no letter after it." },
+
+            // INTRODUCTION & REAL-WORLD
+            "i-task1": { type: "single", q: "Harga 1 kg apel adalah \\( p \\) rupiah. Harga 1 kg jeruk adalah \\( 2000 \\) rupiah lebih murah dari apel. Berapakah harga jeruk? <i class='fas fa-apple-whole text-green-500 ml-2'></i>", q_trans: "Price of 1 kg apple is \\( p \\). Price of 1 kg orange is \\( 2000 \\) cheaper than apple. What is the price of orange?", opts: ["\\( p + 2000 \\)", "\\( p - 2000 \\)", "\\( 2000p \\)", "\\( 2000 - p \\)", "\\( p = 2000 \\)"], ans: "\\( p - 2000 \\)", exp: "Lebih murah berarti dikurangi. Harga jeruk = Harga apel - 2000 = \\( p - 2000 \\).", exp_trans: "Cheaper means subtracted. Orange price = Apple price - 2000 = \\( p - 2000 \\)." },
+            "i-task2": { type: "fill", q: "Kebun Pak Ali berbentuk persegi panjang dengan panjang \\( (2x + 5) \\) m dan lebar \\( x \\) m. Keliling kebun tersebut adalah \\( ... \\) m. (Format: ax+b) <i class='fas fa-tractor text-green-500 ml-2'></i>", q_trans: "Mr. Ali's farm is rectangular with length \\( (2x + 5) \\) m and width \\( x \\) m. Perimeter is ... m.", ans: "6x+10", exp: "Keliling = \\( 2 \\times (p + l) = 2 \\times (2x + 5 + x) = 2 \\times (3x + 5) = 6x + 10 \\).", exp_trans: "Perimeter = \\( 2 \\times (p + l) = 2 \\times (2x + 5 + x) = 2 \\times (3x + 5) = 6x + 10 \\)." },
+            "i-task3": { type: "tf_table", q: "Evaluasi penerjemahan kalimat ke aljabar. <i class='fas fa-language text-green-500 ml-2'></i>", q_trans: "Evaluate translating sentences to algebra.", opts: ["Dua kali sebuah bilangan ditulis \\( 2x \\)", "Kurang dari berarti operasi pengurangan", "Lebih dari berarti operasi perkalian", "Jumlah dua bilangan ditulis \\( x + y \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, lebih dari berarti penjumlahan. 4. B.", exp_trans: "1. T. 2. T. 3. F, more than means addition. 4. T." },
+            "i-task4": { type: "single", q: "Sebuah mobil melaju dengan kecepatan \\( (v + 10) \\) km/jam selama \\( 2 \\) jam. Berapakah jarak yang ditempuh? <i class='fas fa-car-side text-green-500 ml-2'></i>", q_trans: "A car travels at speed \\( (v + 10) \\) km/h for \\( 2 \\) hours. What is the distance?", opts: ["\\( 2v + 10 \\)", "\\( v + 20 \\)", "\\( 2v + 20 \\)", "\\( 2v + 12 \\)", "\\( 10v + 2 \\)"], ans: "\\( 2v + 20 \\)", exp: "Jarak = Kecepatan \\( \\times \\) Waktu = \\( (v + 10) \\times 2 = 2v + 20 \\).", exp_trans: "Distance = Speed \\( \\times \\) Time = \\( (v + 10) \\times 2 = 2v + 20 \\)." },
+            "i-task5": { type: "complex", q: "Manakah bentuk aljabar yang mewakili 'tiga kali luas persegi dengan sisi \\( y \\)'? <i class='fas fa-check-double text-green-500 ml-2'></i>", q_trans: "Which algebraic forms represent 'three times the area of a square with side \\( y \\)'?", opts: ["\\( 3y^2 \\)", "\\( 3 \\times y \\times y \\)", "\\( (3y)^2 \\)", "\\( y^2 + y^2 + y^2 \\)"], ans: [0, 1, 3], exp: "Luas persegi = \\( y^2 \\). Tiga kalinya = \\( 3y^2 \\). Opsi 2 sama dengan \\( 3y^2 \\). Opsi 4 sama dengan \\( 3y^2 \\). Opsi 3 salah karena \\( (3y)^2 = 9y^2 \\).", exp_trans: "Square area = \\( y^2 \\). Three times = \\( 3y^2 \\). Option 2 is \\( 3y^2 \\). Option 4 is \\( 3y^2 \\)." },
+            "i-task6": { type: "fill", q: "Umur Ayah \\( 4 \\) kali umur Anak. Jika umur Anak adalah \\( x \\), dan umur Ibu \\( 3 \\) tahun lebih muda dari Ayah, berapakah umur Ibu? (Format: ax-b) <i class='fas fa-user-clock text-green-500 ml-2'></i>", q_trans: "Father's age is 4 times Child's. If Child is \\( x \\), and Mother is 3 years younger than Father, what is Mother's age?", ans: "4x-3", exp: "Ayah = \\( 4x \\). Ibu = Ayah - 3 = \\( 4x - 3 \\).", exp_trans: "Father = \\( 4x \\). Mother = Father - 3 = \\( 4x - 3 \\)." },
+            "i-task7": { type: "single", q: "Toko A menjual buku tulis seharga \\( p \\) rupiah. Toko B menjualnya \\( 500 \\) rupiah lebih mahal dari 2 kali harga Toko A. Berapakah harga buku di Toko B? <i class='fas fa-store text-green-500 ml-2'></i>", q_trans: "Shop A sells a book for \\( p \\). Shop B sells it \\( 500 \\) more than twice Shop A's price. What is the price at Shop B?", opts: ["\\( 2p + 500 \\)", "\\( 2(p + 500) \\)", "\\( p + 1000 \\)", "\\( 2p - 500 \\)", "\\( 500p + 2 \\)"], ans: "\\( 2p + 500 \\)", exp: "2 kali harga Toko A = \\( 2p \\). Lebih mahal 500 berarti ditambah 500, jadi \\( 2p + 500 \\).", exp_trans: "Twice Shop A = \\( 2p \\). 500 more means plus 500, so \\( 2p + 500 \\)." },
+            "i-task8": { type: "tf_table", q: "Evaluasi pernyataan geometri aljabar. <i class='fas fa-shapes text-green-500 ml-2'></i>", q_trans: "Evaluate algebraic geometry statements.", opts: ["Keliling segitiga sama sisi dengan sisi \\( 2x \\) adalah \\( 6x \\)", "Luas persegi panjang \\( p \\times (p+2) \\) adalah \\( p^2 + 2p \\)", "Volume kubus sisi \\( y \\) adalah \\( 3y \\)", "Keliling persegi sisi \\( x \\) adalah \\( 4x \\)"], ans: ["B", "B", "S", "B"], exp: "1. B, \\( 3 \\times 2x = 6x \\). 2. B, \\( p(p+2) = p^2 + 2p \\). 3. S, volume kubus = \\( y^3 \\), bukan \\( 3y \\). 4. B.", exp_trans: "1. T. 2. T. 3. F, volume is \\( y^3 \\). 4. T." },
+            "i-task9": { type: "single", q: "Sebuah tangki berisi \\( 100 \\) liter air. Air dialirkan keluar dengan laju \\( (x + 2) \\) liter per menit. Berapakah sisa air setelah \\( 5 \\) menit? <i class='fas fa-droplet text-green-500 ml-2'></i>", q_trans: "A tank has \\( 100 \\) L of water. Water flows out at \\( (x + 2) \\) L/min. What is left after \\( 5 \\) mins?", opts: ["\\( 100 - 5x + 10 \\)", "\\( 100 - 5x - 10 \\)", "\\( 100 - 5x + 2 \\)", "\\( 100 + 5x - 10 \\)", "\\( 100 - 5x - 2 \\)"], ans: "\\( 100 - 5x - 10 \\)", exp: "Air keluar selama 5 menit = \\( 5(x + 2) = 5x + 10 \\). Sisa = \\( 100 - (5x + 10) = 100 - 5x - 10 \\).", exp_trans: "Water out for 5 mins = \\( 5(x + 2) = 5x + 10 \\). Left = \\( 100 - (5x + 10) = 100 - 5x - 10 \\)." },
+            "i-task10": { type: "complex", q: "Pilih bentuk aljabar yang mewakili bilangan genap. <i class='fas fa-check-circle text-green-500 ml-2'></i>", q_trans: "Select algebraic forms representing even numbers.", opts: ["\\( 2x \\)", "\\( 2x + 1 \\)", "\\( 2n \\)", "\\( 2p - 2 \\)"], ans: [0, 2, 3], exp: "Bilangan genap selalu kelipatan 2, sehingga aljabarnya pasti memuat faktor 2 tanpa konstanta ganjil.", exp_trans: "Even numbers are always multiples of 2, so their algebra must contain a factor of 2 without odd constants." },
+
+            // REVIEW OF PRIOR KNOWLEDGE
+            "r-task1": { type: "single", q: "Berapakah hasil dari \\( 3x + 4x - 2x \\)? <i class='fas fa-plus text-purple-500 ml-2'></i>", q_trans: "What is the result of \\( 3x + 4x - 2x \\)?", opts: ["\\( 5x \\)", "\\( 9x \\)", "\\( 3x \\)", "\\( 7x \\)", "\\( 4x \\)"], ans: "\\( 5x \\)", exp: "Suku sejenis bisa dijumlahkan/dikurangkan koefisiennya: \\( 3 + 4 - 2 = 5 \\). Hasilnya \\( 5x \\).", exp_trans: "Like terms can add/subtract coefficients: \\( 3 + 4 - 2 = 5 \\). Result is \\( 5x \\)." },
+            "r-task2": { type: "fill", q: "Sederhanakan bentuk \\( 5y - 2y + y \\). (Format: ax) <i class='fas fa-broom text-purple-500 ml-2'></i>", q_trans: "Simplify \\( 5y - 2y + y \\).", ans: "4y", exp: "\\( 5 - 2 + 1 = 4 \\). Karena \\( y \\) sama dengan \\( 1y \\). Hasilnya \\( 4y \\).", exp_trans: "\\( 5 - 2 + 1 = 4 \\). Since \\( y \\) is \\( 1y \\). Result is \\( 4y \\)." },
+            "r-task3": { type: "tf_table", q: "Evaluasi operasi pada bentuk aljabar. <i class='fas fa-list-ul text-purple-500 ml-2'></i>", q_trans: "Evaluate operations on algebraic forms.", opts: ["\\( 2a + 3a = 5a \\)", "\\( 4x - x = 3 \\)", "\\( 5y + 2x = 7xy \\)", "\\( p + p = 2p \\)"], ans: ["B", "S", "S", "B"], exp: "1. B. 2. S, harusnya \\( 3x \\). 3. S, tidak sejenis tidak bisa dijumlahkan. 4. B.", exp_trans: "1. T. 2. F, should be \\( 3x \\). 3. F, unlike terms cannot be added. 4. T." },
+            "r-task4": { type: "single", q: "Manakah yang merupakan suku sejenis dengan \\( 7xy \\)? <i class='fas fa-link text-purple-500 ml-2'></i>", q_trans: "Which is a like term to \\( 7xy \\)?", opts: ["\\( 7x \\)", "\\( 7y \\)", "\\( -3xy \\)", "\\( 2x^2y \\)", "\\( 7 \\)"], ans: "\\( -3xy \\)", exp: "Suku sejenis memiliki variabel dan pangkat yang sama persis. \\( -3xy \\) memiliki variabel \\( xy \\) yang sama dengan \\( 7xy \\).", exp_trans: "Like terms have exactly the same variables and exponents. \\( -3xy \\) matches \\( 7xy \\)." },
+            "r-task5": { type: "complex", q: "Manakah pasangan suku yang sejenis? <i class='fas fa-check-double text-purple-500 ml-2'></i>", q_trans: "Which pairs are like terms?", opts: ["\\( 2a \\text{ dan } 3a \\)", "\\( 4x^2 \\text{ dan } 5x \\)", "\\( 6pq \\text{ dan } -2qp \\)", "\\( 8 \\text{ dan } 5y \\)"], ans: [0, 2], exp: "1. B. 2. S, pangkat beda. 3. B, \\( pq = qp \\). 4. S, konstanta dengan variabel.", exp_trans: "1. T. 2. F, different exponents. 3. T, \\( pq = qp \\). 4. F, constant with variable." },
+            "r-task6": { type: "fill", q: "Jika \\( x \\times x = x^2 \\), berapakah hasil dari \\( 2x \\times 3x \\)? (Format: ax^b) <i class='fas fa-times text-purple-500 ml-2'></i>", q_trans: "If \\( x \\times x = x^2 \\), what is \\( 2x \\times 3x \\)?", ans: "6x^2", exp: "Kalikan angka dengan angka, variabel dengan variabel. \\( 2 \\times 3 = 6 \\), \\( x \\times x = x^2 \\). Hasilnya \\( 6x^2 \\).", exp_trans: "Multiply numbers with numbers, variables with variables. \\( 2 \\times 3 = 6 \\), \\( x \\times x = x^2 \\). Result \\( 6x^2 \\)." },
+            "r-task7": { type: "single", q: "Hasil dari \\( 5(2x - 3) \\) adalah... <i class='fas fa-expand text-purple-500 ml-2'></i>", q_trans: "The result of \\( 5(2x - 3) \\) is...", opts: ["\\( 10x - 3 \\)", "\\( 10x - 15 \\)", "\\( 7x - 8 \\)", "\\( 10x - 8 \\)", "\\( 5x - 15 \\)"], ans: "\\( 10x - 15 \\)", exp: "Gunakan sifat distributif: \\( 5 \\times 2x = 10x \\), dan \\( 5 \\times -3 = -15 \\).", exp_trans: "Use distributive property: \\( 5 \\times 2x = 10x \\), and \\( 5 \\times -3 = -15 \\)." },
+            "r-task8": { type: "tf_table", q: "Evaluasi sifat distributif aljabar. <i class='fas fa-clipboard-check text-purple-500 ml-2'></i>", q_trans: "Evaluate algebraic distributive properties.", opts: ["\\( a(b+c) = ab + ac \\)", "\\( 3(x-2) = 3x - 6 \\)", "\\( -2(y+4) = -2y + 8 \\)", "\\( x(y-z) = xy - xz \\)"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, harusnya \\( -2y - 8 \\). 4. B.", exp_trans: "1. T. 2. T. 3. F, should be \\( -2y - 8 \\). 4. T." },
+            "r-task9": { type: "single", q: "Selesaikan \\( 4(x + 2) - 2x \\). <i class='fas fa-calculator text-purple-500 ml-2'></i>", q_trans: "Simplify \\( 4(x + 2) - 2x \\).", opts: ["\\( 2x + 8 \\)", "\\( 2x + 2 \\)", "\\( 6x + 8 \\)", "\\( 2x - 8 \\)", "\\( 4x + 8 \\)"], ans: "\\( 2x + 8 \\)", exp: "Kaluarkan 4: \\( 4x + 8 - 2x \\). Gabung suku sejenis: \\( (4x - 2x) + 8 = 2x + 8 \\).", exp_trans: "Distribute 4: \\( 4x + 8 - 2x \\). Combine like terms: \\( (4x - 2x) + 8 = 2x + 8 \\)." },
+            "r-task10": { type: "complex", q: "Pilih bentuk aljabar yang setara/sederhananya sama dengan \\( 3x + 6 \\). <i class='fas fa-check-circle text-purple-500 ml-2'></i>", q_trans: "Select forms equivalent to \\( 3x + 6 \\).", opts: ["\\( 3(x + 2) \\)", "\\( 3(x + 6) \\)", "\\( 2x + x + 6 \\)", "\\( 3x + 2 + 4 \\)"], ans: [0, 2, 3], exp: "1. B, difaktorkan. 2. S. 3. B, \\( 2x + x = 3x \\). 4. B, \\( 2 + 4 = 6 \\).", exp_trans: "1. T, factored. 2. F. 3. T. 4. T." },
+
+            // PROBLEM INTRODUCTION
+            "p-task1": { type: "single", q: "Pada bentuk \\( -3x^2y + 5x - 8 \\), berapakah koefisien dari \\( x^2y \\)? <i class='fas fa-magnifying-glass text-orange-500 ml-2'></i>", q_trans: "In \\( -3x^2y + 5x - 8 \\), what is the coefficient of \\( x^2y \\)?", opts: ["\\( 3 \\)", "\\( -3 \\)", "\\( 2 \\)", "\\( -8 \\)", "\\( 5 \\)"], ans: "\\( -3 \\)", exp: "Koefisien adalah angka di depan variabel, termasuk tanda negatifnya. Di sini angkanya adalah \\( -3 \\).", exp_trans: "Coefficient is the number before the variable, including sign. Here it's \\( -3 \\)." },
+            "p-task2": { type: "fill", q: "Dalam bentuk \\( 7a^3 - 4ab + 2c - 10 \\), ada berapa banyak suku yang mengandung variabel? <i class='fas fa-list-ol text-orange-500 ml-2'></i>", q_trans: "In \\( 7a^3 - 4ab + 2c - 10 \\), how many terms contain variables?", ans: "3", exp: "Sukunya adalah \\( 7a^3 \\), \\( -4ab \\), \\( 2c \\), dan \\( -10 \\). Tiga suku pertama mengandung variabel, \\( -10 \\) konstanta.", exp_trans: "Terms are \\( 7a^3 \\), \\( -4ab \\), \\( 2c \\), \\( -10 \\). First three contain variables, \\( -10 \\) is constant." },
+            "p-task3": { type: "tf_table", q: "Evaluasi unsur pada bentuk \\( 5p - 3q^2 + 8 \\). <i class='fas fa-list-ul text-orange-500 ml-2'></i>", q_trans: "Evaluate elements in \\( 5p - 3q^2 + 8 \\).", opts: ["Konstantanya adalah 8", "Koefisien \\( q^2 \\) adalah 3", "Variabelnya adalah \\( p \\) dan \\( q \\)", "Bentuk ini punya 3 suku"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, harusnya \\( -3 \\). 3. B. 4. B.", exp_trans: "1. T. 2. F, should be \\( -3 \\). 3. T. 4. T." },
+            "p-task4": { type: "single", q: "Manakah dari berikut ini yang merupakan suku tidak sejenis? <i class='fas fa-link-slash text-orange-500 ml-2'></i>", q_trans: "Which of the following are unlike terms?", opts: ["\\( 4x \\text{ dan } -2x \\)", "\\( 5y^2 \\text{ dan } 3y^2 \\)", "\\( 6ab \\text{ dan } -2ba \\)", "\\( 7p \\text{ dan } 7q \\)"], ans: "\\( 7p \\text{ dan } 7q \\)", exp: "Suku sejenis jika variabel dan pangkatnya sama. \\( 7p \\) dan \\( 7q \\) variabelnya beda, jadi tidak sejenis.", exp_trans: "Like terms if variables and exponents are same. \\( 7p \\) and \\( 7q \\) have different variables." },
+            "p-task5": { type: "complex", q: "Pilih suku yang sejenis dengan \\( 2x^2y \\). <i class='fas fa-check-double text-orange-500 ml-2'></i>", q_trans: "Select terms like \\( 2x^2y \\).", opts: ["\\( -5x^2y \\)", "\\( 2xy^2 \\)", "\\( 3yx^2 \\)", "\\( 2x^2 \\)"], ans: [0, 2], exp: "1. B. 2. S, pangkat \\( y \\) beda. 3. B, \\( yx^2 = x^2y \\). 4. S, tidak ada \\( y \\).", exp_trans: "1. T. 2. F, different \\( y \\) exponent. 3. T. 4. F." },
+            "p-task6": { type: "fill", q: "Jika suku pertama \\( 4a \\) dan suku kedua \\( -a \\), jumlahkan keduanya. (Format: ax) <i class='fas fa-plus text-orange-500 ml-2'></i>", q_trans: "If first term is \\( 4a \\) and second is \\( -a \\), add them.", ans: "3a", exp: "\\( 4a - a = 4a - 1a = 3a \\). Ingat bahwa \\( a \\) berkoefisien 1.", exp_trans: "\\( 4a - a = 4a - 1a = 3a \\). Remember \\( a \\) has coefficient 1." },
+            "p-task7": { type: "single", q: "Koefisien dari \\( -x^3 \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", q_trans: "The coefficient of \\( -x^3 \\) is...", opts: ["\\( 1 \\)", "\\( -1 \\)", "\\( 3 \\)", "\\( -3 \\)", "\\( 0 \\)"], ans: "\\( -1 \\)", exp: "Tidak ada angka di depan \\( x^3 \\), berarti ada angka 1 invisible. Karena tandanya negatif, koefisiennya \\( -1 \\).", exp_trans: "No number before \\( x^3 \\), means invisible 1. Since sign is negative, coefficient is \\( -1 \\)." },
+            "p-task8": { type: "tf_table", q: "Evaluasi pernyataan tentang koefisien dan konstanta. <i class='fas fa-clipboard-check text-orange-500 ml-2'></i>", q_trans: "Evaluate statements about coefficients and constants.", opts: ["Pada \\( -5y \\), koefisiennya -5", "Pada \\( 3x + 4 \\), konstantanya 4", "Pada \\( p \\), koefisiennya 0", "Pada \\( -2 \\), konstantanya -2"], ans: ["B", "B", "S", "B"], exp: "1. B. 2. B. 3. S, koefisien \\( p \\) adalah 1. 4. B.", exp_trans: "1. T. 2. T. 3. F, coefficient is 1. 4. T." },
+            "p-task9": { type: "single", q: "Dari bentuk \\( 2x - 5y^2 + 7z - 9 \\), manakah yang BUKAN merupakan unsur/suku penyusunnya? <i class='fas fa-ban text-orange-500 ml-2'></i>", q_trans: "From \\( 2x - 5y^2 + 7z - 9 \\), which is NOT an element/term?", opts: ["\\( 2x \\)", "\\( -5y^2 \\)", "\\( 7z \\)", "\\( 9 \\)", "\\( -9 \\)"], ans: "\\( 9 \\)", exp: "Suku terakhir adalah \\( -9 \\), bukan \\( 9 \\). Tanda minus ikut menjadi bagian dari suku.", exp_trans: "The last term is \\( -9 \\), not \\( 9 \\). Minus sign is part of the term." },
+            "p-task10": { type: "complex", q: "Manakah pernyataan yang benar mengenai \\( 4a^2b - 5ab^2 + c \\)? <i class='fas fa-check-circle text-orange-500 ml-2'></i>", q_trans: "Which statements are true about \\( 4a^2b - 5ab^2 + c \\)?", opts: ["Memiliki 3 suku", "\\( 4a^2b \\) dan \\( -5ab^2 \\) sejenis", "Konstantanya adalah 1", "Koefisien \\( c \\) adalah 1"], ans: [0, 3], exp: "1. B. 2. S, pangkat berbeda. 3. S, tidak ada konstanta. 4. B, \\( c = 1c \\).", exp_trans: "1. T. 2. F. 3. F. 4. T." },
+
+            // GUIDED PRACTICE
+            "g-task1": { type: "single", q: "Berapa banyak suku pada \\( 5m - 2n + 3p - 10 + 2q \\)? <i class='fas fa-list-ol text-blue-500 ml-2'></i>", q_trans: "How many terms in \\( 5m - 2n + 3p - 10 + 2q \\)?", opts: ["\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)", "\\( 6 \\)", "\\( 7 \\)"], ans: "\\( 5 \\)", exp: "Dipisah oleh tanda \\( + \\) dan \\( - \\): \\( 5m \\), \\( -2n \\), \\( 3p \\), \\( -10 \\), \\( 2q \\). Total 5 suku.", exp_trans: "Separated by signs: 5 terms." },
+            "g-task2": { type: "fill", q: "Umur Rani \\( x \\) tahun. Umur Dini 3 tahun lebih muda dari 2 kali umur Rani. Tulis umur Dini. (Format: ax-b) <i class='fas fa-user-clock text-blue-500 ml-2'></i>", q_trans: "Rani is \\( x \\). Dini is 3 years younger than twice Rani's age. Write Dini's age.", ans: "2x-3", exp: "2 kali umur Rani = \\( 2x \\). Lebih muda 3 tahun = \\( -3 \\). Umur Dini = \\( 2x - 3 \\).", exp_trans: "Twice Rani = \\( 2x \\). 3 years younger = \\( -3 \\). Dini = \\( 2x - 3 \\)." },
+            "g-task3": { type: "tf_table", q: "Evaluasi soal cerita aljabar. <i class='fas fa-list-ul text-blue-500 ml-2'></i>", q_trans: "Evaluate algebra word problems.", opts: ["'Jumlah dua bilangan \\( a \\) dan \\( b \\)' = \\( a+b \\)", "'Selisih \\( x \\) dan \\( y \\)' selalu \\( x-y \\)", "'Duplikat dari \\( p \\)' = \\( 2p \\)", "'Setengah dari \\( q \\)' = \\( 2q \\)"], ans: ["B", "S", "B", "S"], exp: "1. B. 2. S, selisih bisa \\( x-y \\) atau \\( y-x \\). 3. B. 4. S, setengah = \\( q/2 \\).", exp_trans: "1. T. 2. F. 3. T. 4. F." },
+            "g-task4": { type: "single", q: "Panjang tali A adalah \\( 3x \\) meter, tali B adalah \\( (2x + 5) \\) meter. Berapakah total panjang tali? <i class='fas fa-ruler-horizontal text-blue-500 ml-2'></i>", q_trans: "Rope A is \\( 3x \\) m, Rope B is \\( (2x + 5) \\) m. What is the total length?", opts: ["\\( 5x + 5 \\)", "\\( 5x - 5 \\)", "\\( 6x + 5 \\)", "\\( 5x \\)", "\\( 6x + 10 \\)"], ans: "\\( 5x + 5 \\)", exp: "Total = A + B = \\( 3x + 2x + 5 = 5x + 5 \\).", exp_trans: "Total = A + B = \\( 3x + 2x + 5 = 5x + 5 \\)." },
+            "g-task5": { type: "complex", q: "Manakah pernyataan yang benar tentang \\( 3(x - 4) \\)? <i class='fas fa-check-double text-blue-500 ml-2'></i>", q_trans: "Which statements are true about \\( 3(x - 4) \\)?", opts: ["Memiliki 2 suku setelah disederhanakan", "Setara dengan \\( 3x - 12 \\)", "Memiliki konstanta -12", "Memiliki 1 suku sebelum disederhanakan"], ans: [0, 1, 2, 3], exp: "Jika disederhanakan menjadi \\( 3x - 12 \\), ia punya 2 suku, konstanta -12. Sebelum disederhanakan, \\( 3(x-4) \\) hanya 1 suku besar.", exp_trans: "Simplified to \\( 3x - 12 \\), it has 2 terms, constant -12. Before simplification, it's 1 term." },
+            "g-task6": { type: "fill", q: "Keliling persegi panjang dengan panjang \\( (x+2) \\) dan lebar \\( (x-1) \\) adalah... (Format: ax+b) <i class='fas fa-vector-square text-blue-500 ml-2'></i>", q_trans: "Perimeter of rectangle length \\( (x+2) \\) width \\( (x-1) \\) is...", ans: "4x+2", exp: "Keliling = \\( 2(p+l) = 2(x+2 + x-1) = 2(2x+1) = 4x+2 \\).", exp_trans: "Perimeter = \\( 2(p+l) = 2(x+2 + x-1) = 2(2x+1) = 4x+2 \\)." },
+            "g-task7": { type: "single", q: "Jika harga 2 buah buku adalah \\( (3p + 1000) \\), berapakah harga 1 buku? <i class='fas fa-book text-blue-500 ml-2'></i>", q_trans: "If price of 2 books is \\( (3p + 1000) \\), what is the price of 1 book?", opts: ["\\( 3p + 500 \\)", "\\( 6p + 2000 \\)", "\\( 1.5p + 500 \\)", "\\( 3p + 1000 \\)", "\\( p + 1000 \\)"], ans: "\\( 1.5p + 500 \\)", exp: "Bagi seluruh suku dengan 2: \\( 3p / 2 = 1.5p \\), \\( 1000 / 2 = 500 \\).", exp_trans: "Divide all terms by 2: \\( 3p / 2 = 1.5p \\), \\( 1000 / 2 = 500 \\)." },
+            "g-task8": { type: "tf_table", q: "Evaluasi pembagian aljabar. <i class='fas fa-clipboard-check text-blue-500 ml-2'></i>", q_trans: "Evaluate algebraic division.", opts: ["\\( (6x + 4) / 2 = 3x + 2 \\)", "\\( (10y - 5) / 5 = 2y - 1 \\)", "\\( 8xy / 2x = 4y \\)", "\\( (x^2 + x) / x = x + x = 2x \\)"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B. 4. S, harusnya \\( x + 1 \\).", exp_trans: "1. T. 2. T. 3. T. 4. F, should be \\( x + 1 \\)." },
+            "g-task9": { type: "single", q: "Sebuah kotak berisi \\( x \\) permen. Jika permen dibagi rata ke 4 anak, setiap anak dapat berapa? <i class='fas fa-candy-cane text-blue-500 ml-2'></i>", q_trans: "A box has \\( x \\) candies. Divided equally among 4 children, how many each?", opts: ["\\( x - 4 \\)", "\\( 4x \\)", "\\( x + 4 \\)", "\\( x / 4 \\)", "\\( 4 / x \\)"], ans: "\\( x / 4 \\)", exp: "Membagi rata berarti operasi pembagian. Jadi \\( x \\) dibagi 4, ditulis \\( x/4 \\).", exp_trans: "Divide equally means division. So \\( x \\) divided by 4, written \\( x/4 \\)." },
+            "g-task10": { type: "complex", q: "Manakah bentuk aljabar yang sudah sederhana (tidak bisa disederhanakan lagi)? <i class='fas fa-check-circle text-blue-500 ml-2'></i>", q_trans: "Which algebraic forms are already simplified?", opts: ["\\( 3x + 2x \\)", "\\( 4y - 2y \\)", "\\( 5p + 3q - 2 \\)", "\\( 8 - 3 \\)"], ans: [2], exp: "Hanya \\( 5p + 3q - 2 \\) yang suku-sukunya tidak sejenis. Opsi lain bisa dioperasikan.", exp_trans: "Only \\( 5p + 3q - 2 \\) has no like terms. Others can be operated." },
+
+            // INDEPENDENT PRACTICE
+            "ind-task1": { type: "single", q: "Pak Budi membeli \\( x \\) kg gula dan \\( 2x \\) kg tepung. Jika harga gula \\( 10.000/kg \\) dan tepung \\( 8.000/kg \\), berapakah total harga? <i class='fas fa-store text-green-500 ml-2'></i>", q_trans: "Mr. Budi buys \\( x \\) kg sugar and \\( 2x \\) kg flour. Sugar is 10000/kg, flour 8000/kg. Total price?", opts: ["\\( 26000x \\)", "\\( 18000x \\)", "\\( 10000x + 16000 \\)", "\\( 26000 \\)", "\\( 10x + 16x \\)"], ans: "\\( 26000x \\)", exp: "Gula = \\( 10000x \\). Tepung = \\( 8000(2x) = 16000x \\). Total = \\( 10000x + 16000x = 26000x \\).", exp_trans: "Sugar = \\( 10000x \\). Flour = \\( 8000(2x) = 16000x \\). Total = \\( 26000x \\)." },
+            "ind-task2": { type: "fill", q: "Sebuah segitiga memiliki alas \\( (2x + 3) \\) cm dan tinggi \\( 4x \\) cm. Luasnya adalah... (Format: ax^b+bx) <i class='fas fa-shapes text-green-500 ml-2'></i>", q_trans: "Triangle base \\( (2x + 3) \\), height \\( 4x \\). Area is...", ans: "4x^2+6x", exp: "Luas = \\( 0.5 \\times (2x + 3) \\times 4x = 2x(2x + 3) = 4x^2 + 6x \\).", exp_trans: "Area = \\( 0.5 \\times (2x + 3) \\times 4x = 2x(2x + 3) = 4x^2 + 6x \\)." },
+            "ind-task3": { type: "tf_table", q: "Evaluasi geometri aljabar. <i class='fas fa-list-ol text-green-500 ml-2'></i>", q_trans: "Evaluate algebraic geometry.", opts: ["Luas persegi sisi \\( 2x \\) adalah \\( 4x^2 \\)", "Volume kubus sisi \\( (x+1) \\) adalah \\( x^3 + 1 \\)", "Keliling persegi sisi \\( 3y \\) adalah \\( 12y \\)", "Luas persegi panjang \\( p \\) dan \\( q \\) adalah \\( pq \\)"], ans: ["B", "S", "B", "B"], exp: "1. B. 2. S, \\( (x+1)^3 \\neq x^3+1 \\). 3. B. 4. B.", exp_trans: "1. T. 2. F. 3. T. 4. T." },
+            "ind-task4": { type: "single", q: "Sebuah kereta berjalan dengan kecepatan \\( (2v + 10) \\) km/jam selama \\( 3 \\) jam, lalu \\( (v - 5) \\) km/jam selama \\( 2 \\) jam. Total jaraknya? <i class='fas fa-train text-green-500 ml-2'></i>", q_trans: "Train speed \\( (2v + 10) \\) for 3h, then \\( (v - 5) \\) for 2h. Total distance?", opts: ["\\( 8v + 20 \\)", "\\( 3v + 5 \\)", "\\( 6v + 10 \\)", "\\( 8v + 30 \\)", "\\( 2v + 20 \\)"], ans: "\\( 8v + 20 \\)", exp: "Jarak 1 = \\( 3(2v+10) = 6v+30 \\). Jarak 2 = \\( 2(v-5) = 2v-10 \\). Total = \\( 8v + 20 \\).", exp_trans: "Dist 1 = \\( 3(2v+10) = 6v+30 \\). Dist 2 = \\( 2(v-5) = 2v-10 \\). Total = \\( 8v + 20 \\)." },
+            "ind-task5": { type: "complex", q: "Manakah bentuk aljabar yang mewakili volume balok dengan panjang \\( x \\), lebar \\( x+1 \\), tinggi \\( x-1 \\)? <i class='fas fa-check-double text-green-500 ml-2'></i>", q_trans: "Which represents volume of cuboid length \\( x \\), width \\( x+1 \\), height \\( x-1 \\)?", opts: ["\\( x^3 - x \\)", "\\( x(x^2 - 1) \\)", "\\( x^3 + x \\)", "\\( x(x+1)(x-1) \\)"], ans: [0, 1, 3], exp: "Volume = \\( x(x+1)(x-1) \\). Ingat \\( (x+1)(x-1) = x^2-1 \\). Maka \\( V = x(x^2-1) = x^3 - x \\).", exp_trans: "Volume = \\( x(x+1)(x-1) \\). Remember \\( (x+1)(x-1) = x^2-1 \\). So \\( V = x^3 - x \\)." },
+            "ind-task6": { type: "fill", q: "Umur ayah \\( 4x \\) dan umur ibu \\( 3x + 2 \\). Jika umur anak adalah \\( x \\), berapakah total umur keluarga? (Format: ax+b) <i class='fas fa-users text-green-500 ml-2'></i>", q_trans: "Father \\( 4x \\), mother \\( 3x + 2 \\), child \\( x \\). Total age?", ans: "8x+2", exp: "Total = Ayah + Ibu + Anak = \\( 4x + (3x + 2) + x = 4x + 3x + 2 + x = 8x + 2 \\).", exp_trans: "Total = Father + Mother + Child = \\( 4x + 3x + 2 + x = 8x + 2 \\)." },
+            "ind-task7": { type: "single", q: "Pak Ali memiliki kebun berbentuk persegi panjang \\( (3x+2) \\) m kali \\( (2x-1) \\) m. Ia ingin memagari kebun 2 kali keliling. Berapa meter pagar yang dibutuhkan? <i class='fas fa-fence text-green-500 ml-2'></i>", q_trans: "Rectangular farm \\( (3x+2) \\) by \\( (2x-1) \\). Fence 2 times perimeter. Length of fence?", opts: ["\\( 10x + 2 \\)", "\\( 20x + 4 \\)", "\\( 5x + 1 \\)", "\\( 12x - 2 \\)", "\\( 10x \\)"], ans: "\\( 20x + 4 \\)", exp: "Keliling = \\( 2(3x+2 + 2x-1) = 2(5x+1) = 10x+2 \\). Pagar 2 kali = \\( 2(10x+2) = 20x+4 \\).", exp_trans: "Perimeter = \\( 2(3x+2 + 2x-1) = 2(5x+1) = 10x+2 \\). Fence = \\( 2(10x+2) = 20x+4 \\)." },
+            "ind-task8": { type: "tf_table", q: "Evaluasi soal cerita aljabar. <i class='fas fa-clipboard-check text-green-500 ml-2'></i>", q_trans: "Evaluate algebra word problems.", opts: ["Jika 'gas tinggal \\( x \\) liter' dan dipakai \\( 5 \\) liter, sisanya \\( x-5 \\)", "Harga naik 1000 dari \\( y \\) menjadi \\( y+1000 \\)", "Diskon 10% dari \\( p \\) adalah \\( 0.1p \\) sehingga bayar \\( p-0.1p \\)", "Kecepatan berkurang 5 dari \\( v \\) adalah \\( 5-v \\)"], ans: ["B", "B", "B", "S"], exp: "1. B. 2. B. 3. B, diskon berarti dikurangi. 4. S, harusnya \\( v-5 \\).", exp_trans: "1. T. 2. T. 3. T. 4. F, should be \\( v-5 \\)." },
+            "ind-task9": { type: "single", q: "Sebuah suhu awalnya \\( x \\) derajat. Naik 5 derajat, lalu turun \\( 2y \\) derajat. Berapa suhu akhir? <i class='fas fa-temperature-half text-green-500 ml-2'></i>", q_trans: "Temperature starts at \\( x \\). Rises 5, drops by \\( 2y \\). Final temp?", opts: ["\\( x + 5 - 2y \\)", "\\( x - 5 + 2y \\)", "\\( x + 5 + 2y \\)", "\\( x - 5 - 2y \\)", "\\( x + 7y \\)"], ans: "\\( x + 5 - 2y \\)", exp: "Naik berarti tambah, turun berarti kurang. \\( x + 5 - 2y \\).", exp_trans: "Rises means plus, drops means minus. \\( x + 5 - 2y \\)." },
+            "ind-task10": { type: "complex", q: "Pilih bentuk yang ekuivalen dengan '5 kurang dari 2 kali jumlah \\( p \\) dan \\( q \\)'. <i class='fas fa-check-circle text-green-500 ml-2'></i>", q_trans: "Select forms equivalent to '5 less than 2 times the sum of \\( p \\) and \\( q \\)'.", opts: ["\\( 2(p + q) - 5 \\)", "\\( 2p + 2q - 5 \\)", "\\( 5 - 2(p + q) \\)", "\\( 2pq - 5 \\)"], ans: [0, 1], exp: "Jumlah \\( p \\) dan \\( q \\) adalah \\( p+q \\). 2 kalinya = \\( 2(p+q) \\). 5 kurang dari itu = \\( 2(p+q) - 5 \\), yang jika disederhanakan menjadi \\( 2p+2q-5 \\).", exp_trans: "Sum is \\( p+q \\). Twice is \\( 2(p+q) \\). 5 less than that is \\( 2(p+q) - 5 \\)." },
+
+            // TASK 1: Variabel & Konstanta
+            "t1-task1": { type: "single", q: "Pada \\( 5x - 8y + 10 \\), manakah yang merupakan konstanta? <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 5 \\)", "\\( -8 \\)", "\\( 10 \\)", "\\( x \\)", "\\( y \\)"], ans: "\\( 10 \\)", exp: "Konstanta tidak memiliki variabel. Hanya 10 yang berdiri sendiri.", exp_trans: "Constant has no variable." },
+            "t1-task2": { type: "single", q: "Sebuah kantong berisi \\( m \\) kelereng merah dan \\( 10 \\) kelereng biru. Manakah yang merupakan variabel? <i class='fas fa-circle text-orange-500 ml-2'></i>", opts: ["Merah", "\\( 10 \\)", "\\( m \\)", "Biru", "Kelereng"], ans: "\\( m \\)", exp: "\\( m \\) adalah huruf yang mewakili jumlah kelereng merah yang belum diketahui.", exp_trans: "\\( m \\) represents unknown number of red marbles." },
+            "t1-task3": { type: "single", q: "Dalam \\( -3p + 4q^2 - 7 \\), ada berapa variabel yang berbeda? <i class='fas fa-shapes text-orange-500 ml-2'></i>", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 0 \\)"], ans: "\\( 2 \\)", exp: "Variabelnya adalah \\( p \\) dan \\( q \\). Jumlahnya 2.", exp_trans: "Variables are \\( p \\) and \\( q \\). Total 2." },
+            "t1-task4": { type: "single", q: "Manakah dari berikut yang merupakan himpunan variabel pada bentuk aljabar \\( 2a - 5b + c - 4 \\)? <i class='fas fa-font text-orange-500 ml-2'></i>", opts: ["\\( 2 \\text{ dan } -5 \\)", "\\( a, b, \\text{ dan } c \\)", "\\( -4 \\)", "\\( 2a \\text{ dan } 5b \\)", "\\( 1 \\)"], ans: "\\( a, b, \\text{ dan } c \\)", exp: "Variabel adalah huruf pengganti nilai yang belum diketahui. Pada bentuk ini, variabelnya adalah \\( a, b, \\text{ dan } c \\). Angka lainnya adalah koefisien atau konstanta.", exp_trans: "Variables are letters replacing unknown values. Here, variables are \\( a, b, \\text{ and } c \\). Other numbers are coefficients or constants." },
+            "t1-task5": { type: "single", q: "Diketahui \\( x + 5 = 10 \\). Manakah pernyataan yang benar? <i class='fas fa-question text-orange-500 ml-2'></i>", opts: ["\\( x \\) konstanta", "\\( 5 \\) variabel", "\\( x \\) variabel", "\\( 10 \\) variabel", "Semua konstanta"], ans: "\\( x \\) variabel", exp: "\\( x \\) bisa berubah nilainya, tapi di sini nilai pastinya dicari. Dalam konteks bentuk aljabar, \\( x \\) adalah variabel.", exp_trans: "\\( x \\) is variable." },
+            "t1-task6": { type: "single", q: "Pada persamaan garis lurus \\( y = mx + c \\), manakah yang berperan sebagai variabel? <i class='fas fa-line-chart text-orange-500 ml-2'></i>", opts: ["\\( m \\text{ dan } c \\)", "\\( y \\text{ dan } m \\)", "\\( x \\text{ dan } y \\)", "\\( x \\text{ dan } c \\)", "\\( m \\text{ saja} \\)"], ans: "\\( x \\text{ dan } y \\)", exp: "Dalam persamaan garis \\( y = mx + c \\), \\( x \\) dan \\( y \\) adalah variabel karena nilainya bisa berubah. Sedangkan \\( m \\) dan \\( c \\) adalah konstanta untuk satu garis tertentu.", exp_trans: "In \\( y = mx + c \\), \\( x \\) and \\( y \\) are variables. \\( m \\) and \\( c \\) are constants for a specific line." },
+            "t1-task7": { type: "single", q: "Konstanta pada \\( -2x^2 + 3x - 5 \\) adalah... <i class='fas fa-search text-orange-500 ml-2'></i>", opts: ["\\( -2 \\)", "\\( 3 \\)", "\\( -5 \\)", "\\( 2 \\)", "\\( 5 \\)"], ans: "\\( -5 \\)", exp: "Angka terakhir tanpa huruf, tanda minus ikut.", exp_trans: "Last number without letter." },
+            "t1-task8": { type: "single", q: "Jika 'sebuah bilangan ditambah 5', manakah penulisannya benar? <i class='fas fa-pen text-orange-500 ml-2'></i>", opts: ["\\( x - 5 \\)", "\\( x + 5 \\)", "\\( 5 - x \\)", "\\( 5x \\)", "\\( x = 5 \\)"], ans: "\\( x + 5 \\)", exp: "Bilangan = \\( x \\), ditambah 5 = \\( +5 \\).", exp_trans: "Number = \\( x \\), plus 5." },
+            "t1-task9": { type: "single", q: "Pada \\( 7ab - 4 \\), manakah variabelnya? <i class='fas fa-font text-orange-500 ml-2'></i>", opts: ["\\( 7 \\)", "\\( 4 \\)", "\\( a \\text{ dan } b \\)", "\\( ab \\)", "\\( 7ab \\)"], ans: "\\( a \\text{ dan } b \\)", exp: "Huruf yang mewakili nilai adalah \\( a \\) dan \\( b \\).", exp_trans: "Letters representing values." },
+            "t1-task10": { type: "single", q: "Manakah bentuk yang HANYA memiliki konstanta? <i class='fas fa-circle-notch text-orange-500 ml-2'></i>", opts: ["\\( 5x \\)", "\\( x - 2 \\)", "\\( 100 \\)", "\\( -3y \\)", "\\( a + b \\)"], ans: "\\( 100 \\)", exp: "100 tidak memiliki variabel, jadi ia konstanta murni.", exp_trans: "100 has no variable." },
+
+            // TASK 2: Koefisien & Suku
+            "t2-task1": { type: "single", q: "Koefisien dari \\( -8x^3y \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 8 \\)", "\\( -8 \\)", "\\( 3 \\)", "\\( 1 \\)", "\\( 0 \\)"], ans: "\\( -8 \\)", exp: "Angka pengali variabel, termasuk tanda.", exp_trans: "Number multiplying variable." },
+            "t2-task2": { type: "single", q: "Pada \\( 4a - 5b + 6c \\), koefisien \\( b \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 4 \\)", "\\( -5 \\)", "\\( 6 \\)", "\\( 5 \\)", "\\( b \\)"], ans: "\\( -5 \\)", exp: "Di depan \\( b \\) ada angka -5.", exp_trans: "Before \\( b \\) is -5." },
+            "t2-task3": { type: "single", q: "Berapa banyak suku dalam \\( x^2 - 2xy + y^2 - 1 \\)? <i class='fas fa-list-ol text-orange-500 ml-2'></i>", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 4 \\)", exp: "\\( x^2, -2xy, y^2, -1 \\). Total 4.", exp_trans: "4 terms." },
+            "t2-task4": { type: "single", q: "Koefisien dari \\( x \\) pada \\( 3x - 4 \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 3 \\)", "\\( 4 \\)", "\\( -4 \\)", "\\( 1 \\)", "\\( -1 \\)"], ans: "\\( 3 \\)", exp: "Angka di depan \\( x \\) adalah 3.", exp_trans: "Number before \\( x \\)." },
+            "t2-task5": { type: "single", q: "Pada \\( -p + 2q \\), koefisien \\( p \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 1 \\)", "\\( -1 \\)", "\\( 2 \\)", "\\( 0 \\)", "\\( p \\)"], ans: "\\( -1 \\)", exp: "\\( -p \\) sama dengan \\( -1p \\).", exp_trans: "\\( -p \\) is \\( -1p \\)." },
+            "t2-task6": { type: "single", q: "Manakah bentuk yang memiliki 2 suku? <i class='fas fa-list-ol text-orange-500 ml-2'></i>", opts: ["\\( 5x \\)", "\\( 2x + 3y - 1 \\)", "\\( 4a - 7b \\)", "\\( 10 \\)", "\\( x^2 + y^2 + z^2 \\)"], ans: "\\( 4a - 7b \\)", exp: "Dipisah 1 tanda minus, berarti 2 bagian/suku.", exp_trans: "Separated by 1 sign." },
+            "t2-task7": { type: "single", q: "Pada \\( 5m^2n - 2 \\), manakah yang merupakan koefisien? <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 5 \\)", "\\( -2 \\)", "\\( 2 \\)", "\\( m \\)", "\\( n \\)"], ans: "\\( 5 \\)", exp: "5 adalah angka pengali variabel \\( m^2n \\).", exp_trans: "5 is the multiplier." },
+            "t2-task8": { type: "single", q: "Manakah yang merupakan konstanta pada \\( 3x^2 - x + 4 \\)? <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 3 \\)", "\\( 2 \\)", "\\( -1 \\)", "\\( 4 \\)", "\\( 0 \\)"], ans: "\\( 4 \\)", exp: "Konstanta adalah angka yang berdiri sendiri tanpa huruf/variabel. Pada bentuk ini, konstantanya adalah 4.", exp_trans: "Constant is a standalone number without variables. Here, it is 4." },
+            "t2-task9": { type: "single", q: "Koefisien \\( y \\) pada \\( 7 - 3y \\) adalah... <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 7 \\)", "\\( 3 \\)", "\\( -3 \\)", "\\( 0 \\)", "\\( 1 \\)"], ans: "\\( -3 \\)", exp: "Di depan \\( y \\) ada -3.", exp_trans: "Before \\( y \\) is -3." },
+            "t2-task10": { type: "single", q: "Jika suku ke-1 adalah \\( 4a \\) dan suku ke-2 \\( -5b \\), koefisien total jika dijumlahkan adalah... (jika bisa) <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( -1 \\)", "\\( 9 \\)", "\\( 1 \\)", "\\( 4 \\)", "Tidak bisa dijumlahkan"], ans: "Tidak bisa dijumlahkan", exp: "Suku tidak sejenis tidak bisa dijumlahkan, jadi koefisien total tidak terdefinisi.", exp_trans: "Unlike terms cannot be added." },
+
+            // TASK 3: Suku Sejenis & Tidak Sejenis
+            "t3-task1": { type: "single", q: "Manakah suku sejenis dengan \\( 6ab \\)? <i class='fas fa-link text-orange-500 ml-2'></i>", opts: ["\\( 6a \\)", "\\( 6b \\)", "\\( -2ab \\)", "\\( 6a^2b \\)", "\\( 6 \\)"], ans: "\\( -2ab \\)", exp: "Memiliki variabel yang sama persis: \\( ab \\).", exp_trans: "Exact same variables." },
+            "t3-task2": { type: "single", q: "Manakah pasangan suku sejenis? <i class='fas fa-link text-orange-500 ml-2'></i>", opts: ["\\( 3x \\text{ dan } 3x^2 \\)", "\\( 4y \\text{ dan } 4z \\)", "\\( 5ab \\text{ dan } 5ba \\)", "\\( 7 \\text{ dan } 7x \\)"], ans: "\\( 5ab \\text{ dan } 5ba \\)", exp: "\\( ab \\) dan \\( ba \\) adalah sama.", exp_trans: "\\( ab \\) and \\( ba \\) are same." },
+            "t3-task3": { type: "single", q: "Hasil dari \\( 8x - 3x + x \\) adalah... <i class='fas fa-plus text-orange-500 ml-2'></i>", opts: ["\\( 4x \\)", "\\( 5x \\)", "\\( 6x \\)", "\\( 12x \\)", "\\( 6 \\)"], ans: "\\( 6x \\)", exp: "\\( 8 - 3 + 1 = 6 \\). Jadi \\( 6x \\).", exp_trans: "\\( 8 - 3 + 1 = 6 \\)." },
+            "t3-task4": { type: "single", q: "Manakah yang TIDAK sejenis dengan lainnya? <i class='fas fa-link-slash text-orange-500 ml-2'></i>", opts: ["\\( 2x \\)", "\\( -5x \\)", "\\( 0.5x \\)", "\\( x^2 \\)", "\\( 100x \\)"], ans: "\\( x^2 \\)", exp: "Pangkatnya beda, jadi tidak sejenis.", exp_trans: "Different exponent." },
+            "t3-task5": { type: "single", q: "Hasil dari \\( 5a + 2b - 3a + 4b \\) adalah... <i class='fas fa-plus text-orange-500 ml-2'></i>", opts: ["\\( 2a + 6b \\)", "\\( 8ab \\)", "\\( 2a - 6b \\)", "\\( 8a + 6b \\)", "\\( 2a + 2b \\)"], ans: "\\( 2a + 6b \\)", exp: "Kelompokkan: \\( (5a-3a) + (2b+4b) = 2a + 6b \\).", exp_trans: "Group: \\( (5a-3a) + (2b+4b) \\)." },
+            "t3-task6": { type: "single", q: "Manakah suku sejenis dengan \\( -7p^2q \\)? <i class='fas fa-link text-orange-500 ml-2'></i>", opts: ["\\( 7pq^2 \\)", "\\( -3p^2q \\)", "\\( 7pq \\)", "\\( 7p^2 \\)", "\\( 7q^2 \\)"], ans: "\\( -3p^2q \\)", exp: "Harus sama persis variabel dan pangkatnya: \\( p^2q \\).", exp_trans: "Must be exact match \\( p^2q \\)." },
+            "t3-task7": { type: "single", q: "Sederhanakan \\( 3m + 2n - m - 4n \\). <i class='fas fa-broom text-orange-500 ml-2'></i>", opts: ["\\( 2m - 2n \\)", "\\( 2m + 6n \\)", "\\( 4m - 2n \\)", "\\( 2m - 6n \\)", "\\( 2n - 2m \\)"], ans: "\\( 2m - 2n \\)", exp: "\\( (3m-m) + (2n-4n) = 2m - 2n \\).", exp_trans: "Group \\( m \\) and \\( n \\)." },
+            "t3-task8": { type: "single", q: "Manakah yang sejenis dengan \\( 15 \\)? <i class='fas fa-link text-orange-500 ml-2'></i>", opts: ["\\( 15x \\)", "\\( 15y \\)", "\\( -8 \\)", "\\( 15x^2 \\)", "Tidak ada"], ans: "\\( -8 \\)", exp: "Konstanta sejenis dengan konstanta lainnya.", exp_trans: "Constants are like terms with other constants." },
+            "t3-task9": { type: "single", q: "Hasil dari \\( 4xy - 2xy + xy \\) adalah... <i class='fas fa-plus text-orange-500 ml-2'></i>", opts: ["\\( 2xy \\)", "\\( 3xy \\)", "\\( 4xy \\)", "\\( 7xy \\)", "\\( xy \\)"], ans: "\\( 3xy \\)", exp: "\\( 4 - 2 + 1 = 3 \\). Jadi \\( 3xy \\).", exp_trans: "\\( 4 - 2 + 1 = 3 \\)." },
+			"t3-task10": { type: "single", q: "Jika \\( a=2 \\) dan \\( b=3 \\), berapakah nilai dari \\( 2a + 3b - a \\)? <i class='fas fa-calculator text-orange-500 ml-2'></i>", opts: ["\\( 5 \\)", "\\( 7 \\)", "\\( 9 \\)", "\\( 11 \\)", "\\( 10 \\)"], ans: "\\( 11 \\)", exp: "Sederhanakan dulu: \\( 2a - a = a \\). Sehingga menjadi \\( a + 3b \\). Substitusi nilai: \\( 2 + 3(3) = 2 + 9 = 11 \\).", exp_trans: "Simplify: \\( 2a - a = a \\). So it becomes \\( a + 3b \\). Substitute: \\( 2 + 3(3) = 11 \\)." },
+            
+            // TASK 4: Soal Cerita Aljabar
+            "t4-task1": { type: "single", q: "Umur Budi \\( x \\) tahun. Umur Ayah 4 tahun lebih muda dari 3 kali umur Budi. Umur Ayah adalah... <i class='fas fa-user-clock text-orange-500 ml-2'></i>", opts: ["\\( 3x + 4 \\)", "\\( 3x - 4 \\)", "\\( 4x - 3 \\)", "\\( 4x + 3 \\)", "\\( x - 4 \\)"], ans: "\\( 3x - 4 \\)", exp: "3 kali umur Budi = \\( 3x \\). Lebih muda 4 = \\( -4 \\).", exp_trans: "3 times Budi = \\( 3x \\). 4 younger = \\( -4 \\)." },
+            "t4-task2": { type: "single", q: "Tali sepanjang \\( 5x \\) meter dipotong menjadi 2 bagian. Bagian pertama \\( 2x \\) meter. Berapa sisa talinya? <i class='fas fa-scissors text-orange-500 ml-2'></i>", opts: ["\\( 7x \\)", "\\( 3x \\)", "\\( 10x \\)", "\\( 2.5x \\)", "\\( x \\)"], ans: "\\( 3x \\)", exp: "Sisa = total - potongan = \\( 5x - 2x = 3x \\).", exp_trans: "Remainder = total - cut." },
+            "t4-task3": { type: "single", q: "Harga 1 kg jeruk \\( p \\) rupiah. Harga 1 kg apel 2000 lebih murah. Berapakah harga 2 kg apel? <i class='fas fa-apple-whole text-orange-500 ml-2'></i>", opts: ["\\( 2p - 2000 \\)", "\\( 2p - 4000 \\)", "\\( 2p + 4000 \\)", "\\( 2(p - 1000) \\)", "\\( 2p + 2000 \\)"], ans: "\\( 2p - 4000 \\)", exp: "Harga apel = \\( p - 2000 \\). 2 kg = \\( 2(p - 2000) = 2p - 4000 \\).", exp_trans: "Apple = \\( p - 2000 \\). 2kg = \\( 2p - 4000 \\)." },
+            "t4-task4": { type: "single", q: "Sebuah persegi panjang memiliki lebar \\( y \\) dan panjang 2 kali lebarnya. Kelilingnya adalah... <i class='fas fa-vector-square text-orange-500 ml-2'></i>", opts: ["\\( 2y \\)", "\\( 4y \\)", "\\( 6y \\)", "\\( 8y \\)", "\\( y^2 \\)"], ans: "\\( 6y \\)", exp: "Panjang = \\( 2y \\). Keliling = \\( 2(y + 2y) = 2(3y) = 6y \\).", exp_trans: "Length = \\( 2y \\). Perimeter = \\( 6y \\)." },
+            "t4-task5": { type: "single", q: "Tabungan Andi \\( 3x \\) dan tabungan Budi \\( 5x - 1000 \\). Berapakah total tabungan mereka? <i class='fas fa-money-bill-wave text-orange-500 ml-2'></i>", opts: ["\\( 8x - 1000 \\)", "\\( 8x + 1000 \\)", "\\( 2x - 1000 \\)", "\\( 8x \\)", "\\( 15x - 1000 \\)"], ans: "\\( 8x - 1000 \\)", exp: "Jumlahkan keduanya: \\( 3x + 5x - 1000 = 8x - 1000 \\).", exp_trans: "Sum them up." },
+            "t4-task6": { type: "single", q: "Jarak kota A ke B adalah \\( 100 \\) km. Mobil berangkat dari A dengan kecepatan \\( (v+10) \\) km/jam. Setelah \\( 2 \\) jam, jarak mobil ke kota B adalah... <i class='fas fa-car-side text-orange-500 ml-2'></i>", opts: ["\\( 100 - 2v - 20 \\)", "\\( 100 - 2v + 20 \\)", "\\( 2v + 20 \\)", "\\( 100 - v - 10 \\)", "\\( 80 - 2v \\)"], ans: "\\( 100 - 2v - 20 \\)", exp: "Jarak ditempuh = \\( 2(v+10) = 2v+20 \\). Sisa = \\( 100 - (2v+20) = 100 - 2v - 20 \\).", exp_trans: "Distance covered = \\( 2v+20 \\). Left = \\( 100 - 2v - 20 \\)." },
+            "t4-task7": { type: "single", q: "Sebuah tas harganya \\( p \\). Saat diskon, harganya turun 10%. Berapakah harga tas setelah diskon? <i class='fas fa-tag text-orange-500 ml-2'></i>", opts: ["\\( p - 10 \\)", "\\( 0.9p \\)", "\\( p + 10 \\)", "\\( 0.1p \\)", "\\( 10p \\)"], ans: "\\( 0.9p \\)", exp: "Diskon 10% artinya bayar 90%. \\( 0.9 \\times p = 0.9p \\).", exp_trans: "10% off means pay 90%." },
+            "t4-task8": { type: "single", q: "Pak Budi punya \\( 5x \\) ekor ayam. Ia jual 3 ekor, lalu beli \\( 2y \\) ekor. Berapa ayam Pak Budi sekarang? <i class='fas fa-feather text-orange-500 ml-2'></i>", opts: ["\\( 5x + 2y - 3 \\)", "\\( 5x - 2y + 3 \\)", "\\( 5x - 2y - 3 \\)", "\\( 2y - 3 \\)", "\\( 5x + 3 \\)"], ans: "\\( 5x + 2y - 3 \\)", exp: "Awal \\( 5x \\). Dikurang jual: \\( -3 \\). Ditambah beli: \\( +2y \\). Hasil: \\( 5x + 2y - 3 \\).", exp_trans: "Start \\( 5x \\). Sell: \\( -3 \\). Buy: \\( +2y \\)." },
+            "t4-task9": { type: "single", q: "Air dalam kolam ber volumenya \\( V \\) liter. Dikeluarkan \\( 5 \\) liter per menit selama \\( x \\) menit. Berapakah sisa air? <i class='fas fa-droplet text-orange-500 ml-2'></i>", opts: ["\\( V - 5 \\)", "\\( V - 5x \\)", "\\( V + 5x \\)", "\\( 5x - V \\)", "\\( x - 5 \\)"], ans: "\\( V - 5x \\)", exp: "Dikeluarkan 5 liter per menit selama \\( x \\) menit = \\( 5x \\). Sisa = \\( V - 5x \\).", exp_trans: "Out 5L/min for \\( x \\) mins = \\( 5x \\). Left = \\( V - 5x \\)." },
+            "t4-task10": { type: "single", q: "Jumlah 2 bilangan genap berurutan adalah \\( 4x \\). Bilangan pertama adalah \\( 2x - 2 \\). Berapakah bilangan kedua? <i class='fas fa-calculator text-orange-500 ml-2'></i>", opts: ["\\( 2x + 2 \\)", "\\( 2x - 2 \\)", "\\( 2x \\)", "\\( 4x + 2 \\)", "\\( 8x - 2 \\)"], ans: "\\( 2x + 2 \\)", exp: "Bilangan kedua = Total - pertama = \\( 4x - (2x - 2) = 4x - 2x + 2 = 2x + 2 \\).", exp_trans: "Second = Total - first." },
+
+            // TASK 5: Kombinasi Mastery
+            "t5-task1": { type: "single", q: "Pada \\( -3x^2y + 4 \\), manakah koefisien dari \\( x^2y \\)? <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 3 \\)", "\\( -3 \\)", "\\( 2 \\)", "\\( 4 \\)", "\\( 1 \\)"], ans: "\\( -3 \\)", exp: "Tanda minus adalah bagian dari koefisien.", exp_trans: "Minus sign is part of coefficient." },
+            "t5-task2": { type: "single", q: "Selesaikan \\( 3(2x - 1) - (4x + 2) \\). <i class='fas fa-calculator text-orange-500 ml-2'></i>", opts: ["\\( 2x - 5 \\)", "\\( 2x - 1 \\)", "\\( 10x - 5 \\)", "\\( 2x + 1 \\)", "\\( 10x + 1 \\)"], ans: "\\( 2x - 5 \\)", exp: "\\( 6x - 3 - 4x - 2 = 2x - 5 \\).", exp_trans: "Distribute and combine." },
+            "t5-task3": { type: "single", q: "Jika \\( x = 2 \\), berapakah nilai dari \\( 3x^2 - 2x + 1 \\)? <i class='fas fa-superscript text-orange-500 ml-2'></i>", opts: ["\\( 9 \\)", "\\( 11 \\)", "\\( 13 \\)", "\\( 5 \\)", "\\( 3 \\)"], ans: "\\( 13 \\)", exp: "\\( 3(4) - 2(2) + 1 = 12 - 4 + 1 = 13 \\).", exp_trans: "Substitute and calculate." },
+            "t5-task4": { type: "single", q: "Manakah yang merupakan suku sejenis dengan \\( -5pqr \\)? <i class='fas fa-link text-orange-500 ml-2'></i>", opts: ["\\( 5pq \\)", "\\( -5p^2qr \\)", "\\( 10rqp \\)", "\\( -5pqr^2 \\)", "\\( 5 \\)"], ans: "\\( 10rqp \\)", exp: "\\( pqr = rqp \\). Urutan variabel tidak masalah asal pangkatnya sama.", exp_trans: "\\( pqr = rqp \\)." },
+            "t5-task5": { type: "single", q: "Keliling sebuah segitiga sama sisi adalah \\( 6x + 9 \\). Berapakah panjang salah satu sisinya? <i class='fas fa-shapes text-orange-500 ml-2'></i>", opts: ["\\( 2x + 3 \\)", "\\( 2x + 9 \\)", "\\( 6x + 3 \\)", "\\( 18x + 27 \\)", "\\( 6x \\)"], ans: "\\( 2x + 3 \\)", exp: "Sisi segitiga sama sisi = Keliling / 3 = \\( (6x+9)/3 = 2x+3 \\).", exp_trans: "Side = Perimeter / 3." },
+            "t5-task6": { type: "single", q: "Pada \\( 2a - 3b + 4c - 5 \\), ada berapa variabel? <i class='fas fa-font text-orange-500 ml-2'></i>", opts: ["\\( 1 \\)", "\\( 2 \\)", "\\( 3 \\)", "\\( 4 \\)", "\\( 5 \\)"], ans: "\\( 3 \\)", exp: "Variabelnya adalah \\( a, b, \\) dan \\( c \\).", exp_trans: "Variables are \\( a, b, c \\)." },
+            "t5-task7": { type: "single", q: "Jika \\( A = 2x + 1 \\) dan \\( B = x - 3 \\), berapakah \\( 2A - B \\)? <i class='fas fa-calculator text-orange-500 ml-2'></i>", opts: ["\\( 3x + 5 \\)", "\\( 3x - 1 \\)", "\\( 5x - 5 \\)", "\\( 5x + 5 \\)", "\\( 3x - 5 \\)"], ans: "\\( 3x + 5 \\)", exp: "\\( 2(2x+1) - (x-3) = 4x + 2 - x + 3 = 3x + 5 \\).", exp_trans: "Substitute A and B." },
+            "t5-task8": { type: "single", q: "Diketahui \\( p = 2 \\) dan \\( q = 3 \\). Berapakah nilai dari \\( pq^2 - p^2q \\)? <i class='fas fa-calculator text-orange-500 ml-2'></i>", opts: ["\\( 0 \\)", "\\( 6 \\)", "\\( -6 \\)", "\\( 12 \\)", "\\( -12 \\)"], ans: "\\( 6 \\)", exp: "Substitusi nilai \\( p = 2 \\) dan \\( q = 3 \\): \\( (2)(3^2) - (2^2)(3) = (2)(9) - (4)(3) = 18 - 12 = 6 \\).", exp_trans: "Substitute \\( p = 2 \\), \\( q = 3 \\): \\( (2)(9) - (4)(3) = 18 - 12 = 6 \\)." },
+            "t5-task9": { type: "single", q: "Manakah bentuk aljabar dari 'kuadrat dari jumlah \\( x \\) dan \\( 2 \\)'? <i class='fas fa-square text-orange-500 ml-2'></i>", opts: ["\\( x^2 + 2 \\)", "\\( x^2 + 4 \\)", "\\( (x + 2)^2 \\)", "\\( x^2 + 2x + 2 \\)", "\\( x^2 - 4 \\)"], ans: "\\( (x + 2)^2 \\)", exp: "Jumlah \\( x \\) dan 2 = \\( x+2 \\). Kuadrat dari itu = \\( (x+2)^2 \\).", exp_trans: "Sum = \\( x+2 \\). Square it." },
+            "t5-task10": { type: "single", q: "Pada \\( 5x - 7y + 3 \\), jika \\( x \\) dan \\( y \\) adalah variabel, berapakah jumlah koefisien dan konstanta? <i class='fas fa-hashtag text-orange-500 ml-2'></i>", opts: ["\\( 5 \\)", "\\( -7 \\)", "\\( 3 \\)", "\\( 1 \\)", "\\( -2 \\)"], ans: "\\( 1 \\)", exp: "Koefisien \\( 5 \\) dan \\( -7 \\), konstanta \\( 3 \\). Jumlah = \\( 5 + (-7) + 3 = 1 \\).", exp_trans: "Sum all numbers: 5, -7, 3." }
+        });
+        
+        // ====== JAVASCRIPT LOGIC ======
+        let currentPage = 1;
+        let currentTaskSection = ""; 
+
+        function openModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeModal() {
+            const modal = document.getElementById('classRulesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('bg-indigo-100', 'text-indigo-800', 'font-bold', 'bg-orange-100', 'text-orange-800');
+            });
+            const activeLink = document.querySelector(`.sidebar-item[data-section="${sectionId}"]`);
+            if (activeLink) {
+                if(sectionId.startsWith('task')) {
+                    activeLink.classList.add('bg-orange-100', 'text-orange-800', 'font-bold');
+                } else {
+                    activeLink.classList.add('bg-indigo-100', 'text-indigo-800', 'font-bold');
+                }
+            }
+            currentPage = 1;
+            currentTaskSection = sectionId;
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const firstPage = document.querySelector(`#${sectionId} .page[data-page="1"]`);
+            if(firstPage) firstPage.classList.add('active');
+            
+            renderMath();
+            renderPagination(sectionId, currentPage);
+            document.getElementById('contentScrollArea').scrollTo(0, 0);
+        }
+
+        function changePage(direction) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            let newPage = currentPage + direction;
+            if(newPage >= 1 && newPage <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[newPage - 1].classList.add('active');
+                currentPage = newPage;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+
+        function goToPage(pageNum) {
+            const activeSection = document.querySelector('.content-section.active');
+            if(!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            if(pageNum >= 1 && pageNum <= pages.length) {
+                pages[currentPage - 1].classList.remove('active');
+                pages[pageNum - 1].classList.add('active');
+                currentPage = pageNum;
+                renderMath();
+                renderPagination(currentTaskSection, currentPage);
+                document.getElementById('contentScrollArea').scrollTo(0, 0);
+            }
+        }
+        
+        function renderPagination(sectionId, pageNum) {
+            const activeSection = document.getElementById(sectionId);
+            if (!activeSection) return;
+            const pages = activeSection.querySelectorAll('.page');
+            const totalPages = pages.length;
+            let html = '';
+            const isMainTask = sectionId.startsWith('t');
+            const theoryPages = [1, 5, 9]; 
+            
+            html += `<button onclick="goToPage(${pageNum - 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === 1 ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Prev</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                let btnColor = 'bg-gray-100 hover:bg-gray-200 text-gray-700';
+                if (!isMainTask && theoryPages.includes(i)) {
+                    btnColor = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'; 
+                } else {
+                    btnColor = 'bg-orange-100 hover:bg-orange-200 text-orange-800'; 
+                }
+                if (i === pageNum) {
+                    if (!isMainTask && theoryPages.includes(i)) {
+                        btnColor = 'bg-indigo-600 text-white shadow-md'; 
+                    } else {
+                        btnColor = 'bg-orange-500 text-white shadow-md'; 
+                    }
+                }
+                html += `<button onclick="goToPage(${i})" class="w-9 h-9 rounded-md text-sm font-semibold transition-all ${btnColor}">${i}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${pageNum + 1})" class="px-3 py-1.5 rounded-md text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 ${pageNum === totalPages ? 'opacity-50 cursor-not-allowed' : ''}" ${pageNum === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+            document.getElementById('paginationBar').innerHTML = html;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        let studentAnswers = {};
+
+        function renderTasks() {
+            document.querySelectorAll('[data-task-id]').forEach(div => {
+                const taskId = div.getAttribute('data-task-id');
+                renderSingleTask(taskId, div);
+            });
+            renderMath();
+        }
+        
+        function renderSingleTask(taskId, div) {
+            const data = questions[taskId];
+            if(!data) return;
+
+            const isMainTask = taskId.startsWith('t');
+            const taskNum = isMainTask ? taskId[1] : 0;
+            let taskType = data.type || 'single';
+            
+            let questionHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-orange-500">
+                    <div class="flex justify-between items-center mb-4 no-print">
+                        <h2 class="text-xl font-bold text-orange-600">
+                            ${isMainTask ? `Task ${taskNum}` : 'Latihan'} 
+                            ${taskType === 'complex' ? '<span class="text-sm bg-purple-200 text-purple-800 px-2 py-1 rounded ml-2">PG Kompleks</span>' : ''}
+                            ${taskType === 'fill' ? '<span class="text-sm bg-blue-200 text-blue-800 px-2 py-1 rounded ml-2">Isian Singkat</span>' : ''}
+                            ${taskType === 'tf_table' ? '<span class="text-sm bg-teal-200 text-teal-800 px-2 py-1 rounded ml-2">Tabel Benar/Salah</span>' : ''}
+                            <span class="translation text-gray-500 text-sm">Exercise</span>
+                        </h2>
+                        <div class="flex gap-2">
+                            <button onclick="resetTask('${taskId}')" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            ${isMainTask ? `<button onclick="printTask(${taskNum})" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                <i class="fas fa-print"></i> Print
+                            </button>` : ''}
+                        </div>
+                    </div>
+                    <div class="mb-6 flex gap-4 items-start">
+                        <div class="bg-orange-100 p-3 rounded-full shrink-0">
+                            <i class="fas fa-question text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-lg">${data.q}</p>
+                            <p class="translation">${data.q_trans}</p>
+                        </div>
+                    </div>
+            `;
+
+            if (taskType === 'single') {
+                const shuffledOpts = shuffleArray([...data.opts]);
+                questionHTML += `
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${shuffledOpts.map((opt, i) => `
+                            <button onclick="checkAnswer('${taskId}', this.getAttribute('data-opt'), 'single')" 
+                                    class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-orange-500 flex items-center gap-3" 
+                                    data-opt="${opt}">
+                                <span class="w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full font-bold shrink-0">${String.fromCharCode(65 + i)}</span>
+                                <span class="katex">${opt}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (taskType === 'complex') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Pilih semua pernyataan yang benar. <span class="translation">*Select all correct statements.</span></p>
+                    <div id="options-${taskId}" class="space-y-3">
+                        ${data.opts.map((opt, i) => `
+                            <label class="option-btn w-full text-left p-3 border-2 border-gray-200 rounded hover:border-purple-500 flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" class="w-5 h-5 complex-checkbox shrink-0" data-opt-index="${i}">
+                                <span class="katex">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'complex')" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            } else if (taskType === 'fill') {
+                questionHTML += `
+                    <div class="flex gap-2 items-center mt-2">
+                        <input type="text" id="input-${taskId}" class="border-2 border-gray-200 rounded p-2 w-32 text-lg text-center focus:border-orange-500 outline-none" placeholder="Jawaban...">
+                        <button onclick="checkAnswer('${taskId}', null, 'fill')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-bold">Submit</button>
+                    </div>
+                `;
+            } else if (taskType === 'tf_table') {
+                questionHTML += `
+                    <p class="text-sm text-gray-600 mb-3">*Tentukan Benar atau Salah untuk setiap pernyataan. <span class="translation">*Determine True or False for each statement.</span></p>
+                    <div id="options-${taskId}" class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 w-10">No.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Pernyataan <span class="translation text-xs">Statement</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Benar <span class="translation text-xs block">True</span></th>
+                                    <th class="border border-gray-300 p-2 w-20">Salah <span class="translation text-xs block">False</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.opts.map((opt, i) => `
+                                    <tr>
+                                        <td class="border border-gray-300 p-2 text-center font-bold">${i + 1}</td>
+                                        <td class="border border-gray-300 p-2"><span class="katex">${opt}</span></td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="B" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                        <td class="border border-gray-300 p-2 text-center">
+                                            <input type="radio" name="tf-${taskId}-${i}" value="S" class="tf-radio w-5 h-5 cursor-pointer">
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="checkAnswer('${taskId}', null, 'tf_table')" class="mt-4 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded font-bold">Submit Jawaban</button>
+                `;
+            }
+
+            questionHTML += `
+                    <div id="result-${taskId}" class="mt-4 hidden p-4 rounded"></div>
+
+                    <div class="mt-4 no-print">
+                        <button onclick="toggleCollapse('${taskId}')" id="collapse-btn-${taskId}" class="hidden text-blue-600 underline">
+                            Tampilkan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Show Explanation</span>
+                        </button>
+                        <div id="collapse-${taskId}" class="collapse-content w-full">
+                            <h3 class="font-bold text-blue-800">Penjelasan: <span class="translation text-gray-500 text-sm">Explanation:</span></h3>
+                            <p class="mt-2">${data.exp}</p>
+                            <p class="translation">${data.exp_trans}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            div.innerHTML = questionHTML;
+        }
+
+        function checkAnswer(taskId, selectedOpt, type) {
+            const data = questions[taskId];
+            const resultDiv = document.getElementById(`result-${taskId}`);
+            const collapseBtn = document.getElementById(`collapse-btn-${taskId}`);
+            let isCorrect = false;
+            let correctAnsText = '';
+
+            if (type === 'single') {
+                const buttons = document.querySelectorAll(`#options-${taskId} button`);
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-70', 'cursor-not-allowed');
+                    if(btn.getAttribute('data-opt') === data.ans) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                    } else if (btn.getAttribute('data-opt') === selectedOpt) {
+                        btn.classList.remove('border-gray-200', 'hover:border-orange-500');
+                        btn.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                isCorrect = (selectedOpt === data.ans);
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = selectedOpt; 
+            } 
+            else if (type === 'complex') {
+                const checkboxes = document.querySelectorAll(`#options-${taskId} input[type="checkbox"]`);
+                let selectedAns = [];
+                checkboxes.forEach((cb, i) => {
+                    if (cb.checked) selectedAns.push(i);
+                    cb.disabled = true;
+                });
+                const correctAnsStr = [...data.ans].sort().join(',');
+                const selectedAnsStr = [...selectedAns].sort().join(',');
+                isCorrect = (correctAnsStr === selectedAnsStr);
+                
+                let correctComplexText = [];
+                data.ans.forEach(i => correctComplexText.push(data.opts[i]));
+                correctAnsText = correctComplexText.join(', ');
+
+                checkboxes.forEach((cb, i) => {
+                    if(data.ans.includes(i)) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-green-500', 'bg-green-50');
+                    } else if (cb.checked) {
+                        cb.parentElement.classList.remove('border-gray-200', 'hover:border-purple-500');
+                        cb.parentElement.classList.add('border-red-500', 'bg-red-50');
+                    }
+                });
+                studentAnswers[taskId] = selectedAns;
+            } 
+            else if (type === 'fill') {
+                const inputField = document.getElementById(`input-${taskId}`);
+                let userVal = inputField.value.trim().toLowerCase().replace(/\s/g, '');
+                let correctAns = data.ans.toString().toLowerCase().replace(/\s/g, '');
+                inputField.disabled = true;
+                isCorrect = (userVal === correctAns);
+                if(!isCorrect) inputField.classList.add('border-red-500', 'bg-red-50');
+                else inputField.classList.add('border-green-500', 'bg-green-50');
+                correctAnsText = data.ans;
+                studentAnswers[taskId] = userVal;
+            }
+            else if (type === 'tf_table') {
+                const rows = document.querySelectorAll(`#options-${taskId} tbody tr`);
+                let userAns = [];
+                let allFilled = true;
+
+                rows.forEach((row, i) => {
+                    const radios = row.querySelectorAll('input[type="radio"]');
+                    let rowVal = null;
+                    radios.forEach(r => {
+                        r.disabled = true;
+                        if (r.checked) rowVal = r.value;
+                    });
+                    if (rowVal === null) allFilled = false;
+                    userAns.push(rowVal);
+                });
+
+                if (!allFilled) {
+                    alert("Harap isi semua pernyataan terlebih dahulu! / Please answer all statements first!");
+                    rows.forEach((row, i) => {
+                        let radios = row.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.disabled = false);
+                    });
+                    return;
+                }
+
+                let correctCount = 0;
+                let correctTFText = [];
+                rows.forEach((row, i) => {
+                    const userVal = userAns[i];
+                    const correctVal = data.ans[i];
+                    correctTFText.push(`${i+1}. ${correctVal}`);
+                    if (userVal === correctVal) {
+                        correctCount++;
+                        row.classList.add('bg-green-50');
+                    } else {
+                        row.classList.add('bg-red-50');
+                    }
+                });
+
+                isCorrect = (correctCount === data.ans.length);
+                correctAnsText = correctTFText.join(' | ');
+                studentAnswers[taskId] = userAns;
+            }
+
+            if(isCorrect) {
+                resultDiv.innerHTML = `<p class="text-green-600 font-bold"><i class="fas fa-check-circle"></i> Benar! <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Correct!</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-green-50 border border-green-200";
+            } else {
+                resultDiv.innerHTML = `<p class="text-red-600 font-bold"><i class="fas fa-times-circle"></i> Salah! Jawaban yang benar adalah: ${correctAnsText}. <span class="translation text-gray-600 font-normal" style="display: inline-block; margin-left: 4px;">Wrong! The correct answer is: ${correctAnsText}.</span></p>`;
+                resultDiv.className = "mt-4 p-4 rounded bg-red-50 border border-red-200";
+            }
+            resultDiv.classList.remove('hidden');
+            collapseBtn.classList.remove('hidden');
+            
+            const collapseContent = document.getElementById(`collapse-${taskId}`);
+            collapseContent.classList.add('open');
+            collapseBtn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            
+            renderMath();
+        }
+
+        function resetTask(taskId) {
+            delete studentAnswers[taskId];
+            const taskDiv = document.querySelector(`[data-task-id="${taskId}"]`);
+            if(taskDiv) {
+                renderSingleTask(taskId, taskDiv);
+                renderMath();
+            }
+        }
+
+        function printTask(taskNum) {
+            let score = 0;
+            let tableBody = '';
+            for(let i=1; i<=10; i++) {
+                const taskId = `t${taskNum}-task${i}`;
+                const data = questions[taskId];
+                if(!data) continue;
+                
+                let studentAns = studentAnswers[taskId] || 'Tidak Dijawab';
+                let correctAns = data.ans;
+                
+                let sAnsStr = '';
+                let cAnsStr = '';
+                let isCorrect = false;
+                
+                if (data.type === 'complex') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.length > 0 ? cArr.slice().sort().map(idx => data.opts[idx]).join(', ') : 'Tidak Dijawab';
+                    isCorrect = (sArr.length > 0 && sArr.slice().sort().join(',') === cArr.slice().sort().join(','));
+                } else if (data.type === 'tf_table') {
+                    let sArr = Array.isArray(studentAns) ? studentAns : [];
+                    let cArr = Array.isArray(correctAns) ? correctAns : [];
+                    sAnsStr = sArr.length > 0 ? sArr.join(' | ') : 'Tidak Dijawab';
+                    cAnsStr = cArr.join(' | ');
+                    isCorrect = (sArr.length > 0 && sArr.join(',') === cArr.join(','));
+                } else {
+                    sAnsStr = studentAns || 'Tidak Dijawab';
+                    cAnsStr = correctAns;
+                    isCorrect = (sAnsStr === cAnsStr);
+                }
+                
+                let note = '❌';
+                if(isCorrect) { score++; note = '✔️'; }
+                
+                let qText = data.q.replace(/<[^>]+>/g, '');
+                if (data.type === 'tf_table') {
+                    qText += " | Statements: " + data.opts.map((opt, idx) => `${idx+1}. ${opt}`).join(" ; ");
+                }
+                
+                tableBody += `<tr>
+                    <td class="border border-black p-1 text-center">${i}</td>
+                    <td class="border border-black p-1">${qText}</td>
+                    <td class="border border-black p-1">${sAnsStr}</td>
+                    <td class="border border-black p-1">${cAnsStr}</td>
+                    <td class="border border-black p-1 text-center">${note}</td>
+                </tr>`;
+            }
+            document.getElementById('printTableBody').innerHTML = tableBody;
+            document.getElementById('printTaskNum').innerText = taskNum;
+            document.getElementById('printScore').innerText = score;
+            
+            renderMathInElement(document.getElementById('printArea'), {
+                delimiters: [
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ]
+            });
+            window.print();
+        }
+
+        function toggleCollapse(taskId) {
+            const content = document.getElementById(`collapse-${taskId}`);
+            const btn = document.getElementById(`collapse-btn-${taskId}`);
+            content.classList.toggle('open');
+            if(content.classList.contains('open')) {
+                btn.innerHTML = 'Sembunyikan Penjelasan <span class="translation text-gray-500 text-xs" style="display: inline-block; margin-left: 4px;">Hide Explanation</span>';
+            } else {
+                btn.innerHTML = 'Tampilkan Penjelasan <span class="translation text-gray-500 text-xs">Show Explanation</span>';
+            }
+        }
+
+        function renderMath() {
+            if (typeof renderMathInElement === 'undefined') return;
+            
+            const target = document.querySelector('.content-section.active') || document.body;
+            try {
+                renderMathInElement(target, {
+                    delimiters: [
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            } catch(e) {
+                console.error("KaTeX rendering error:", e);
+            }
+        }
+
+        window.onload = () => {
+            renderTasks();
+            setTimeout(() => {
+                showSection('warmup');
+                renderMath();
+            }, 100);
+        };
+    </script>
+</body>
+</html>
