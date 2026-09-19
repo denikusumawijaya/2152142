@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Brief — Tutor Cheat Sheet</title>
+<style>
+
+:root{
+  --ink:#1f2937; --ink-soft:#586074; --bg:#101425; --panel:#171c30; --panel2:#1d2338;
+  --accent:#6366f1; --accent2:#22d3ee; --good:#34d399; --bad:#f87171; --warn:#fbbf24;
+  --border:#2b3252; --radius:12px;
+}
+*{box-sizing:border-box;}
+html{font-size:16px;}
+body{margin:0; background:var(--bg); color:#e7e9f5; font-family:"Segoe UI",system-ui,Arial,sans-serif; line-height:1.5;}
+a{color:var(--accent2);}
+.wrap{display:flex; min-height:100vh;}
+.sidebar{
+  width:230px; flex-shrink:0; background:var(--panel); border-right:1px solid var(--border);
+  padding:1.1rem .8rem; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sidebar h1{font-size:1.05rem; margin:0 0 .2rem; color:#fff;}
+.sidebar .sub{font-size:.78rem; color:var(--ink-soft); margin-bottom:1rem;}
+.sidebar nav a{
+  display:block; padding:.5rem .6rem; border-radius:8px; font-size:.86rem; color:#c9cdf0;
+  text-decoration:none; margin-bottom:.15rem; border-left:3px solid transparent;
+}
+.sidebar nav a:hover{background:var(--panel2);}
+.sidebar nav a.tag-neg{border-left-color:var(--warn);}
+.content{flex:1; padding:1.4rem clamp(1rem,3vw,2.6rem) 4rem; max-width:1100px;}
+h2.stage-h{
+  display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; margin:2.2rem 0 .6rem;
+  padding-bottom:.4rem; border-bottom:2px solid var(--border); scroll-margin-top:1rem;
+}
+h2.stage-h .dur{
+  background:var(--accent); color:#fff; font-weight:700; font-size:.85rem;
+  padding:.25rem .65rem; border-radius:999px; font-variant-numeric:tabular-nums;
+}
+h2.stage-h .goal{color:var(--ink-soft); font-size:.9rem; font-weight:400;}
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:1rem 1.2rem; margin-bottom:1rem;
+}
+.card h3{margin:.1rem 0 .6rem; font-size:1rem; color:var(--accent2);}
+.card p{margin:.4rem 0;}
+ul, ol{margin:.4rem 0; padding-left:1.3rem;}
+li{margin-bottom:.35rem;}
+.script{
+  background:#0d1120; border-left:3px solid var(--accent); border-radius:8px;
+  padding:.6rem .8rem; margin:.5rem 0; font-size:.94rem;
+}
+.script b{color:#fff;}
+.tag{display:inline-block; font-size:.72rem; font-weight:700; padding:.12rem .5rem; border-radius:6px; margin-right:.3rem;}
+.tag-qc{background:#312e81; color:#c7d2fe;}
+.tag-warn{background:#78350f; color:#fde68a;}
+.tag-good{background:#064e3b; color:#a7f3d0;}
+.tag-bad{background:#7f1d1d; color:#fecaca;}
+table{width:100%; border-collapse:collapse; margin:.6rem 0; font-size:.88rem;}
+th, td{border:1px solid var(--border); padding:.4rem .55rem; text-align:left; vertical-align:top;}
+th{background:var(--panel2); color:#fff;}
+tr:nth-child(even) td{background:#141834;}
+.checklist{list-style:none; padding-left:0;}
+.checklist li{padding-left:1.6rem; position:relative;}
+.checklist li::before{content:"☐"; position:absolute; left:0; color:var(--accent2); font-size:1.05rem;}
+.mistake-box{
+  background:#3a1414; border:1.5px solid var(--bad); border-radius:10px; padding:.8rem 1rem; margin:.6rem 0;
+}
+.mistake-box .lbl{color:#fecaca; font-weight:700; font-size:.82rem; text-transform:uppercase; letter-spacing:.03em;}
+.fix-box{
+  background:#0f2e1f; border:1.5px solid var(--good); border-radius:10px; padding:.8rem 1rem; margin:.6rem 0;
+}
+.fix-box .lbl{color:#a7f3d0; font-weight:700; font-size:.82rem; text-transform:uppercase; letter-spacing:.03em;}
+.top-overview{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.5rem; margin:.8rem 0 1.4rem;}
+.ov-tile{background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:.6rem .7rem; text-align:center;}
+.ov-tile .t{font-size:.78rem; color:var(--ink-soft);}
+.ov-tile .v{font-weight:700; color:#fff; font-size:.95rem;}
+code{background:#0d1120; padding:.1rem .35rem; border-radius:5px; font-size:.9em;}
+.small{font-size:.82rem; color:var(--ink-soft);}
+hr{border:none; border-top:1px solid var(--border); margin:1.4rem 0;}
+@media print{ .sidebar{display:none;} .content{max-width:none;} body{background:#fff;color:#111;} }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar">
+    <h1>Lesson Brief</h1>
+    <div class="sub">Contekan Tutor — Private, 60 menit<br>Pemodelan Bentuk Aljabar</div>
+    <nav>
+<a href="#overview">Ringkasan & Persiapan</a><a href="#pembukaan">1. Pembukaan & Kesiapan</a><a href="#apersepsi">2. Apersepsi & Koneksi</a><a href="#eksplorasi">3. Eksplorasi Konsep</a><a href="#terbimbing">4. Latihan Terbimbing</a><a href="#mandiri">5. Latihan Mandiri</a><a href="#refleksi">6. Refleksi & Penutup</a><a href="#homework">7. Tugas Rumah (setelah sesi)</a>
+    </nav>
+    <hr style="border-color:#2b3252;">
+    <p class="small">File ini HANYA untuk tutor (tampilkan di monitor extend). Jangan di-share ke siswa — berisi jawaban &amp; skrip mengajar.</p>
+  </aside>
+  <main class="content">
+
+<h2 class="stage-h" id="overview"><span class="dur">SIAPKAN</span> Ringkasan &amp; Persiapan Sebelum Kelas</h2>
+
+<div class="top-overview">
+  <div class="ov-tile"><div class="t">Tipe kelas</div><div class="v">Private</div></div>
+  <div class="ov-tile"><div class="t">Durasi</div><div class="v">60 menit</div></div>
+  <div class="ov-tile"><div class="t">Topik</div><div class="v">Pemodelan Bentuk Aljabar</div></div>
+  <div class="ov-tile"><div class="t">Kurikulum</div><div class="v">Merdeka SMP Kls 7</div></div>
+  <div class="ov-tile"><div class="t">Fokus perbaikan</div><div class="v">Operasi bilangan negatif</div></div>
+  <div class="ov-tile"><div class="t">File pendamping</div><div class="v">lesson_material.html</div></div>
+</div>
+
+<div class="card">
+  <h3>✅ Checklist Kesiapan Teknis &amp; Ruang (lakukan sebelum siswa masuk, target 0 gangguan teknis)</h3>
+  <ul class="checklist">
+    <li>Hadir di ruang kelas online <b>minimal 3 menit</b> sebelum jadwal mulai.</li>
+    <li>Cek audio &amp; video: mic jernih tanpa noise, kamera fokus, pencahayaan wajah dari depan (bukan backlight jendela).</li>
+    <li>Rapikan background: netral, bebas benda mengganggu; posisi kamera sejajar mata.</li>
+    <li>Buka <code>lesson_material.html</code> di layar utama (share screen), buka file ini (<code>lesson_brief.html</code>) di monitor extend — jangan sampai tertukar saat share screen.</li>
+    <li>Tes tombol Next/Previous dan pastikan modal "Class Rules" bisa dibuka-tutup.</li>
+    <li>Siapkan alat tulis/whiteboard digital cadangan untuk mencontohkan perhitungan manual bila diperlukan.</li>
+    <li>Siapkan catatan siswa (progress sebelumnya) terbuka di tab terpisah: siswa paham konsep dasar aljabar, tapi masih sering salah pada operasi hitung bilangan negatif.</li>
+    <li>Matikan notifikasi (HP &amp; desktop) sebelum sesi dimulai.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>👤 Penampilan &amp; Kesan Pertama</h3>
+  <ul>
+    <li>Berpakaian rapi/profesional, senyum saat siswa masuk, sapa dengan nama siswa secara personal.</li>
+    <li>Buka sesi dengan nada hangat &amp; antusias — kesan pertama menentukan suasana 60 menit ke depan.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>🎯 Catatan Personalisasi Siswa (baca ulang sebelum mulai)</h3>
+  <p><b>Sudah dikuasai:</b> Rasio (Konsep Rasio, Skala, Laju Perubahan Satuan); Bentuk Aljabar (Unsur-Unsur, Sifat &amp; Operasi Aljabar dasar).</p>
+  <p><b>Masih lemah:</b> operasi hitung bilangan negatif (penjumlahan, pengurangan, terutama saat mengurangi bilangan negatif dan distribusi koefisien negatif).</p>
+  <p><b>Implikasi untuk hari ini:</b> perbanyak repetisi pada soal-soal bertanda <span class="tag tag-warn">FOKUS NEGATIF</span> di bawah, perlambat tempo saat sampai di bagian itu, dan gunakan tangga bantuan (hint ladder) di bagian Latihan sebelum memberi jawaban.</p>
+</div>
+
+<div class="card">
+  <h3>🧩 &ge;5 Bentuk Personalisasi yang Harus Terlihat Hari Ini (checklist QC Private)</h3>
+  <ol>
+    <li>Pilih soal cadangan yang menonjolkan bilangan negatif (lihat tag <span class="tag tag-warn">FOKUS NEGATIF</span> di tabel bank soal tiap tahap) sebagai prioritas, bukan asal urutan 1-10.</li>
+    <li>Saat siswa salah tanda negatif, langsung berikan analogi konkret miliknya (suhu freezer / saldo rekening) — bukan penjelasan abstrak.</li>
+    <li>Sesuaikan kecepatan: jika siswa lambat di Latihan Terbimbing, kurangi jumlah soal pengayaan di Latihan Mandiri (lewati D8-D10) dan tambah repetisi soal dasar.</li>
+    <li>Jika siswa cepat &amp; akurat, tambahkan soal pengayaan (D8-D10) dan percepat ke Latihan Mandiri lebih awal.</li>
+    <li>Siapkan soal cadangan tambahan sesuai minat siswa (lihat kotak "Soal Cadangan Sesuai Minat" di bagian Eksplorasi) jika siswa menunjukkan ketertarikan pada topik tertentu (olahraga, game, uang saku, dll).</li>
+  </ol>
+</div>
+
+<h2 class="stage-h" id="pembukaan"><span class="dur">00:00–00:05</span> 1. Pembukaan &amp; Kesiapan <span class="goal">Tujuan: kesan pertama sangat positif, transisi mulus ke materi</span></h2>
+
+<div class="card">
+  <h3>🗣️ Skrip Pembuka (ucapkan dengan nama siswa)</h3>
+  <div class="script">"Halo [Nama Siswa]! Apa kabar hari ini? Sebelum kita mulai, boleh cerita sedikit, ada kejadian seru minggu ini?" <span class="small">(bangun rapport 30-45 detik, dengarkan aktif, baru lanjut.)</span></div>
+  <div class="script">"Hari ini kita lanjut ke topik baru: <b>Pemodelan dengan Bentuk Aljabar</b> — cara mengubah situasi sehari-hari, seperti suhu atau saldo rekening, menjadi bentuk aljabar. Kita juga akan latihan lebih dalam soal operasi bilangan negatif, karena itu bagian yang masih sering meleset ya kemarin — tenang, hari ini kita kuatkan sama-sama."</div>
+</div>
+
+<div class="card">
+  <h3>📋 Yang harus dilakukan (jangan sampai lewat)</h3>
+  <ul class="checklist">
+    <li>Buka <code>lesson_material.html</code>, tampilkan Stage 1 (Pembukaan) di layar share.</li>
+    <li>Sebutkan agenda 7 bagian sambil menunjuk tiap kartu agenda di layar.</li>
+    <li>Ulas singkat (&lt;1 menit) materi sebelumnya: Rasio &amp; Unsur/Operasi Aljabar — cukup tanya "Masih ingat apa itu koefisien dan konstanta?" sebagai jembatan ke Apersepsi.</li>
+    <li>Tekan tombol <b>Class Rules</b> sebentar, ingatkan singkat: bicara bergantian, izin bila mau keluar, nyalakan mic/cam bila perlu — lalu tutup modal &amp; lanjut.</li>
+  </ul>
+</div>
+
+<h2 class="stage-h" id="apersepsi"><span class="dur">00:05–00:12</span> 2. Apersepsi &amp; Koneksi <span class="goal">Target: &ge;2 soal tinjauan interaktif, siswa merespons aktif</span></h2>
+
+<div class="card">
+  <h3>🗣️ Skrip Transisi</h3>
+  <div class="script">"Sebelum masuk topik baru, yuk pemanasan dulu 5-7 soal singkat. Ini bukan ujian, santai saja — kalau salah, kita bahas bareng." <span class="small">(turunkan tensi, buat aman untuk mencoba.)</span></div>
+</div>
+
+<div class="card">
+  <h3>📌 Urutan Soal yang Dipakai (dari 10 soal di bank Apersepsi)</h3>
+  <p class="small">Kerjakan minimal 5-7 soal sesuai kecepatan siswa. Soal wajib dipakai: <b>A3, A7, A9</b> (berkaitan langsung ke bilangan negatif / pemodelan). Sisanya opsional tergantung waktu &amp; kebutuhan.</p>
+  <table>
+    <tr><th>No</th><th>Fokus</th><th>Prioritas</th></tr>
+    <tr><td>A1</td><td>Koefisien pada bentuk aljabar</td><td>Opsional (cepat lewati jika siswa sudah lancar)</td></tr>
+    <tr><td>A2</td><td>Suku sejenis (T/F)</td><td>Opsional</td></tr>
+    <tr><td>A3</td><td>Menjumlahkan suku dengan koefisien negatif</td><td><span class="tag tag-warn">WAJIB — FOKUS NEGATIF</span></td></tr>
+    <tr><td>A4</td><td>Identifikasi suku</td><td>Opsional</td></tr>
+    <tr><td>A5</td><td>Urutan penyederhanaan (sorting)</td><td>Opsional</td></tr>
+    <tr><td>A6</td><td>Istilah aljabar (pairing)</td><td>Opsional — gunakan jika ingin format variatif</td></tr>
+    <tr><td>A7</td><td>Klasifikasi bilangan negatif (drag)</td><td><span class="tag tag-warn">WAJIB — FOKUS NEGATIF</span></td></tr>
+    <tr><td>A8</td><td>Review Rasio/Skala (jembatan materi lama)</td><td>Wajib singkat, sebagai bridging</td></tr>
+    <tr><td>A9</td><td>Pemodelan awal ("lebih muda 3 tahun")</td><td><span class="tag tag-warn">WAJIB — pembuka konsep pemodelan</span></td></tr>
+    <tr><td>A10</td><td>Definisi pemodelan aljabar (T/F)</td><td>Wajib singkat, penutup bagian ini</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>❓ Pertanyaan Terbuka yang Bisa Dipakai (bank umum, pakai kapan saja di kelas)</h3>
+  <ol>
+    <li>"Menurutmu, kenapa tanda negatif itu penting dalam bentuk aljabar?"</li>
+    <li>"Coba jelaskan dengan kata-katamu sendiri, apa bedanya koefisien dan konstanta?"</li>
+    <li>"Kalau kamu lihat angka minus di kehidupan sehari-hari, biasanya di mana?"</li>
+    <li>"Apa yang membuatmu yakin jawabanmu benar?"</li>
+    <li>"Ada cara lain untuk menyelesaikan soal ini?"</li>
+  </ol>
+  <p class="small">Gunakan minimal 5 pertanyaan terbuka sepanjang sesi (boleh diulang di bagian lain) sesuai kriteria QC.</p>
+</div>
+
+<h2 class="stage-h" id="eksplorasi"><span class="dur">00:12–00:25</span> 3. Eksplorasi Konsep <span class="goal">Target: thinking aloud, miskonsepsi dibahas, &ge;3 pulse check</span></h2>
+
+<div class="card">
+  <h3>🗣️ Buka dengan Definisi + Contoh Kontekstual</h3>
+  <div class="script">"Pemodelan aljabar itu simpel: kita ubah cerita jadi angka dan huruf. Contoh, kalau suhu turun, kita pakai tanda minus. Yuk kita coba satu soal bareng-bareng, aku kerjakan dulu sambil mikir keras (thinking aloud), kamu perhatikan ya."</div>
+</div>
+
+<div class="mistake-box">
+  <div class="lbl">⚠️ Kesalahan Sengaja (Planted Mistake) — WAJIB dilakukan di sini</div>
+  <p><b>Soal:</b> "Suhu gudang pendingin mula-mula $-15°C$. Pintu terbuka, suhu naik $4°C$. Lalu teknisi menurunkan suhu $6°C$ lagi. Berapa suhu akhirnya?"</p>
+  <p><b>Langkah 1-3</b>: Kerjakan BENAR seperti biasa secara verbal: $-15+4=-11$ (jangan klik tombol step di material dulu, kerjakan lisan/tulis manual di whiteboard supaya terlihat proses berpikir).</p>
+  <p><b>Langkah 4 — INI BAGIAN SALAHNYA:</b> Saat menghitung $-11-6$, ucapkan dengan nada meyakinkan namun keliru: <i>"Nah, $-11$ dikurangi $6$... hasilnya $-5$, karena kita kurangi saja angkanya."</i> (Kesalahan: siswa/tutor sengaja mengabaikan aturan bahwa mengurangi memperbesar nilai negatif, seolah tanda minus "membatalkan" pengurangan.)</p>
+  <p><b>Lalu tanya siswa:</b> <i>"Coba kamu cek, menurutmu ini sudah benar belum?"</i> — beri waktu &ge;10 detik hening, jangan buru-buru dikoreksi sendiri.</p>
+</div>
+
+<div class="fix-box">
+  <div class="lbl">✅ Koreksi &amp; Pembahasan (setelah siswa merespons)</div>
+  <p>Jika siswa menyadari kesalahan: puji spesifik — <i>"Bagus banget, kamu benar! $-11-6$ itu artinya makin ke kiri di garis bilangan, jadi $-17$, bukan $-5$."</i></p>
+  <p>Jika siswa tidak sadar: pancing dengan garis bilangan — <i>"Coba gambar garis bilangan, mulai dari $-11$, terus bergerak $6$ langkah ke arah mana kalau dikurangi?"</i> Baru kemudian klik tombol step 4 &amp; 5 di <code>lesson_material.html</code> untuk konfirmasi visual: hasil benar $-17°C$.</p>
+  <p class="small">Ini memenuhi kriteria QC: thinking aloud konsisten, miskonsepsi dibahas + cara menghindarinya, siswa menemukan konsep baru dengan bimbingan.</p>
+</div>
+
+<div class="card">
+  <h3>📌 Studi Kasus Eksplorasi — Urutan Pemakaian (dari 10 soal bank Eksplorasi)</h3>
+  <p class="small">Bagian ini paling padat fokus negatif — gunakan minimal 6 soal. Prioritaskan B1, B4, B5, B9, B10 (langsung terkait catatan kelemahan siswa).</p>
+  <table>
+    <tr><th>No</th><th>Fokus</th><th>Prioritas</th></tr>
+    <tr><td>B1</td><td>Model suhu naik dari bilangan negatif</td><td><span class="tag tag-warn">WAJIB</span></td></tr>
+    <tr><td>B2</td><td>Model saldo rekening (dua blank isian)</td><td>Wajib jika waktu cukup</td></tr>
+    <tr><td>B3</td><td>Bentuk setara hasil pengurangan</td><td>Opsional</td></tr>
+    <tr><td>B4</td><td>Cek miskonsepsi $-5-(-3)$ (T/F)</td><td><span class="tag tag-warn">WAJIB — langsung sasar miskonsepsi utama</span></td></tr>
+    <tr><td>B5</td><td>Distribusi koefisien negatif (sorting)</td><td><span class="tag tag-warn">WAJIB</span></td></tr>
+    <tr><td>B6</td><td>Pairing konteks &rarr; bentuk aljabar</td><td>Opsional</td></tr>
+    <tr><td>B7</td><td>Klasifikasi suku (drag)</td><td>Opsional</td></tr>
+    <tr><td>B8</td><td>Model ketinggian gunung/palung</td><td>Opsional, bagus untuk siswa suka geografi</td></tr>
+    <tr><td>B9</td><td>$-8+(-3)$ (isian)</td><td><span class="tag tag-warn">WAJIB</span></td></tr>
+    <tr><td>B10</td><td>Identifikasi kesalahan umum (checkbox)</td><td><span class="tag tag-warn">WAJIB — penguatan setelah planted mistake</span></td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>🎨 Soal Cadangan Sesuai Minat (siapkan sendiri jika siswa tertarik topik ini)</h3>
+  <ul>
+    <li><b>Suka game/e-sport:</b> "Skor awal $-40$ poin (penalti). Menang ronde dapat $+65$. Berapa skor akhir?" (Jawaban: $25$)</li>
+    <li><b>Suka olahraga:</b> "Selisih gol tim A dan B: A unggul $-3$ (tertinggal 3), lalu mencetak $5$ gol. Berapa selisih akhir?" (Jawaban: $2$)</li>
+    <li><b>Suka uang saku/jajan:</b> "Uang saku sisa $-Rp5.000$ (pinjam teman), dapat THR $Rp25.000$. Sisa uang sekarang?" (Jawaban: $Rp20.000$)</li>
+  </ul>
+  <p class="small">Gunakan salah satu di atas sebagai pengganti/​tambahan bila siswa menunjukkan minat pada topik tersebut (bagian dari &ge;5 personalisasi).</p>
+</div>
+
+<div class="card">
+  <h3>💓 Jadwal Pulse Check (&ge;3 kali, catat responsnya)</h3>
+  <table>
+    <tr><th>Kapan</th><th>Pertanyaan</th></tr>
+    <tr><td>Setelah contoh bersama</td><td>"Sejauh ini, bagian mana yang masih bikin bingung?"</td></tr>
+    <tr><td>Setelah soal B4/B5</td><td>"Coba ulangi dengan kata-katamu, kenapa $-5-(-3)$ hasilnya $-2$, bukan $-8$?"</td></tr>
+    <tr><td>Sebelum lanjut ke Latihan Terbimbing</td><td>"Kalau 1-10, seberapa yakin kamu dengan operasi bilangan negatif sekarang?"</td></tr>
+  </table>
+</div>
+
+<h2 class="stage-h" id="terbimbing"><span class="dur">00:25–00:40</span> 4. Latihan Terbimbing <span class="goal">Target: rotasi bertanya terbuka, hint bertahap (bukan jawaban langsung)</span></h2>
+
+<div class="card">
+  <h3>🗣️ Skrip Transisi</h3>
+  <div class="script">"Sekarang giliranmu coba dulu, aku dampingi. Kalau macet, bilang aja, aku kasih petunjuk — bukan langsung kasih jawaban ya, biar kamu yang nemuin sendiri."</div>
+</div>
+
+<div class="card">
+  <h3>🪜 Tangga Bantuan (Hint Ladder) — WAJIB dipakai berurutan, jangan lompat ke jawaban</h3>
+  <ol>
+    <li><b>Hint 1 (arahkan perhatian):</b> "Coba lihat lagi, ini penjumlahan atau pengurangan bilangan negatif?"</li>
+    <li><b>Hint 2 (analogi konkret):</b> "Bayangkan di garis bilangan / termometer, kamu bergerak ke arah mana?"</li>
+    <li><b>Hint 3 (pecah langkah):</b> "Coba kerjakan satu operasi dulu, jangan langsung semua."</li>
+    <li><b>Hint 4 (baru jika benar-benar stuck):</b> tunjukkan contoh serupa dengan angka berbeda, minta siswa tiru polanya.</li>
+  </ol>
+  <p class="small">Jangan berikan jawaban akhir sebelum siswa mencoba minimal 2 hint. Ini kriteria wajib QC (hint diberikan, bukan jawaban langsung).</p>
+</div>
+
+<div class="card">
+  <h3>📌 Urutan Soal (dari 10 soal bank Latihan Terbimbing) — gunakan 2-3 soal utama + cadangan</h3>
+  <p class="small">Wajib: <b>C1/C2</b> (satu paket model+simplify), <b>C8/C9</b> (satu paket model+hitung). Sisanya cadangan sesuai kecepatan.</p>
+  <table>
+    <tr><th>No</th><th>Fokus</th><th>Prioritas</th></tr>
+    <tr><td>C1</td><td>Model ketinggian pesawat (naik-turun)</td><td><span class="tag tag-warn">WAJIB (paket 1)</span></td></tr>
+    <tr><td>C2</td><td>Sederhanakan hasil dari C1</td><td><span class="tag tag-warn">WAJIB (paket 1)</span></td></tr>
+    <tr><td>C3</td><td>Bentuk setara $-2x+7$</td><td>Opsional</td></tr>
+    <tr><td>C4</td><td>Model stok apel (checkbox setara)</td><td>Cadangan jika siswa cepat</td></tr>
+    <tr><td>C5</td><td>Urutan langkah transaksi saldo (sorting)</td><td>Cadangan jika siswa cepat</td></tr>
+    <tr><td>C6</td><td>Pairing pertanyaan pemahaman</td><td>Opsional, bagus untuk cek konsep verbal</td></tr>
+    <tr><td>C7</td><td>Klasifikasi jenis operasi negatif (drag)</td><td>Opsional</td></tr>
+    <tr><td>C8</td><td>Model penyelam naik bertahap</td><td><span class="tag tag-warn">WAJIB (paket 2)</span></td></tr>
+    <tr><td>C9</td><td>Hitung hasil dari C8</td><td><span class="tag tag-warn">WAJIB (paket 2)</span></td></tr>
+    <tr><td>C10</td><td>Aturan tanda perkalian negatif (T/F)</td><td>Penutup singkat bagian ini</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>✅ Checkpoint Pemahaman (cek &ge;4 kali di sepanjang tahap ini, lalu di Mandiri)</h3>
+  <ul>
+    <li>Setelah C1/C2: "Coba jelaskan ulang kenapa hasilnya $x-300$, bukan $x+300$."</li>
+    <li>Setelah C4/C5 (jika dipakai): "Yakin dengan urutan langkahmu? Coba cek lagi tanda minusnya."</li>
+    <li>Setelah C8/C9: "Bagaimana caramu memastikan tanda hasil akhirnya benar?"</li>
+    <li>Sebelum ke Latihan Mandiri: "Ada bagian dari operasi bilangan negatif yang masih ragu-ragu?"</li>
+  </ul>
+</div>
+
+<h2 class="stage-h" id="mandiri"><span class="dur">00:40–00:53</span> 5. Latihan Mandiri <span class="goal">Target: soal utama + pengayaan, siswa selesaikan mandiri, feedback spesifik</span></h2>
+
+<div class="card">
+  <h3>🗣️ Skrip Transisi</h3>
+  <div class="script">"Sekarang coba kerjakan sendiri dulu ya, aku perhatikan tapi nggak bantu dulu kecuali kamu minta. Ambil waktumu."</div>
+</div>
+
+<div class="card">
+  <h3>📌 Soal Utama (WAJIB, semua siswa harus selesaikan)</h3>
+  <table>
+    <tr><th>No</th><th>Fokus</th></tr>
+    <tr><td>D1</td><td>Selisih suhu dua kota (kedua negatif)</td></tr>
+    <tr><td>D2</td><td>Hitung hasil dari D1</td></tr>
+    <tr><td>D3</td><td>Substitusi $x=-4$ ke $-2x+5$ (T/F)</td></tr>
+    <tr><td>D4</td><td>Substitusi $x=-2$, cek beberapa pernyataan (checkbox)</td></tr>
+    <tr><td>D7</td><td>Klasifikasi hasil operasi negatif/positif (drag)</td></tr>
+  </table>
+  <p class="small">Item D5 (sorting substitusi) dan D6 (pairing konteks) &mdash; opsional, pakai bila waktu tersisa sebelum menit 00:50.</p>
+</div>
+
+<div class="card">
+  <h3>⭐ Soal Pengayaan (opsional, hanya jika siswa selesai cepat &amp; akurat &ge;80% di soal utama)</h3>
+  <table>
+    <tr><th>No</th><th>Fokus</th></tr>
+    <tr><td>D8</td><td>Cari nilai awal dari model suhu (persamaan sederhana)</td></tr>
+    <tr><td>D9</td><td>Sederhanakan bentuk distribusi + gabung suku ($-3(x-4)+2x$)</td></tr>
+    <tr><td>D10</td><td>Verifikasi hasil penyederhanaan D9 (T/F)</td></tr>
+  </table>
+  <p class="small">Jika siswa masih ragu di soal utama, LEWATI D8-D10 sepenuhnya &mdash; gunakan sisa waktu untuk repetisi soal cadangan bertanda FOKUS NEGATIF dari tahap Eksplorasi/Terbimbing.</p>
+</div>
+
+<div class="card">
+  <h3>📝 Feedback Spesifik — Contoh Kalimat Siap Pakai</h3>
+  <ul>
+    <li><b>Saat benar:</b> "Betul! Caramu mengubah pengurangan jadi penjumlahan lawan bilangan itu sudah tepat sekali."</li>
+    <li><b>Saat salah tanda:</b> "Hampir tepat — coba cek lagi bagian tandanya di langkah kedua, itu yang biasanya suka kebalik."</li>
+    <li><b>Saat ragu-ragu:</b> "Nggak apa-apa kalau belum yakin, coba saja dulu, salah itu bagian dari belajar."</li>
+  </ul>
+  <p class="small">Beri feedback dalam &lt;10 detik setelah siswa menjawab, sebutkan bagian spesifik (bukan cuma "bagus"/"salah").</p>
+</div>
+
+<h2 class="stage-h" id="refleksi"><span class="dur">00:53–01:00</span> 6. Refleksi &amp; Penutup <span class="goal">Target: refleksi dua arah, exit ticket, penguatan positif, follow-up</span></h2>
+
+<div class="card">
+  <h3>🗣️ Skrip Refleksi (biarkan siswa menjawab dengan kata-katanya sendiri, jangan disambung duluan)</h3>
+  <div class="script">"Sebelum kita tutup, coba ceritakan lagi ke aku: apa itu pemodelan dengan bentuk aljabar, menurut kamu?" <span class="small">(tunggu jawaban penuh sebelum menambahkan.)</span></div>
+  <div class="script">"Bagian mana yang paling menantang hari ini buat kamu?"</div>
+  <div class="script">"Ceritakan satu hal baru yang kamu pahami soal bilangan negatif hari ini."</div>
+  <p class="small">Ketiga pertanyaan ini sudah tersedia sebagai kotak isian di material (Stage 6) &mdash; biarkan siswa mengetik/menjawab lisan, lalu tanggapi tiap jawaban secara spesifik.</p>
+</div>
+
+<div class="card">
+  <h3>🎫 Exit Ticket</h3>
+  <p>Minta siswa mengerjakan langsung di material: soal <code>$-9+4=\_\_\_$</code> dan menuliskan satu contoh situasi sehari-hari yang bisa dimodelkan dengan bilangan negatif.</p>
+  <p class="small">Jika siswa kesulitan membuat contoh sendiri, beri pilihan: suhu, saldo rekening, ketinggian, atau skor pertandingan.</p>
+</div>
+
+<div class="card">
+  <h3>🌟 Penguatan Positif &amp; Penutup</h3>
+  <div class="script">"Kerja bagus hari ini, [Nama Siswa]! Tadi kamu sempat mikir dalam-dalam pas soal suhu gudang pendingin, dan akhirnya nemu sendiri letak kesalahannya — itu keren banget. PR minggu ini fokus melatih lagi operasi bilangan negatif ya, biar makin lancar."</div>
+  <ul class="checklist">
+    <li>Sebutkan pencapaian SPESIFIK siswa hari ini (bukan pujian umum).</li>
+    <li>Sampaikan rangkuman 3 poin penting (sudah tertulis di material Stage 6).</li>
+    <li>Infokan tugas rumah akan dikirim/tersedia di <code>lesson_material.html</code> Stage 7.</li>
+    <li>Tutup dengan hangat, konfirmasi jadwal pertemuan berikutnya.</li>
+  </ul>
+</div>
+
+<h2 class="stage-h" id="homework"><span class="dur">setelah sesi</span> 7. Tugas Rumah <span class="goal">10 soal reveal-answer, sudah otomatis tersedia di material</span></h2>
+<div class="card">
+  <p>Seluruh 10 soal tugas rumah (H1–H10) sudah tersedia lengkap dengan tombol "Lihat Pembahasan" di <code>lesson_material.html</code> Stage 7. Tidak perlu tindakan tambahan saat kelas berlangsung — cukup arahkan siswa ke bagian ini di akhir sesi dan pastikan siswa tahu cara mengakses filenya kembali di rumah.</p>
+  <p class="small">Soal H1, H3, H4, H9 adalah repetisi langsung operasi bilangan negatif dasar — sampaikan ke siswa bahwa soal-soal ini paling penting untuk dilatih ulang.</p>
+</div>
+
+  </main>
+</div>
+</body>
+</html>
