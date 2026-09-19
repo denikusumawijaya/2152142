@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring — Bentuk Aljabar: Pemodelan</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+
+:root{
+  --ink:#1f2937; --ink-soft:#4b5563; --bg:#f3f5fb; --card:#ffffff;
+  --primary:#4f46e5; --primary-dark:#3730a3; --primary-soft:#eef0fe;
+  --accent:#0891b2; --accent-soft:#e0f7fa;
+  --good:#16a34a; --good-soft:#e9f9ee; --bad:#dc2626; --bad-soft:#fdecec;
+  --warn:#d97706; --warn-soft:#fef3e0;
+  --border:#e2e5f1; --shadow:0 4px 14px rgba(31,41,55,.07);
+  --radius:14px; --maxw:1180px;
+}
+*{box-sizing:border-box;}
+html{font-size:16px;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.5; min-height:100vh; display:flex; flex-direction:column;
+}
+em{font-style:italic;}
+.en-sub{color:var(--ink-soft); font-size:.82em; font-style:italic; display:block; font-weight:400;}
+.text-id{font-weight:500;}
+.text-en{color:var(--ink-soft); font-size:.85em; font-style:italic; margin-top:.15rem;}
+
+/* ===== Header ===== */
+.topbar{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:1rem;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff;
+  padding:.9rem clamp(1rem,3vw,2.2rem); position:sticky; top:0; z-index:40;
+  box-shadow:0 2px 10px rgba(55,48,163,.25);
+}
+.brand-line{font-size:.95rem; line-height:1.35;}
+.brand-line.brand-main{font-size:1.25rem; font-weight:700; letter-spacing:.2px;}
+.topbar .en-sub{color:#dcdcff;}
+.topbar-right{display:flex; align-items:flex-start;}
+.btn{
+  font-family:inherit; cursor:pointer; border-radius:10px; border:none;
+  padding:.55rem .95rem; font-size:.92rem; font-weight:600; line-height:1.25;
+  transition:transform .08s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn:active{transform:translateY(1px);}
+.btn-outline{background:rgba(255,255,255,.12); color:#fff; border:1.5px solid rgba(255,255,255,.65);}
+.btn-outline:hover{background:rgba(255,255,255,.22);}
+.btn-outline .en-sub{color:#e9e9ff;}
+.btn-primary{background:var(--primary); color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-primary .en-sub{color:#dcdcff;}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+
+/* ===== Stage bar (duration corner) ===== */
+.stagebar{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.4rem;
+  background:#fff; border-bottom:1px solid var(--border);
+  padding:.6rem clamp(1rem,3vw,2.2rem); position:sticky; top:0; z-index:30;
+}
+.stagebar-left{display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;}
+.stage-no{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:1.7rem; height:1.7rem; border-radius:50%; background:var(--primary-soft);
+  color:var(--primary-dark); font-weight:700; font-size:.9rem;
+}
+.stage-name{font-weight:700; font-size:1.02rem;}
+.stage-name-en{color:var(--ink-soft); font-size:.88rem;}
+.duration-badge{
+  background:var(--accent-soft); color:#075361; border:1px solid #b6e6ef;
+  font-weight:700; font-variant-numeric:tabular-nums; padding:.3rem .7rem;
+  border-radius:999px; font-size:.88rem; white-space:nowrap;
+}
+
+/* ===== Layout ===== */
+.container{max-width:var(--maxw); margin:0 auto; padding:1.4rem clamp(1rem,3vw,2.2rem) 2.5rem; flex:1; width:100%;}
+.stage{display:none;}
+.stage.active{display:block; animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:1.3rem clamp(1rem,2.5vw,1.8rem); margin-bottom:1.2rem;
+}
+.card h2{margin:0 0 .2rem; font-size:1.25rem; color:var(--primary-dark);}
+.card h3{margin:1rem 0 .3rem; font-size:1.05rem; color:var(--ink);}
+.card p{margin:.4rem 0;}
+.lead-en{color:var(--ink-soft); font-style:italic; font-size:.9rem; margin-top:.1rem;}
+
+.grid-2{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem;}
+.info-tile{
+  background:var(--primary-soft); border-radius:12px; padding:.9rem 1rem; border:1px solid #dfe1fb;
+}
+.info-tile .ic{font-size:1.4rem; margin-bottom:.25rem; display:block;}
+
+.badge{display:inline-block; padding:.18rem .6rem; border-radius:999px; font-size:.76rem; font-weight:700;}
+.badge-recap{background:var(--warn-soft); color:#8a5a06;}
+.badge-new{background:var(--good-soft); color:#146c2e;}
+.badge-enrich{background:#fdf0ff; color:#8a1a9e;}
+
+/* ===== Illustration icons (SVG) ===== */
+.icon-wrap{display:flex; align-items:center; justify-content:center; width:2.6rem; height:2.6rem;
+  border-radius:10px; background:var(--accent-soft); flex-shrink:0;}
+.icon-wrap svg{width:1.5rem; height:1.5rem;}
+
+/* ===== Worked example step-reveal ===== */
+.worked-example{border:1.5px dashed #c7cbf5; border-radius:12px; padding:1rem 1.1rem; background:#fafbff;}
+.step-buttons{display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0;}
+.step-btn{
+  width:2.3rem; height:2.3rem; border-radius:50%; border:2px solid var(--primary);
+  background:#fff; color:var(--primary-dark); font-weight:700; cursor:pointer; font-size:.95rem;
+}
+.step-btn.revealed{background:var(--primary); color:#fff;}
+.step-btn:hover{box-shadow:0 0 0 3px var(--primary-soft);}
+.step-panel{
+  display:none; background:#fff; border-left:4px solid var(--primary); border-radius:8px;
+  padding:.7rem .9rem; margin-top:.5rem; box-shadow:var(--shadow);
+}
+.step-panel.show{display:block; animation:fadeIn .2s ease;}
+
+/* ===== Case study / quiz ===== */
+.case-shell{margin-top:1rem;}
+.case-head{display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.6rem;}
+.case-title{font-weight:700; color:var(--primary-dark); display:flex; align-items:center; gap:.5rem;}
+.case-type-tag{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+  background:var(--primary-soft); color:var(--primary-dark); padding:.15rem .5rem; border-radius:6px;}
+.case-body{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.1rem clamp(.9rem,2vw,1.5rem);}
+.case-prompt{font-size:1.05rem; margin-bottom:.9rem;}
+.case-prompt .text-en{font-size:.82rem;}
+
+.opt-list{display:flex; flex-direction:column; gap:.55rem; margin:.6rem 0;}
+.opt-item{
+  display:flex; align-items:flex-start; gap:.6rem; border:1.5px solid var(--border); border-radius:10px;
+  padding:.6rem .8rem; cursor:pointer; background:#fff; transition:border-color .12s, background .12s;
+}
+.opt-item:hover{border-color:var(--primary);}
+.opt-item.selected{border-color:var(--primary); background:var(--primary-soft);}
+.opt-item input{margin-top:.2rem; flex-shrink:0;}
+.opt-item.correct-flag{border-color:var(--good); background:var(--good-soft);}
+.opt-item.wrong-flag{border-color:var(--bad); background:var(--bad-soft);}
+
+.tf-row{display:flex; gap:.8rem; margin:.7rem 0;}
+.tf-btn{flex:1; padding:.75rem; border-radius:10px; border:1.5px solid var(--border); background:#fff;
+  cursor:pointer; font-weight:700; font-size:1rem;}
+.tf-btn.selected{border-color:var(--primary); background:var(--primary-soft);}
+.tf-btn.correct-flag{border-color:var(--good); background:var(--good-soft); color:#146c2e;}
+.tf-btn.wrong-flag{border-color:var(--bad); background:var(--bad-soft); color:#a11414;}
+
+.fill-row{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin:.7rem 0;}
+.fill-input{
+  border:1.5px solid var(--border); border-radius:8px; padding:.5rem .7rem; font-size:1rem;
+  width:8.5rem; font-family:inherit;
+}
+.fill-input:focus{outline:none; border-color:var(--primary);}
+.fill-input.correct-flag{border-color:var(--good); background:var(--good-soft);}
+.fill-input.wrong-flag{border-color:var(--bad); background:var(--bad-soft);}
+
+.sort-list{display:flex; flex-direction:column; gap:.5rem; margin:.7rem 0;}
+.sort-item{
+  display:flex; align-items:center; gap:.7rem; border:1.5px solid var(--border); border-radius:10px;
+  padding:.55rem .8rem; background:#fff;
+}
+.sort-item .sort-idx{
+  width:1.7rem; height:1.7rem; border-radius:50%; background:var(--primary-soft); color:var(--primary-dark);
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.85rem; flex-shrink:0;
+}
+.sort-item .sort-text{flex:1;}
+.sort-controls{display:flex; gap:.3rem;}
+.sort-controls button{
+  width:1.9rem; height:1.9rem; border-radius:6px; border:1.5px solid var(--border); background:#fff;
+  cursor:pointer; font-weight:700;
+}
+.sort-item.correct-flag{border-color:var(--good); background:var(--good-soft);}
+.sort-item.wrong-flag{border-color:var(--bad); background:var(--bad-soft);}
+
+.pair-wrap{display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
+.pair-col{display:flex; flex-direction:column; gap:.5rem;}
+.pair-item{
+  border:1.5px solid var(--border); border-radius:10px; padding:.55rem .75rem; cursor:pointer; background:#fff;
+  font-size:.94rem;
+}
+.pair-item.active{border-color:var(--primary); background:var(--primary-soft);}
+.pair-item.matched{border-color:var(--accent); background:var(--accent-soft);}
+.pair-item.correct-flag{border-color:var(--good); background:var(--good-soft);}
+.pair-item.wrong-flag{border-color:var(--bad); background:var(--bad-soft);}
+.pair-tag{font-size:.7rem; font-weight:700; color:var(--accent); margin-left:.3rem;}
+
+.drag-wrap{display:flex; flex-direction:column; gap:1rem;}
+.drag-items{display:flex; flex-wrap:wrap; gap:.6rem;}
+.drag-item{
+  border:1.5px solid var(--primary); background:var(--primary-soft); color:var(--primary-dark);
+  border-radius:8px; padding:.5rem .8rem; cursor:grab; font-weight:600; user-select:none;
+}
+.drag-item.placed{opacity:.45; cursor:default;}
+.drag-zones{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem;}
+.drag-zone{
+  min-height:5rem; border:2px dashed var(--border); border-radius:12px; padding:.6rem;
+  background:#fafbff;
+}
+.drag-zone.over{border-color:var(--primary); background:var(--primary-soft);}
+.drag-zone-label{font-weight:700; font-size:.9rem; margin-bottom:.4rem; color:var(--ink-soft);}
+.drag-zone-items{display:flex; flex-wrap:wrap; gap:.4rem; min-height:1.6rem;}
+.drag-chip{border-radius:7px; padding:.35rem .6rem; font-weight:600; font-size:.9rem; border:1.5px solid var(--border); background:#fff;}
+.drag-chip.correct-flag{border-color:var(--good); background:var(--good-soft);}
+.drag-chip.wrong-flag{border-color:var(--bad); background:var(--bad-soft);}
+
+.case-actions{display:flex; gap:.6rem; margin-top:1rem; flex-wrap:wrap;}
+.feedback-box{
+  margin-top:1rem; border-radius:10px; padding:.85rem 1rem; display:none;
+}
+.feedback-box.show{display:block; animation:fadeIn .2s ease;}
+.feedback-box.ok{background:var(--good-soft); border:1.5px solid #b7e8c4;}
+.feedback-box.bad{background:var(--bad-soft); border:1.5px solid #f3c2c2;}
+.feedback-title{font-weight:700; margin-bottom:.3rem;}
+.feedback-box.ok .feedback-title{color:#146c2e;}
+.feedback-box.bad .feedback-title{color:#a11414;}
+
+.pagination{display:flex; align-items:center; justify-content:center; gap:.35rem; margin-top:1rem; flex-wrap:wrap;}
+.page-btn{
+  width:2.1rem; height:2.1rem; border-radius:50%; border:1.5px solid var(--border); background:#fff;
+  cursor:pointer; font-weight:700; font-size:.85rem; color:var(--ink-soft);
+}
+.page-btn.current{border-color:var(--primary); background:var(--primary); color:#fff;}
+.page-btn.done{border-color:var(--good); color:var(--good);}
+.page-arrow{width:2.1rem; height:2.1rem; border-radius:50%; border:1.5px solid var(--border); background:#fff; cursor:pointer; font-weight:700;}
+.page-arrow:disabled{opacity:.35; cursor:not-allowed;}
+
+/* ===== Reflection ===== */
+.reflect-item{margin-bottom:.9rem;}
+.reflect-item textarea{
+  width:100%; min-height:3.4rem; border:1.5px solid var(--border); border-radius:10px; padding:.6rem .8rem;
+  font-family:inherit; font-size:.95rem; resize:vertical;
+}
+.reflect-item textarea:focus{outline:none; border-color:var(--primary);}
+
+/* ===== Footer nav ===== */
+.navbar{
+  position:sticky; bottom:0; background:#fff; border-top:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+  padding:.7rem clamp(1rem,3vw,2.2rem); z-index:35; box-shadow:0 -3px 10px rgba(31,41,55,.05);
+}
+.btn-nav{background:#fff; border:1.5px solid var(--border); color:var(--ink);}
+.btn-nav:hover:not(:disabled){border-color:var(--primary); color:var(--primary-dark);}
+.progress-dots{display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center;}
+.progress-dot{width:.55rem; height:.55rem; border-radius:50%; background:var(--border);}
+.progress-dot.active{background:var(--primary); width:1.5rem; border-radius:999px;}
+.progress-dot.visited{background:#b7bdf3;}
+
+/* ===== Modal ===== */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(17,24,39,.55); display:none;
+  align-items:center; justify-content:center; z-index:100; padding:1rem;
+}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#fff; border-radius:16px; padding:1.5rem; max-width:30rem; width:100%; box-shadow:0 20px 50px rgba(0,0,0,.25);}
+.modal-header{display:flex; justify-content:space-between; align-items:flex-start; gap:.6rem; margin-bottom:.8rem;}
+.modal-header h2{margin:0; font-size:1.2rem; color:var(--primary-dark);}
+.rules-list{list-style:none; margin:0 0 1.1rem; padding:0; display:flex; flex-direction:column; gap:.8rem;}
+.rules-list li{display:flex; gap:.7rem; align-items:flex-start;}
+.rule-icon{font-size:1.3rem;}
+
+/* ===== Homework list ===== */
+.hw-solution-btn{margin-top:.8rem;}
+
+/* Utility */
+.hidden{display:none !important;}
+.kv{color:var(--ink-soft); font-size:.86rem;}
+
+/* Responsive / zoom resilience */
+@media (max-width:640px){
+  .pair-wrap{grid-template-columns:1fr;}
+  .topbar{flex-direction:column;}
+  .navbar{flex-wrap:wrap;}
+}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="brand-line brand-main">Math Tutoring</div>
+    <div class="brand-line">by Deni</div>
+    <div class="brand-line">Topic: Bentuk Aljabar — Pemodelan dengan Bentuk Aljabar</div>
+    <div class="brand-line en-sub"><em>Topic: Algebraic Expressions — Modeling with Algebraic Expressions</em></div>
+  </div>
+  <div class="topbar-right">
+    <button id="btnRules" class="btn btn-outline">
+      Aturan Kelas<br><em class="en-sub">Class Rules</em>
+    </button>
+  </div>
+</header>
+
+<div class="stagebar">
+  <div class="stagebar-left">
+    <span class="stage-no" id="stageNo">1</span>
+    <span class="stage-name" id="stageNameId">Pembukaan &amp; Kesiapan</span>
+    <span class="stage-name-en" id="stageNameEn"><em>Opening &amp; Readiness</em></span>
+  </div>
+  <div class="stagebar-right">
+    <span class="duration-badge" id="durationBadge">00:00–00:05</span>
+  </div>
+</div>
+
+<main class="container" id="mainContainer">
+
+<!-- ============ STAGE 1: PEMBUKAAN ============ -->
+<section class="stage" data-stage="pembukaan">
+  <div class="card">
+    <h2>Selamat Datang! 👋</h2>
+    <p class="lead-en"><em>Welcome!</em></p>
+    <p class="text-id">Hari ini kita akan belajar tentang <strong>Pemodelan dengan Bentuk Aljabar</strong> — bagaimana mengubah situasi sehari-hari menjadi bentuk aljabar, dengan penekanan khusus pada operasi hitung bilangan negatif.</p>
+    <div class="text-en">Today we will learn about <strong>Modeling with Algebraic Expressions</strong> — how to turn everyday situations into algebraic form, with special focus on operations involving negative numbers.</div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Agenda Hari Ini <span class="en-sub" style="display:inline"><em>Today's Agenda</em></span></h3>
+    <div class="grid-2">
+      <div class="info-tile"><span class="ic">🔗</span><div class="text-id">Apersepsi &amp; Koneksi</div><div class="text-en"><em>Warm-up &amp; Connection</em></div></div>
+      <div class="info-tile"><span class="ic">🧭</span><div class="text-id">Eksplorasi Konsep Baru</div><div class="text-en"><em>New Concept Exploration</em></div></div>
+      <div class="info-tile"><span class="ic">🤝</span><div class="text-id">Latihan Terbimbing</div><div class="text-en"><em>Guided Practice</em></div></div>
+      <div class="info-tile"><span class="ic">🚀</span><div class="text-id">Latihan Mandiri</div><div class="text-en"><em>Independent Practice</em></div></div>
+      <div class="info-tile"><span class="ic">💬</span><div class="text-id">Refleksi &amp; Penutup</div><div class="text-en"><em>Reflection &amp; Closing</em></div></div>
+      <div class="info-tile"><span class="ic">🏠</span><div class="text-id">Tugas Rumah</div><div class="text-en"><em>Homework</em></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🧠 Yang Sudah Kamu Pelajari <span class="en-sub" style="display:inline"><em>What You've Already Learned</em></span></h3>
+    <div class="grid-2">
+      <div class="info-tile">
+        <span class="badge badge-recap">Materi Sebelumnya</span>
+        <p class="text-id" style="margin-top:.5rem;">📏 <strong>Rasio:</strong> Konsep Rasio, Skala, Laju Perubahan Satuan</p>
+        <div class="text-en"><em>Ratio: Ratio Concepts, Scale, Rate of Change of Units</em></div>
+      </div>
+      <div class="info-tile">
+        <span class="badge badge-recap">Materi Sebelumnya</span>
+        <p class="text-id" style="margin-top:.5rem;">🔤 <strong>Bentuk Aljabar:</strong> Unsur-Unsur Bentuk Aljabar, Sifat-Sifat dan Operasi Aljabar</p>
+        <div class="text-en"><em>Algebraic Expressions: Elements of Algebraic Expressions, Properties and Operations</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Tujuan Pembelajaran <span class="en-sub" style="display:inline"><em>Learning Objectives</em></span></h3>
+    <p class="text-id">Setelah sesi ini, kamu dapat mengubah situasi nyata menjadi bentuk aljabar dan menghitungnya dengan benar, termasuk saat melibatkan bilangan negatif.</p>
+    <div class="text-en"><em>After this session, you will be able to turn real situations into algebraic expressions and compute them correctly, including with negative numbers.</em></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 2: APERSEPSI ============ -->
+<section class="stage" data-stage="apersepsi">
+  <div class="card">
+    <h2>🔗 Koneksi ke Dunia Nyata</h2>
+    <p class="lead-en"><em>Real-World Connection</em></p>
+    <p class="text-id">Pernahkah kamu melihat ramalan cuaca yang menyebut suhu <strong>"$-2°C$"</strong>, atau melihat saldo rekening yang menunjukkan angka merah (minus)? Itu semua adalah penerapan bilangan negatif dan bentuk aljabar dalam kehidupan sehari-hari!</p>
+    <div class="text-en"><em>Have you seen a weather forecast mention "$-2°C$", or a bank balance shown in red (negative)? Those are everyday applications of negative numbers and algebraic expressions!</em></div>
+  </div>
+
+  <div class="card">
+    <h3>🔁 Sebelum Lanjut, Yuk Ingat Kembali... <span class="en-sub" style="display:inline"><em>Before We Continue, Let's Recall...</em></span></h3>
+    <p class="text-id">Coba kerjakan 10 soal singkat berikut untuk mengingat kembali materi sebelumnya dan mengaitkannya dengan topik hari ini. Tutor akan memilih soal yang paling sesuai dengan kebutuhanmu.</p>
+    <div class="text-en"><em>Try these 10 short questions to recall earlier material and connect it to today's topic. Your tutor will pick the questions that best fit your needs.</em></div>
+    <div id="bank-apersepsi" class="case-shell"></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 3: EKSPLORASI ============ -->
+<section class="stage" data-stage="eksplorasi">
+  <div class="card">
+    <h2>🧭 Apa itu Pemodelan dengan Bentuk Aljabar?</h2>
+    <p class="lead-en"><em>What is Modeling with Algebraic Expressions?</em></p>
+    <p class="text-id"><strong>Pemodelan dengan bentuk aljabar</strong> adalah proses mengubah situasi atau cerita dalam kehidupan sehari-hari menjadi bentuk aljabar (menggunakan variabel, koefisien, dan konstanta) supaya bisa dihitung secara matematis.</p>
+    <div class="text-en"><em><strong>Modeling with algebraic expressions</strong> is the process of turning an everyday situation or story into an algebraic expression (using variables, coefficients, and constants) so it can be computed mathematically.</em></div>
+    <h3>⚠️ Perhatian Khusus: Bilangan Negatif <span class="en-sub" style="display:inline"><em>Special Focus: Negative Numbers</em></span></h3>
+    <p class="text-id">Kata kunci seperti <em>"turun"</em>, <em>"berkurang"</em>, <em>"di bawah"</em>, atau <em>"utang"</em> biasanya menandakan bilangan <strong>negatif</strong>. Kesalahan paling umum terjadi saat menjumlah/mengurangi bilangan negatif — mari kita latih ini dengan hati-hati.</p>
+    <div class="text-en"><em>Keywords like "down", "decreases", "below", or "debt" usually signal a <strong>negative</strong> number. The most common mistakes happen when adding/subtracting negatives — let's practice this carefully.</em></div>
+  </div>
+
+  <div class="card">
+    <h3>🧊 Contoh Bersama <span class="en-sub" style="display:inline"><em>Worked Example Together</em></span></h3>
+    <div class="worked-example">
+      <p class="text-id">Suhu gudang pendingin mula-mula <strong>$-15°C$</strong>. Karena pintu terbuka, suhu naik <strong>$4°C$</strong>. Teknisi kemudian menurunkan suhu sebesar <strong>$6°C$</strong>. Berapa suhu akhir gudang pendingin itu?</p>
+      <div class="text-en"><em>A cold storage room starts at $-15°C$. Because the door was open, the temperature rose $4°C$. A technician then lowered the temperature by $6°C$. What is the room's final temperature?</em></div>
+      <p class="kv" style="margin-top:.6rem;">👉 Klik tombol bernomor untuk melihat langkah penyelesaian satu per satu. <span class="text-en" style="display:inline"><em>Click the numbered buttons to reveal each step.</em></span></p>
+      <div class="step-buttons" id="workedSteps"></div>
+      <div id="workedPanels"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📚 Studi Kasus Eksplorasi <span class="en-sub" style="display:inline"><em>Exploration Case Studies</em></span></h3>
+    <p class="text-id">Sekarang giliranmu mencoba! Berikut 10 studi kasus — kerjakan sesuai arahan tutor.</p>
+    <div class="text-en"><em>Now it's your turn! Here are 10 case studies — work on them as guided by your tutor.</em></div>
+    <div id="bank-eksplorasi" class="case-shell"></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 4: LATIHAN TERBIMBING ============ -->
+<section class="stage" data-stage="terbimbing">
+  <div class="card">
+    <h2>🤝 Latihan Terbimbing</h2>
+    <p class="lead-en"><em>Guided Practice</em></p>
+    <p class="text-id">Kerjakan soal berikut bersama tutor. Coba jelaskan alasanmu dengan kalimat lengkap sebelum melihat pembahasan.</p>
+    <div class="text-en"><em>Work through the following with your tutor. Try to explain your reasoning in full sentences before checking the explanation.</em></div>
+    <div id="bank-terbimbing" class="case-shell"></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 5: LATIHAN MANDIRI ============ -->
+<section class="stage" data-stage="mandiri">
+  <div class="card">
+    <h2>🚀 Latihan Mandiri</h2>
+    <p class="lead-en"><em>Independent Practice</em></p>
+    <p class="text-id">Sekarang coba kerjakan sendiri! Soal bertanda <span class="badge badge-enrich">Pengayaan</span> adalah tantangan tambahan untuk kamu yang ingin lebih.</p>
+    <div class="text-en"><em>Now try it on your own! Items marked <span class="badge badge-enrich">Enrichment</span> are extra challenges for those who want more.</em></div>
+    <div id="bank-mandiri" class="case-shell"></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 6: REFLEKSI ============ -->
+<section class="stage" data-stage="refleksi">
+  <div class="card">
+    <h2>💬 Refleksi Dua Arah</h2>
+    <p class="lead-en"><em>Two-Way Reflection</em></p>
+    <p class="text-id">Yuk ceritakan kembali apa yang sudah kamu pelajari hari ini dengan kata-katamu sendiri.</p>
+    <div class="text-en"><em>Let's recap what you learned today, in your own words.</em></div>
+
+    <div class="reflect-item">
+      <p class="text-id"><strong>1.</strong> Apa itu pemodelan dengan bentuk aljabar, menurut pemahamanmu?</p>
+      <div class="text-en"><em>What is modeling with algebraic expressions, in your understanding?</em></div>
+      <textarea placeholder="Tulis jawabanmu di sini... / Write your answer here..."></textarea>
+    </div>
+    <div class="reflect-item">
+      <p class="text-id"><strong>2.</strong> Bagian mana yang paling menantang bagimu hari ini, dan mengapa?</p>
+      <div class="text-en"><em>Which part was most challenging for you today, and why?</em></div>
+      <textarea placeholder="Tulis jawabanmu di sini... / Write your answer here..."></textarea>
+    </div>
+    <div class="reflect-item">
+      <p class="text-id"><strong>3.</strong> Apa satu hal baru yang kamu pahami tentang bilangan negatif hari ini?</p>
+      <div class="text-en"><em>What is one new thing you understood about negative numbers today?</em></div>
+      <textarea placeholder="Tulis jawabanmu di sini... / Write your answer here..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎫 Exit Ticket</h3>
+    <p class="text-id">Sebelum kita tutup, jawab dua pertanyaan singkat ini.</p>
+    <div class="text-en"><em>Before we close, answer these two quick questions.</em></div>
+    <div class="reflect-item">
+      <p class="text-id"><strong>a.</strong> $-9 + 4 = \_\_\_$</p>
+      <input class="fill-input" id="exitFill1" placeholder="jawaban / answer">
+    </div>
+    <div class="reflect-item">
+      <p class="text-id"><strong>b.</strong> Tuliskan satu contoh situasi sehari-hari yang bisa dimodelkan dengan bilangan negatif.</p>
+      <div class="text-en"><em>Write one everyday situation that can be modeled with a negative number.</em></div>
+      <textarea placeholder="Tulis jawabanmu di sini... / Write your answer here..."></textarea>
+    </div>
+    <button class="btn btn-primary" id="btnExitCheck">Periksa Jawaban (a) <em class="en-sub">Check Answer (a)</em></button>
+    <div id="exitFeedback" class="feedback-box"></div>
+  </div>
+
+  <div class="card">
+    <h3>⭐ Rangkuman Penting <span class="en-sub" style="display:inline"><em>Key Takeaways</em></span></h3>
+    <ul>
+      <li><span class="text-id">Pemodelan aljabar mengubah situasi nyata menjadi bentuk aljabar menggunakan variabel.</span><div class="text-en"><em>Algebraic modeling turns real situations into expressions using variables.</em></div></li>
+      <li><span class="text-id">Kata kunci seperti "turun", "di bawah", dan "utang" menandakan bilangan negatif.</span><div class="text-en"><em>Keywords like "down", "below", and "debt" signal negative numbers.</em></div></li>
+      <li><span class="text-id">Mengurangi bilangan negatif sama dengan menambah lawannya: $a-(-b)=a+b$.</span><div class="text-en"><em>Subtracting a negative equals adding its opposite: $a-(-b)=a+b$.</em></div></li>
+    </ul>
+    <p class="text-id">Kerja bagus hari ini! Kamu sudah menunjukkan pemahaman yang baik. Teruslah berlatih operasi bilangan negatif agar makin lancar. 🎉</p>
+    <div class="text-en"><em>Great work today! You showed good understanding. Keep practicing negative-number operations to build fluency. 🎉</em></div>
+  </div>
+</section>
+
+<!-- ============ STAGE 7: HOMEWORK ============ -->
+<section class="stage" data-stage="homework">
+  <div class="card">
+    <h2>🏠 Tugas Rumah</h2>
+    <p class="lead-en"><em>Homework</em></p>
+    <p class="text-id">Kerjakan 10 soal berikut di rumah sebagai latihan lanjutan. Tekan "Lihat Pembahasan" setelah mencoba menjawab sendiri.</p>
+    <div class="text-en"><em>Complete these 10 problems at home for further practice. Tap "Show Solution" after you've tried answering on your own.</em></div>
+    <div id="bank-homework" class="case-shell"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="navbar">
+  <button id="btnPrev" class="btn btn-nav" disabled>&larr; Sebelumnya <em class="en-sub">Previous</em></button>
+  <div class="progress-dots" id="progressDots"></div>
+  <button id="btnNext" class="btn btn-nav btn-primary">Berikutnya &rarr; <em class="en-sub">Next</em></button>
+</footer>
+
+<!-- Class Rules Modal -->
+<div class="modal-overlay" id="rulesModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Aturan Kelas <em class="en-sub">Class Rules</em></h2>
+      <span class="duration-badge">00:00–00:00</span>
+    </div>
+    <ul class="rules-list">
+      <li>
+        <span class="rule-icon">🗣️</span>
+        <div><div class="text-id">Berbicara secara bergantian.</div><div class="text-en"><em>Speak one at a time, taking turns.</em></div></div>
+      </li>
+      <li>
+        <span class="rule-icon">🙋</span>
+        <div><div class="text-id">Meminta izin jika ingin meninggalkan kelas.</div><div class="text-en"><em>Ask for permission before leaving the class.</em></div></div>
+      </li>
+      <li>
+        <span class="rule-icon">🎥</span>
+        <div><div class="text-id">Menyalakan microphone dan camera jika diperlukan.</div><div class="text-en"><em>Turn on microphone and camera when needed.</em></div></div>
+      </li>
+    </ul>
+    <button class="btn btn-primary" id="btnCloseRules">Tutup <em class="en-sub">Close</em></button>
+  </div>
+</div>
+
+<script>
+window.__MATERIAL_DATA__ = {"stages": [{"key": "pembukaan", "no": 1, "id": "Pembukaan & Kesiapan", "en": "Opening & Readiness", "start": "00:00", "end": "00:05"}, {"key": "apersepsi", "no": 2, "id": "Apersepsi & Koneksi", "en": "Warm-up & Connection", "start": "00:05", "end": "00:12"}, {"key": "eksplorasi", "no": 3, "id": "Eksplorasi Konsep", "en": "Concept Exploration", "start": "00:12", "end": "00:25"}, {"key": "terbimbing", "no": 4, "id": "Latihan Terbimbing", "en": "Guided Practice", "start": "00:25", "end": "00:40"}, {"key": "mandiri", "no": 5, "id": "Latihan Mandiri", "en": "Independent Practice", "start": "00:40", "end": "00:53"}, {"key": "refleksi", "no": 6, "id": "Refleksi & Penutup", "en": "Reflection & Closing", "start": "00:53", "end": "01:00"}, {"key": "homework", "no": 7, "id": "Tugas Rumah", "en": "Homework", "start": "—", "end": "—"}], "banks": {"apersepsi": [{"id": "A1", "type": "radio", "icon": "pencil", "prompt": {"id": "Perhatikan bentuk aljabar $-3x + 5$. Koefisien dari $x$ adalah ...", "en": "Look at the expression $-3x + 5$. The coefficient of $x$ is ..."}, "options": [{"id": "a", "t": {"id": "$-3$", "en": "$-3$"}}, {"id": "b", "t": {"id": "$3$", "en": "$3$"}}, {"id": "c", "t": {"id": "$5$", "en": "$5$"}}, {"id": "d", "t": {"id": "$x$", "en": "$x$"}}], "correct": "a", "explanation": {"id": "Koefisien adalah angka yang menempel langsung di depan variabel. Pada $-3x+5$, angka di depan $x$ adalah $-3$ (tanda negatif ikut menjadi bagian koefisien).", "en": "The coefficient is the number attached directly in front of the variable. In $-3x+5$, the number in front of $x$ is $-3$ (the negative sign is part of the coefficient)."}}, {"id": "A2", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: Pada bentuk $4x - 7 + 2y$, suku $4x$ dan $2y$ termasuk suku sejenis (like terms).", "en": "Statement: In $4x - 7 + 2y$, the terms $4x$ and $2y$ are like terms."}, "correct": false, "explanation": {"id": "Salah. Suku sejenis harus memiliki variabel dan pangkat yang sama. $4x$ bervariabel $x$, sedangkan $2y$ bervariabel $y$, sehingga keduanya bukan suku sejenis.", "en": "False. Like terms must share the same variable and power. $4x$ has variable $x$ while $2y$ has variable $y$, so they are not like terms."}}, {"id": "A3", "type": "fill", "icon": "calc", "prompt": {"id": "Lengkapi: $5x + (-2x) = \\_\\_\\_x$", "en": "Complete: $5x + (-2x) = \\_\\_\\_x$"}, "blanks": 1, "correct": ["3"], "explanation": {"id": "$5x+(-2x)$ sama dengan $5x-2x = 3x$. Kita cukup mengurangkan koefisiennya: $5-2=3$.", "en": "$5x+(-2x)$ equals $5x-2x=3x$. We simply subtract the coefficients: $5-2=3$."}}, {"id": "A4", "type": "checkbox", "icon": "list", "prompt": {"id": "Manakah yang merupakan suku (term) pada bentuk $4x - 7 + 2y$? (pilih semua yang benar)", "en": "Which of these are terms in $4x - 7 + 2y$? (select all that apply)"}, "options": [{"id": "a", "t": {"id": "$4x$", "en": "$4x$"}}, {"id": "b", "t": {"id": "$-7$", "en": "$-7$"}}, {"id": "c", "t": {"id": "$2y$", "en": "$2y$"}}, {"id": "d", "t": {"id": "$4$ saja", "en": "just $4$"}}], "correct": ["a", "b", "c"], "explanation": {"id": "Suku adalah bagian yang dipisahkan oleh tanda $+$ atau $-$, yaitu $4x$, $-7$, dan $2y$. Angka $4$ saja bukan suku, melainkan koefisien dari $x$.", "en": "A term is a part separated by $+$ or $-$: $4x$, $-7$, and $2y$. The number $4$ alone is not a term — it is the coefficient of $x$."}}, {"id": "A5", "type": "sort", "icon": "steps", "prompt": {"id": "Urutkan langkah menyederhanakan $3x + 5 - x + 2$ dari awal sampai akhir.", "en": "Order the steps to simplify $3x + 5 - x + 2$ from first to last."}, "items": [{"id": "s1", "t": {"id": "Kelompokkan suku sejenis: $(3x - x)$ dan $(5+2)$", "en": "Group like terms: $(3x-x)$ and $(5+2)$"}}, {"id": "s2", "t": {"id": "Sederhanakan suku-$x$: $3x - x = 2x$", "en": "Simplify the $x$-terms: $3x-x=2x$"}}, {"id": "s3", "t": {"id": "Sederhanakan konstanta: $5+2=7$", "en": "Simplify the constants: $5+2=7$"}}, {"id": "s4", "t": {"id": "Gabungkan hasil akhir: $2x+7$", "en": "Combine the final result: $2x+7$"}}], "correct": ["s1", "s2", "s3", "s4"], "explanation": {"id": "Selalu mulai dengan mengelompokkan suku sejenis, sederhanakan tiap kelompok, lalu gabungkan menjadi bentuk paling sederhana.", "en": "Always start by grouping like terms, simplify each group, then combine into the simplest form."}}, {"id": "A6", "type": "pair", "icon": "link", "prompt": {"id": "Pasangkan istilah dengan definisinya.", "en": "Match each term with its definition."}, "left": [{"id": "l1", "t": {"id": "Variabel", "en": "Variable"}}, {"id": "l2", "t": {"id": "Koefisien", "en": "Coefficient"}}, {"id": "l3", "t": {"id": "Konstanta", "en": "Constant"}}, {"id": "l4", "t": {"id": "Suku", "en": "Term"}}], "right": [{"id": "r1", "t": {"id": "Huruf yang mewakili bilangan yang belum diketahui, misal $x$", "en": "A letter representing an unknown number, e.g. $x$"}}, {"id": "r2", "t": {"id": "Angka di depan variabel, misal $3$ pada $3x$", "en": "The number in front of a variable, e.g. $3$ in $3x$"}}, {"id": "r3", "t": {"id": "Suku tanpa variabel, misal $7$", "en": "A term with no variable, e.g. $7$"}}, {"id": "r4", "t": {"id": "Bagian yang dipisahkan oleh tanda $+$ atau $-$", "en": "A part separated by a $+$ or $-$ sign"}}], "correct": {"l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4"}, "explanation": {"id": "Variabel = huruf pengganti bilangan; koefisien = angka pengali variabel; konstanta = suku tanpa variabel; suku = bagian yang dipisah $+/-$.", "en": "Variable = letter standing for a number; coefficient = the multiplier of a variable; constant = term with no variable; term = part separated by $+/-$."}}, {"id": "A7", "type": "drag", "icon": "drag", "prompt": {"id": "Seret setiap bilangan ke kategori yang tepat pada garis bilangan.", "en": "Drag each number into the correct category on the number line."}, "items": [{"id": "i1", "t": "-8"}, {"id": "i2", "t": "-1"}, {"id": "i3", "t": "0"}, {"id": "i4", "t": "3"}, {"id": "i5", "t": "12"}], "zones": [{"id": "z1", "t": {"id": "Bilangan negatif", "en": "Negative numbers"}}, {"id": "z2", "t": {"id": "Bukan bilangan negatif", "en": "Not negative"}}], "correct": {"i1": "z1", "i2": "z1", "i3": "z2", "i4": "z2", "i5": "z2"}, "explanation": {"id": "Bilangan negatif adalah bilangan yang kurang dari $0$, yaitu $-8$ dan $-1$. Bilangan $0$, $3$, dan $12$ bukan negatif.", "en": "Negative numbers are numbers less than $0$: $-8$ and $-1$. The numbers $0$, $3$, and $12$ are not negative."}}, {"id": "A8", "type": "radio", "icon": "map", "prompt": {"id": "Sebuah peta memiliki skala $1:500.000$. Jika jarak pada peta $4$ cm, jarak sebenarnya adalah ...", "en": "A map has a scale of $1:500{,}000$. If the map distance is $4$ cm, the real distance is ..."}, "options": [{"id": "a", "t": {"id": "$2$ km", "en": "$2$ km"}}, {"id": "b", "t": {"id": "$20$ km", "en": "$20$ km"}}, {"id": "c", "t": {"id": "$200$ km", "en": "$200$ km"}}, {"id": "d", "t": {"id": "$2000$ km", "en": "$2000$ km"}}], "correct": "b", "explanation": {"id": "Jarak sebenarnya $= 4 \\times 500.000 = 2.000.000$ cm $= 20.000$ m $= 20$ km. (Mengingat kembali materi Rasio & Skala.)", "en": "Real distance $= 4 \\times 500{,}000 = 2{,}000{,}000$ cm $= 20{,}000$ m $= 20$ km. (Recalling the Ratio & Scale topic.)"}}, {"id": "A9", "type": "fill", "icon": "pencil", "prompt": {"id": "Umur Andi dinyatakan sebagai $x$ tahun. Umur adiknya $3$ tahun lebih muda. Bentuk aljabarnya: $x \\_\\_\\_ 3$", "en": "Andi's age is $x$ years. His sibling is $3$ years younger. The expression: $x \\_\\_\\_ 3$"}, "blanks": 1, "correct": ["-"], "explanation": {"id": "“Lebih muda” berarti dikurangi, sehingga bentuknya $x-3$. Ini adalah contoh awal pemodelan dengan bentuk aljabar.", "en": "“Younger” means subtract, so the expression is $x-3$. This is an early example of algebraic modeling."}}, {"id": "A10", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: Pemodelan dengan bentuk aljabar berarti mengubah situasi sehari-hari menjadi kalimat matematika menggunakan variabel.", "en": "Statement: Algebraic modeling means turning everyday situations into a mathematical sentence using variables."}, "correct": true, "explanation": {"id": "Benar. Itulah inti dari pemodelan aljabar — mengubah cerita/situasi nyata menjadi bentuk aljabar yang bisa dihitung.", "en": "True. That is the essence of algebraic modeling — turning a real situation into an algebraic expression that can be computed."}}], "eksplorasi": [{"id": "B1", "type": "radio", "icon": "thermo", "prompt": {"id": "Suhu suatu ruangan mula-mula $-4°C$, lalu naik $9°C$. Model matematika untuk suhu akhirnya adalah ...", "en": "A room's temperature starts at $-4°C$, then rises $9°C$. The correct model for the final temperature is ..."}, "options": [{"id": "a", "t": {"id": "$-4+9$", "en": "$-4+9$"}}, {"id": "b", "t": {"id": "$-4-9$", "en": "$-4-9$"}}, {"id": "c", "t": {"id": "$4+9$", "en": "$4+9$"}}, {"id": "d", "t": {"id": "$-(4+9)$", "en": "$-(4+9)$"}}], "correct": "a", "explanation": {"id": "“Naik” berarti ditambah. Suhu awal $-4°C$ ditambah kenaikan $9°C$ menjadi $-4+9=5°C$.", "en": "“Rises” means add. Starting temperature $-4°C$ plus a rise of $9°C$ gives $-4+9=5°C$."}, "steps": [{"id": "Tulis suhu awal: $-4$", "en": "Write the starting temperature: $-4$"}, {"id": "“Naik $9°C$” berarti $+9$", "en": "“Rises $9°C$” means $+9$"}, {"id": "Model: $-4+9$", "en": "Model: $-4+9$"}, {"id": "Hasil: $-4+9=5°C$", "en": "Result: $-4+9=5°C$"}]}, {"id": "B2", "type": "fill", "icon": "wallet", "prompt": {"id": "Saldo rekening Pak Budi $-Rp50.000$ (utang). Ia menyetor $Rp120.000$. Model: $-50.000 \\_\\_\\_ 120.000$, hasil akhir $= Rp\\_\\_\\_$", "en": "Pak Budi's balance is $-Rp50{,}000$ (debt). He deposits $Rp120{,}000$. Model: $-50{,}000 \\_\\_\\_ 120{,}000$, final result $= Rp\\_\\_\\_$"}, "blanks": 2, "correct": ["+", "70000"], "explanation": {"id": "Menyetor berarti ditambahkan: $-50.000+120.000=70.000$. Saldo akhir Pak Budi menjadi $Rp70.000$ (sudah tidak berutang).", "en": "Depositing means adding: $-50{,}000+120{,}000=70{,}000$. His final balance is $Rp70{,}000$ (no longer in debt)."}}, {"id": "B3", "type": "checkbox", "icon": "wave", "prompt": {"id": "Posisi seekor ikan $15$ m di bawah permukaan laut, lalu naik $6$ m. Manakah bentuk yang SETARA untuk posisi akhirnya? (pilih semua)", "en": "A fish is $15$ m below sea level, then rises $6$ m. Which expressions are EQUIVALENT for its final position? (select all)"}, "options": [{"id": "a", "t": {"id": "$-15+6$", "en": "$-15+6$"}}, {"id": "b", "t": {"id": "$6-15$", "en": "$6-15$"}}, {"id": "c", "t": {"id": "$-15-6$", "en": "$-15-6$"}}, {"id": "d", "t": {"id": "$15-6$", "en": "$15-6$"}}], "correct": ["a", "b"], "explanation": {"id": "$-15+6=-9$ dan $6-15=-9$ setara (penjumlahan bersifat komutatif). $-15-6=-21$ dan $15-6=9$ tidak setara — keduanya salah konteks.", "en": "$-15+6=-9$ and $6-15=-9$ are equivalent (addition is commutative). $-15-6=-21$ and $15-6=9$ do not match the context."}}, {"id": "B4", "type": "tf", "icon": "warn", "prompt": {"id": "Pernyataan (cek miskonsepsi): $-5-(-3) = -8$", "en": "Statement (misconception check): $-5-(-3) = -8$"}, "correct": false, "explanation": {"id": "Salah — ini kesalahan umum! Mengurangi bilangan negatif sama dengan menambah lawannya: $-5-(-3)=-5+3=-2$, bukan $-8$.", "en": "False — a common mistake! Subtracting a negative equals adding its opposite: $-5-(-3)=-5+3=-2$, not $-8$."}}, {"id": "B5", "type": "sort", "icon": "steps", "prompt": {"id": "Urutkan langkah menyederhanakan $-2(x-5)$.", "en": "Order the steps to simplify $-2(x-5)$."}, "items": [{"id": "s1", "t": {"id": "Kalikan $-2$ dengan $x$: $-2 \\cdot x = -2x$", "en": "Multiply $-2$ by $x$: $-2\\cdot x=-2x$"}}, {"id": "s2", "t": {"id": "Kalikan $-2$ dengan $-5$: $-2 \\cdot (-5) = 10$", "en": "Multiply $-2$ by $-5$: $-2\\cdot(-5)=10$"}}, {"id": "s3", "t": {"id": "Gabungkan hasil kali: $-2x+10$", "en": "Combine the products: $-2x+10$"}}], "correct": ["s1", "s2", "s3"], "explanation": {"id": "Sifat distributif: kalikan $-2$ ke setiap suku di dalam kurung, lalu gabungkan. Perhatikan tanda: negatif × negatif = positif.", "en": "Distributive property: multiply $-2$ into each term inside the bracket, then combine. Watch the signs: negative × negative = positive."}}, {"id": "B6", "type": "pair", "icon": "link", "prompt": {"id": "Pasangkan situasi dengan bentuk aljabarnya (misal $x$ = nilai awal).", "en": "Match each situation with its algebraic expression (let $x$ = the starting value)."}, "left": [{"id": "l1", "t": {"id": "Lift turun $3$ lantai dari lantai $x$", "en": "A lift goes down $3$ floors from floor $x$"}}, {"id": "l2", "t": {"id": "Suhu freezer $x°C$ turun $7°C$ karena mati listrik", "en": "Freezer at $x°C$ drops $7°C$ during a power cut"}}, {"id": "l3", "t": {"id": "Suhu naik $x°C$ dari $-10°C$", "en": "Temperature rises $x°C$ from $-10°C$"}}, {"id": "l4", "t": {"id": "Utang $Rp x$ dilunasi $Rp20.000$", "en": "A debt of $Rp\\,x$ is paid off by $Rp20{,}000$"}}], "right": [{"id": "r1", "t": {"id": "$x-3$", "en": "$x-3$"}}, {"id": "r2", "t": {"id": "$x-7$", "en": "$x-7$"}}, {"id": "r3", "t": {"id": "$-10+x$", "en": "$-10+x$"}}, {"id": "r4", "t": {"id": "$-x+20.000$", "en": "$-x+20{,}000$"}}], "correct": {"l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4"}, "explanation": {"id": "Setiap kata kunci (turun, naik, dilunasi) menentukan operasi $+$ atau $-$ dalam model aljabarnya.", "en": "Each keyword (down, up, paid off) determines whether the model uses $+$ or $-$."}}, {"id": "B7", "type": "drag", "icon": "drag", "prompt": {"id": "Seret setiap suku dari $-3x+8-2x+(-5)$ ke kategori yang tepat.", "en": "Drag each term of $-3x+8-2x+(-5)$ into the correct category."}, "items": [{"id": "i1", "t": "-3x"}, {"id": "i2", "t": "8"}, {"id": "i3", "t": "-2x"}, {"id": "i4", "t": "-5"}], "zones": [{"id": "z1", "t": {"id": "Suku dengan variabel $x$", "en": "Terms with variable $x$"}}, {"id": "z2", "t": {"id": "Suku konstanta", "en": "Constant terms"}}], "correct": {"i1": "z1", "i2": "z2", "i3": "z1", "i4": "z2"}, "explanation": {"id": "Suku bervariabel: $-3x$ dan $-2x$ (bisa digabung menjadi $-5x$). Suku konstanta: $8$ dan $-5$ (bisa digabung menjadi $3$).", "en": "Variable terms: $-3x$ and $-2x$ (combine to $-5x$). Constant terms: $8$ and $-5$ (combine to $3$)."}}, {"id": "B8", "type": "radio", "icon": "mountain", "prompt": {"id": "Puncak gunung berada $2.400$ m di atas permukaan laut; dasar palung berada $2.400$ m di bawah permukaan laut. Jika permukaan laut $=0$, ketinggian dasar palung adalah ...", "en": "A mountain peak is $2{,}400$ m above sea level; a trench floor is $2{,}400$ m below sea level. If sea level $=0$, the trench floor's elevation is ..."}, "options": [{"id": "a", "t": {"id": "$2.400$", "en": "$2{,}400$"}}, {"id": "b", "t": {"id": "$-2.400$", "en": "$-2{,}400$"}}, {"id": "c", "t": {"id": "$0$", "en": "$0$"}}, {"id": "d", "t": {"id": "$4.800$", "en": "$4{,}800$"}}], "correct": "b", "explanation": {"id": "“Di bawah” acuan $0$ dinyatakan dengan tanda negatif, sehingga dasar palung $=-2.400$ m.", "en": "“Below” the $0$ reference is written with a negative sign, so the trench floor $=-2{,}400$ m."}}, {"id": "B9", "type": "fill", "icon": "calc", "prompt": {"id": "$-8+(-3) = \\_\\_\\_$", "en": "$-8+(-3) = \\_\\_\\_$"}, "blanks": 1, "correct": ["-11"], "explanation": {"id": "Dua bilangan negatif dijumlahkan: jumlahkan nilai mutlaknya ($8+3=11$) lalu beri tanda negatif: $-11$.", "en": "Adding two negatives: add their absolute values ($8+3=11$) then keep the negative sign: $-11$."}}, {"id": "B10", "type": "checkbox", "icon": "warn", "prompt": {"id": "Manakah pernyataan yang merupakan KESALAHAN dalam menghitung bilangan negatif? (pilih semua yang salah)", "en": "Which statements are ERRORS in computing with negative numbers? (select all that are wrong)"}, "options": [{"id": "a", "t": {"id": "$-5-3=-2$", "en": "$-5-3=-2$"}}, {"id": "b", "t": {"id": "$-(-4)=4$", "en": "$-(-4)=4$"}}, {"id": "c", "t": {"id": "$-6+2=-8$", "en": "$-6+2=-8$"}}, {"id": "d", "t": {"id": "$2 \\times (-3) = -6$", "en": "$2\\times(-3)=-6$"}}], "correct": ["a", "c"], "explanation": {"id": "(a) salah, seharusnya $-5-3=-8$. (c) salah, seharusnya $-6+2=-4$. (b) dan (d) sudah benar.", "en": "(a) is wrong, it should be $-5-3=-8$. (c) is wrong, it should be $-6+2=-4$. (b) and (d) are already correct."}}], "terbimbing": [{"id": "C1", "type": "radio", "icon": "plane", "prompt": {"id": "Ketinggian pesawat mula-mula $x$ meter. Pesawat turun $500$ m lalu naik $200$ m. Bentuk aljabar ketinggian akhirnya adalah ...", "en": "A plane starts at $x$ meters. It descends $500$ m then climbs $200$ m. The expression for its final altitude is ..."}, "options": [{"id": "a", "t": {"id": "$x-500+200$", "en": "$x-500+200$"}}, {"id": "b", "t": {"id": "$x+500-200$", "en": "$x+500-200$"}}, {"id": "c", "t": {"id": "$x-500-200$", "en": "$x-500-200$"}}, {"id": "d", "t": {"id": "$x+700$", "en": "$x+700$"}}], "correct": "a", "explanation": {"id": "Turun $500$ m $\\to -500$; naik $200$ m $\\to +200$. Model: $x-500+200$, yang bila disederhanakan menjadi $x-300$.", "en": "Descend $500$ m $\\to -500$; climb $200$ m $\\to +200$. Model: $x-500+200$, which simplifies to $x-300$."}}, {"id": "C2", "type": "fill", "icon": "calc", "prompt": {"id": "Sederhanakan: $x-500+200 = x \\_\\_\\_ 300$", "en": "Simplify: $x-500+200 = x \\_\\_\\_ 300$"}, "blanks": 1, "correct": ["-"], "explanation": {"id": "$-500+200=-300$, sehingga bentuknya menjadi $x-300$.", "en": "$-500+200=-300$, so the expression becomes $x-300$."}}, {"id": "C3", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: Bentuk $-2x+7$ dan $7-2x$ adalah bentuk aljabar yang setara (ekuivalen).", "en": "Statement: $-2x+7$ and $7-2x$ are equivalent algebraic expressions."}, "correct": true, "explanation": {"id": "Benar, karena penjumlahan bersifat komutatif: $-2x+7=7+(-2x)=7-2x$.", "en": "True, because addition is commutative: $-2x+7=7+(-2x)=7-2x$."}}, {"id": "C4", "type": "checkbox", "icon": "fruit", "prompt": {"id": "Kios buah mencatat stok apel: hari 1 berkurang $12$, hari 2 bertambah $5$, hari 3 berkurang $8$. Manakah bentuk yang SETARA dengan total perubahannya? (pilih semua)", "en": "A fruit stall's apple stock: day 1 down $12$, day 2 up $5$, day 3 down $8$. Which expressions are EQUIVALENT to the total change? (select all)"}, "options": [{"id": "a", "t": {"id": "$-12+5-8$", "en": "$-12+5-8$"}}, {"id": "b", "t": {"id": "$-15$", "en": "$-15$"}}, {"id": "c", "t": {"id": "$5-12-8$", "en": "$5-12-8$"}}, {"id": "d", "t": {"id": "$12-5+8$", "en": "$12-5+8$"}}], "correct": ["a", "b", "c"], "explanation": {"id": "$-12+5-8=-15$, dan $5-12-8=-15$ juga. Opsi (d) $12-5+8=15$ tidak sesuai konteks (tanda perubahan terbalik).", "en": "$-12+5-8=-15$, and $5-12-8=-15$ too. Option (d) $12-5+8=15$ does not match the context (signs are flipped)."}}, {"id": "C5", "type": "sort", "icon": "steps", "prompt": {"id": "Urutkan langkah menyelesaikan: saldo awal $-Rp200.000$, setor $Rp150.000$, tarik $Rp80.000$.", "en": "Order the steps: starting balance $-Rp200{,}000$, deposit $Rp150{,}000$, withdraw $Rp80{,}000$."}, "items": [{"id": "s1", "t": {"id": "Tulis model: $-200.000+150.000-80.000$", "en": "Write the model: $-200{,}000+150{,}000-80{,}000$"}}, {"id": "s2", "t": {"id": "Hitung $-200.000+150.000=-50.000$", "en": "Compute $-200{,}000+150{,}000=-50{,}000$"}}, {"id": "s3", "t": {"id": "Hitung $-50.000-80.000=-130.000$", "en": "Compute $-50{,}000-80{,}000=-130{,}000$"}}, {"id": "s4", "t": {"id": "Kesimpulan: saldo akhir $-Rp130.000$ (masih utang)", "en": "Conclusion: final balance $-Rp130{,}000$ (still in debt)"}}], "correct": ["s1", "s2", "s3", "s4"], "explanation": {"id": "Kerjakan dari kiri ke kanan secara bertahap agar tidak salah tanda.", "en": "Work step by step from left to right to avoid sign errors."}}, {"id": "C6", "type": "pair", "icon": "link", "prompt": {"id": "Pasangkan pertanyaan pemahaman dengan jawabannya.", "en": "Match each understanding-check question with its answer."}, "left": [{"id": "l1", "t": {"id": "Apa yang terjadi saat menjumlahkan dua bilangan negatif?", "en": "What happens when adding two negatives?"}}, {"id": "l2", "t": {"id": "Apa arti tanda negatif pada konteks suhu?", "en": "What does a negative sign mean for temperature?"}}, {"id": "l3", "t": {"id": "Apa arti tanda negatif pada konteks ketinggian?", "en": "What does a negative sign mean for elevation?"}}, {"id": "l4", "t": {"id": "Bagaimana bentuk $a-(-b)$ disederhanakan?", "en": "How is $a-(-b)$ simplified?"}}], "right": [{"id": "r1", "t": {"id": "Hasilnya tetap negatif; jumlahkan nilai mutlaknya", "en": "Result stays negative; add the absolute values"}}, {"id": "r2", "t": {"id": "Suhu di bawah $0°C$", "en": "Temperature below $0°C$"}}, {"id": "r3", "t": {"id": "Posisi di bawah permukaan/acuan", "en": "Position below the surface/reference"}}, {"id": "r4", "t": {"id": "Menjadi $a+b$", "en": "Becomes $a+b$"}}], "correct": {"l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4"}, "explanation": {"id": "Memahami arti tanda negatif pada tiap konteks membantu menuliskan model aljabar yang tepat.", "en": "Understanding what the negative sign means in each context helps write the correct algebraic model."}}, {"id": "C7", "type": "drag", "icon": "drag", "prompt": {"id": "Seret tiap bentuk ke kategori operasi yang sesuai.", "en": "Drag each expression into the matching operation category."}, "items": [{"id": "i1", "t": "-4+(-6)"}, {"id": "i2", "t": "9-(-2)"}, {"id": "i3", "t": "-7+(-1)"}, {"id": "i4", "t": "5-(-3)"}], "zones": [{"id": "z1", "t": {"id": "Negatif + negatif", "en": "Negative + negative"}}, {"id": "z2", "t": {"id": "Pengurangan bilangan negatif", "en": "Subtracting a negative"}}], "correct": {"i1": "z1", "i2": "z2", "i3": "z1", "i4": "z2"}, "explanation": {"id": "$-4+(-6)$ dan $-7+(-1)$ adalah penjumlahan dua negatif. $9-(-2)$ dan $5-(-3)$ adalah pengurangan bilangan negatif (berubah jadi penjumlahan).", "en": "$-4+(-6)$ and $-7+(-1)$ are negative + negative. $9-(-2)$ and $5-(-3)$ are subtracting a negative (turns into addition)."}}, {"id": "C8", "type": "radio", "icon": "wave", "prompt": {"id": "Penyelam berada $18$ m di bawah permukaan laut ($-18$). Ia naik $6$ m tiap menit selama $2$ menit. Posisinya setelah $2$ menit adalah ...", "en": "A diver is $18$ m below sea level ($-18$). They rise $6$ m per minute for $2$ minutes. Their position after $2$ minutes is ..."}, "options": [{"id": "a", "t": {"id": "$-6$", "en": "$-6$"}}, {"id": "b", "t": {"id": "$-12$", "en": "$-12$"}}, {"id": "c", "t": {"id": "$-18$", "en": "$-18$"}}, {"id": "d", "t": {"id": "$6$", "en": "$6$"}}], "correct": "a", "explanation": {"id": "$-18+6+6=-18+12=-6$. Setelah $2$ menit, penyelam berada $6$ m di bawah permukaan laut.", "en": "$-18+6+6=-18+12=-6$. After $2$ minutes, the diver is $6$ m below sea level."}}, {"id": "C9", "type": "fill", "icon": "calc", "prompt": {"id": "$-18+6+6 = \\_\\_\\_$", "en": "$-18+6+6 = \\_\\_\\_$"}, "blanks": 1, "correct": ["-6"], "explanation": {"id": "$-18+6=-12$, lalu $-12+6=-6$.", "en": "$-18+6=-12$, then $-12+6=-6$."}}, {"id": "C10", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: Mengalikan bilangan negatif dengan bilangan negatif hasilnya selalu positif.", "en": "Statement: Multiplying a negative by a negative always gives a positive result."}, "correct": true, "explanation": {"id": "Benar. Aturan tanda: $(-)\\times(-)=(+)$, misalnya $(-3)\\times(-4)=12$.", "en": "True. Sign rule: $(-)\\times(-)=(+)$, e.g. $(-3)\\times(-4)=12$."}}], "mandiri": [{"id": "D1", "type": "radio", "icon": "thermo", "prompt": {"id": "Suhu kota A $-3°C$ dan kota B $-11°C$. Selisih suhu (A dikurangi B) adalah ...", "en": "City A is $-3°C$ and city B is $-11°C$. The difference (A minus B) is ..."}, "options": [{"id": "a", "t": {"id": "$8$", "en": "$8$"}}, {"id": "b", "t": {"id": "$-8$", "en": "$-8$"}}, {"id": "c", "t": {"id": "$14$", "en": "$14$"}}, {"id": "d", "t": {"id": "$-14$", "en": "$-14$"}}], "correct": "a", "explanation": {"id": "$-3-(-11)=-3+11=8$. Kota A lebih hangat $8°C$ dibanding kota B.", "en": "$-3-(-11)=-3+11=8$. City A is $8°C$ warmer than city B."}}, {"id": "D2", "type": "fill", "icon": "calc", "prompt": {"id": "$-3-(-11) = \\_\\_\\_$", "en": "$-3-(-11) = \\_\\_\\_$"}, "blanks": 1, "correct": ["8"], "explanation": {"id": "Ubah menjadi penjumlahan lawan bilangannya: $-3+11=8$.", "en": "Turn it into addition of the opposite: $-3+11=8$."}}, {"id": "D3", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: Jika $x=-4$, maka nilai $-2x+5 = 13$.", "en": "Statement: If $x=-4$, then $-2x+5=13$."}, "correct": true, "explanation": {"id": "$-2(-4)+5=8+5=13$. Pernyataan ini benar.", "en": "$-2(-4)+5=8+5=13$. The statement is true."}}, {"id": "D4", "type": "checkbox", "icon": "list", "prompt": {"id": "Diberikan $x=-2$. Manakah nilai berikut yang BENAR? (pilih semua)", "en": "Given $x=-2$. Which of the following are CORRECT? (select all)"}, "options": [{"id": "a", "t": {"id": "$3x=-6$", "en": "$3x=-6$"}}, {"id": "b", "t": {"id": "$x^2=4$", "en": "$x^2=4$"}}, {"id": "c", "t": {"id": "$-x=2$", "en": "$-x=2$"}}, {"id": "d", "t": {"id": "$x+5=-7$", "en": "$x+5=-7$"}}], "correct": ["a", "b", "c"], "explanation": {"id": "$3(-2)=-6$ benar; $(-2)^2=4$ benar; $-(-2)=2$ benar. Namun $-2+5=3$, bukan $-7$, jadi (d) salah.", "en": "$3(-2)=-6$ true; $(-2)^2=4$ true; $-(-2)=2$ true. But $-2+5=3$, not $-7$, so (d) is wrong."}}, {"id": "D5", "type": "sort", "icon": "steps", "prompt": {"id": "Urutkan langkah substitusi $x=-5$ ke bentuk $4x-6$.", "en": "Order the steps to substitute $x=-5$ into $4x-6$."}, "items": [{"id": "s1", "t": {"id": "Tulis bentuk: $4x-6$", "en": "Write the expression: $4x-6$"}}, {"id": "s2", "t": {"id": "Substitusi $x=-5$: $4(-5)-6$", "en": "Substitute $x=-5$: $4(-5)-6$"}}, {"id": "s3", "t": {"id": "Hitung perkalian: $-20-6$", "en": "Compute the product: $-20-6$"}}, {"id": "s4", "t": {"id": "Hasil akhir: $-26$", "en": "Final result: $-26$"}}], "correct": ["s1", "s2", "s3", "s4"], "explanation": {"id": "Substitusi dilakukan dengan mengganti $x$ memakai kurung terlebih dahulu agar tanda tidak tertukar.", "en": "Substitute by placing the value in brackets first so signs are not mixed up."}}, {"id": "D6", "type": "pair", "icon": "link", "prompt": {"id": "Pasangkan konteks dengan bentuk aljabarnya ($x$ = nilai awal).", "en": "Match each context with its algebraic expression ($x$ = starting value)."}, "left": [{"id": "l1", "t": {"id": "Suhu turun $6°C$ dari $x°C$", "en": "Temperature drops $6°C$ from $x°C$"}}, {"id": "l2", "t": {"id": "Ketinggian naik $10$ m dari $x$ m", "en": "Elevation rises $10$ m from $x$ m"}}, {"id": "l3", "t": {"id": "Saldo $Rp x$ dipotong denda $Rp15.000$", "en": "Balance $Rp\\,x$ minus a $Rp15{,}000$ fine"}}, {"id": "l4", "t": {"id": "Suhu freezer $x°C$ turun $4°C$ lalu naik $1°C$", "en": "Freezer at $x°C$ drops $4°C$ then rises $1°C$"}}], "right": [{"id": "r1", "t": {"id": "$x-6$", "en": "$x-6$"}}, {"id": "r2", "t": {"id": "$x+10$", "en": "$x+10$"}}, {"id": "r3", "t": {"id": "$x-15.000$", "en": "$x-15{,}000$"}}, {"id": "r4", "t": {"id": "$x-4+1$", "en": "$x-4+1$"}}], "correct": {"l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4"}, "explanation": {"id": "Setiap kata kunci menentukan tanda operasi: turun/dipotong $\\to -$, naik $\\to +$.", "en": "Each keyword decides the operation sign: drops/minus $\\to -$, rises $\\to +$."}}, {"id": "D7", "type": "drag", "icon": "drag", "prompt": {"id": "Seret tiap hasil operasi ke kategori tandanya.", "en": "Drag each result into its sign category."}, "items": [{"id": "i1", "t": "-9+4"}, {"id": "i2", "t": "-2-6"}, {"id": "i3", "t": "10-15"}, {"id": "i4", "t": "-3+8"}], "zones": [{"id": "z1", "t": {"id": "Hasil negatif", "en": "Negative result"}}, {"id": "z2", "t": {"id": "Hasil positif", "en": "Positive result"}}], "correct": {"i1": "z1", "i2": "z1", "i3": "z1", "i4": "z2"}, "explanation": {"id": "$-9+4=-5$, $-2-6=-8$, $10-15=-5$ (semua negatif); $-3+8=5$ (positif).", "en": "$-9+4=-5$, $-2-6=-8$, $10-15=-5$ (all negative); $-3+8=5$ (positive)."}}, {"id": "D8", "type": "radio", "icon": "star", "prompt": {"id": "(Pengayaan) Model suhu akhir adalah $x+12-20$, dan suhu akhir diketahui $-3°C$. Nilai $x$ (suhu awal) adalah ...", "en": "(Enrichment) The final-temperature model is $x+12-20$, and the final temperature is $-3°C$. The value of $x$ (starting temperature) is ..."}, "options": [{"id": "a", "t": {"id": "$5$", "en": "$5$"}}, {"id": "b", "t": {"id": "$-5$", "en": "$-5$"}}, {"id": "c", "t": {"id": "$11$", "en": "$11$"}}, {"id": "d", "t": {"id": "$-11$", "en": "$-11$"}}], "correct": "a", "explanation": {"id": "$x+12-20=-3 \\Rightarrow x-8=-3 \\Rightarrow x=-3+8=5$. Suhu awalnya adalah $5°C$.", "en": "$x+12-20=-3 \\Rightarrow x-8=-3 \\Rightarrow x=-3+8=5$. The starting temperature was $5°C$."}}, {"id": "D9", "type": "fill", "icon": "star", "prompt": {"id": "(Pengayaan) Sederhanakan bentuk $-3(x-4)+2x$ menjadi bentuk paling sederhana: $\\_\\_\\_$", "en": "(Enrichment) Simplify $-3(x-4)+2x$ to its simplest form: $\\_\\_\\_$"}, "blanks": 1, "correct": ["-x+12", "12-x"], "explanation": {"id": "$-3(x-4)+2x=-3x+12+2x=-x+12$ (sama dengan $12-x$).", "en": "$-3(x-4)+2x=-3x+12+2x=-x+12$ (same as $12-x$)."}}, {"id": "D10", "type": "tf", "icon": "star", "prompt": {"id": "(Pengayaan) Pernyataan: $-3(x-4)+2x$ jika disederhanakan menjadi $-x+12$, adalah benar.", "en": "(Enrichment) Statement: $-3(x-4)+2x$ simplified equals $-x+12$ — this is correct."}, "correct": true, "explanation": {"id": "Benar, seperti pada pembahasan soal sebelumnya.", "en": "True, as shown in the previous item's explanation."}}], "homework": [{"id": "H1", "type": "fill", "icon": "thermo", "prompt": {"id": "Suhu pagi hari $-2°C$, siang naik $9°C$. Berapa suhu siang hari?", "en": "Morning temperature is $-2°C$, it rises $9°C$ by noon. What is the noon temperature?"}, "blanks": 1, "correct": ["7"], "explanation": {"id": "$-2+9=7°C$.", "en": "$-2+9=7°C$."}}, {"id": "H2", "type": "fill", "icon": "bird", "prompt": {"id": "Burung terbang $8$ m di atas tanah lalu turun $15$ m. Posisi akhirnya relatif terhadap tanah?", "en": "A bird is $8$ m above ground then descends $15$ m. Its final position relative to the ground?"}, "blanks": 1, "correct": ["-7"], "explanation": {"id": "$8-15=-7$, artinya $7$ m di bawah tanah.", "en": "$8-15=-7$, meaning $7$ m below ground."}}, {"id": "H3", "type": "fill", "icon": "calc", "prompt": {"id": "$-6+(-9) = \\_\\_\\_$", "en": "$-6+(-9) = \\_\\_\\_$"}, "blanks": 1, "correct": ["-15"], "explanation": {"id": "Jumlahkan nilai mutlak $6+9=15$, tetap negatif: $-15$.", "en": "Add absolute values $6+9=15$, keep it negative: $-15$."}}, {"id": "H4", "type": "fill", "icon": "calc", "prompt": {"id": "$-14-(-5) = \\_\\_\\_$", "en": "$-14-(-5) = \\_\\_\\_$"}, "blanks": 1, "correct": ["-9"], "explanation": {"id": "$-14-(-5)=-14+5=-9$.", "en": "$-14-(-5)=-14+5=-9$."}}, {"id": "H5", "type": "checkbox", "icon": "list", "prompt": {"id": "Manakah bentuk yang SETARA dengan $x-8$? (pilih semua)", "en": "Which expressions are EQUIVALENT to $x-8$? (select all)"}, "options": [{"id": "a", "t": {"id": "$-8+x$", "en": "$-8+x$"}}, {"id": "b", "t": {"id": "$8-x$", "en": "$8-x$"}}, {"id": "c", "t": {"id": "$-(8-x)$", "en": "$-(8-x)$"}}, {"id": "d", "t": {"id": "$x+8$", "en": "$x+8$"}}], "correct": ["a", "c"], "explanation": {"id": "$-8+x=x-8$; dan $-(8-x)=-8+x=x-8$. Sedangkan $8-x$ dan $x+8$ berbeda nilai.", "en": "$-8+x=x-8$; and $-(8-x)=-8+x=x-8$. But $8-x$ and $x+8$ are different."}}, {"id": "H6", "type": "sort", "icon": "steps", "prompt": {"id": "Urutkan langkah menyederhanakan $-4(x-3)$.", "en": "Order the steps to simplify $-4(x-3)$."}, "items": [{"id": "s1", "t": {"id": "Kalikan $-4$ dengan $x$: $-4x$", "en": "Multiply $-4$ by $x$: $-4x$"}}, {"id": "s2", "t": {"id": "Kalikan $-4$ dengan $-3$: $12$", "en": "Multiply $-4$ by $-3$: $12$"}}, {"id": "s3", "t": {"id": "Gabungkan: $-4x+12$", "en": "Combine: $-4x+12$"}}], "correct": ["s1", "s2", "s3"], "explanation": {"id": "Sifat distributif dengan koefisien negatif.", "en": "Distributive property with a negative coefficient."}}, {"id": "H7", "type": "pair", "icon": "link", "prompt": {"id": "Pasangkan konteks dengan bentuk aljabarnya.", "en": "Match each context with its expression."}, "left": [{"id": "l1", "t": {"id": "Utang $Rp75.000$ bertambah $Rp30.000$", "en": "A $Rp75{,}000$ debt increases by $Rp30{,}000$"}}, {"id": "l2", "t": {"id": "Suhu $-10°C$ naik $x°C$", "en": "Temperature $-10°C$ rises by $x°C$"}}, {"id": "l3", "t": {"id": "Ketinggian $x$ m turun $12$ m", "en": "Elevation $x$ m drops $12$ m"}}, {"id": "l4", "t": {"id": "Kedalaman laut $-40$ m naik $18$ m", "en": "Sea depth $-40$ m rises $18$ m"}}], "right": [{"id": "r1", "t": {"id": "$-75.000-30.000$", "en": "$-75{,}000-30{,}000$"}}, {"id": "r2", "t": {"id": "$-10+x$", "en": "$-10+x$"}}, {"id": "r3", "t": {"id": "$x-12$", "en": "$x-12$"}}, {"id": "r4", "t": {"id": "$-40+18$", "en": "$-40+18$"}}], "correct": {"l1": "r1", "l2": "r2", "l3": "r3", "l4": "r4"}, "explanation": {"id": "Utang dinyatakan negatif dan bertambah berarti semakin negatif (ditambah tanda $-$ lagi pada nilainya).", "en": "Debt is written as negative, and increasing it makes it more negative."}}, {"id": "H8", "type": "drag", "icon": "drag", "prompt": {"id": "Kelompokkan hasil operasi berikut ke 'Negatif' atau 'Positif'.", "en": "Group each result as 'Negative' or 'Positive'."}, "items": [{"id": "i1", "t": "-7+2"}, {"id": "i2", "t": "-3-(-9)"}, {"id": "i3", "t": "4-10"}, {"id": "i4", "t": "-2×(-5)"}], "zones": [{"id": "z1", "t": {"id": "Negatif", "en": "Negative"}}, {"id": "z2", "t": {"id": "Positif", "en": "Positive"}}], "correct": {"i1": "z1", "i2": "z2", "i3": "z1", "i4": "z2"}, "explanation": {"id": "$-7+2=-5$, $-3-(-9)=6$, $4-10=-6$, $-2\\times(-5)=10$.", "en": "$-7+2=-5$, $-3-(-9)=6$, $4-10=-6$, $-2\\times(-5)=10$."}}, {"id": "H9", "type": "tf", "icon": "check", "prompt": {"id": "Pernyataan: $-5 \\times 4 = -20$", "en": "Statement: $-5 \\times 4 = -20$"}, "correct": true, "explanation": {"id": "Benar. Negatif × positif $=$ negatif.", "en": "True. Negative × positive $=$ negative."}}, {"id": "H10", "type": "radio", "icon": "wave", "prompt": {"id": "Kapal selam berada $-120$ m. Kapal naik $45$ m lalu turun $20$ m. Posisi akhirnya adalah ...", "en": "A submarine is at $-120$ m. It rises $45$ m then descends $20$ m. Its final position is ..."}, "options": [{"id": "a", "t": {"id": "$-95$", "en": "$-95$"}}, {"id": "b", "t": {"id": "$-145$", "en": "$-145$"}}, {"id": "c", "t": {"id": "$-85$", "en": "$-85$"}}, {"id": "d", "t": {"id": "$95$", "en": "$95$"}}], "correct": "a", "explanation": {"id": "$-120+45-20=-95$.", "en": "$-120+45-20=-95$."}}]}};
+</script>
+<script>
+
+(function(){
+"use strict";
+var DATA = window.__MATERIAL_DATA__;
+var STAGES = DATA.stages;
+var BANKS = DATA.banks;
+
+var ICONS = {
+  pencil:"✏️", check:"✅", calc:"🧮", list:"📋", steps:"🪜", link:"🔗", drag:"🖐️",
+  map:"🗺️", thermo:"🌡️", wallet:"💰", wave:"🌊", warn:"⚠️", mountain:"⛰️",
+  plane:"✈️", fruit:"🍎", star:"⭐", bird:"🐦"
+};
+
+/* ---------- KaTeX render helper ---------- */
+function renderMath(el){
+  if(window.renderMathInElement){
+    try{
+      window.renderMathInElement(el, {
+        delimiters:[
+          {left:"$$", right:"$$", display:true},
+          {left:"$", right:"$", display:false}
+        ],
+        throwOnError:false
+      });
+    }catch(e){ /* noop */ }
+  }
+}
+
+/* ============================================================
+   STAGE NAVIGATION
+   ============================================================ */
+var stageKeys = STAGES.map(function(s){return s.key;});
+var curStageIdx = 0;
+
+function showStage(idx){
+  curStageIdx = Math.max(0, Math.min(stageKeys.length-1, idx));
+  var key = stageKeys[curStageIdx];
+  document.querySelectorAll(".stage").forEach(function(sec){
+    sec.classList.toggle("active", sec.getAttribute("data-stage")===key);
+  });
+  var meta = STAGES[curStageIdx];
+  document.getElementById("stageNo").textContent = meta.no;
+  document.getElementById("stageNameId").textContent = meta.id;
+  document.getElementById("stageNameEn").innerHTML = "<em>"+meta.en+"</em>";
+  document.getElementById("durationBadge").textContent = meta.start+"–"+meta.end;
+  document.getElementById("btnPrev").disabled = curStageIdx===0;
+  document.getElementById("btnNext").disabled = curStageIdx===stageKeys.length-1;
+  renderDots();
+  window.scrollTo({top:0, behavior:"smooth"});
+  renderMath(document.getElementById("mainContainer"));
+}
+
+function renderDots(){
+  var wrap = document.getElementById("progressDots");
+  wrap.innerHTML = "";
+  STAGES.forEach(function(s, i){
+    var d = document.createElement("span");
+    d.className = "progress-dot" + (i===curStageIdx ? " active" : (i<curStageIdx ? " visited" : ""));
+    d.title = s.id;
+    d.addEventListener("click", function(){ showStage(i); });
+    d.style.cursor = "pointer";
+    wrap.appendChild(d);
+  });
+}
+
+document.getElementById("btnPrev").addEventListener("click", function(){ showStage(curStageIdx-1); });
+document.getElementById("btnNext").addEventListener("click", function(){ showStage(curStageIdx+1); });
+
+/* ============================================================
+   CLASS RULES MODAL
+   ============================================================ */
+var modal = document.getElementById("rulesModal");
+document.getElementById("btnRules").addEventListener("click", function(){ modal.classList.add("show"); });
+document.getElementById("btnCloseRules").addEventListener("click", function(){ modal.classList.remove("show"); });
+modal.addEventListener("click", function(e){ if(e.target===modal) modal.classList.remove("show"); });
+
+/* ============================================================
+   WORKED EXAMPLE (Eksplorasi) — step-by-step reveal
+   ============================================================ */
+var WORKED_STEPS = [
+  {id:"Tulis suhu awal gudang pendingin: $-15°C$", en:"Write the starting temperature: $-15°C$"},
+  {id:"Pintu terbuka, suhu naik $4°C$ → model: $-15+4$", en:"Door opens, temperature rises $4°C$ → model: $-15+4$"},
+  {id:"Hitung: $-15+4=-11°C$", en:"Compute: $-15+4=-11°C$"},
+  {id:"Teknisi menurunkan suhu $6°C$ lagi → model: $-11-6$", en:"Technician lowers it $6°C$ more → model: $-11-6$"},
+  {id:"Hasil akhir: $-11-6=-17°C$", en:"Final result: $-11-6=-17°C$"}
+];
+(function initWorked(){
+  var btnWrap = document.getElementById("workedSteps");
+  var panelWrap = document.getElementById("workedPanels");
+  if(!btnWrap) return;
+  WORKED_STEPS.forEach(function(step, i){
+    var b = document.createElement("button");
+    b.className = "step-btn";
+    b.textContent = (i+1);
+    b.addEventListener("click", function(){
+      b.classList.add("revealed");
+      var p = panelWrap.querySelector('[data-idx="'+i+'"]');
+      p.classList.toggle("show");
+      renderMath(p);
+    });
+    btnWrap.appendChild(b);
+    var panel = document.createElement("div");
+    panel.className = "step-panel";
+    panel.setAttribute("data-idx", i);
+    panel.innerHTML = '<div class="text-id">Langkah '+(i+1)+': '+step.id+'</div><div class="text-en"><em>Step '+(i+1)+': '+step.en+'</em></div>';
+    panelWrap.appendChild(panel);
+  });
+})();
+
+/* ============================================================
+   CASE-STUDY / QUIZ ENGINE
+   ============================================================ */
+var bankState = {}; // key -> {idx, answered:Set-like obj, selections:{}}
+
+function initBank(key, mode){
+  bankState[key] = {idx:0, done:{}, mode: mode||"quiz"};
+  var container = document.getElementById("bank-"+key);
+  if(!container) return;
+  container.innerHTML =
+    '<div class="case-head">'+
+      '<div class="case-title" id="caseTitle-'+key+'"></div>'+
+      '<div class="case-type-tag" id="caseTag-'+key+'"></div>'+
+    '</div>'+
+    '<div class="case-body" id="caseBody-'+key+'"></div>'+
+    '<div class="pagination" id="pagination-'+key+'"></div>';
+  renderCase(key);
+}
+
+var TYPE_LABEL = {
+  radio:{id:"Pilihan Ganda", en:"Multiple Choice"},
+  checkbox:{id:"Pilihan Ganda (Multi)", en:"Multiple Select"},
+  fill:{id:"Isian Singkat", en:"Fill in the Blank"},
+  tf:{id:"Benar / Salah", en:"True / False"},
+  sort:{id:"Urutkan", en:"Sorting"},
+  pair:{id:"Pasangkan", en:"Pairing"},
+  drag:{id:"Seret & Letakkan", en:"Drag & Drop"}
+};
+
+function renderCase(key){
+  var st = bankState[key];
+  var bank = BANKS[key];
+  var item = bank[st.idx];
+  var titleEl = document.getElementById("caseTitle-"+key);
+  var tagEl = document.getElementById("caseTag-"+key);
+  var bodyEl = document.getElementById("caseBody-"+key);
+  var isEnrich = /Pengayaan|Enrichment/.test(item.prompt.id) || /Pengayaan|Enrichment/.test(item.prompt.en);
+
+  titleEl.innerHTML = ICONS[item.icon]+' Studi Kasus '+(st.idx+1)+' / '+bank.length +
+    (isEnrich ? ' <span class="badge badge-enrich">Pengayaan</span>' : '');
+  tagEl.textContent = TYPE_LABEL[item.type].id + " / " + TYPE_LABEL[item.type].en;
+
+  var html = '<div class="case-prompt"><div class="text-id">'+item.prompt.id+'</div><div class="text-en"><em>'+item.prompt.en+'</em></div></div>';
+  html += '<div id="answerArea-'+key+'"></div>';
+  var solveLabel = st.mode==="homework"
+    ? '<button class="btn btn-primary" id="submitBtn-'+key+'">Lihat Pembahasan <em class="en-sub">Show Solution</em></button>'
+    : '<button class="btn btn-primary" id="submitBtn-'+key+'">Periksa Jawaban <em class="en-sub">Check Answer</em></button>';
+  html += '<div class="case-actions">'+solveLabel+'</div>';
+  html += '<div class="feedback-box" id="feedback-'+key+'"></div>';
+  bodyEl.innerHTML = html;
+
+  var answerArea = document.getElementById("answerArea-"+key);
+  var api = buildAnswerUI(item, answerArea);
+
+  document.getElementById("submitBtn-"+key).addEventListener("click", function(){
+    var result = api.check();
+    showFeedback(key, item, result);
+    st.done[st.idx] = true;
+    renderPagination(key);
+  });
+
+  renderMath(bodyEl);
+  renderPagination(key);
+}
+
+function showFeedback(key, item, result){
+  var box = document.getElementById("feedback-"+key);
+  box.className = "feedback-box show " + (result.correct ? "ok" : "bad");
+  var titleId = result.correct ? "Tepat sekali! Jawabanmu benar." : "Belum tepat, ayo simak pembahasannya.";
+  var titleEn = result.correct ? "Correct! Well done." : "Not quite — check the explanation below.";
+  box.innerHTML =
+    '<div class="feedback-title text-id">'+titleId+'</div>'+
+    '<div class="feedback-title text-en" style="margin-top:-.3rem;margin-bottom:.4rem;"><em>'+titleEn+'</em></div>'+
+    '<div class="text-id">'+item.explanation.id+'</div>'+
+    '<div class="text-en"><em>'+item.explanation.en+'</em></div>';
+  renderMath(box);
+}
+
+function renderPagination(key){
+  var st = bankState[key];
+  var bank = BANKS[key];
+  var wrap = document.getElementById("pagination-"+key);
+  var html = '<button class="page-arrow" id="pgPrev-'+key+'" '+(st.idx===0?'disabled':'')+'>&lsaquo;</button>';
+  bank.forEach(function(it, i){
+    var cls = "page-btn" + (i===st.idx ? " current" : "") + (st.done[i] ? " done" : "");
+    html += '<button class="'+cls+'" data-i="'+i+'">'+(i+1)+'</button>';
+  });
+  html += '<button class="page-arrow" id="pgNext-'+key+'" '+(st.idx===bank.length-1?'disabled':'')+'>&rsaquo;</button>';
+  wrap.innerHTML = html;
+  wrap.querySelectorAll(".page-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){ st.idx = parseInt(btn.getAttribute("data-i"),10); renderCase(key); });
+  });
+  document.getElementById("pgPrev-"+key).addEventListener("click", function(){ if(st.idx>0){ st.idx--; renderCase(key);} });
+  document.getElementById("pgNext-"+key).addEventListener("click", function(){ if(st.idx<bank.length-1){ st.idx++; renderCase(key);} });
+}
+
+/* ---------- per-type answer UI builders ---------- */
+function buildAnswerUI(item, mount){
+  if(item.type==="radio") return buildRadio(item, mount);
+  if(item.type==="checkbox") return buildCheckbox(item, mount);
+  if(item.type==="fill") return buildFill(item, mount);
+  if(item.type==="tf") return buildTF(item, mount);
+  if(item.type==="sort") return buildSort(item, mount);
+  if(item.type==="pair") return buildPair(item, mount);
+  if(item.type==="drag") return buildDrag(item, mount);
+  return {check:function(){return {correct:false};}};
+}
+
+function normFill(s){
+  return (s||"").toString().trim().toLowerCase().replace(/[.\s]/g,"").replace(/,/g,"");
+}
+
+function buildRadio(item, mount){
+  var sel = null;
+  var list = document.createElement("div"); list.className="opt-list";
+  item.options.forEach(function(o){
+    var lab = document.createElement("label"); lab.className="opt-item"; lab.setAttribute("data-id", o.id);
+    lab.innerHTML = '<input type="radio" name="r-'+item.id+'" value="'+o.id+'"><span class="text-id">'+o.t.id+'</span>';
+    lab.addEventListener("click", function(){
+      sel = o.id;
+      list.querySelectorAll(".opt-item").forEach(function(el){ el.classList.remove("selected"); });
+      lab.classList.add("selected");
+      lab.querySelector("input").checked = true;
+    });
+    list.appendChild(lab);
+  });
+  mount.appendChild(list);
+  return {check:function(){
+    var ok = sel === item.correct;
+    list.querySelectorAll(".opt-item").forEach(function(el){
+      var id = el.getAttribute("data-id");
+      if(id===item.correct) el.classList.add("correct-flag");
+      else if(id===sel) el.classList.add("wrong-flag");
+    });
+    return {correct: ok && sel!==null};
+  }};
+}
+
+function buildCheckbox(item, mount){
+  var sel = {};
+  var list = document.createElement("div"); list.className="opt-list";
+  item.options.forEach(function(o){
+    var lab = document.createElement("label"); lab.className="opt-item"; lab.setAttribute("data-id", o.id);
+    lab.innerHTML = '<input type="checkbox" value="'+o.id+'"><span class="text-id">'+o.t.id+'</span>';
+    lab.addEventListener("click", function(e){
+      sel[o.id] = !sel[o.id];
+      lab.classList.toggle("selected", sel[o.id]);
+      lab.querySelector("input").checked = sel[o.id];
+    });
+    list.appendChild(lab);
+  });
+  mount.appendChild(list);
+  return {check:function(){
+    var chosen = Object.keys(sel).filter(function(k){return sel[k];}).sort();
+    var correct = item.correct.slice().sort();
+    var ok = chosen.length===correct.length && chosen.every(function(v,i){return v===correct[i];});
+    list.querySelectorAll(".opt-item").forEach(function(el){
+      var id = el.getAttribute("data-id");
+      var isCorrect = item.correct.indexOf(id)>-1;
+      if(isCorrect) el.classList.add("correct-flag");
+      else if(sel[id]) el.classList.add("wrong-flag");
+    });
+    return {correct: ok};
+  }};
+}
+
+function buildFill(item, mount){
+  var row = document.createElement("div"); row.className="fill-row";
+  var inputs = [];
+  for(var i=0;i<item.blanks;i++){
+    var inp = document.createElement("input");
+    inp.className = "fill-input";
+    inp.placeholder = "Jawaban "+(i+1)+" / Answer "+(i+1);
+    row.appendChild(inp);
+    inputs.push(inp);
+  }
+  mount.appendChild(row);
+  return {check:function(){
+    var ok = true;
+    inputs.forEach(function(inp, i){
+      var expected = item.correct[i];
+      var got = normFill(inp.value);
+      var accepted = Array.isArray(expected) ? expected : [expected];
+      // also support multi-accepted answers defined globally for blanks:1 with multiple strings
+      var matched = false;
+      if(item.blanks===1 && item.correct.length>1){
+        matched = item.correct.some(function(c){ return normFill(c)===got; });
+      } else {
+        matched = normFill(expected)===got;
+      }
+      inp.classList.remove("correct-flag","wrong-flag");
+      inp.classList.add(matched ? "correct-flag" : "wrong-flag");
+      if(!matched) ok = false;
+    });
+    return {correct: ok};
+  }};
+}
+
+function buildTF(item, mount){
+  var sel = null;
+  var row = document.createElement("div"); row.className="tf-row";
+  var bTrue = document.createElement("button"); bTrue.className="tf-btn"; bTrue.innerHTML='Benar <span class="en-sub" style="display:inline"><em>True</em></span>';
+  var bFalse = document.createElement("button"); bFalse.className="tf-btn"; bFalse.innerHTML='Salah <span class="en-sub" style="display:inline"><em>False</em></span>';
+  bTrue.addEventListener("click", function(){ sel=true; bTrue.classList.add("selected"); bFalse.classList.remove("selected"); });
+  bFalse.addEventListener("click", function(){ sel=false; bFalse.classList.add("selected"); bTrue.classList.remove("selected"); });
+  row.appendChild(bTrue); row.appendChild(bFalse);
+  mount.appendChild(row);
+  return {check:function(){
+    var ok = sel===item.correct;
+    (item.correct ? bTrue : bFalse).classList.add("correct-flag");
+    if(!ok && sel!==null) (sel ? bTrue : bFalse).classList.add("wrong-flag");
+    return {correct: ok && sel!==null};
+  }};
+}
+
+function buildSort(item, mount){
+  var order = item.items.map(function(it){return it.id;});
+  // shuffle deterministically-ish
+  for(var i=order.length-1;i>0;i--){ var j=(i*7+3)%(i+1); var t=order[i]; order[i]=order[j]; order[j]=t; }
+  var list = document.createElement("div"); list.className="sort-list";
+  mount.appendChild(list);
+  function draw(){
+    list.innerHTML = "";
+    order.forEach(function(id, i){
+      var it = item.items.find(function(x){return x.id===id;});
+      var row = document.createElement("div"); row.className="sort-item"; row.setAttribute("data-id", id);
+      row.innerHTML =
+        '<span class="sort-idx">'+(i+1)+'</span>'+
+        '<span class="sort-text"><span class="text-id">'+it.t.id+'</span><div class="text-en"><em>'+it.t.en+'</em></div></span>'+
+        '<span class="sort-controls">'+
+          '<button data-dir="up" '+(i===0?'disabled':'')+'>↑</button>'+
+          '<button data-dir="down" '+(i===order.length-1?'disabled':'')+'>↓</button>'+
+        '</span>';
+      list.appendChild(row);
+    });
+    list.querySelectorAll(".sort-controls button").forEach(function(btn, idx){
+      btn.addEventListener("click", function(){
+        var dir = btn.getAttribute("data-dir");
+        var i = Array.prototype.indexOf.call(list.querySelectorAll(".sort-item"), btn.closest(".sort-item"));
+        var swapWith = dir==="up" ? i-1 : i+1;
+        if(swapWith<0 || swapWith>=order.length) return;
+        var tmp = order[i]; order[i]=order[swapWith]; order[swapWith]=tmp;
+        draw(); renderMath(list);
+      });
+    });
+    renderMath(list);
+  }
+  draw();
+  return {check:function(){
+    var ok = order.every(function(id, i){ return id===item.correct[i]; });
+    list.querySelectorAll(".sort-item").forEach(function(row, i){
+      row.classList.add(order[i]===item.correct[i] ? "correct-flag" : "wrong-flag");
+    });
+    return {correct: ok};
+  }};
+}
+
+function buildPair(item, mount){
+  var matches = {}; // leftId -> rightId
+  var activeLeft = null;
+  var wrap = document.createElement("div"); wrap.className="pair-wrap";
+  var colL = document.createElement("div"); colL.className="pair-col";
+  var colR = document.createElement("div"); colR.className="pair-col";
+  wrap.appendChild(colL); wrap.appendChild(colR);
+  mount.appendChild(wrap);
+
+  var rightShuffled = item.right.slice();
+  for(var i=rightShuffled.length-1;i>0;i--){ var j=(i*5+1)%(i+1); var t=rightShuffled[i]; rightShuffled[i]=rightShuffled[j]; rightShuffled[j]=t; }
+
+  item.left.forEach(function(l){
+    var el = document.createElement("div"); el.className="pair-item"; el.setAttribute("data-id", l.id);
+    el.innerHTML = '<span class="text-id">'+l.t.id+'</span><div class="text-en"><em>'+l.t.en+'</em></div>';
+    el.addEventListener("click", function(){
+      if(matches[l.id]) return;
+      colL.querySelectorAll(".pair-item").forEach(function(x){x.classList.remove("active");});
+      activeLeft = l.id; el.classList.add("active");
+    });
+    colL.appendChild(el);
+  });
+  rightShuffled.forEach(function(r){
+    var el = document.createElement("div"); el.className="pair-item"; el.setAttribute("data-id", r.id);
+    el.innerHTML = '<span class="text-id">'+r.t.id+'</span><div class="text-en"><em>'+r.t.en+'</em></div>';
+    el.addEventListener("click", function(){
+      if(!activeLeft) return;
+      var already = Object.keys(matches).find(function(k){return matches[k]===r.id;});
+      if(already) return;
+      matches[activeLeft] = r.id;
+      var leftEl = colL.querySelector('[data-id="'+activeLeft+'"]');
+      leftEl.classList.remove("active"); leftEl.classList.add("matched");
+      leftEl.insertAdjacentHTML("beforeend", '<span class="pair-tag">→ matched</span>');
+      el.classList.add("matched");
+      activeLeft = null;
+      renderMath(wrap);
+    });
+    colR.appendChild(el);
+  });
+  renderMath(wrap);
+  return {check:function(){
+    var ok = item.left.every(function(l){ return matches[l.id]===item.correct[l.id]; });
+    colL.querySelectorAll(".pair-item").forEach(function(el){
+      var id = el.getAttribute("data-id");
+      el.classList.add(matches[id]===item.correct[id] ? "correct-flag" : "wrong-flag");
+    });
+    return {correct: ok};
+  }};
+}
+
+function buildDrag(item, mount){
+  var placed = {}; // itemId -> zoneId
+  var wrap = document.createElement("div"); wrap.className="drag-wrap";
+  var itemsWrap = document.createElement("div"); itemsWrap.className="drag-items";
+  var zonesWrap = document.createElement("div"); zonesWrap.className="drag-zones";
+  wrap.appendChild(itemsWrap); wrap.appendChild(zonesWrap);
+  mount.appendChild(wrap);
+
+  item.zones.forEach(function(z){
+    var zEl = document.createElement("div"); zEl.className="drag-zone"; zEl.setAttribute("data-zone", z.id);
+    zEl.innerHTML = '<div class="drag-zone-label text-id">'+z.t.id+' <span class="en-sub" style="display:inline"><em>'+z.t.en+'</em></span></div><div class="drag-zone-items"></div>';
+    zEl.addEventListener("dragover", function(e){ e.preventDefault(); zEl.classList.add("over"); });
+    zEl.addEventListener("dragleave", function(){ zEl.classList.remove("over"); });
+    zEl.addEventListener("drop", function(e){
+      e.preventDefault(); zEl.classList.remove("over");
+      var iid = e.dataTransfer.getData("text/plain");
+      placeItem(iid, z.id);
+    });
+    zonesWrap.appendChild(zEl);
+  });
+
+  function makeChip(it){
+    var chip = document.createElement("div");
+    chip.className = "drag-item"; chip.setAttribute("draggable","true"); chip.setAttribute("data-id", it.id);
+    chip.textContent = it.t;
+    chip.addEventListener("dragstart", function(e){ e.dataTransfer.setData("text/plain", it.id); });
+    chip.addEventListener("click", function(){
+      // tap-to-place fallback: cycle through zones
+      var zones = item.zones.map(function(z){return z.id;});
+      var cur = placed[it.id];
+      var nextIdx = cur ? (zones.indexOf(cur)+1)%zones.length : 0;
+      placeItem(it.id, zones[nextIdx]);
+    });
+    return chip;
+  }
+  item.items.forEach(function(it){ itemsWrap.appendChild(makeChip(it)); });
+
+  function placeItem(iid, zid){
+    placed[iid] = zid;
+    var srcChip = itemsWrap.querySelector('[data-id="'+iid+'"]');
+    if(srcChip) srcChip.classList.add("placed");
+    item.zones.forEach(function(z){
+      var target = zonesWrap.querySelector('[data-zone="'+z.id+'"] .drag-zone-items');
+      var existing = target.querySelector('[data-id="'+iid+'"]');
+      if(existing) existing.remove();
+    });
+    if(zid){
+      var target = zonesWrap.querySelector('[data-zone="'+zid+'"] .drag-zone-items');
+      var it = item.items.find(function(x){return x.id===iid;});
+      var chip = document.createElement("span");
+      chip.className = "drag-chip"; chip.setAttribute("data-id", iid);
+      chip.textContent = it.t;
+      target.appendChild(chip);
+    }
+  }
+
+  return {check:function(){
+    var ok = item.items.every(function(it){ return placed[it.id]===item.correct[it.id]; });
+    item.items.forEach(function(it){
+      var chip = zonesWrap.querySelector('.drag-zone-items [data-id="'+it.id+'"]');
+      if(chip) chip.classList.add(placed[it.id]===item.correct[it.id] ? "correct-flag" : "wrong-flag");
+    });
+    return {correct: ok};
+  }};
+}
+
+/* ============================================================
+   EXIT TICKET (Refleksi) quick check
+   ============================================================ */
+(function(){
+  var btn = document.getElementById("btnExitCheck");
+  if(!btn) return;
+  btn.addEventListener("click", function(){
+    var v = normFill(document.getElementById("exitFill1").value);
+    var box = document.getElementById("exitFeedback");
+    var ok = v === "-5";
+    box.className = "feedback-box show " + (ok ? "ok" : "bad");
+    box.innerHTML = ok
+      ? '<div class="feedback-title text-id">Benar! <em class="en-sub" style="display:inline">Correct!</em></div><div class="text-id">$-9+4=-5$</div>'
+      : '<div class="feedback-title text-id">Coba lagi ya <em class="en-sub" style="display:inline">Try again</em></div><div class="text-id">Ingat: $-9+4=-5$</div>';
+    renderMath(box);
+  });
+})();
+
+/* ============================================================
+   INIT
+   ============================================================ */
+window.addEventListener("DOMContentLoaded", function(){
+  initBank("apersepsi","quiz");
+  initBank("eksplorasi","quiz");
+  initBank("terbimbing","quiz");
+  initBank("mandiri","quiz");
+  initBank("homework","homework");
+  showStage(0);
+});
+})();
+
+</script>
+</body>
+</html>
