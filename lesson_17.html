@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni - Kesebangunan: Hubungan Antar Sudut</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#f59e0b;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.tr{font-style:italic;font-size:.82em;color:var(--muted);display:block;margin-top:2px}
+header{background:var(--primary);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+header .brand{font-weight:700;font-size:1.05em}
+header .topic{font-size:.88em;text-align:center;flex:1}
+header .topic .tr{color:rgba(255,255,255,.85)}
+header button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85em;white-space:nowrap}
+header button:hover{background:rgba(255,255,255,.25)}
+.main-container{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:14px;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px)}
+.sidebar h3{font-size:.72em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.nav-link{display:block;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:3px;font-size:.84em;border:1px solid transparent;transition:all .15s}
+.nav-link:hover{background:#eff6ff}
+.nav-link.active{background:var(--primary);color:#fff;pointer-events:none;cursor:default}
+.nav-link .nl-title{display:block;font-weight:600}
+.nav-link .time{font-size:.76em;color:var(--muted);display:block;margin-top:2px}
+.nav-link.active .time,.nav-link.active .tr{color:rgba(255,255,255,.85)}
+.nav-link.disabled{opacity:.45;cursor:not-allowed;font-size:.8em;padding:6px 10px}
+.content-area{padding:22px 28px;overflow-y:auto;max-width:1100px;margin:0 auto;width:100%}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px}
+.page-header h2{color:var(--primary-dark);font-size:1.1em}
+.page-header .badge{background:var(--secondary);color:#fff;padding:4px 10px;border-radius:20px;font-size:.76em;font-weight:600}
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--border)}
+.card.explain{border-left:4px solid var(--primary)}
+.card.task{border-left:4px solid var(--secondary)}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.1em}
+.math-block{background:#f1f5f9;padding:12px 14px;border-radius:8px;margin:12px 0;overflow-x:auto}
+.example-box{background:#fef3c7;border-left:4px solid var(--secondary);padding:12px 16px;margin:12px 0;border-radius:6px}
+.example-box h4{color:#92400e;margin-bottom:6px;font-size:.95em}
+.tip-box{background:#dbeafe;border-left:4px solid var(--primary);padding:10px 14px;margin:10px 0;border-radius:6px}
+.tip-box h4{color:#1e40af;margin-bottom:4px;font-size:.9em}
+.illustration{text-align:center;margin:14px 0;padding:14px;background:#f1f5f9;border-radius:8px}
+.q-text{font-size:1em;margin-bottom:12px;line-height:1.7}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.option:hover{border-color:var(--primary);background:#eff6ff}
+.option.selected{border-color:var(--primary);background:#dbeafe}
+.option.correct{border-color:var(--success);background:#d1fae5}
+.option.incorrect{border-color:var(--danger);background:#fee2e2}
+.option .marker{min-width:18px;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff}
+.option.selected .marker{background:var(--primary);border-color:var(--primary)}
+.option.correct .marker{background:var(--success);border-color:var(--success)}
+.option.incorrect .marker{background:var(--danger);border-color:var(--danger)}
+.option.checkbox .marker{border-radius:3px}
+.option .opt-text{flex:1}
+.fill-input{padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;width:100%;margin:8px 0;font-family:inherit}
+.fill-input:focus{border-color:var(--primary);outline:none}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-size:.88em;font-weight:600;margin-top:12px}
+.btn-submit:hover{background:var(--primary-dark)}
+.feedback{margin-top:12px;padding:14px;border-radius:8px;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#d1fae5;border:1px solid var(--success)}
+.feedback.incorrect{background:#fee2e2;border:1px solid var(--danger)}
+.feedback h4{margin-bottom:6px}
+.feedback ol,.feedback ul{margin:6px 0;padding-left:22px}
+.feedback li{margin:4px 0}
+.card ol, .card ul { padding-left: 26px; margin: 10px 0; }
+.card li { margin: 5px 0; }
+.example-box ol, .example-box ul { padding-left: 22px; margin: 8px 0; }
+.tip-box ol, .tip-box ul { padding-left: 22px; margin: 8px 0; }
+.math-block ol, .math-block ul { padding-left: 22px; margin: 8px 0; }
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.pagination button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.84em}
+.pagination button:disabled{background:#cbd5e1;cursor:not-allowed}
+.pagination .indicator{font-size:.82em;color:var(--muted);text-align:center;flex:1;padding:0 10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;padding:22px;border-radius:12px;max-width:460px;width:90%}
+.modal-content h3{color:var(--primary-dark);margin-bottom:12px}
+.modal-content ul{list-style:none;padding-left:0}
+.modal-content li{padding:10px 0;border-bottom:1px solid var(--border)}
+.modal-content li:last-child{border-bottom:none}
+.modal-close{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px}
+.sort-list{display:flex;flex-direction:column;gap:6px}
+.sort-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.sort-item:hover{border-color:var(--primary)}
+.sort-item.selected{border-color:var(--primary);background:#dbeafe}
+.sort-item .pos{background:var(--primary);color:#fff;min-width:24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;flex-shrink:0}
+.sort-item .sort-text{flex:1}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair-col h4{font-size:.85em;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.pair-col{display:flex;flex-direction:column;gap:6px}
+.pair-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;font-size:.92em}
+.pair-item.selected{border-color:var(--primary);background:#dbeafe}
+.pair-item.paired{opacity:.5;cursor:default;border-color:var(--success);background:#d1fae5}
+.pairs-list{margin-top:10px}
+.pair-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f1f5f9;border-radius:6px;margin-bottom:4px;font-size:.85em}
+.pair-row .remove{cursor:pointer;color:var(--danger);font-weight:700;margin-left:6px}
+.page-numbers { display: flex; gap: 3px; flex-wrap: nowrap; justify-content: center; flex: 1; overflow-x: auto; padding: 0 3px; }
+.page-num { min-width: 28px; height: 26px; border: 1px solid var(--border); background: #fff; border-radius: 4px; cursor: pointer; font-size: .7em; display: flex; align-items: center; justify-content: center; padding: 0 4px; white-space: nowrap; transition: all .15s; flex-shrink: 0; }
+.page-num.page-num-e { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+.page-num.page-num-t { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+.page-num.page-num-e:hover { background: #dbeafe; border-color: var(--primary); }
+.page-num.page-num-t:hover { background: #fef3c7; border-color: var(--secondary); }
+.page-num.page-num-e.active { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+.page-num.page-num-t.active { background: var(--secondary); color: #fff; border-color: var(--secondary); font-weight: 600; }
+.page-num:disabled { opacity: 1; cursor: default; }
+.page-num.page-num-e:disabled:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.page-num.page-num-t:disabled:hover { background: var(--secondary); color: #fff; border-color: var(--secondary); }
+@media(max-width:1100px){.main-container{grid-template-columns:180px 1fr}.content-area{padding:18px 20px}}
+@media(max-width:760px){.main-container{grid-template-columns:1fr}.sidebar{display:none}.content-area{padding:16px}header{font-size:.9em}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Math Tutoring by Deni</div>
+  <div class="topic">Topik: Kesebangunan: Hubungan Antar Sudut <span class="tr">Topic: Similarity: Relationship Between Angles</span></div>
+  <button id="classRulesBtn">Aturan Kelas <span class="tr">Class Rules</span></button>
+</header>
+<div class="main-container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content-area">
+    <div id="pageContent"></div>
+    <div class="pagination">
+      <button id="prevBtn">← Sebelumnya <span class="tr">Previous</span></button>
+      <div class="page-numbers" id="pageNums"></div>
+      <button id="nextBtn">Berikutnya <span class="tr">Next</span> →</button>
+    </div>
+  </main>
+</div>
+<div id="classRulesModal" class="modal">
+  <div class="modal-content">
+    <h3>Aturan Kelas <span class="tr">Class Rules</span></h3>
+    <ul>
+      <li>Berbicara secara bergantian <span class="tr">Speak in turn</span></li>
+      <li>Meminta izin jika ingin meninggalkan kelas <span class="tr">Ask permission before leaving the class</span></li>
+      <li>Menyalakan microphone dan camera jika diperlukan <span class="tr">Turn on microphone and camera when needed</span></li>
+    </ul>
+    <button class="modal-close">Tutup <span class="tr">Close</span></button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.renderMathInElement){setTimeout(arguments.callee,50);return;}
+  const sectionsData = {
+    a: {
+      title: 'Spiral Review Warm-up',
+      titleEn: 'Spiral Review Warm-up',
+      time: '00:00 - 00:10',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Pengertian Sudut', pageTitleEn:'Definition of Angles',
+          body:`
+            <p><strong>Sudut</strong> adalah bangun geometri yang dibentuk oleh dua sinar garis yang memiliki titik pangkal yang sama. Satuan untuk mengukur sudut adalah derajat ($^\\circ$).
+              <span class="tr"><strong>Angle</strong> is a geometric shape formed by two rays sharing the same endpoint. The unit to measure angles is degrees ($^\\circ$).</span></p>
+            <div class="math-block"><strong>Jenis-jenis sudut:</strong> <span class="tr">Types of angles:</span>
+              <ul>
+                <li>Sudut Lancip: $<90^\\circ$ <span class="tr">Acute Angle</span></li>
+                <li>Sudut Siku-siku: $=90^\\circ$ <span class="tr">Right Angle</span></li>
+                <li>Sudut Tumpul: $>90^\\circ$ dan $<180^\\circ$ <span class="tr">Obtuse Angle</span></li>
+                <li>Sudut Lurus: $=180^\\circ$ <span class="tr">Straight Angle</span></li>
+              </ul>
+            </div>
+            <div class="illustration">
+              <svg width="260" height="80" viewBox="0 0 260 80">
+                <line x1="20" y1="60" x2="80" y2="60" stroke="#333" stroke-width="2"/>
+                <line x1="20" y1="60" x2="60" y2="20" stroke="#ef4444" stroke-width="2"/>
+                <text x="85" y="65" font-size="12" fill="#666">Lancip <span class="tr">Acute</span></text>
+                
+                <line x1="110" y1="60" x2="170" y2="60" stroke="#333" stroke-width="2"/>
+                <line x1="110" y1="60" x2="110" y2="20" stroke="#10b981" stroke-width="2"/>
+                <text x="150" y="65" font-size="12" fill="#666">Siku-siku <span class="tr">Right</span></text>
+                
+                <line x1="200" y1="60" x2="250" y2="60" stroke="#333" stroke-width="2"/>
+                <line x1="200" y1="60" x2="230" y2="20" stroke="#f59e0b" stroke-width="2"/>
+                <text x="200" y="75" font-size="12" fill="#666">Tumpul <span class="tr">Obtuse</span></text>
+              </svg>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Identifikasi Jenis Sudut', pageTitleEn:'Identify Angle Type', taskType:'radio',
+          question:'Sebuah sudut memiliki besar $120^\\circ$. Termasuk ke dalam jenis sudut apakah itu?', questionEn:'An angle measures $120^\\circ$. What type of angle is it?',
+          options:[
+            {text:'Sudut Lancip <span class="tr">Acute Angle</span>', correct:false},
+            {text:'Sudut Siku-siku <span class="tr">Right Angle</span>', correct:false},
+            {text:'Sudut Tumpul <span class="tr">Obtuse Angle</span>', correct:true},
+            {text:'Sudut Lurus <span class="tr">Straight Angle</span>', correct:false}
+          ],
+          explanation:`<p>Sudut tumpul memiliki nilai lebih besar dari $90^\\circ$ tetapi kurang dari $180^\\circ$. <span class="tr">An obtuse angle is greater than $90^\\circ$ but less than $180^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Menghitung Sudut Lurus', pageTitleEn:'Calculating Straight Angle', taskType:'fill',
+          question:'Pada sebuah garis lurus, terdapat sudut $\\alpha$ dan $\\beta$. Jika $\\alpha = 110^\\circ$, maka $\\beta = \\dots^\\circ$', questionEn:'On a straight line, there are angles $\\alpha$ and $\\beta$. If $\\alpha = 110^\\circ$, then $\\beta = \\dots^\\circ$',
+          correctAnswer:'70', acceptableAnswers:['70'],
+          explanation:`<p>Pada garis lurus, total sudutnya adalah $180^\\circ$. <span class="tr">On a straight line, the total angle is $180^\\circ$.</span></p>
+            <ol><li>$\\alpha + \\beta = 180^\\circ$</li>
+            <li>$110^\\circ + \\beta = 180^\\circ$ <span class="tr">Substitute $\\alpha$</span></li>
+            <li>$\\beta = 180^\\circ - 110^\\circ$</li>
+            <li>$\\beta = 70^\\circ$</li></ol>`
+        },
+        { type:'task', pageTitle:'T3: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jika total dua sudut adalah $90^\\circ$, maka keduanya disebut sudut komplementer. <span class="tr">True or false: If the total of two angles is $90^\\circ$, they are called complementary angles.</span>', questionEn:'Benar atau salah: Jika total dua sudut adalah $90^\\circ$, maka keduanya disebut sudut komplementer. <span class="tr">True or false: If the total of two angles is $90^\\circ$, they are called complementary angles.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Dua sudut yang jika dijumlahkan menghasilkan $90^\\circ$ disebut sudut komplementer. <span class="tr">Two angles that add up to $90^\\circ$ are called complementary angles.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Sudut Berseberangan', pageTitleEn:'Vertically Opposite Angles',
+          body:`
+            <p>Ketika dua garis berpotongan, mereka akan membentuk empat sudut. Sudut-sudut yang saling berhadapan disebut <strong>sudut berseberangan</strong>.
+              <span class="tr">When two lines intersect, they form four angles. Angles that face each other are called <strong>vertically opposite angles</strong>.</span></p>
+            <div class="illustration">
+              <svg width="160" height="120" viewBox="0 0 160 120">
+                <line x1="20" y1="100" x2="140" y2="20" stroke="#333" stroke-width="2"/>
+                <line x1="20" y1="20" x2="140" y2="100" stroke="#333" stroke-width="2"/>
+                <text x="70" y="40" font-size="14" fill="#ef4444" font-weight="bold">a</text>
+                <text x="80" y="90" font-size="14" fill="#ef4444" font-weight="bold">c</text>
+                <text x="60" y="90" font-size="14" fill="#10b981" font-weight="bold">b</text>
+                <text x="80" y="40" font-size="14" fill="#10b981" font-weight="bold">d</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Sudut berseberangan <span class="tr">Vertically opposite angles</span></div>
+            </div>
+            <div class="math-block"><strong>Sifat Sudut Berseberangan:</strong> Sudut yang berseberangan memiliki besar yang sama. <span class="tr">Vertically opposite angles are equal in measure.</span><br>
+              $\\angle a = \\angle c$ <span class="tr">Angle a equals Angle c</span><br>
+              $\\angle b = \\angle d$ <span class="tr">Angle b equals Angle d</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Pasangkan Sudut', pageTitleEn:'Match Angles', taskType:'pairing',
+          question:'Pasangkan sudut berseberangan yang memiliki besar yang sama.', questionEn:'Match the vertically opposite angles that are equal.',
+          pairs:[
+            {left:'$\\angle a = 45^\\circ$', right:'$\\angle c = 45^\\circ$'},
+            {left:'$\\angle b = 135^\\circ$', right:'$\\angle d = 135^\\circ$'},
+            {left:'$\\angle e = 90^\\circ$', right:'$\\angle f = 90^\\circ$'},
+            {left:'$\\angle g = 60^\\circ$', right:'$\\angle h = 60^\\circ$'}
+          ],
+          explanation:`<p>Sudut berseberangan selalu memiliki nilai yang sama. <span class="tr">Vertically opposite angles always have the same value.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Menghitung Sudut Tak Diketahui', pageTitleEn:'Calculating Unknown Angle', taskType:'fill',
+          question:'Dua garis berpotongan. Jika $\\angle 1 = 110^\\circ$, maka $\\angle 3$ (berseberangan dengan $\\angle 1$) adalah $\\dots^\\circ$', questionEn:'Two lines intersect. If $\\angle 1 = 110^\\circ$, then $\\angle 3$ (opposite to $\\angle 1$) is $\\dots^\\circ$',
+          correctAnswer:'110', acceptableAnswers:['110'],
+          explanation:`<p>Karena $\\angle 1$ dan $\\angle 3$ adalah sudut berseberangan, maka $\\angle 1 = \\angle 3 = 110^\\circ$. <span class="tr">Since $\\angle 1$ and $\\angle 3$ are vertically opposite, $\\angle 1 = \\angle 3 = 110^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Pilih Sudut yang Sama', pageTitleEn:'Select Equal Angles', taskType:'checkbox',
+          question:'Pilih semua sudut yang besarnya pasti sama dengan $\\angle x$ pada titik potong dua garis.', questionEn:'Select all angles that are definitely equal to $\\angle x$ at the intersection of two lines.',
+          options:[
+            {text:'Sudut di sebelah $\\angle x$ <span class="tr">Angle next to $\\angle x$</span>', correct:false},
+            {text:'Sudut berseberangan dengan $\\angle x$ <span class="tr">Angle opposite to $\\angle x$</span>', correct:true},
+            {text:'Sudut komplemen dari $\\angle x$ <span class="tr">Complement of $\\angle x$</span>', correct:false},
+            {text:'Sudut yang memiliki titik puncak sama dengan $\\angle x$ dan berhadapan <span class="tr">Angle with the same vertex as $\\angle x$ facing it</span>', correct:true}
+          ],
+          explanation:`<p>Hanya sudut berseberangan yang besarnya pasti sama dengan $\\angle x$. <span class="tr">Only the vertically opposite angle is definitely equal to $\\angle x$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Sudut Sekitar Titik', pageTitleEn:'Angles Around a Point',
+          body:`
+            <p>Beberapa garis yang berpotongan di satu titik akan membentuk sudut-sudut di sekitar titik tersebut. Total dari semua sudut di sekitar titik tersebut selalu $360^\\circ$.
+              <span class="tr">Several lines intersecting at one point will form angles around that point. The total of all angles around a point is always $360^\\circ$.</span></p>
+            <div class="math-block"><strong>Rumus:</strong> $\\angle 1 + \\angle 2 + \\angle 3 + \\dots = 360^\\circ$ <span class="tr">Formula: Angle 1 + Angle 2 + Angle 3 + ... = 360 degrees</span></div>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Jika tiga garis berpotongan membentuk sudut $\\alpha=120^\\circ$, $\\beta=100^\\circ$, dan $\\gamma$. Berapakah nilai $\\gamma$? <span class="tr">If three lines intersect forming angles $\\alpha=120^\\circ$, $\\beta=100^\\circ$, and $\\gamma$. What is the value of $\\gamma$?</span>
+              <ol>
+                <li>$\\alpha + \\beta + \\gamma = 360^\\circ$</li>
+                <li>$120^\\circ + 100^\\circ + \\gamma = 360^\\circ$ <span class="tr">Substitute values</span></li>
+                <li>$220^\\circ + \\gamma = 360^\\circ$ <span class="tr">Simplify</span></li>
+                <li>$\\gamma = 360^\\circ - 220^\\circ$ <span class="tr">Subtract 220</span></li>
+                <li>$\\gamma = 140^\\circ$</li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Mencari Sudut Ketiga', pageTitleEn:'Find the Third Angle', taskType:'fill',
+          question:'Tiga garis berpotongan di satu titik. Diketahui dua sudut besarnya $90^\\circ$ dan $150^\\circ$. Sudut ketiga adalah $\\dots^\\circ$', questionEn:'Three lines intersect at one point. Given two angles measure $90^\\circ$ and $150^\\circ$. The third angle is $\\dots^\\circ$',
+          correctAnswer:'120', acceptableAnswers:['120'],
+          explanation:`<ol><li>Total sudut sekitar titik = $360^\\circ$</li>
+            <li>$90^\\circ + 150^\\circ + x = 360^\\circ$</li>
+            <li>$240^\\circ + x = 360^\\circ$</li>
+            <li>$x = 360^\\circ - 240^\\circ = 120^\\circ$</li></ol>`
+        },
+        { type:'task', pageTitle:'T8: Pilih Total Sudut', pageTitleEn:'Select Total Angle', taskType:'radio',
+          question:'Berapakah total sudut yang terbentuk di sekitar satu titik?', questionEn:'What is the total angle formed around a single point?',
+          options:[
+            {text:'$90^\\circ$', correct:false},
+            {text:'$180^\\circ$', correct:false},
+            {text:'$270^\\circ$', correct:false},
+            {text:'$360^\\circ$', correct:true}
+          ],
+          explanation:`<p>Total sudut di sekitar satu titik adalah $360^\\circ$. <span class="tr">The total angle around a point is $360^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Empat buah sudut siku-siku yang bertemu di satu titik akan menghasilkan total $360^\\circ$. <span class="tr">True or false: Four right angles meeting at a point will yield a total of $360^\\circ$.</span>', questionEn:'Benar atau salah: Empat buah sudut siku-siku yang bertemu di satu titik akan menghasilkan total $360^\\circ$. <span class="tr">True or false: Four right angles meeting at a point will yield a total of $360^\\circ$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Empat kali $90^\\circ$ sama dengan $360^\\circ$. <span class="tr">Four times $90^\\circ$ equals $360^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Soal Cerita Pendek', pageTitleEn:'Short Word Problem', taskType:'fill',
+          question:'Kincir angin memiliki 3 sudut yang berputar. Jika dua sudut kincir sudah berputar sebesar $110^\\circ$ dan $130^\\circ$, sisa sudut untuk menutup satu putaran penuh adalah $\\dots^\\circ$', questionEn:'A windmill has 3 rotating angles. If two angles have rotated $110^\\circ$ and $130^\\circ$, the remaining angle to complete a full rotation is $\\dots^\\circ$',
+          correctAnswer:'120', acceptableAnswers:['120'],
+          explanation:`<p>Satu putaran penuh = $360^\\circ$. <span class="tr">One full rotation = $360^\\circ$.</span></p>
+            <ol><li>$360^\\circ - (110^\\circ + 130^\\circ)$</li>
+            <li>$360^\\circ - 240^\\circ = 120^\\circ$</li></ol>`
+        }
+      ]
+    },
+    b: {
+      title: 'Introduction & Real-World Connection',
+      titleEn: 'Introduction & Real-World Connection',
+      time: '00:10 - 00:15',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Konsep Garis Sejajar', pageTitleEn:'Concept of Parallel Lines',
+          body:`
+            <p>Dua garis dikatakan <strong>sejajar</strong> jika keduanya terletak pada satu bidang dan tidak akan pernah berpotongan, berapapun panjangnya ditarik. Jarak antara kedua garis tersebut selalu sama.
+              <span class="tr">Two lines are said to be <strong>parallel</strong> if they lie on the same plane and never intersect, no matter how far they are drawn. The distance between the two lines is always the same.</span></p>
+            <div class="illustration">
+              <svg width="240" height="80" viewBox="0 0 240 80">
+                <line x1="20" y1="30" x2="220" y2="30" stroke="#2563eb" stroke-width="3"/>
+                <line x1="20" y1="60" x2="220" y2="60" stroke="#f59e0b" stroke-width="3"/>
+                <text x="100" y="20" font-size="12" fill="#2563eb">Garis 1 <span class="tr">Line 1</span></text>
+                <text x="100" y="75" font-size="12" fill="#f59e0b">Garis 2 <span class="tr">Line 2</span></text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Garis sejajar <span class="tr">Parallel lines</span></div>
+            </div>
+            <div class="tip-box"><h4>Simbol <span class="tr">Symbol</span></h4>
+              Garis $k$ sejajar dengan garis $l$ ditulis sebagai $k \\parallel l$.
+              <span class="tr">Line $k$ parallel to line $l$ is written as $k \\parallel l$.</span></div>
+            <div class="example-box"><h4>Contoh Dunia Nyata <span class="tr">Real-World Example</span></h4>
+              Rel kereta api yang membentang lurus ke cakrawala adalah contoh terbaik dari dua garis sejajar. Pinggiran buku yang lurus juga sejajar. <span class="tr">Straight train tracks stretching to the horizon are the best example of two parallel lines. The straight edges of a book are also parallel.</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Contoh Garis Sejajar', pageTitleEn:'Example of Parallel Lines', taskType:'radio',
+          question:'Manakah dari benda berikut yang biasanya memiliki sisi yang sejajar?', questionEn:'Which of the following objects usually has parallel sides?',
+          options:[
+            {text:'Permukaan bola <span class="tr">Surface of a sphere</span>', correct:false},
+            {text:'Rel kereta api <span class="tr">Railway tracks</span>', correct:true},
+            {text:'Roda sepeda <span class="tr">Bicycle wheels</span>', correct:false},
+            {text:'Tanah berbukit <span class="tr">Hilly ground</span>', correct:false}
+          ],
+          explanation:`<p>Rel kereta api dirancang agar kedua relnya sejajar untuk menjaga kereta tetak di jalurnya. <span class="tr">Railway tracks are designed to be parallel to keep the train on its path.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Pilih Benda Sejajar', pageTitleEn:'Select Parallel Objects', taskType:'checkbox',
+          question:'Pilih semua benda yang umumnya memiliki bagian yang sejajar.', questionEn:'Select all objects that commonly have parallel parts.',
+          options:[
+            {text:'Uang koin <span class="tr">Coin money</span>', correct:false},
+            {text:'Papan tulis <span class="tr">Whiteboard</span>', correct:true},
+            {text:'Tiang listrik sejajar <span class="tr">Parallel utility poles</span>', correct:false},
+            {text:'Sisi-sisi penggaris <span class="tr">Edges of a ruler</span>', correct:true}
+          ],
+          explanation:`<p>Papan tulis dan penggaris umumnya memiliki sisi-sisi yang sejajar. <span class="tr">Whiteboards and rulers generally have parallel sides.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Jarak Antar Garis', pageTitleEn:'Distance Between Lines', taskType:'fill',
+          question:'Dua garis sejajar memiliki jarak antar mereka $5 \\text{ cm}$. Jika diukur di tempat lain, jaraknya adalah $\\dots \\text{ cm}$', questionEn:'Two parallel lines have a distance between them of $5 \\text{ cm}$. If measured elsewhere, the distance is $\\dots \\text{ cm}$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Garis sejajar selalu memiliki jarak yang sama di setiap titik. <span class="tr">Parallel lines always have the same distance at every point.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Garis Transversal', pageTitleEn:'Transversal Line',
+          body:`
+            <p>Garis <strong>transversal</strong> adalah sebuah garis yang memotong dua garis atau lebih. Garis transversal ini akan membentuk beberapa sudut di titik potongnya.
+              <span class="tr">A <strong>transversal</strong> line is a line that intersects two or more lines. This transversal line will form several angles at the intersection points.</span></p>
+            <div class="illustration">
+              <svg width="260" height="120" viewBox="0 0 260 120">
+                <line x1="20" y1="30" x2="240" y2="30" stroke="#2563eb" stroke-width="3"/>
+                <line x1="20" y1="90" x2="240" y2="90" stroke="#2563eb" stroke-width="3"/>
+                <line x1="60" y1="110" x2="200" y2="10" stroke="#ef4444" stroke-width="2"/>
+                <text x="230" y="25" font-size="12" fill="#2563eb">k</text>
+                <text x="230" y="85" font-size="12" fill="#2563eb">l</text>
+                <text x="195" y="5" font-size="12" fill="#ef4444">t</text>
+                <circle cx="90" cy="50" r="3" fill="#000"/>
+                <text x="70" y="45" font-size="10">Titik 1</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Garis t transversal memotong k dan l <span class="tr">Line t transversal intersects k and l</span></div>
+            </div>
+            <div class="tip-box"><h4>Sifat Penting <span class="tr">Important Property</span></h4>
+              Jika garis transversal memotong garis sejajar, akan terbentuk 8 sudut di dua titik potong. <span class="tr">If a transversal intersects parallel lines, 8 angles are formed at two intersection points.</span></div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Urutkan Identifikasi', pageTitleEn:'Order the Identification', taskType:'sorting',
+          question:'Urutkan langkah mengidentifikasi garis transversal pada gambar.', questionEn:'Order the steps to identify a transversal line in an image.',
+          items:[
+            'Temukan dua garis yang lurus',
+            'Periksa apakah ada garis lain memotong keduanya',
+            'Identifikasi garis yang memotong sebagai transversal',
+            'Hitung jumlah sudut yang terbentuk'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Langkah dimulai dari mengamati garis, menemukan pemotong, mengidentifikasi, hingga menghitung sudut. <span class="tr">Steps start from observing lines, finding the intersector, identifying, to counting angles.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Garis transversal harus selalu tegak lurus dengan garis yang dipotongnya. <span class="tr">True or false: A transversal line must always be perpendicular to the lines it intersects.</span>', questionEn:'Benar atau salah: Garis transversal harus selalu tegak lurus dengan garis yang dipotongnya. <span class="tr">True or false: A transversal line must always be perpendicular to the lines it intersects.</span>',
+          correctAnswer:'false',
+          explanation:`<p>Garis transversal bisa memotong dengan sudut miring apa pun, tidak harus $90^\\circ$. <span class="tr">A transversal can intersect at any oblique angle, not necessarily $90^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Pasangkan Istilah', pageTitleEn:'Match Terms', taskType:'pairing',
+          question:'Pasangkan istilah dengan definisinya.', questionEn:'Match the terms with their definitions.',
+          pairs:[
+            {left:'Garis Sejajar', right:'Tidak berpotongan, jarak sama'},
+            {left:'Garis Transversal', right:'Memotong dua garis atau lebih'},
+            {left:'Titik Potong', right:'Tempat garis bertemu'},
+            {left:'Sudut', right:'Bentuk dari dua sinar garis'}
+          ],
+          explanation:`<p>Pastikan definisi dipahami sebelum menghitung sudut. <span class="tr">Ensure definitions are understood before calculating angles.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Penamaan Sudut Transversal', pageTitleEn:'Naming Transversal Angles',
+          body:`
+            <p>Ketika garis transversal memotong dua garis sejajar, 8 sudut akan terbentuk. Kita perlu mengetahui posisi sudut-sudut ini:
+              <span class="tr">When a transversal intersects two parallel lines, 8 angles are formed. We need to know the positions of these angles:</span></p>
+            <div class="math-block">
+              <ol>
+                <li><strong>Sudut Dalam (Interior):</strong> Sudut yang berada di antara dua garis sejajar. <span class="tr"><strong>Interior Angles:</strong> Angles between the two parallel lines.</span></li>
+                <li><strong>Sudut Luar (Exterior):</strong> Sudut yang berada di luar dua garis sejajar. <span class="tr"><strong>Exterior Angles:</strong> Angles outside the two parallel lines.</span></li>
+                <li><strong>Sudut Sepihak (Same-side):</strong> Sudut yang berada di sisi yang sama dari garis transversal. <span class="tr"><strong>Same-side Angles:</strong> Angles on the same side of the transversal.</span></li>
+                <li><strong>Sudut Berseberangan (Alternate):</strong> Sudut yang berada di sisi yang berlawanan dari garis transversal. <span class="tr"><strong>Alternate Angles:</strong> Angles on opposite sides of the transversal.</span></li>
+              </ol>
+            </div>
+            <div class="illustration">
+              <svg width="260" height="120" viewBox="0 0 260 120">
+                <line x1="20" y1="30" x2="240" y2="30" stroke="#2563eb" stroke-width="2"/>
+                <line x1="20" y1="90" x2="240" y2="90" stroke="#2563eb" stroke-width="2"/>
+                <line x1="40" y1="110" x2="220" y2="10" stroke="#ef4444" stroke-width="2"/>
+                <text x="90" y="45" font-size="10" fill="#10b981">Dalam</text>
+                <text x="140" y="85" font-size="10" fill="#10b981">Dalam</text>
+                <text x="40" y="25" font-size="10" fill="#f59e0b">Luar</text>
+                <text x="180" y="95" font-size="10" fill="#f59e0b">Luar</text>
+              </svg>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Identifikasi Sudut Dalam', pageTitleEn:'Identify Interior Angle', taskType:'radio',
+          question:'Manakah yang merupakan ciri sudut dalam (interior)?', questionEn:'Which is a characteristic of an interior angle?',
+          options:[
+            {text:'Berada di luar dua garis <span class="tr">Outside two lines</span>', correct:false},
+            {text:'Berada di antara dua garis <span class="tr">Between two lines</span>', correct:true},
+            {text:'Selalu $90^\\circ$ <span class="tr">Always $90^\\circ$</span>', correct:false},
+            {text:'Tidak dibentuk transversal <span class="tr">Not formed by transversal</span>', correct:false}
+          ],
+          explanation:`<p>Sudut dalam berada di area antara dua garis yang dipotong transversal. <span class="tr">Interior angles are in the area between two lines cut by a transversal.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Jumlah Sudut Terbentuk', pageTitleEn:'Number of Angles Formed', taskType:'fill',
+          question:'Garis transversal memotong dua garis sejajar. Berapa total sudut yang terbentuk di kedua titik potong?', questionEn:'A transversal intersects two parallel lines. What is the total number of angles formed at both intersection points?',
+          correctAnswer:'8', acceptableAnswers:['8'],
+          explanation:`<p>Di setiap titik potong terbentuk 4 sudut. Karena ada 2 titik potong, totalnya $4 \\times 2 = 8$ sudut. <span class="tr">At each intersection, 4 angles are formed. Since there are 2 intersections, the total is $4 \\times 2 = 8$ angles.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Pilih Sudut Luar', pageTitleEn:'Select Exterior Angles', taskType:'checkbox',
+          question:'Pilih semua deskripsi yang menunjukkan sudut luar (exterior).', questionEn:'Select all descriptions that indicate an exterior angle.',
+          options:[
+            {text:'Di dalam area antara dua garis <span class="tr">Inside the area between two lines</span>', correct:false},
+            {text:'Di atas garis pertama <span class="tr">Above the first line</span>', correct:true},
+            {text:'Di bawah garis kedua <span class="tr">Below the second line</span>', correct:true},
+            {text:'Tumpang tindih dengan transversal <span class="tr">Overlapping with transversal</span>', correct:false}
+          ],
+          explanation:`<p>Sudut luar berada di luar area antara dua garis sejajar, baik di atas maupun di bawah. <span class="tr">Exterior angles are outside the area between two parallel lines, either above or below.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Hitung Sepihak', pageTitleEn:'Count Same-side', taskType:'fill',
+          question:'Dari 8 sudut yang terbentuk, ada berapa pasang sudut yang berada di sisi sepihak (same-side)? (Dalam angka)', questionEn:'Out of 8 formed angles, how many pairs of angles are on the same-side? (In numbers)',
+          correctAnswer:'2', acceptableAnswers:['2'],
+          explanation:`<p>Ada 2 pasang sudut dalam sepihak dan 2 pasang sudut luar sepihak, namun jika ditanya pasangan yang hanya sepihak umum (1 dalam, 1 luar) atau pasangan spesifik, perhitungannya melibatkan kombinatorial. Namun pada konteks dasar, 4 pasangan sepihak total (2 dalam, 2 luar). Kunci disini mengacu pasangan utama yang berseberangan/sepihak. 2 pasangan dalam, 2 pasangan luar. Maka 2. <span class="tr">There are 2 pairs of same-side interior and 2 pairs of same-side exterior. Usually 2 is referred for same-side interior.</span></p>`
+        }
+      ]
+    },
+    c: {
+      title: 'Review of Prior Knowledge',
+      titleEn: 'Review of Prior Knowledge',
+      time: '00:15 - 00:20',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Persamaan Linear Satu Variabel', pageTitleEn:'Linear Equations in One Variable',
+          body:`
+            <p>Sebelum menyelesaikan soal sudut yang menggunakan aljabar, mari kita ingat kembali <strong>persamaan linear satu variabel</strong>.
+              <span class="tr">Before solving angle problems using algebra, let's review <strong>linear equations in one variable</strong>.</span></p>
+            <div class="math-block"><strong>Bentuk Umum:</strong> $ax + b = c$, di mana $a \\neq 0$. <span class="tr">General Form: $ax + b = c$, where $a \\neq 0$.</span></div>
+            <p>Tujuan kita adalah mengisolasi variabel $x$ di satu sisi. Apa pun yang dilakukan pada ruas kiri, harus dilakukan pada ruas kanan.
+              <span class="tr">Our goal is to isolate the variable $x$ on one side. Whatever is done to the left side must be done to the right side.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Selesaikan $2x - 4 = 10$. <span class="tr">Solve $2x - 4 = 10$.</span>
+              <ol>
+                <li>$2x - 4 = 10$ <span class="tr">Original equation</span></li>
+                <li>$2x = 10 + 4$ <span class="tr">Add 4 to both sides</span></li>
+                <li>$2x = 14$ <span class="tr">Simplify</span></li>
+                <li>$x = \\dfrac{14}{2}$ <span class="tr">Divide by 2</span></li>
+                <li>$x = 7$ <span class="tr">Solution</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Selesaikan Persamaan', pageTitleEn:'Solve the Equation', taskType:'fill',
+          question:'Selesaikan $3x + 5 = 23$. Nilai $x = \\dots$', questionEn:'Solve $3x + 5 = 23$. The value of $x = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<ol><li>$3x + 5 = 23$</li>
+            <li>$3x = 23 - 5$ <span class="tr">Subtract 5</span></li>
+            <li>$3x = 18$ <span class="tr">Simplify</span></li>
+            <li>$x = \\dfrac{18}{3}$ <span class="tr">Divide by 3</span></li>
+            <li>$x = 6$</li></ol>`
+        },
+        { type:'task', pageTitle:'T2: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jika $x + 7 = 15$, maka $x = 8$. <span class="tr">True or false: If $x + 7 = 15$, then $x = 8$.</span>', questionEn:'Benar atau salah: Jika $x + 7 = 15$, maka $x = 8$. <span class="tr">True or false: If $x + 7 = 15$, then $x = 8$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>$x = 15 - 7 = 8$. Pernyataan benar. <span class="tr">$x = 15 - 7 = 8$. Statement is true.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Operasi Invers', pageTitleEn:'Inverse Operation', taskType:'radio',
+          question:'Apa kebalikan (invers) dari operasi $+ 5$?', questionEn:'What is the inverse of the operation $+ 5$?',
+          options:[
+            {text:'$\\times 5$ <span class="tr">Multiply by 5</span>', correct:false},
+            {text:'$- 5$ <span class="tr">Subtract 5</span>', correct:true},
+            {text:'$\\div 5$ <span class="tr">Divide by 5</span>', correct:false},
+            {text:'$+ 5$ <span class="tr">Add 5</span>', correct:false}
+          ],
+          explanation:`<p>Kebalikan dari penjumlahan adalah pengurangan. <span class="tr">The inverse of addition is subtraction.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Variabel di Kedua Sisi', pageTitleEn:'Variables on Both Sides',
+          body:`
+            <p>Ketika variabel $x$ ada di kedua sisi persamaan, kita harus memindahkan semua variabel $x$ ke satu sisi dan konstanta (angka) ke sisi lainnya.
+              <span class="tr">When the variable $x$ is on both sides of the equation, we must move all $x$ terms to one side and constants (numbers) to the other side.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Selesaikan $4x + 3 = 2x + 11$. <span class="tr">Solve $4x + 3 = 2x + 11$.</span>
+              <ol>
+                <li>$4x - 2x + 3 = 11$ <span class="tr">Subtract $2x$ from both sides</span></li>
+                <li>$2x + 3 = 11$ <span class="tr">Simplify</span></li>
+                <li>$2x = 11 - 3$ <span class="tr">Subtract 3</span></li>
+                <li>$2x = 8$ <span class="tr">Simplify</span></li>
+                <li>$x = 4$ <span class="tr">Divide by 2</span></li>
+              </ol>
+            </div>
+            <div class="tip-box"><h4>Tips <span class="tr">Tip</span></h4>
+              Pindahkan variabel ke sisi yang membuat koefisien $x$ tetap positif untuk mempermudah perhitungan.
+              <span class="tr">Move the variable to the side that keeps the $x$ coefficient positive to simplify calculation.</span></div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Urutkan Langkah', pageTitleEn:'Order the Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $5x - 2 = 2x + 10$.', questionEn:'Order the steps to solve $5x - 2 = 2x + 10$.',
+          items:[
+            '$5x - 2x - 2 = 10$',
+            '$3x - 2 = 10$',
+            '$3x = 12$',
+            '$x = 4$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<ol><li>Kurangi $2x$ dari kedua sisi.</li><li>Sederhanakan.</li><li>Tambah 2 ke kedua sisi.</li><li>Bagi dengan 3.</li></ol>`
+        },
+        { type:'task', pageTitle:'T5: Selesaikan Persamaan Dua Sisi', pageTitleEn:'Solve Two-Sided Equation', taskType:'fill',
+          question:'Selesaikan $4x - 5 = 2x + 11$. Nilai $x = \\dots$', questionEn:'Solve $4x - 5 = 2x + 11$. The value of $x = \\dots$',
+          correctAnswer:'8', acceptableAnswers:['8'],
+          explanation:`<ol><li>$2x - 5 = 11$ <span class="tr">Subtract $2x$</span></li>
+            <li>$2x = 16$ <span class="tr">Add 5</span></li>
+            <li>$x = 8$ <span class="tr">Divide by 2</span></li></ol>`
+        },
+        { type:'task', pageTitle:'T6: Pasangkan Langkah', pageTitleEn:'Match the Steps', taskType:'pairing',
+          question:'Pasangkan persamaan dengan langkah selanjutnya yang benar.', questionEn:'Match the equation with the correct next step.',
+          pairs:[
+            {left:'$x + 4 = 10$', right:'$x = 6$'},
+            {left:'$2x = 14$', right:'$x = 7$'},
+            {left:'$x - 3 = 5$', right:'$x = 8$'},
+            {left:'$3x = 21$', right:'$x = 7$'}
+          ],
+          explanation:`<p>Lakukan operasi invers dengan tepat. <span class="tr">Perform the inverse operation correctly.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Sudut & Aljabar', pageTitleEn:'Angles & Algebra',
+          body:`
+            <p>Sifat sudut sering digabungkan dengan aljabar. Jika dua sudut saling berpelurus (membentuk garis lurus), jumlahnya $180^\\circ$.
+              <span class="tr">Angle properties are often combined with algebra. If two angles form a straight line, their sum is $180^\\circ$.</span></p>
+            <div class="math-block"><strong>Rumus:</strong> $\\angle 1 + \\angle 2 = 180^\\circ$ <span class="tr">Formula: Angle 1 + Angle 2 = 180 degrees</span></div>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Dua sudut berpelurus, $\\angle A = x^\\circ$ dan $\\angle B = 2x^\\circ$. Tentukan nilai $x$ dan besar $\\angle B$.
+              <span class="tr">Two angles form a straight line, $\\angle A = x^\\circ$ and $\\angle B = 2x^\\circ$. Find $x$ and the measure of $\\angle B$.</span>
+              <ol>
+                <li>$x + 2x = 180^\\circ$ <span class="tr">Sum of straight angles</span></li>
+                <li>$3x = 180^\\circ$ <span class="tr">Combine like terms</span></li>
+                <li>$x = \\dfrac{180^\\circ}{3} = 60^\\circ$ <span class="tr">Divide by 3</span></li>
+                <li>$\\angle B = 2(60^\\circ) = 120^\\circ$ <span class="tr">Substitute $x$ to find Angle B</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Mencari Nilai x', pageTitleEn:'Find the Value of x', taskType:'fill',
+          question:'Dua sudut berpelurus: $x^\\circ$ dan $2x^\\circ$. Nilai $x = \\dots^\\circ$', questionEn:'Two angles form a straight line: $x^\\circ$ and $2x^\\circ$. Value of $x = \\dots^\\circ$',
+          correctAnswer:'60', acceptableAnswers:['60'],
+          explanation:`<ol><li>$x + 2x = 180^\\circ$</li>
+            <li>$3x = 180^\\circ$</li>
+            <li>$x = 60^\\circ$</li></ol>`
+        },
+        { type:'task', pageTitle:'T8: Sifat Persamaan', pageTitleEn:'Properties of Equations', taskType:'checkbox',
+          question:'Pilih semua operasi yang TIDAK mengubah nilai kebenaran sebuah persamaan.', questionEn:'Select all operations that DO NOT change the truth value of an equation.',
+          options:[
+            {text:'Menambahkan angka yang sama ke kedua sisi <span class="tr">Adding the same number to both sides</span>', correct:true},
+            {text:'Mengurangi angka yang sama ke kedua sisi <span class="tr">Subtracting the same number from both sides</span>', correct:true},
+            {text:'Mengalikan kedua sisi dengan $0$ <span class="tr">Multiplying both sides by 0</span>', correct:false},
+            {text:'Membagi kedua sisi dengan $x$ <span class="tr">Dividing both sides by $x$</span>', correct:false}
+          ],
+          explanation:`<p>Penjumlahan dan pengurangan angka yang sama mempertahankan keseimbangan. Mengalikan dengan 0 membuat persamaan menjadi $0=0$, dan membagi dengan $x$ bisa salah jika $x=0$. <span class="tr">Adding/subtracting same numbers maintains balance. Multiplying by 0 makes it $0=0$, and dividing by $x$ is wrong if $x=0$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jika $4x = 80^\\circ$, maka $x = 20^\\circ$. <span class="tr">True or false: If $4x = 80^\\circ$, then $x = 20^\\circ$.</span>', questionEn:'Benar atau salah: Jika $4x = 80^\\circ$, maka $x = 20^\\circ$. <span class="tr">True or false: If $4x = 80^\\circ$, then $x = 20^\\circ$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>$x = \\dfrac{80^\\circ}{4} = 20^\\circ$. Pernyataan benar. <span class="tr">$x = \\dfrac{80^\\circ}{4} = 20^\\circ$. Statement is true.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Mencari Total Sudut', pageTitleEn:'Find Total Angle', taskType:'fill',
+          question:'Dua sudut berseberangan memiliki besar $(3x)^\\circ$ dan $(2x + 20)^\\circ$. Jika kedua sudut sama besar, maka nilai $x = \\dots$', questionEn:'Two vertically opposite angles measure $(3x)^\\circ$ and $(2x + 20)^\\circ$. If both angles are equal, then $x = \\dots$',
+          correctAnswer:'20', acceptableAnswers:['20'],
+          explanation:`<ol><li>$3x = 2x + 20$ <span class="tr">Set equal</span></li>
+            <li>$3x - 2x = 20$ <span class="tr">Subtract $2x$</span></li>
+            <li>$x = 20$</li></ol>`
+        }
+      ]
+    },
+    d: {
+      title: 'Problem Introduction',
+      titleEn: 'Problem Introduction',
+      time: '00:20 - 00:30',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Sudut Sehadap', pageTitleEn:'Corresponding Angles',
+          body:`
+            <p>Ketika sebuah garis transversal memotong dua garis sejajar, akan terbentuk 8 sudut. <strong>Sudut Sehadap (Corresponding Angles)</strong> adalah sudut-sudut yang menempati posisi sudut yang sama di kedua titik potong.
+              <span class="tr">When a transversal cuts two parallel lines, 8 angles are formed. <strong>Corresponding Angles</strong> are angles that occupy the same corner position at both intersections.</span></p>
+            <div class="illustration">
+              <svg width="280" height="150" viewBox="0 0 280 150">
+                <line x1="20" y1="40" x2="260" y2="40" stroke="#2563eb" stroke-width="3"/>
+                <line x1="20" y1="110" x2="260" y2="110" stroke="#2563eb" stroke-width="3"/>
+                <line x1="100" y1="140" x2="100" y2="10" stroke="#ef4444" stroke-width="2"/>
+                <text x="75" y="35" font-size="14" fill="#333" font-weight="bold">1</text>
+                <text x="110" y="35" font-size="14" fill="#333" font-weight="bold">2</text>
+                <text x="110" y="55" font-size="14" fill="#333" font-weight="bold">3</text>
+                <text x="75" y="55" font-size="14" fill="#333" font-weight="bold">4</text>
+                <text x="75" y="105" font-size="14" fill="#333" font-weight="bold">5</text>
+                <text x="110" y="105" font-size="14" fill="#333" font-weight="bold">6</text>
+                <text x="110" y="125" font-size="14" fill="#333" font-weight="bold">7</text>
+                <text x="75" y="125" font-size="14" fill="#333" font-weight="bold">8</text>
+                <circle cx="95" cy="45" r="8" fill="none" stroke="#10b981" stroke-width="2"/>
+                <circle cx="95" cy="115" r="8" fill="none" stroke="#10b981" stroke-width="2"/>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Sudut 1 dan 5 sehadap <span class="tr">Angles 1 and 5 are corresponding</span></div>
+            </div>
+            <div class="math-block"><strong>Sifat Sudut Sehadap:</strong> Jika dua garis sejajar dipotong transversal, maka sudut-sudut sehadap besarnya sama.
+              <span class="tr"><strong>Corresponding Angles Postulate:</strong> If two parallel lines are cut by a transversal, corresponding angles are equal.</span><br>
+              $\\angle 1 = \\angle 5$, $\\angle 2 = \\angle 6$, $\\angle 3 = \\angle 7$, $\\angle 4 = \\angle 8$ <span class="tr">Angle 1 = Angle 5, etc.</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Hitung Sudut Sehadap', pageTitleEn:'Calculate Corresponding Angle', taskType:'fill',
+          question:'Diketahui $\\angle 1 = 70^\\circ$. Maka besar $\\angle 5 = \\dots^\\circ$', questionEn:'Given $\\angle 1 = 70^\\circ$. Then $\\angle 5 = \\dots^\\circ$',
+          correctAnswer:'70', acceptableAnswers:['70'],
+          explanation:`<p>$\\angle 1$ dan $\\angle 5$ adalah sudut sehadap. Karena garis sejajar, $\\angle 1 = \\angle 5 = 70^\\circ$. <span class="tr">Angles 1 and 5 are corresponding. Since lines are parallel, $\\angle 1 = \\angle 5 = 70^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Pasangan Sehadap', pageTitleEn:'Corresponding Pair', taskType:'radio',
+          question:'Manakah dari pasangan berikut yang merupakan sudut sehadap?', questionEn:'Which of the following pairs are corresponding angles?',
+          options:[
+            {text:'$\\angle 2$ dan $\\angle 4$ <span class="tr">Angle 2 and Angle 4</span>', correct:false},
+            {text:'$\\angle 3$ dan $\\angle 6$ <span class="tr">Angle 3 and Angle 6</span>', correct:false},
+            {text:'$\\angle 4$ dan $\\angle 8$ <span class="tr">Angle 4 and Angle 8</span>', correct:true},
+            {text:'$\\angle 1$ dan $\\angle 3$ <span class="tr">Angle 1 and Angle 3</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 4$ dan $\\angle 8$ berada di posisi yang sama (kiri bawah) pada masing-masing titik potong. <span class="tr">Angle 4 and Angle 8 are in the same position (bottom left) at each intersection.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jumlah dua sudut sehadap selalu $180^\\circ$. <span class="tr">True or false: The sum of two corresponding angles is always $180^\\circ$.</span>', questionEn:'Benar atau salah: Jumlah dua sudut sehadap selalu $180^\\circ$. <span class="tr">True or false: The sum of two corresponding angles is always $180^\\circ$.</span>',
+          correctAnswer:'false',
+          explanation:`<p>Sudut sehadap besarnya sama besar, bukan dijumlahkan menjadi $180^\\circ$. <span class="tr">Corresponding angles are equal in measure, not added to $180^\\circ$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Sudut Dalam Berseberangan', pageTitleEn:'Alternate Interior Angles',
+          body:`
+            <p><strong>Sudut Dalam Berseberangan (Alternate Interior Angles)</strong> adalah pasangan sudut dalam yang berada di sisi yang berlawanan dari garis transversal.
+              <span class="tr"><strong>Alternate Interior Angles</strong> are pairs of interior angles on opposite sides of the transversal line.</span></p>
+            <div class="illustration">
+              <svg width="280" height="150" viewBox="0 0 280 150">
+                <line x1="20" y1="40" x2="260" y2="40" stroke="#2563eb" stroke-width="3"/>
+                <line x1="20" y1="110" x2="260" y2="110" stroke="#2563eb" stroke-width="3"/>
+                <line x1="100" y1="140" x2="100" y2="10" stroke="#ef4444" stroke-width="2"/>
+                <text x="110" y="55" font-size="14" fill="#333" font-weight="bold">3</text>
+                <text x="75" y="105" font-size="14" fill="#333" font-weight="bold">5</text>
+                <text x="75" y="55" font-size="14" fill="#333" font-weight="bold">4</text>
+                <text x="110" y="105" font-size="14" fill="#333" font-weight="bold">6</text>
+                <circle cx="105" cy="50" r="8" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="95" cy="110" r="8" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="95" cy="50" r="8" fill="none" stroke="#10b981" stroke-width="2"/>
+                <circle cx="105" cy="110" r="8" fill="none" stroke="#10b981" stroke-width="2"/>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Sudut 3 & 6, dan 4 & 5 <span class="tr">Angles 3 & 6, and 4 & 5</span></div>
+            </div>
+            <div class="math-block"><strong>Sifat:</strong> Jika garis sejajar, sudut dalam berseberangan besarnya sama.
+              <span class="tr"><strong>Property:</strong> If lines are parallel, alternate interior angles are equal.</span><br>
+              $\\angle 3 = \\angle 6$ dan $\\angle 4 = \\angle 5$ <span class="tr">Angle 3 = Angle 6 and Angle 4 = Angle 5</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Hitung Berseberangan', pageTitleEn:'Calculate Alternate Interior', taskType:'fill',
+          question:'Diketahui $\\angle 4 = 110^\\circ$. Maka besar $\\angle 5 = \\dots^\\circ$', questionEn:'Given $\\angle 4 = 110^\\circ$. Then $\\angle 5 = \\dots^\\circ$',
+          correctAnswer:'110', acceptableAnswers:['110'],
+          explanation:`<p>$\\angle 4$ dan $\\angle 5$ adalah sudut dalam berseberangan. Mereka besarnya sama, jadi $\\angle 5 = 110^\\circ$. <span class="tr">Angle 4 and Angle 5 are alternate interior angles. They are equal, so $\\angle 5 = 110^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Pasangkan Sudut', pageTitleEn:'Match Angles', taskType:'pairing',
+          question:'Pasangkan sudut dalam berseberangan yang besarnya sama.', questionEn:'Match the equal alternate interior angles.',
+          pairs:[
+            {left:'$\\angle 3 = 60^\\circ$', right:'$\\angle 6 = 60^\\circ$'},
+            {left:'$\\angle 4 = 120^\\circ$', right:'$\\angle 5 = 120^\\circ$'},
+            {left:'$\\angle 3 = 90^\\circ$', right:'$\\angle 6 = 90^\\circ$'},
+            {left:'$\\angle 4 = 45^\\circ$', right:'$\\angle 5 = 45^\\circ$'}
+          ],
+          explanation:`<p>Ingat pasangan dalam berseberangan: 3 & 6, dan 4 & 5. <span class="tr">Remember the alternate interior pairs: 3 & 6, and 4 & 5.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Pilih Sudut yang Sama', pageTitleEn:'Select Equal Angles', taskType:'checkbox',
+          question:'Jika $\\angle 2 = 50^\\circ$, pilih semua sudut yang besarnya juga $50^\\circ$. (Asumsikan garis sejajar)', questionEn:'If $\\angle 2 = 50^\\circ$, select all angles that also measure $50^\\circ$. (Assume parallel lines)',
+          options:[
+            {text:'$\\angle 1$ <span class="tr">Angle 1</span>', correct:false},
+            {text:'$\\angle 3$ <span class="tr">Angle 3</span>', correct:false},
+            {text:'$\\angle 6$ <span class="tr">Angle 6</span>', correct:true},
+            {text:'$\\angle 7$ <span class="tr">Angle 7</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2$ sehadap dengan $\\angle 6$, jadi $\\angle 6 = 50^\\circ$. <span class="tr">$\\angle 2$ corresponds to $\\angle 6$, so $\\angle 6 = 50^\\circ$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Sepihak & Luar Berseberangan', pageTitleEn:'Same-Side & Alternate Exterior',
+          body:`
+            <p>Selain sehadap dan dalam berseberangan, ada dua jenis hubungan sudut lain:
+              <span class="tr">Besides corresponding and alternate interior, there are two other angle relationships:</span></p>
+            <div class="math-block">
+              <ol>
+                <li><strong>Sudut Luar Berseberangan (Alternate Exterior):</strong> Di luar garis sejajar, sisi berlawanan. Besarnya sama. <span class="tr"><strong>Alternate Exterior:</strong> Outside parallel lines, opposite sides. Equal.</span><br>Contoh: $\\angle 1 = \\angle 8$, $\\angle 2 = \\angle 7$</li>
+                <li><strong>Sudut Dalam Sepihak (Co-Interior / Same-Side Interior):</strong> Di dalam garis sejajar, sisi yang sama. <strong>Jumlahnya $180^\\circ$ (berpelurus).</strong> <span class="tr"><strong>Co-Interior:</strong> Inside parallel lines, same side. <strong>Sum is $180^\\circ$ (supplementary).</strong></span><br>Contoh: $\\angle 3 + \\angle 5 = 180^\\circ$, $\\angle 4 + \\angle 6 = 180^\\circ$</li>
+              </ol>
+            </div>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Jika $\\angle 3 = 70^\\circ$, maka $\\angle 5 = 180^\\circ - 70^\\circ = 110^\\circ$.
+              <span class="tr">If $\\angle 3 = 70^\\circ$, then $\\angle 5 = 180^\\circ - 70^\\circ = 110^\\circ$.</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Hitung Sepihak', pageTitleEn:'Calculate Co-Interior', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 80^\\circ$. Maka besar $\\angle 5 = \\dots^\\circ$ (Dalam Sepihak)', questionEn:'Given $\\angle 3 = 80^\\circ$. Then $\\angle 5 = \\dots^\\circ$ (Co-Interior)',
+          correctAnswer:'100', acceptableAnswers:['100'],
+          explanation:`<p>Sudut dalam sepihak berjumlah $180^\\circ$. $\\angle 5 = 180^\\circ - 80^\\circ = 100^\\circ$. <span class="tr">Co-interior angles sum to $180^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Hitung Luar Berseberangan', pageTitleEn:'Calculate Alternate Exterior', taskType:'radio',
+          question:'Diketahui $\\angle 2 = 60^\\circ$. Maka besar $\\angle 7 = \\dots^\\circ$', questionEn:'Given $\\angle 2 = 60^\\circ$. Then $\\angle 7 = \\dots^\\circ$',
+          options:[
+            {text:'$60^\\circ$ <span class="tr">60 degrees</span>', correct:true},
+            {text:'$120^\\circ$ <span class="tr">120 degrees</span>', correct:false},
+            {text:'$90^\\circ$ <span class="tr">90 degrees</span>', correct:false},
+            {text:'$180^\\circ$ <span class="tr">180 degrees</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2$ dan $\\angle 7$ adalah sudut luar berseberangan, sehingga besarnya sama, yaitu $60^\\circ$. <span class="tr">Angle 2 and Angle 7 are alternate exterior angles, so they are equal, $60^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Sudut dalam sepihak pada garis sejajar selalu memiliki besar yang sama. <span class="tr">True or false: Co-interior angles on parallel lines always have the same measure.</span>', questionEn:'Benar atau salah: Sudut dalam sepihak pada garis sejajar selalu memiliki besar yang sama. <span class="tr">True or false: Co-interior angles on parallel lines always have the same measure.</span>',
+          correctAnswer:'false',
+          explanation:`<p>Sudut dalam sepihak berjumlah $180^\\circ$, bukan besarnya sama. <span class="tr">Co-interior angles sum to $180^\\circ$, not equal in measure.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Urutkan Sifat Sudut', pageTitleEn:'Order Angle Properties', taskType:'sorting',
+          question:'Urutkan langkah mencari $\\angle 6$ jika $\\angle 3 = 50^\\circ$ (Dalam Sepihak).', questionEn:'Order the steps to find $\\angle 6$ if $\\angle 3 = 50^\\circ$ (Co-Interior).',
+          items:[
+            'Identifikasi $\\angle 3$ dan $\\angle 6$ sepihak',
+            'Ketahui totalnya $180^\\circ$',
+            'Kurangi $180^\\circ$ dengan $50^\\circ$',
+            'Hasilnya $\\angle 6 = 130^\\circ$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Karena sepihak, jumlah keduanya $180^\\circ$, sehingga $180^\\circ - 50^\\circ = 130^\\circ$. <span class="tr">Since they are co-interior, they sum to $180^\\circ$, so $180^\\circ - 50^\\circ = 130^\\circ$.</span></p>`
+        }
+      ]
+    },
+    e: {
+      title: 'Guided Practice',
+      titleEn: 'Guided Practice',
+      time: '00:30 - 00:45',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Mencari x dengan Sudut Sehadap', pageTitleEn:'Finding x with Corresponding Angles',
+          body:`
+            <p>Kita bisa menggunakan sifat sudut sehadap untuk mencari nilai $x$ yang tidak diketahui pada soal aljabar sudut.
+              <span class="tr">We can use corresponding angle properties to find the unknown value of $x$ in angle algebra problems.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Dua garis sejajar dipotong transversal. $\\angle 1 = 2x + 10^\\circ$ dan $\\angle 5 = 3x - 20^\\circ$. Tentukan nilai $x$.
+              <span class="tr">Two parallel lines cut by a transversal. $\\angle 1 = 2x + 10^\\circ$ and $\\angle 5 = 3x - 20^\\circ$. Find $x$.</span>
+              <ol>
+                <li>$\\angle 1 = \\angle 5$ <span class="tr">Corresponding angles are equal</span></li>
+                <li>$2x + 10 = 3x - 20$ <span class="tr">Substitute values</span></li>
+                <li>$10 + 20 = 3x - 2x$ <span class="tr">Move $x$ to one side, constants to other</span></li>
+                <li>$30 = x$ <span class="tr">Simplify</span></li>
+                <li>$x = 30$ <span class="tr">Solution</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Selesaikan x Sehadap', pageTitleEn:'Solve Corresponding x', taskType:'fill',
+          question:'Diketahui $\\angle 2 = 4x^\\circ$ dan $\\angle 6 = 3x + 30^\\circ$ (Sehadap). Nilai $x = \\dots^\\circ$', questionEn:'Given $\\angle 2 = 4x^\\circ$ and $\\angle 6 = 3x + 30^\\circ$ (Corresponding). Value of $x = \\dots^\\circ$',
+          correctAnswer:'30', acceptableAnswers:['30'],
+          explanation:`<ol><li>$4x = 3x + 30$</li><li>$4x - 3x = 30$</li><li>$x = 30$</li></ol>`
+        },
+        { type:'task', pageTitle:'T2: Hitung Sudutnya', pageTitleEn:'Calculate the Angle', taskType:'radio',
+          question:'Dari soal sebelumnya, jika $x = 30^\\circ$, maka besar $\\angle 2 = \\dots^\\circ$', questionEn:'From previous problem, if $x = 30^\\circ$, then $\\angle 2 = \\dots^\\circ$',
+          options:[
+            {text:'$90^\\circ$ <span class="tr">90 degrees</span>', correct:false},
+            {text:'$120^\\circ$ <span class="tr">120 degrees</span>', correct:true},
+            {text:'$150^\\circ$ <span class="tr">150 degrees</span>', correct:false},
+            {text:'$60^\\circ$ <span class="tr">60 degrees</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2 = 4x = 4(30) = 120^\\circ$. <span class="tr">$\\angle 2 = 4x = 4(30) = 120^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jika $\\angle 3 = 2x$ dan $\\angle 7 = 2x$, maka garis sudah pasti sejajar dan $x$ bisa bernilai apa saja. <span class="tr">True or false: If $\\angle 3 = 2x$ and $\\angle 7 = 2x$, lines are definitely parallel and $x$ can be anything.</span>', questionEn:'Benar atau salah: Jika $\\angle 3 = 2x$ dan $\\angle 7 = 2x$, maka garis sudah pasti sejajar dan $x$ bisa bernilai apa saja. <span class="tr">True or false: If $\\angle 3 = 2x$ and $\\angle 7 = 2x$, lines are definitely parallel and $x$ can be anything.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Karena $\\angle 3 = \\angle 7$ (sehadap), garis sejajar. Nilai $x$ bisa apa pun karena persamaan selalu benar ($2x = 2x$). <span class="tr">Since $\\angle 3 = \\angle 7$ (corresponding), lines are parallel. $x$ can be anything as it's always true ($2x = 2x$).</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Mencari x dengan Berseberangan', pageTitleEn:'Finding x with Alternate Angles',
+          body:`
+            <p>Sama seperti sudut sehadap, sudut dalam berseberangan juga besarnya sama. Ini sangat berguna untuk mencari $x$.
+              <span class="tr">Like corresponding angles, alternate interior angles are also equal. This is very useful for finding $x$.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              $\\angle 3 = 4x + 2^\\circ$ dan $\\angle 6 = 2x + 22^\\circ$. Tentukan nilai $x$.
+              <span class="tr">$\\angle 3 = 4x + 2^\\circ$ and $\\angle 6 = 2x + 22^\\circ$. Find $x$.</span>
+              <ol>
+                <li>$\\angle 3 = \\angle 6$ <span class="tr">Alternate interior angles are equal</span></li>
+                <li>$4x + 2 = 2x + 22$ <span class="tr">Substitute</span></li>
+                <li>$4x - 2x = 22 - 2$ <span class="tr">Move terms</span></li>
+                <li>$2x = 20$ <span class="tr">Simplify</span></li>
+                <li>$x = 10$ <span class="tr">Divide by 2</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Selesaikan x Berseberangan', pageTitleEn:'Solve Alternate x', taskType:'fill',
+          question:'Diketahui $\\angle 4 = 5x^\\circ$ dan $\\angle 5 = 3x + 20^\\circ$ (Dalam Berseberangan). Nilai $x = \\dots^\\circ$', questionEn:'Given $\\angle 4 = 5x^\\circ$ and $\\angle 5 = 3x + 20^\\circ$ (Alternate Interior). Value of $x = \\dots^\\circ$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<ol><li>$5x = 3x + 20$</li><li>$2x = 20$</li><li>$x = 10$</li></ol>`
+        },
+        { type:'task', pageTitle:'T5: Hitung Sudut Berseberangan', pageTitleEn:'Calculate Alternate Angle', taskType:'fill',
+          question:'Dari soal sebelumnya, jika $x = 10^\\circ$, maka besar $\\angle 4 = \\dots^\\circ$', questionEn:'From previous problem, if $x = 10^\\circ$, then $\\angle 4 = \\dots^\\circ$',
+          correctAnswer:'50', acceptableAnswers:['50'],
+          explanation:`<p>$\\angle 4 = 5x = 5(10) = 50^\\circ$. <span class="tr">$\\angle 4 = 5x = 5(10) = 50^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Urutkan Langkah Berseberangan', pageTitleEn:'Order Alternate Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $3x + 5 = 2x + 12$ (Dalam Berseberangan).', questionEn:'Order steps to solve $3x + 5 = 2x + 12$ (Alternate Interior).',
+          items:[
+            '$3x - 2x + 5 = 12$',
+            '$x + 5 = 12$',
+            '$x = 12 - 5$',
+            '$x = 7$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Kurangi $2x$, sederhanakan, kurangi 5, lalu bagi. <span class="tr">Subtract $2x$, simplify, subtract 5, then divide.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Mencari x dengan Sepihak', pageTitleEn:'Finding x with Same-Side Interior',
+          body:`
+            <p><strong>Perbedaan utama:</strong> Sudut dalam sepihak (Co-Interior) tidak sama besar, melainkan <strong>berjumlah $180^\\circ$</strong>.
+              <span class="tr"><strong>Key difference:</strong> Co-Interior angles are not equal, but <strong>sum up to $180^\\circ$</strong>.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              $\\angle 4 = 2x^\\circ$ dan $\\angle 6 = 3x + 30^\\circ$ (Sepihak). Tentukan $x$.
+              <span class="tr">$\\angle 4 = 2x^\\circ$ and $\\angle 6 = 3x + 30^\\circ$ (Co-Interior). Find $x$.</span>
+              <ol>
+                <li>$\\angle 4 + \\angle 6 = 180^\\circ$ <span class="tr">Co-interior sum is 180</span></li>
+                <li>$2x + 3x + 30 = 180$ <span class="tr">Substitute</span></li>
+                <li>$5x + 30 = 180$ <span class="tr">Combine like terms</span></li>
+                <li>$5x = 180 - 30$ <span class="tr">Subtract 30</span></li>
+                <li>$5x = 150$ <span class="tr">Simplify</span></li>
+                <li>$x = 30$ <span class="tr">Divide by 5</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Selesaikan Persamaan Sepihak', pageTitleEn:'Solve Co-Interior Equation', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 4x^\\circ$ dan $\\angle 5 = 2x + 30^\\circ$ (Sepihak). Persamaan yang terbentuk jika disubstitusi adalah $6x + 30 = \\dots$', questionEn:'Given $\\angle 3 = 4x^\\circ$ and $\\angle 5 = 2x + 30^\\circ$ (Co-Interior). The formed equation when substituted is $6x + 30 = \\dots$',
+          correctAnswer:'180', acceptableAnswers:['180'],
+          explanation:`<p>Karena sepihak, $\\angle 3 + \\angle 5 = 180^\\circ$. Sehingga $4x + 2x + 30 = 180 \\Rightarrow 6x + 30 = 180$. <span class="tr">Since co-interior, $\\angle 3 + \\angle 5 = 180^\\circ$. Thus $4x + 2x + 30 = 180 \\Rightarrow 6x + 30 = 180$.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Mencari x Sepihak', pageTitleEn:'Find Co-Interior x', taskType:'radio',
+          question:'Dari persamaan $6x + 30 = 180$, maka nilai $6x = \\dots$', questionEn:'From the equation $6x + 30 = 180$, then $6x = \\dots$',
+          options:[
+            {text:'$150$ <span class="tr">150</span>', correct:true},
+            {text:'$180$ <span class="tr">180</span>', correct:false},
+            {text:'$210$ <span class="tr">210</span>', correct:false},
+            {text:'$120$ <span class="tr">120</span>', correct:false}
+          ],
+          explanation:`<p>$6x = 180 - 30 = 150$. <span class="tr">$6x = 180 - 30 = 150$.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Pasangkan Aturan', pageTitleEn:'Match Rules', taskType:'pairing',
+          question:'Pasangkan pasangan sudut dengan aturannya yang benar.', questionEn:'Match the angle pairs with their correct rule.',
+          pairs:[
+            {left:'Sudut Sehadap', right:'Besarnya sama'},
+            {left:'Sudut Dalam Berseberangan', right:'Besarnya sama'},
+            {left:'Sudut Dalam Sepihak', right:'Jumlahnya 180 derajat'},
+            {left:'Sudut Luar Berseberangan', right:'Besarnya sama'}
+          ],
+          explanation:`<p>Hanya sudut sepihak yang berjumlah $180^\\circ$. <span class="tr">Only same-side angles sum to $180^\\circ$.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Hitung Sudut Sepihak', pageTitleEn:'Calculate Co-Interior Angle', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 3x^\\circ$ (Sepihak dengan $\\angle 5$). Jika $x = 30^\\circ$, maka besar $\\angle 3 = \\dots^\\circ$', questionEn:'Given $\\angle 3 = 3x^\\circ$ (Co-Interior with $\\angle 5$). If $x = 30^\\circ$, then $\\angle 3 = \\dots^\\circ$',
+          correctAnswer:'90', acceptableAnswers:['90'],
+          explanation:`<p>$\\angle 3 = 3x = 3(30) = 90^\\circ$. <span class="tr">$\\angle 3 = 3x = 3(30) = 90^\\circ$.</span></p>`
+        }
+      ]
+    },
+    f: {
+      title: 'Independent Practice',
+      titleEn: 'Independent Practice',
+      time: '00:45 - 00:55',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Mengkombinasikan Sifat Sudut & Aljabar', pageTitleEn:'Combining Angle Properties & Algebra',
+          body:`
+            <p>Seringkali, kita perlu menggunakan beberapa sifat sudut sekaligus untuk menyelesaikan persamaan aljabar.
+              <span class="tr">Often, we need to use multiple angle properties simultaneously to solve algebraic equations.</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Diketahui garis sejajar dipotong transversal. $\\angle 4 = 3x^\\circ$ dan $\\angle 6 = (x + 40)^\\circ$. Tentukan nilai $x$.
+              <span class="tr">Given parallel lines cut by a transversal. $\\angle 4 = 3x^\\circ$ and $\\angle 6 = (x + 40)^\\circ$. Find $x$.</span>
+              <ol>
+                <li>$\\angle 4$ dan $\\angle 6$ adalah sudut dalam sepihak. <span class="tr">Co-interior angles</span></li>
+                <li>$\\angle 4 + \\angle 6 = 180^\\circ$ <span class="tr">Sum is 180</span></li>
+                <li>$3x + x + 40 = 180$ <span class="tr">Substitute</span></li>
+                <li>$4x + 40 = 180$ <span class="tr">Combine like terms</span></li>
+                <li>$4x = 140$ <span class="tr">Subtract 40</span></li>
+                <li>$x = 35$ <span class="tr">Divide by 4</span></li>
+              </ol>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Tentukan Persamaan', pageTitleEn:'Determine the Equation', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 2x^\\circ$ dan $\\angle 5 = (3x + 20)^\\circ$ (Sepihak). Persamaan yang terbentuk adalah $5x + 20 = \\dots$', questionEn:'Given $\\angle 3 = 2x^\\circ$ and $\\angle 5 = (3x + 20)^\\circ$ (Co-Interior). The formed equation is $5x + 20 = \\dots$',
+          correctAnswer:'180', acceptableAnswers:['180'],
+          explanation:`<p>$2x + 3x + 20 = 180 \\Rightarrow 5x + 20 = 180$. <span class="tr">Co-interior sum is 180.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Selesaikan x', pageTitleEn:'Solve for x', taskType:'radio',
+          question:'Dari persamaan $5x + 20 = 180$, maka nilai $x = \\dots$', questionEn:'From the equation $5x + 20 = 180$, then $x = \\dots$',
+          options:[
+            {text:'$32$ <span class="tr">32</span>', correct:true},
+            {text:'$36$ <span class="tr">36</span>', correct:false},
+            {text:'$40$ <span class="tr">40</span>', correct:false},
+            {text:'$28$ <span class="tr">28</span>', correct:false}
+          ],
+          explanation:`<p>$5x = 180 - 20 = 160 \\Rightarrow x = \\dfrac{160}{5} = 32$. <span class="tr">$5x = 180 - 20 = 160 \\Rightarrow x = \\dfrac{160}{5} = 32$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Benar atau Salah', pageTitleEn:'True or False', taskType:'truefalse',
+          question:'Benar atau salah: Jika $\\angle 1 = 2x^\\circ$ dan $\\angle 8 = (x + 30)^\\circ$ (Luar Berseberangan), maka $2x = x + 30$. <span class="tr">True or false: If $\\angle 1 = 2x^\\circ$ and $\\angle 8 = (x + 30)^\\circ$ (Alternate Exterior), then $2x = x + 30$.</span>', questionEn:'Benar atau salah: Jika $\\angle 1 = 2x^\\circ$ dan $\\angle 8 = (x + 30)^\\circ$ (Luar Berseberangan), maka $2x = x + 30$. <span class="tr">True or false: If $\\angle 1 = 2x^\\circ$ and $\\angle 8 = (x + 30)^\\circ$ (Alternate Exterior), then $2x = x + 30$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Sudut luar berseberangan besarnya sama, sehingga $2x = x + 30$ adalah benar. <span class="tr">Alternate exterior angles are equal, so $2x = x + 30$ is true.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Mencari Banyak Sudut Sekaligus', pageTitleEn:'Finding Multiple Angles at Once',
+          body:`
+            <p>Jika kita mengetahui besar satu sudut, kita bisa menemukan besar ketujuh sudut lainnya pada garis sejajar dan transversal!
+              <span class="tr">If we know the measure of one angle, we can find the measures of all seven other angles on parallel lines and a transversal!</span></p>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Diketahui $\\angle 1 = 60^\\circ$. Tentukan $\\angle 7$.
+              <span class="tr">Given $\\angle 1 = 60^\\circ$. Find $\\angle 7$.</span>
+              <ol>
+                <li>$\\angle 1$ dan $\\angle 2$ berpelurus: $\\angle 2 = 180^\\circ - 60^\\circ = 120^\\circ$. <span class="tr">Supplementary</span></li>
+                <li>$\\angle 2$ dan $\\angle 7$ adalah sudut luar berseberangan: $\\angle 7 = \\angle 2 = 120^\\circ$. <span class="tr">Alternate exterior</span></li>
+              </ol>
+              <p>Alternatif lain: $\\angle 1$ dan $\\angle 5$ sehadap ($60^\\circ$). $\\angle 5$ dan $\\angle 7$ berpelurus ($180^\\circ - 60^\\circ = 120^\\circ$). <span class="tr">Alternative: Corresponding + Supplementary.</span></p>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T4: Hitung Sudut Berseberangan', pageTitleEn:'Calculate Alternate Angle', taskType:'fill',
+          question:'Diketahui $\\angle 1 = 80^\\circ$ (Sehadap dengan $\\angle 5$). Maka besar $\\angle 5 = \\dots^\\circ$', questionEn:'Given $\\angle 1 = 80^\\circ$ (Corresponding to $\\angle 5$). Then $\\angle 5 = \\dots^\\circ$',
+          correctAnswer:'80', acceptableAnswers:['80'],
+          explanation:`<p>Sudut sehadap besarnya sama: $\\angle 5 = \\angle 1 = 80^\\circ$. <span class="tr">Corresponding angles are equal.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Pilih Sudut 120 Derajat', pageTitleEn:'Select 120 Degree Angles', taskType:'checkbox',
+          question:'Diketahui $\\angle 1 = 60^\\circ$. Pilih semua sudut yang besarnya $120^\\circ$.', questionEn:'Given $\\angle 1 = 60^\\circ$. Select all angles that measure $120^\\circ$.',
+          options:[
+            {text:'$\\angle 2$ <span class="tr">Angle 2</span>', correct:true},
+            {text:'$\\angle 3$ <span class="tr">Angle 3</span>', correct:true},
+            {text:'$\\angle 4$ <span class="tr">Angle 4</span>', correct:false},
+            {text:'$\\angle 6$ <span class="tr">Angle 6</span>', correct:true}
+          ],
+          explanation:`<p>$\\angle 2$ dan $\\angle 3$ berpelurus dengan $\\angle 1$, jadi $120^\\circ$. $\\angle 6$ sehadap dengan $\\angle 2$, jadi $120^\\circ$. <span class="tr">Angles 2, 3, 6 are 120 degrees.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Urutkan Langkah Aljabar', pageTitleEn:'Order Algebra Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $3x + 20 = 5x - 10$.', questionEn:'Order steps to solve $3x + 20 = 5x - 10$.',
+          items:[
+            '$3x - 5x + 20 = -10$',
+            '$-2x + 20 = -10$',
+            '$-2x = -30$',
+            '$x = 15$'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<ol><li>Kurangi $5x$.</li><li>Sederhanakan.</li><li>Kurangi 20.</li><li>Bagi -2.</li></ol>`
+        },
+        { type:'explanation', pageTitle:'E3: Aplikasi Dunia Nyata', pageTitleEn:'Real-World Application',
+          body:`
+            <p>Di dunia nyata, hubungan antar sudut banyak dijumpai pada arsitektur, desain, dan jalan.
+              <span class="tr">In the real world, angle relationships are often found in architecture, design, and roads.</span></p>
+            <div class="illustration">
+              <svg width="260" height="120" viewBox="0 0 260 120">
+                <line x1="20" y1="30" x2="240" y2="30" stroke="#2563eb" stroke-width="4"/>
+                <line x1="20" y1="90" x2="240" y2="90" stroke="#2563eb" stroke-width="4"/>
+                <line x1="60" y1="110" x2="200" y2="10" stroke="#ef4444" stroke-width="2"/>
+                <text x="120" y="20" font-size="12" fill="#2563eb">Rel 1 <span class="tr">Track 1</span></text>
+                <text x="120" y="80" font-size="12" fill="#2563eb">Rel 2 <span class="tr">Track 2</span></text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:6px">Jalan menyeberang rel <span class="tr">Road crossing tracks</span></div>
+            </div>
+            <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+              Sebuah jalan menyeberang dua rel kereta sejajar. Jika sudut antara jalan dan rel pertama adalah $70^\\circ$, maka sudut antara jalan dan rel kedua (sisi sepihak) adalah $180^\\circ - 70^\\circ = 110^\\circ$.
+              <span class="tr">A road crosses two parallel train tracks. If the angle between the road and the first track is $70^\\circ$, the angle between the road and the second track (same-side) is $180^\\circ - 70^\\circ = 110^\\circ$.</span>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T7: Hitung Sudut Jalan', pageTitleEn:'Calculate Road Angle', taskType:'fill',
+          question:'Sebuah jalan memotong dua rel sejajar. Sudut pertama adalah $60^\\circ$. Maka sudut sepihaknya adalah $\\dots^\\circ$', questionEn:'A road cuts two parallel tracks. First angle is $60^\\circ$. Then its same-side angle is $\\dots^\\circ$',
+          correctAnswer:'120', acceptableAnswers:['120'],
+          explanation:`<p>$180^\\circ - 60^\\circ = 120^\\circ$. <span class="tr">Co-interior sum is 180.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Identifikasi Sifat', pageTitleEn:'Identify Property', taskType:'radio',
+          question:'Sifat apa yang digunakan pada soal sebelumnya?', questionEn:'What property was used in the previous problem?',
+          options:[
+            {text:'Sudut Sehadap <span class="tr">Corresponding Angles</span>', correct:false},
+            {text:'Sudut Dalam Sepihak <span class="tr">Co-Interior Angles</span>', correct:true},
+            {text:'Sudut Berseberangan <span class="tr">Alternate Angles</span>', correct:false},
+            {text:'Sudut Siku-siku <span class="tr">Right Angles</span>', correct:false}
+          ],
+          explanation:`<p>Karena dijumlahkan menjadi $180^\\circ$, itu adalah sifat sudut dalam sepihak. <span class="tr">Summing to 180 means co-interior.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Pasangkan Komponen', pageTitleEn:'Match Components', taskType:'pairing',
+          question:'Pasangkan komponen dunia nyata dengan analogi geometrinya.', questionEn:'Match real-world components to their geometry analogies.',
+          pairs:[
+            {left:'Rel Kereta', right:'Garis Sejajar'},
+            {left:'Jalan', right:'Garis Transversal'},
+            {left:'Simpangan', right:'Titik Potong'},
+            {left:'Sudut Belokan', right:'Sudut Antar Garis'}
+          ],
+          explanation:`<p>Hubungkan benda nyata dengan istilah matematisnya. <span class="tr">Connect real objects with math terms.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Hitung Sudut Akhir', pageTitleEn:'Calculate Final Angle', taskType:'fill',
+          question:'Jika sudut antara jalan dan rel adalah $2x^\\circ$, dan $x = 35$, maka sudut sepihak dengan rel lain adalah $\\dots^\\circ$', questionEn:'If the angle between road and track is $2x^\\circ$, and $x = 35$, then the same-side angle with the other track is $\\dots^\\circ$',
+          correctAnswer:'110', acceptableAnswers:['110'],
+          explanation:`<p>$2x = 2(35) = 70^\\circ$. Sudut sepihak $= 180^\\circ - 70^\\circ = 110^\\circ$. <span class="tr">$2x = 70^\\circ$. Co-interior $= 180 - 70 = 110^\\circ$.</span></p>`
+        }
+      ]
+    },
+    g: {
+      title: 'Consolidation & Reflection',
+      titleEn: 'Consolidation & Reflection',
+      time: '00:55 - 01:00',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Poin Penting', pageTitleEn:'Key Takeaways',
+          body:`
+            <div class="illustration">
+              <svg width="220" height="80" viewBox="0 0 220 80">
+                <circle cx="40" cy="40" r="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="40" y="48" text-anchor="middle" font-size="22" fill="#2563eb">★</text>
+                <text x="85" y="35" font-size="13" fill="#1e40af" font-weight="bold">Hubungan Antar Sudut</text>
+                <text x="85" y="52" font-size="10" fill="#64748b">Pada Garis Sejajar</text>
+              </svg>
+              <div style="font-size:.82em;color:var(--muted);margin-top:4px">Simbol & Aturan <span class="tr">Symbols & Rules</span></div>
+            </div>
+            <p>Hari ini kita belajar tentang <strong>Hubungan Antar Sudut pada Garis Sejajar</strong>. Berikut poin terpentingnya:
+              <span class="tr">Today we learned about <strong>Angle Relationships on Parallel Lines</strong>. Here are the most important points:</span></p>
+            <div class="math-block">
+              <ol>
+                <li><strong>Sudut Sehadap (Corresponding):</strong> Besarnya sama. <span class="tr">Equal.</span> ($\\angle 1 = \\angle 5$, dll)</li>
+                <li><strong>Sudut Dalam Berseberangan (Alternate Interior):</strong> Besarnya sama. <span class="tr">Equal.</span> ($\\angle 3 = \\angle 6$, $\\angle 4 = \\angle 5$)</li>
+                <li><strong>Sudut Luar Berseberangan (Alternate Exterior):</strong> Besarnya sama. <span class="tr">Equal.</span> ($\\angle 1 = \\angle 8$, $\\angle 2 = \\angle 7$)</li>
+                <li><strong>Sudut Dalam Sepihak (Co-Interior):</strong> Berjumlah $180^\\circ$. <span class="tr">Sum is 180.</span> ($\\angle 3 + \\angle 5 = 180^\\circ$, $\\angle 4 + \\angle 6 = 180^\\circ$)</li>
+              </ol>
+            </div>
+            <div class="tip-box">
+              <h4>Tips <span class="tr">Tip</span></h4>
+              <ul>
+                <li>Gunakan warna untuk menandai pasangan sudut pada gambar.</li>
+                <li>Ingat: "Berseberangan & Sehadap" itu SAMA. "Sepihak" itu JUMLAH 180.</li>
+              </ul>
+            </div>
+          `
+        },
+        { type:'task', pageTitle:'T1: Pertanyaan Refleksi', pageTitleEn:'Reflection Question', taskType:'truefalse',
+          question:'Benar atau salah: Saya memahami bahwa sudut sehadap dan sudut berseberangan memiliki besar yang sama, sedangkan sudut dalam sepihak berjumlah $180^\\circ$. <span class="tr">True or false: I understand that corresponding and alternate angles are equal, while co-interior angles sum to $180^\\circ$.</span>', questionEn:'Benar atau salah: Saya memahami bahwa sudut sehadap dan sudut berseberangan memiliki besar yang sama, sedangkan sudut dalam sepihak berjumlah $180^\\circ$. <span class="tr">True or false: I understand that corresponding and alternate angles are equal, while co-interior angles sum to $180^\\circ$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Jika benar, Anda siap untuk latihan mandiri! <span class="tr">If true, you are ready for independent practice!</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Exit Ticket', pageTitleEn:'Exit Ticket', taskType:'fill',
+          question:'Selesaikan: $\\angle 3 = 3x^\\circ$ dan $\\angle 5 = (2x + 25)^\\circ$ (Sepihak). Nilai $x = \\dots$', questionEn:'Solve: $\\angle 3 = 3x^\\circ$ and $\\angle 5 = (2x + 25)^\\circ$ (Co-Interior). Value of $x = \\dots$',
+          correctAnswer:'31', acceptableAnswers:['31'],
+          explanation:`<ol><li>$3x + 2x + 25 = 180$</li><li>$5x + 25 = 180$</li><li>$5x = 155$</li><li>$x = 31$</li></ol>`
+        },
+        { type:'explanation', pageTitle:'E2: Follow-up Practice', pageTitleEn:'Follow-up Practice',
+          body:`
+            <p>Latihan tambahan tersedia di <strong>Bagian H–L (Task 1–5)</strong>. Setiap bagian berisi 10 soal:
+              <span class="tr">Additional practice is available in <strong>Sections H–L</strong>. Each section contains 10 questions:</span></p>
+            <div class="math-block">
+              <ul>
+                <li><strong>Task 1 (H):</strong> Identifikasi & hitung dasar <span class="tr">Basic identification & calculation</span></li>
+                <li><strong>Task 2 (I):</strong> Aljabar pada sudut sehadap <span class="tr">Algebra on corresponding angles</span></li>
+                <li><strong>Task 3 (J):</strong> Aljabar pada sudut berseberangan <span class="tr">Algebra on alternate angles</span></li>
+                <li><strong>Task 4 (K):</strong> Aljabar pada sudut sepihak <span class="tr">Algebra on co-interior angles</span></li>
+                <li><strong>Task 5 (L):</strong> Soal cerita & logika <span class="tr">Word problems & logic</span></li>
+              </ul>
+            </div>
+            <div class="tip-box">
+              <h4>Cara menggunakan <span class="tr">How to use</span></h4>
+              <ol>
+                <li>Buka bagian H–L dari sidebar kiri.</li>
+                <li>Jawab soal, lalu klik <strong>"Periksa Jawaban"</strong>.</li>
+                <li>Setelah selesai 10 soal, klik tombol <strong>🖨 Cetak ke PDF</strong> di kanan atas.</li>
+                <li>Cetak atau simpan sebagai PDF untuk diperiksa oleh tutor Anda.</li>
+              </ol>
+            </div>
+          `
+        }
+      ]
+    },
+    h: {
+      title: 'Task 1',
+      titleEn: 'Task 1',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Identifikasi Sehadap', pageTitleEn:'Identify Corresponding', taskType:'radio',
+          question:'Manakah pasangan sudut sehadap?', questionEn:'Which is a pair of corresponding angles?',
+          options:[
+            {text:'$\\angle 1$ dan $\\angle 3$ <span class="tr">Angle 1 & 3</span>', correct:false},
+            {text:'$\\angle 2$ dan $\\angle 6$ <span class="tr">Angle 2 & 6</span>', correct:true},
+            {text:'$\\angle 4$ dan $\\angle 6$ <span class="tr">Angle 4 & 6</span>', correct:false},
+            {text:'$\\angle 3$ dan $\\angle 5$ <span class="tr">Angle 3 & 5</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2$ dan $\\angle 6$ berada di posisi yang sama (kanan atas) di tiap potongan. <span class="tr">They are in the same position.</span></p>`},
+        { type:'task', pageTitle:'T2: Hitung Berseberangan', pageTitleEn:'Calculate Alternate', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 50^\\circ$. Maka $\\angle 6 = \\dots^\\circ$ (Dalam Berseberangan)', questionEn:'Given $\\angle 3 = 50^\\circ$. Then $\\angle 6 = \\dots^\\circ$ (Alternate Interior)',
+          correctAnswer:'50', acceptableAnswers:['50'],
+          explanation:`<p>Sudut dalam berseberangan besarnya sama. <span class="tr">Alternate interior angles are equal.</span></p>`},
+        { type:'task', pageTitle:'T3: Benar atau Salah Sepihak', pageTitleEn:'True or False Co-Interior', taskType:'truefalse',
+          question:'Benar atau salah: $\\angle 4 + \\angle 6 = 180^\\circ$. <span class="tr">True or false: $\\angle 4 + \\angle 6 = 180^\\circ$.</span>', questionEn:'Benar atau salah: $\\angle 4 + \\angle 6 = 180^\\circ$. <span class="tr">True or false: $\\angle 4 + \\angle 6 = 180^\\circ$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Sudut dalam sepihak berjumlah $180^\\circ$. <span class="tr">Co-interior angles sum to 180.</span></p>`},
+        { type:'task', pageTitle:'T4: Selesaikan x Sehadap', pageTitleEn:'Solve Corresponding x', taskType:'fill',
+          question:'$\\angle 1 = x^\\circ$ dan $\\angle 5 = (2x - 30)^\\circ$ (Sehadap). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 1 = x^\\circ$ and $\\angle 5 = (2x - 30)^\\circ$ (Corresponding). Value of $x = \\dots^\\circ$',
+          correctAnswer:'30', acceptableAnswers:['30'],
+          explanation:`<ol><li>$x = 2x - 30$</li><li>$30 = x$</li></ol>`},
+        { type:'task', pageTitle:'T5: Urutkan Langkah', pageTitleEn:'Order Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $2x + 10 = 3x - 5$.', questionEn:'Order steps to solve $2x + 10 = 3x - 5$.',
+          items:['$2x - 3x + 10 = -5$','$-x + 10 = -5$','$-x = -15$','$x = 15$'],
+          correctOrder:[0,1,2,3],
+          explanation:`<ol><li>Kurangi $3x$.</li><li>Sederhanakan.</li><li>Kurangi 10.</li><li>Kali -1.</li></ol>`},
+        { type:'task', pageTitle:'T6: Pasangkan Aturan', pageTitleEn:'Match Rules', taskType:'pairing',
+          question:'Pasangkan pasangan sudut dengan aturannya.', questionEn:'Match angle pairs with their rules.',
+          pairs:[
+            {left:'Sudut Sehadap', right:'Besarnya sama'},
+            {left:'Sudut Dalam Sepihak', right:'Jumlah 180 derajat'},
+            {left:'Sudut Luar Berseberangan', right:'Besarnya sama'},
+            {left:'Sudut Dalam Berseberangan', right:'Besarnya sama'}
+          ],
+          explanation:`<p>Hanya sepihak yang jumlahnya 180. <span class="tr">Only same-side sums to 180.</span></p>`},
+        { type:'task', pageTitle:'T7: Pilih Sudut 120', pageTitleEn:'Select 120 Angles', taskType:'checkbox',
+          question:'Jika $\\angle 1 = 60^\\circ$, pilih semua sudut yang besarnya $120^\\circ$.', questionEn:'If $\\angle 1 = 60^\\circ$, select all angles that measure $120^\\circ$.',
+          options:[
+            {text:'$\\angle 2$ <span class="tr">Angle 2</span>', correct:true},
+            {text:'$\\angle 3$ <span class="tr">Angle 3</span>', correct:true},
+            {text:'$\\angle 4$ <span class="tr">Angle 4</span>', correct:false},
+            {text:'$\\angle 5$ <span class="tr">Angle 5</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2$ dan $\\angle 3$ berpelurus dengan $\\angle 1$, jadi $120^\\circ$. <span class="tr">Angles 2 & 3 are supplementary to Angle 1.</span></p>`},
+        { type:'task', pageTitle:'T8: Hitung Sepihak', pageTitleEn:'Calculate Co-Interior', taskType:'fill',
+          question:'Diketahui $\\angle 3 = 70^\\circ$. Maka $\\angle 5 = \\dots^\\circ$ (Sepihak)', questionEn:'Given $\\angle 3 = 70^\\circ$. Then $\\angle 5 = \\dots^\\circ$ (Co-Interior)',
+          correctAnswer:'110', acceptableAnswers:['110'],
+          explanation:`<p>$180^\\circ - 70^\\circ = 110^\\circ$. <span class="tr">Co-interior sum to 180.</span></p>`},
+        { type:'task', pageTitle:'T9: Identifikasi Luar Berseberangan', pageTitleEn:'Identify Alternate Exterior', taskType:'radio',
+          question:'Manakah pasangan sudut luar berseberangan?', questionEn:'Which is a pair of alternate exterior angles?',
+          options:[
+            {text:'$\\angle 1$ dan $\\angle 5$ <span class="tr">Angle 1 & 5</span>', correct:false},
+            {text:'$\\angle 3$ dan $\\angle 6$ <span class="tr">Angle 3 & 6</span>', correct:false},
+            {text:'$\\angle 1$ dan $\\angle 8$ <span class="tr">Angle 1 & 8</span>', correct:true},
+            {text:'$\\angle 4$ dan $\\angle 5$ <span class="tr">Angle 4 & 5</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 1$ dan $\\angle 8$ berada di luar dan sisi berlawanan. <span class="tr">They are outside and opposite.</span></p>`},
+        { type:'task', pageTitle:'T10: Selesaikan x Sepihak', pageTitleEn:'Solve Co-Interior x', taskType:'fill',
+          question:'$\\angle 4 = 3x^\\circ$ dan $\\angle 6 = (2x + 30)^\\circ$ (Sepihak). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 4 = 3x^\\circ$ and $\\angle 6 = (2x + 30)^\\circ$ (Co-Interior). Value of $x = \\dots^\\circ$',
+          correctAnswer:'30', acceptableAnswers:['30'],
+          explanation:`<ol><li>$3x + 2x + 30 = 180$</li><li>$5x + 30 = 180$</li><li>$5x = 150$</li><li>$x = 30$</li></ol>`}
+      ]
+    },
+    i: {
+      title: 'Task 2',
+      titleEn: 'Task 2',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Selesaikan x Sehadap', pageTitleEn:'Solve Corresponding x', taskType:'fill',
+          question:'$\\angle 1 = 2x^\\circ$ dan $\\angle 5 = (x + 40)^\\circ$ (Sehadap). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 1 = 2x^\\circ$ and $\\angle 5 = (x + 40)^\\circ$ (Corresponding). Value of $x = \\dots^\\circ$',
+          correctAnswer:'40', acceptableAnswers:['40'],
+          explanation:`<ol><li>$2x = x + 40$</li><li>$2x - x = 40$</li><li>$x = 40$</li></ol>`},
+        { type:'task', pageTitle:'T2: Identifikasi Persamaan', pageTitleEn:'Identify Equation', taskType:'radio',
+          question:'Jika $\\angle 2 = 3x^\\circ$ dan $\\angle 6 = (x + 20)^\\circ$ (Sehadap), persamaan yang benar adalah?', questionEn:'If $\\angle 2 = 3x^\\circ$ and $\\angle 6 = (x + 20)^\\circ$ (Corresponding), the correct equation is?',
+          options:[
+            {text:'$3x + x + 20 = 180$ <span class="tr">Sum to 180</span>', correct:false},
+            {text:'$3x = x + 20$ <span class="tr">Set equal</span>', correct:true},
+            {text:'$3x + x = 20$ <span class="tr">Add to 20</span>', correct:false},
+            {text:'$3x - 20 = x$ <span class="tr">Subtract 20</span>', correct:false}
+          ],
+          explanation:`<p>Sudut sehadap besarnya sama, jadi $3x = x + 20$. <span class="tr">Corresponding angles are equal.</span></p>`},
+        { type:'task', pageTitle:'T3: Benar atau Salah Aljabar', pageTitleEn:'True or False Algebra', taskType:'truefalse',
+          question:'Benar atau salah: Jika $3x = x + 10$, maka $x = 5$. <span class="tr">True or false: If $3x = x + 10$, then $x = 5$.</span>', questionEn:'Benar atau salah: Jika $3x = x + 10$, maka $x = 5$. <span class="tr">True or false: If $3x = x + 10$, then $x = 5$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>$3x - x = 10 \\Rightarrow 2x = 10 \\Rightarrow x = 5$. Pernyataan benar. <span class="tr">Statement is true.</span></p>`},
+        { type:'task', pageTitle:'T4: Hitung Sudut Akhir', pageTitleEn:'Calculate Final Angle', taskType:'fill',
+          question:'Dari soal sebelumnya, jika $x = 15$, maka $\\angle 2 = 3x = \\dots^\\circ$', questionEn:'From previous problem, if $x = 15$, then $\\angle 2 = 3x = \\dots^\\circ$',
+          correctAnswer:'45', acceptableAnswers:['45'],
+          explanation:`<p>$\\angle 2 = 3(15) = 45^\\circ$. <span class="tr">$3(15) = 45$.</span></p>`},
+        { type:'task', pageTitle:'T5: Urutkan Langkah', pageTitleEn:'Order Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $4x + 5 = 3x + 20$.', questionEn:'Order steps to solve $4x + 5 = 3x + 20$.',
+          items:['$4x - 3x + 5 = 20$','$x + 5 = 20$','$x = 20 - 5$','$x = 15$'],
+          correctOrder:[0,1,2,3],
+          explanation:`<ol><li>Kurangi $3x$.</li><li>Sederhanakan.</li><li>Kurangi 5.</li><li>Hasilnya.</li></ol>`},
+        { type:'task', pageTitle:'T6: Pasangkan Persamaan', pageTitleEn:'Match Equations', taskType:'pairing',
+          question:'Pasangkan persamaan dengan nilai $x$ yang benar.', questionEn:'Match equations with correct $x$ value.',
+          pairs:[
+            {left:'$2x = x + 10$', right:'$x = 10$'},
+            {left:'$3x = 2x + 5$', right:'$x = 5$'},
+            {left:'$4x = 3x + 20$', right:'$x = 20$'},
+            {left:'$5x = 3x + 30$', right:'$x = 15$'}
+          ],
+          explanation:`<p>Pindahkan $x$ ke satu sisi. <span class="tr">Move $x$ to one side.</span></p>`},
+        { type:'task', pageTitle:'T7: Pilih Langkah Benar', pageTitleEn:'Select Correct Steps', taskType:'checkbox',
+          question:'Pilih semua langkah yang benar untuk menyelesaikan $5x = 2x + 30$.', questionEn:'Select all correct steps to solve $5x = 2x + 30$.',
+          options:[
+            {text:'$5x - 2x = 30$ <span class="tr">Subtract $2x$</span>', correct:true},
+            {text:'$3x = 30$ <span class="tr">Simplify</span>', correct:true},
+            {text:'$x = 10$ <span class="tr">Divide by 3</span>', correct:true},
+            {text:'$x = 15$ <span class="tr">Divide by 2</span>', correct:false}
+          ],
+          explanation:`<p>$5x - 2x = 3x = 30 \\Rightarrow x = 10$. <span class="tr">Correct steps lead to $x=10$.</span></p>`},
+        { type:'task', pageTitle:'T8: Selesaikan x Berseberangan', pageTitleEn:'Solve Alternate x', taskType:'fill',
+          question:'$\\angle 3 = 5x^\\circ$ dan $\\angle 6 = (3x + 20)^\\circ$ (Berseberangan). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 3 = 5x^\\circ$ and $\\angle 6 = (3x + 20)^\\circ$ (Alternate). Value of $x = \\dots^\\circ$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<ol><li>$5x = 3x + 20$</li><li>$2x = 20$</li><li>$x = 10$</li></ol>`},
+        { type:'task', pageTitle:'T9: Identifikasi Hubungan', pageTitleEn:'Identify Relationship', taskType:'radio',
+          question:'Jika $\\angle 2 = \\angle 6$, apa hubungan keduanya?', questionEn:'If $\\angle 2 = \\angle 6$, what is their relationship?',
+          options:[
+            {text:'Sudut Dalam Sepihak <span class="tr">Co-Interior</span>', correct:false},
+            {text:'Sudut Sehadap <span class="tr">Corresponding</span>', correct:true},
+            {text:'Sudut Luar Berseberangan <span class="tr">Alternate Exterior</span>', correct:false},
+            {text:'Sudut Berpelurus <span class="tr">Supplementary</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 2$ dan $\\angle 6$ berada di posisi sudut yang sama di tiap potongan. <span class="tr">They are in the same corner.</span></p>`},
+        { type:'task', pageTitle:'T10: Hitung Sudut x=20', pageTitleEn:'Calculate Angle x=20', taskType:'fill',
+          question:'Jika $\\angle 5 = (3x + 10)^\\circ$ dan $x = 20$, maka besar $\\angle 5 = \\dots^\\circ$', questionEn:'If $\\angle 5 = (3x + 10)^\\circ$ and $x = 20$, then $\\angle 5 = \\dots^\\circ$',
+          correctAnswer:'70', acceptableAnswers:['70'],
+          explanation:`<p>$\\angle 5 = 3(20) + 10 = 60 + 10 = 70^\\circ$. <span class="tr">$60 + 10 = 70$.</span></p>`}
+      ]
+    },
+    j: {
+      title: 'Task 3',
+      titleEn: 'Task 3',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Selesaikan x Berseberangan', pageTitleEn:'Solve Alternate x', taskType:'fill',
+          question:'$\\angle 4 = 3x^\\circ$ dan $\\angle 5 = (2x + 15)^\\circ$ (Dalam Berseberangan). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 4 = 3x^\\circ$ and $\\angle 5 = (2x + 15)^\\circ$ (Alternate Interior). Value of $x = \\dots^\\circ$',
+          correctAnswer:'15', acceptableAnswers:['15'],
+          explanation:`<ol><li>$3x = 2x + 15$</li><li>$x = 15$</li></ol>`},
+        { type:'task', pageTitle:'T2: Identifikasi Dalam Berseberangan', pageTitleEn:'Identify Alternate Interior', taskType:'radio',
+          question:'Manakah pasangan sudut dalam berseberangan?', questionEn:'Which is a pair of alternate interior angles?',
+          options:[
+            {text:'$\\angle 1$ dan $\\angle 5$ <span class="tr">Angle 1 & 5</span>', correct:false},
+            {text:'$\\angle 3$ dan $\\angle 6$ <span class="tr">Angle 3 & 6</span>', correct:true},
+            {text:'$\\angle 2$ dan $\\angle 7$ <span class="tr">Angle 2 & 7</span>', correct:false},
+            {text:'$\\angle 4$ dan $\\angle 6$ <span class="tr">Angle 4 & 6</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 3$ dan $\\angle 6$ berada di dalam dan sisi berlawanan. <span class="tr">They are inside and opposite.</span></p>`},
+        { type:'task', pageTitle:'T3: Benar atau Salah Aljabar', pageTitleEn:'True or False Algebra', taskType:'truefalse',
+          question:'Benar atau salah: Jika $4x - 2 = 2x + 10$, maka $x = 6$. <span class="tr">True or false: If $4x - 2 = 2x + 10$, then $x = 6$.</span>', questionEn:'Benar atau salah: Jika $4x - 2 = 2x + 10$, maka $x = 6$. <span class="tr">True or false: If $4x - 2 = 2x + 10$, then $x = 6$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>$4x - 2x = 10 + 2 \\Rightarrow 2x = 12 \\Rightarrow x = 6$. <span class="tr">Correct.</span></p>`},
+        { type:'task', pageTitle:'T4: Hitung Sudut Akhir', pageTitleEn:'Calculate Final Angle', taskType:'fill',
+          question:'Dari soal sebelumnya, jika $x = 12$, maka $\\angle 3 = 3x = \\dots^\\circ$', questionEn:'From previous problem, if $x = 12$, then $\\angle 3 = 3x = \\dots^\\circ$',
+          correctAnswer:'36', acceptableAnswers:['36'],
+          explanation:`<p>$\\angle 3 = 3(12) = 36^\\circ$. <span class="tr">$3(12) = 36$.</span></p>`},
+        { type:'task', pageTitle:'T5: Urutkan Langkah', pageTitleEn:'Order Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $5x = 3x + 10$.', questionEn:'Order steps to solve $5x = 3x + 10$.',
+          items:['$5x - 3x = 10$','$2x = 10$','$x = 5$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Kurangi $3x$.</li><li>Sederhanakan.</li><li>Bagi 2.</li></ol>`},
+        { type:'task', pageTitle:'T6: Pasangkan Persamaan', pageTitleEn:'Match Equations', taskType:'pairing',
+          question:'Pasangkan persamaan dengan nilai $x$ yang benar.', questionEn:'Match equations with correct $x$ value.',
+          pairs:[
+            {left:'$3x = x + 20$', right:'$x = 10$'},
+            {left:'$4x = 2x + 10$', right:'$x = 5$'},
+            {left:'$5x = 3x + 20$', right:'$x = 10$'},
+            {left:'$6x = 4x + 10$', right:'$x = 5$'}
+          ],
+          explanation:`<p>Pindahkan $x$ ke satu sisi. <span class="tr">Move $x$ to one side.</span></p>`},
+        { type:'task', pageTitle:'T7: Pilih Sudut Sama', pageTitleEn:'Select Equal Angles', taskType:'checkbox',
+          question:'Jika $\\angle 3 = 50^\\circ$, pilih semua sudut yang besarnya $50^\\circ$.', questionEn:'If $\\angle 3 = 50^\\circ$, select all angles that measure $50^\\circ$.',
+          options:[
+            {text:'$\\angle 1$ <span class="tr">Angle 1</span>', correct:false},
+            {text:'$\\angle 4$ <span class="tr">Angle 4</span>', correct:false},
+            {text:'$\\angle 6$ <span class="tr">Angle 6</span>', correct:true},
+            {text:'$\\angle 7$ <span class="tr">Angle 7</span>', correct:true}
+          ],
+          explanation:`<p>$\\angle 6$ berseberangan dengan $\\angle 3$. $\\angle 7$ sehadap dengan $\\angle 3$. <span class="tr">Angle 6 is alternate, Angle 7 is corresponding.</span></p>`},
+        { type:'task', pageTitle:'T8: Selesaikan x Campuran', pageTitleEn:'Solve Mixed x', taskType:'fill',
+          question:'$\\angle 4 = (2x + 5)^\\circ$ dan $\\angle 5 = (x + 15)^\\circ$ (Berseberangan). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 4 = (2x + 5)^\\circ$ and $\\angle 5 = (x + 15)^\\circ$ (Alternate). Value of $x = \\dots^\\circ$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<ol><li>$2x + 5 = x + 15$</li><li>$2x - x = 15 - 5$</li><li>$x = 10$</li></ol>`},
+        { type:'task', pageTitle:'T9: Identifikasi Hubungan', pageTitleEn:'Identify Relationship', taskType:'radio',
+          question:'Jika $\\angle 4 = \\angle 5$, apa hubungan keduanya?', questionEn:'If $\\angle 4 = \\angle 5$, what is their relationship?',
+          options:[
+            {text:'Sudut Dalam Berseberangan <span class="tr">Alternate Interior</span>', correct:true},
+            {text:'Sudut Dalam Sepihak <span class="tr">Co-Interior</span>', correct:false},
+            {text:'Sudut Luar Berseberangan <span class="tr">Alternate Exterior</span>', correct:false},
+            {text:'Sudut Berpelurus <span class="tr">Supplementary</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 4$ dan $\\angle 5$ berada di dalam dan sisi berlawanan. <span class="tr">They are inside and opposite.</span></p>`},
+        { type:'task', pageTitle:'T10: Hitung Sudut x=14', pageTitleEn:'Calculate Angle x=14', taskType:'fill',
+          question:'Jika $\\angle 6 = (2x - 4)^\\circ$ dan $x = 14$, maka besar $\\angle 6 = \\dots^\\circ$', questionEn:'If $\\angle 6 = (2x - 4)^\\circ$ and $x = 14$, then $\\angle 6 = \\dots^\\circ$',
+          correctAnswer:'24', acceptableAnswers:['24'],
+          explanation:`<p>$\\angle 6 = 2(14) - 4 = 28 - 4 = 24^\\circ$. <span class="tr">$28 - 4 = 24$.</span></p>`}
+      ]
+    },
+    k: {
+      title: 'Task 4',
+      titleEn: 'Task 4',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Selesaikan x Sepihak', pageTitleEn:'Solve Co-Interior x', taskType:'fill',
+          question:'$\\angle 3 = 2x^\\circ$ dan $\\angle 5 = (3x + 10)^\\circ$ (Sepihak). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 3 = 2x^\\circ$ and $\\angle 5 = (3x + 10)^\\circ$ (Co-Interior). Value of $x = \\dots^\\circ$',
+          correctAnswer:'34', acceptableAnswers:['34'],
+          explanation:`<ol><li>$2x + 3x + 10 = 180$</li><li>$5x + 10 = 180$</li><li>$5x = 170$</li><li>$x = 34$</li></ol>`},
+        { type:'task', pageTitle:'T2: Identifikasi Sepihak', pageTitleEn:'Identify Co-Interior', taskType:'radio',
+          question:'Manakah pasangan sudut dalam sepihak?', questionEn:'Which is a pair of co-interior angles?',
+          options:[
+            {text:'$\\angle 1$ dan $\\angle 5$ <span class="tr">Angle 1 & 5</span>', correct:false},
+            {text:'$\\angle 3$ dan $\\angle 6$ <span class="tr">Angle 3 & 6</span>', correct:false},
+            {text:'$\\angle 4$ dan $\\angle 6$ <span class="tr">Angle 4 & 6</span>', correct:true},
+            {text:'$\\angle 2$ dan $\\angle 7$ <span class="tr">Angle 2 & 7</span>', correct:false}
+          ],
+          explanation:`<p>$\\angle 4$ dan $\\angle 6$ berada di dalam dan sisi yang sama. <span class="tr">They are inside and same-side.</span></p>`},
+        { type:'task', pageTitle:'T3: Benar atau Salah Aljabar', pageTitleEn:'True or False Algebra', taskType:'truefalse',
+          question:'Benar atau salah: Jika $x + 2x = 180$, maka $x = 60$. <span class="tr">True or false: If $x + 2x = 180$, then $x = 60$.</span>', questionEn:'Benar atau salah: Jika $x + 2x = 180$, maka $x = 60$. <span class="tr">True or false: If $x + 2x = 180$, then $x = 60$.</span>',
+          correctAnswer:'true',
+          explanation:`<p>$3x = 180 \\Rightarrow x = 60$. Pernyataan benar. <span class="tr">Correct.</span></p>`},
+        { type:'task', pageTitle:'T4: Hitung Sudut Akhir', pageTitleEn:'Calculate Final Angle', taskType:'fill',
+          question:'Dari soal sebelumnya, jika $x = 40$, maka $\\angle 3 = 2x = \\dots^\\circ$', questionEn:'From previous problem, if $x = 40$, then $\\angle 3 = 2x = \\dots^\\circ$',
+          correctAnswer:'80', acceptableAnswers:['80'],
+          explanation:`<p>$\\angle 3 = 2(40) = 80^\\circ$. <span class="tr">$2(40) = 80$.</span></p>`},
+        { type:'task', pageTitle:'T5: Urutkan Langkah', pageTitleEn:'Order Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan $3x + x + 20 = 180$.', questionEn:'Order steps to solve $3x + x + 20 = 180$.',
+          items:['$4x + 20 = 180$','$4x = 160$','$x = 40$'],
+          correctOrder:[0,1,2],
+          explanation:`<ol><li>Sederhanakan.</li><li>Kurangi 20.</li><li>Bagi 4.</li></ol>`},
+        { type:'task', pageTitle:'T6: Pasangkan Persamaan', pageTitleEn:'Match Equations', taskType:'pairing',
+          question:'Pasangkan persamaan dengan nilai $x$ yang benar.', questionEn:'Match equations with correct $x$ value.',
+          pairs:[
+            {left:'$2x + x = 180$', right:'$x = 60$'},
+            {left:'$3x + x = 180$', right:'$x = 45$'},
+            {left:'$4x + x = 180$', right:'$x = 36$'},
+            {left:'$5x + x = 180$', right:'$x = 30$'}
+          ],
+          explanation:`<p>Sederhanakan lalu bagi. <span class="tr">Simplify then divide.</span></p>`},
+        { type:'task', pageTitle:'T7: Pilih Sudut 130', pageTitleEn:'Select 130 Angles', taskType:'checkbox',
+          question:'Jika $\\angle 3 = 50^\\circ$, pilih semua sudut yang besarnya $130^\\circ$.', questionEn:'If $\\angle 3 = 50^\\circ$, select all angles that measure $130^\\circ$.',
+          options:[
+            {text:'$\\angle 1$ <span class="tr">Angle 1</span>', correct:true},
+            {text:'$\\angle 4$ <span class="tr">Angle 4</span>', correct:false},
+            {text:'$\\angle 5$ <span class="tr">Angle 5</span>', correct:true},
+            {text:'$\\angle 8$ <span class="tr">Angle 8</span>', correct:true}
+          ],
+          explanation:`<p>$\\angle 3+\\angle 1=180 \\Rightarrow 130$. $\\angle 5$ sepihak dengan $\\angle 3 \\Rightarrow 130$. $\\angle 8$ sehadap dengan $\\angle 5 \\Rightarrow 130$. <span class="tr">Angles 1, 5, 8 are 130.</span></p>`},
+        { type:'task', pageTitle:'T8: Selesaikan x Campuran', pageTitleEn:'Solve Mixed x', taskType:'fill',
+          question:'$\\angle 4 = 4x^\\circ$ dan $\\angle 6 = (2x + 30)^\\circ$ (Sepihak). Nilai $x = \\dots^\\circ$', questionEn:'$\\angle 4 = 4x^\\circ$ and $\\angle 6 = (2x + 30)^\\circ$ (Co-Interior). Value of $x = \\dots^\\circ$',
+          correctAnswer:'25', acceptableAnswers:['25'],
+          explanation:`<ol><li>$4x + 2x + 30 = 180$</li><li>$6x + 30 = 180$</li><li>$6x = 150$</li><li>$x = 25$</li></ol>`},
+        { type:'task', pageTitle:'T9: Identifikasi Hubungan', pageTitleEn:'Identify Relationship', taskType:'radio',
+          question:'Jika $\\angle 3 + \\angle 5 = 180^\\circ$, apa hubungan keduanya?', questionEn:'If $\\angle 3 + \\angle 5 = 180^\\circ$, what is their relationship?',
+          options:[
+            {text:'Sudut Sehadap <span class="tr">Corresponding</span>', correct:false},
+            {text:'Sudut Dalam Sepihak <span class="tr">Co-Interior</span>', correct:true},
+            {text:'Sudut Luar Berseberangan <span class="tr">Alternate Exterior</span>', correct:false},
+            {text:'Sudut Siku-siku <span class="tr">Right Angles</span>', correct:false}
+          ],
+          explanation:`<p>Sudut dalam sepihak berjumlah $180^\\circ$. <span class="tr">Co-interior sum to 180.</span></p>`},
+        { type:'task', pageTitle:'T10: Hitung Sudut x=50', pageTitleEn:'Calculate Angle x=50', taskType:'fill',
+          question:'Jika $\\angle 3 = 3x^\\circ$ dan $x = 50$, maka $\\angle 3 = \\dots^\\circ$', questionEn:'If $\\angle 3 = 3x^\\circ$ and $x = 50$, then $\\angle 3 = \\dots^\\circ$',
+          correctAnswer:'150', acceptableAnswers:['150'],
+          explanation:`<p>$\\angle 3 = 3(50) = 150^\\circ$. <span class="tr">$3(50) = 150$.</span></p>`}
+      ]
+    },
+    l: {
+      title: 'Task 5',
+      titleEn: 'Task 5',
+      time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Identifikasi Dunia Nyata', pageTitleEn:'Identify Real-World', taskType:'radio',
+          question:'Manakah contoh garis sejajar dan transversal di dunia nyata?', questionEn:'Which is an example of parallel lines and a transversal in the real world?',
+          options:[
+            {text:'Pohon di hutan <span class="tr">Trees in forest</span>', correct:false},
+            {text:'Rel kereta api dan jalan menyeberang <span class="tr">Train tracks and crossing road</span>', correct:true},
+            {text:'Garis pantai <span class="tr">Coastline</span>', correct:false},
+            {text:'Pillar jembatan <span class="tr">Bridge pillars</span>', correct:false}
+          ],
+          explanation:`<p>Rel sejajar dan jalan memotongnya membentuk transversal. <span class="tr">Parallel tracks and crossing road form a transversal.</span></p>`},
+        { type:'task', pageTitle:'T2: Hitung Sudut Jalan', pageTitleEn:'Calculate Road Angle', taskType:'fill',
+          question:'Jalan memotong rel sejajar. Sudut sepihak pertama $60^\\circ$. Sudut sepihak kedua $\\dots^\\circ$', questionEn:'Road cuts parallel tracks. First co-interior angle $60^\\circ$. Second co-interior angle $\\dots^\\circ$',
+          correctAnswer:'120', acceptableAnswers:['120'],
+          explanation:`<p>$180^\\circ - 60^\\circ = 120^\\circ$. <span class="tr">Co-interior sum is 180.</span></p>`},
+        { type:'task', pageTitle:'T3: Benar atau Salah Logika', pageTitleEn:'True or False Logic', taskType:'truefalse',
+          question:'Benar atau salah: Jika dua sudut sehadap tidak sama besarnya, maka kedua garis pasti tidak sejajar. <span class="tr">True or false: If two corresponding angles are not equal, the lines must not be parallel.</span>', questionEn:'Benar atau salah: Jika dua sudut sehadap tidak sama besarnya, maka kedua garis pasti tidak sejajar. <span class="tr">True or false: If two corresponding angles are not equal, the lines must not be parallel.</span>',
+          correctAnswer:'true',
+          explanation:`<p>Sudut sehadap sama besar hanya jika garis sejajar. <span class="tr">Corresponding angles are equal only if lines are parallel.</span></p>`},
+        { type:'task', pageTitle:'T4: Selesaikan x Cerita', pageTitleEn:'Solve Word Problem x', taskType:'fill',
+          question:'Sebuah tangga bersandar pada dua dinding sejajar. Sudut sehadap atas $2x^\\circ$ dan bawah $(x+30)^\\circ$. Nilai $x = \\dots^\\circ$', questionEn:'A ladder leans on two parallel walls. Top corresponding angle $2x^\\circ$ and bottom $(x+30)^\\circ$. Value of $x = \\dots^\\circ$',
+          correctAnswer:'30', acceptableAnswers:['30'],
+          explanation:`<ol><li>$2x = x + 30$</li><li>$x = 30$</li></ol>`},
+        { type:'task', pageTitle:'T5: Urutkan Langkah Cerita', pageTitleEn:'Order Word Problem Steps', taskType:'sorting',
+          question:'Urutkan langkah menyelesaikan soal cerita sudut sepihak.', questionEn:'Order steps to solve co-interior word problem.',
+          items:[
+            'Identifikasi sudut sepihak pada soal',
+            'Buat persamaan: jumlah = 180',
+            'Substitusi nilai sudut yang diketahui',
+            'Selesaikan persamaan untuk x'
+          ],
+          correctOrder:[0,1,2,3],
+          explanation:`<p>Identifikasi, buat persamaan, substitusi, selesaikan. <span class="tr">Identify, equation, substitute, solve.</span></p>`},
+        { type:'task', pageTitle:'T6: Pasangkan Komponen', pageTitleEn:'Match Components', taskType:'pairing',
+          question:'Pasangkan komponen soal cerita dengan istilah geometrinya.', questionEn:'Match word problem components with geometry terms.',
+          pairs:[
+            {left:'Dinding Rumah', right:'Garis Sejajar'},
+            {left:'Tangga', right:'Garis Transversal'},
+            {left:'Sudut Lantai', right:'Sudut Dalam'},
+            {left:'Sudut Atap', right:'Sudut Luar'}
+          ],
+          explanation:`<p>Hubungkan objek nyata dengan konsep. <span class="tr">Connect real objects with concepts.</span></p>`},
+        { type:'task', pageTitle:'T7: Pilih Pernyataan Benar', pageTitleEn:'Select True Statements', taskType:'checkbox',
+          question:'Pilih semua pernyataan yang benar tentang garis sejajar dan transversal.', questionEn:'Select all true statements about parallel lines and transversals.',
+          options:[
+            {text:'Sudut sehadap besarnya sama <span class="tr">Corresponding are equal</span>', correct:true},
+            {text:'Sudut sepihak besarnya sama <span class="tr">Co-interior are equal</span>', correct:false},
+            {text:'Sudut berseberangan besarnya sama <span class="tr">Alternate are equal</span>', correct:true},
+            {text:'Sudut sepihak berjumlah 90 derajat <span class="tr">Co-interior sum to 90</span>', correct:false}
+          ],
+          explanation:`<p>Sepihak berjumlah 180, bukan sama atau 90. <span class="tr">Co-interior sum to 180, not equal or 90.</span></p>`},
+        { type:'task', pageTitle:'T8: Hitung Sudut Sehadap Cerita', pageTitleEn:'Calculate Corresponding Word Problem', taskType:'fill',
+          question:'Jalan memotong rel sejajar. Sudut antara jalan dan rel 1 adalah $70^\\circ$. Sudut sehadap pada rel 2 adalah $\\dots^\\circ$', questionEn:'Road cuts parallel tracks. Angle between road and track 1 is $70^\\circ$. Corresponding angle on track 2 is $\\dots^\\circ$',
+          correctAnswer:'70', acceptableAnswers:['70'],
+          explanation:`<p>Sudut sehadap besarnya sama: $70^\\circ$. <span class="tr">Corresponding are equal.</span></p>`},
+        { type:'task', pageTitle:'T9: Tentukan Persamaan Cerita', pageTitleEn:'Determine Word Problem Equation', taskType:'radio',
+          question:'Diketahui sudut dalam sepihak adalah $3x^\\circ$ dan $(x+40)^\\circ$. Persamaan yang benar adalah?', questionEn:'Given co-interior angles are $3x^\\circ$ and $(x+40)^\\circ$. Correct equation is?',
+          options:[
+            {text:'$3x = x + 40$ <span class="tr">Set equal</span>', correct:false},
+            {text:'$3x + x + 40 = 90$ <span class="tr">Sum to 90</span>', correct:false},
+            {text:'$3x + x + 40 = 180$ <span class="tr">Sum to 180</span>', correct:true},
+            {text:'$3x - x = 40$ <span class="tr">Subtract</span>', correct:false}
+          ],
+          explanation:`<p>Sudut sepihak berjumlah 180: $3x + x + 40 = 180$. <span class="tr">Sum to 180.</span></p>`},
+        { type:'task', pageTitle:'T10: Hitung x Akhir', pageTitleEn:'Calculate Final x', taskType:'fill',
+          question:'Dari soal sebelumnya, nilai $x = \\dots^\\circ$', questionEn:'From previous problem, value of $x = \\dots^\\circ$',
+          correctAnswer:'35', acceptableAnswers:['35'],
+          explanation:`<ol><li>$4x + 40 = 180$</li><li>$4x = 140$</li><li>$x = 35$</li></ol>`}
+      ]
+    }
+  };
+
+  // ================= STATE =================
+  let currentSection = 'a';
+  let currentPage = 0;
+  let userAnswers = {};
+
+  // ================= UTILITIES =================
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function renderMath(el){
+    if(window.renderMathInElement){
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$', right:'$', display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ================= SIDEBAR =================
+  function renderSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const sectionKeys = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const meta = {
+      a:{t:'Spiral Review Warm-up', e:'Spiral Review Warm-up', time:'00:00-00:10'},
+      b:{t:'Intro & Real-World', e:'Intro & Real-World', time:'00:10-00:15'},
+      c:{t:'Review of Prior Knowledge', e:'Review of Prior Knowledge', time:'00:15-00:20'},
+      d:{t:'Problem Introduction', e:'Problem Introduction', time:'00:20-00:30'},
+      e:{t:'Guided Practice', e:'Guided Practice', time:'00:30-00:45'},
+      f:{t:'Independent Practice', e:'Independent Practice', time:'00:45-00:55'},
+      g:{t:'Consolidation & Reflection', e:'Consolidation & Reflection', time:'00:55-01:00'},
+      h:{t:'Task 1', e:'Task 1', time:'Printable'},
+      i:{t:'Task 2', e:'Task 2', time:'Printable'},
+      j:{t:'Task 3', e:'Task 3', time:'Printable'},
+      k:{t:'Task 4', e:'Task 4', time:'Printable'},
+      l:{t:'Task 5', e:'Task 5', time:'Printable'}
+    };
+    let html = '<h3>Bagian <span class="tr">Sections</span></h3>';
+    sectionKeys.forEach(key => {
+      const section = sectionsData[key];
+      const isActive = currentSection === key;
+      if(section){
+        html += `<div class="nav-link ${isActive?'active':''}" data-section="${key}">
+          <span class="nl-title">${key.toUpperCase()}. ${meta[key].t}</span>
+          <span class="tr">${meta[key].e}</span>
+          <span class="time">${meta[key].time}</span>
+        </div>`;
+      } else {
+        html += `<div class="nav-link disabled">${key.toUpperCase()}. ${meta[key].t}<br><span class="tr">${meta[key].e}</span><br><span class="time">${meta[key].time} (segera)</span></div>`;
+      }
+    });
+    sidebar.innerHTML = html;
+    sidebar.querySelectorAll('.nav-link[data-section]').forEach(el => {
+      el.addEventListener('click', () => {
+        currentSection = el.dataset.section;
+        currentPage = 0;
+        renderSidebar();
+        renderPage();
+      });
+    });
+  }
+
+  // ================= PAGE RENDER =================
+  function renderPage(){
+    const section = sectionsData[currentSection];
+    if(!section) return;
+    const page = section.pages[currentPage];
+    const contentEl = document.getElementById('pageContent');
+
+    let printBtnHtml = '';
+    if(['h','i','j','k','l'].includes(currentSection)){
+      printBtnHtml = '<button id="printBtnTop" style="background:var(--success);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap">🖨 Cetak ke PDF <span class="tr">Print to PDF</span></button>';
+    }
+
+    let html = '<div class="page-header"><h2>' + section.title + ' <span class="tr">' + section.titleEn + '</span></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + printBtnHtml + '<span class="badge">' + page.pageTitle.split(':')[0] + '</span></div></div>';
+
+    if(page.type === 'explanation'){
+      html += '<div class="card explain"><h3>' + page.pageTitle + ' <span class="tr">' + page.pageTitleEn + '</span></h3>' + page.body + '</div>';
+    } else if(page.type === 'task'){
+      html += renderTask(page);
+    }
+    contentEl.innerHTML = html;
+    renderMath(contentEl);
+
+    const total = section.pages.length;
+    const pageNumsEl = document.getElementById('pageNums');
+    let pageNumHtml = '';
+    section.pages.forEach(function(p, i){
+      var raw = p.pageTitle.split(':')[0].trim();
+      var type = raw.charAt(0);
+      var num = parseInt(raw.substring(1));
+      var label = type + '-' + String(num).padStart(2, '0');
+      var typeClass = (type === 'E') ? 'page-num-e' : 'page-num-t';
+      var isActive = (i === currentPage);
+      pageNumHtml += '<button class="page-num ' + typeClass + ' ' + (isActive ? 'active' : '') + '" data-page="' + i + '"' + (isActive ? ' disabled' : '') + '>' + label + '</button>';
+    });
+    pageNumsEl.innerHTML = pageNumHtml;
+
+    pageNumsEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+      });
+    });
+
+    document.getElementById('prevBtn').disabled = (currentPage === 0);
+    document.getElementById('nextBtn').disabled = (currentPage === total - 1);
+
+    var printBtnTop = document.getElementById('printBtnTop');
+    if(printBtnTop){
+      printBtnTop.addEventListener('click', function(){ printTask(currentSection); });
+    }
+
+    if(page.type === 'task'){
+      attachTaskHandlers(page);
+    }
+  }
+
+  function renderTask(page){
+    let html = `<div class="card task"><h3>${page.pageTitle} <span class="tr">${page.pageTitleEn}</span></h3>`;
+    html += `<div class="q-text">${page.question} <span class="tr">${page.questionEn || ''}</span></div>`;
+
+    if(page.taskType === 'radio' || page.taskType === 'checkbox'){
+      const options = shuffle(page.options);
+      page._shuffledOptions = options;
+      html += '<div class="options">';
+      options.forEach((opt, i) => {
+        const cls = page.taskType === 'checkbox' ? 'option checkbox' : 'option radio';
+        html += `<div class="${cls}" data-idx="${i}">
+          <div class="marker"></div>
+          <div class="opt-text">${opt.text}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'fill'){
+      html += `<input type="text" class="fill-input" id="fillInput" placeholder="...">`;
+    } else if(page.taskType === 'truefalse'){
+      const opts = shuffle([
+        {text:'Benar <span class="tr">True</span>', val:'true'},
+        {text:'Salah <span class="tr">False</span>', val:'false'}
+      ]);
+      page._shuffledTF = opts;
+      html += '<div class="options">';
+      opts.forEach((o, i) => {
+        html += `<div class="option radio" data-val="${o.val}" data-idx="${i}"><div class="marker"></div><div class="opt-text">${o.text}</div></div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'sorting'){
+      const shuffled = shuffle(page.items.map((item, idx) => ({text:item, originalIdx:idx})));
+      page._shuffledItems = shuffled;
+      html += '<div class="sort-list">';
+      shuffled.forEach((it, i) => {
+        html += `<div class="sort-item" data-pos="${i}" data-orig="${it.originalIdx}">
+          <span class="pos">${i+1}</span>
+          <span class="sort-text">${it.text}</span>
+        </div>`;
+      });
+      html += '</div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Klik dua item untuk menukar. <span class="tr">Click two items to swap.</span></p>';
+    } else if(page.taskType === 'pairing'){
+      const lefts = shuffle(page.pairs.map((p, idx) => ({text:p.left, originalIdx:idx})));
+      const rights = shuffle(page.pairs.map((p, idx) => ({text:p.right, originalIdx:idx})));
+      page._shuffledPairs = {lefts, rights};
+      html += '<div class="pair-grid">';
+      html += '<div class="pair-col"><h4>Kiri <span class="tr">Left</span></h4>';
+      lefts.forEach((l, i) => {
+        html += `<div class="pair-item" data-side="left" data-idx="${i}">${l.text}</div>`;
+      });
+      html += '</div>';
+      html += '<div class="pair-col"><h4>Kanan <span class="tr">Right</span></h4>';
+      rights.forEach((r, i) => {
+        html += `<div class="pair-item" data-side="right" data-idx="${i}">${r.text}</div>`;
+      });
+      html += '</div></div>';
+      html += '<div class="pairs-list" id="pairsList"></div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Klik kiri lalu kanan untuk memasangkan. <span class="tr">Click left then right to pair.</span></p>';
+    }
+    html += `<button class="btn-submit" id="submitBtn">Periksa Jawaban <span class="tr">Check Answer</span></button>`;
+    html += `<div class="feedback" id="feedback"></div></div>`;
+    return html;
+  }
+
+  function attachTaskHandlers(page){
+    const taskType = page.taskType;
+    if(taskType === 'radio' || taskType === 'truefalse'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    } else if(taskType === 'checkbox'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => opt.classList.toggle('selected'));
+      });
+    } else if(taskType === 'sorting'){
+      let firstClick = null;
+      document.querySelectorAll('.sort-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if(firstClick === null){
+            firstClick = item;
+            item.classList.add('selected');
+          } else if(firstClick === item){
+            item.classList.remove('selected');
+            firstClick = null;
+          } else {
+            const fText = firstClick.querySelector('.sort-text').innerHTML;
+            const sText = item.querySelector('.sort-text').innerHTML;
+            firstClick.querySelector('.sort-text').innerHTML = sText;
+            item.querySelector('.sort-text').innerHTML = fText;
+            const fOrig = firstClick.dataset.orig;
+            firstClick.dataset.orig = item.dataset.orig;
+            item.dataset.orig = fOrig;
+            firstClick.classList.remove('selected');
+            firstClick = null;
+          }
+        });
+      });
+    } else if(taskType === 'pairing'){
+      let selectedLeft = null;
+      document.querySelectorAll('.pair-item[data-side="left"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired')) return;
+          document.querySelectorAll('.pair-item[data-side="left"]').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedLeft = item;
+        });
+      });
+      document.querySelectorAll('.pair-item[data-side="right"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired') || !selectedLeft) return;
+          const leftIdx = selectedLeft.dataset.idx;
+          const rightIdx = item.dataset.idx;
+          const pairList = document.getElementById('pairsList');
+          const pairRow = document.createElement('div');
+          pairRow.className = 'pair-row';
+          pairRow.dataset.leftIdx = leftIdx;
+          pairRow.dataset.rightIdx = rightIdx;
+          pairRow.innerHTML = `<span>${selectedLeft.innerHTML}</span> <span>↔</span> <span>${item.innerHTML}</span> <span class="remove" title="Hapus">×</span>`;
+          pairRow.querySelector('.remove').addEventListener('click', function() {
+            const lIdx = pairRow.dataset.leftIdx;
+            const rIdx = pairRow.dataset.rightIdx;
+            const lItem = document.querySelector(`.pair-item[data-side="left"][data-idx="${lIdx}"]`);
+            const rItem = document.querySelector(`.pair-item[data-side="right"][data-idx="${rIdx}"]`);
+            if(lItem) lItem.classList.remove('paired');
+            if(rItem) rItem.classList.remove('paired');
+            pairRow.remove();
+          });
+          pairList.appendChild(pairRow);
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('paired');
+          item.classList.add('paired');
+          selectedLeft = null;
+        });
+      });
+    }
+    document.getElementById('submitBtn').addEventListener('click', () => checkAnswer(page));
+  }
+
+  function checkAnswer(page){
+    const taskType = page.taskType;
+    let isCorrect = false;
+    let userAnswerStr = '';
+
+    if(taskType === 'radio'){
+      let selected = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selected = page._shuffledOptions[i];
+          selectedIdx = i;
+        }
+      });
+      if(!selected){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      isCorrect = selected.correct;
+      userAnswerStr = selected.text;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(i === selectedIdx && !selected.correct) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'checkbox'){
+      const selectedIdxs = [];
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')) selectedIdxs.push(i);
+      });
+      if(selectedIdxs.length === 0){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      const correctSet = new Set();
+      page._shuffledOptions.forEach((opt, i) => { if(opt.correct) correctSet.add(i); });
+      const selectedSet = new Set(selectedIdxs);
+      isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(i => selectedSet.has(i));
+      userAnswerStr = selectedIdxs.map(i => page._shuffledOptions[i].text).join(', ');
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(selectedSet.has(i)) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'fill'){
+      const val = document.getElementById('fillInput').value.trim();
+      const acceptable = page.acceptableAnswers || [page.correctAnswer];
+      const norm = s => s.toLowerCase().replace(/\s+/g, '').trim();
+      isCorrect = acceptable.some(a => norm(a) === norm(val));
+      userAnswerStr = val;
+    } else if(taskType === 'truefalse'){
+      let selectedVal = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selectedVal = opt.dataset.val;
+          selectedIdx = i;
+        }
+      });
+      if(!selectedVal){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      isCorrect = selectedVal === page.correctAnswer;
+      userAnswerStr = selectedVal === 'true' ? 'Benar' : 'Salah';
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(opt.dataset.val === page.correctAnswer) opt.classList.add('correct');
+        else if(i === selectedIdx) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'sorting'){
+      const currentOrder = [];
+      document.querySelectorAll('.sort-item').forEach(item => {
+        currentOrder.push(parseInt(item.dataset.orig));
+      });
+      isCorrect = currentOrder.every((idx, i) => idx === page.correctOrder[i]);
+      userAnswerStr = currentOrder.map((idx, i) => `${i+1}. ${page.items[idx] || '?'}`).join('  |  ');
+      document.querySelectorAll('.sort-item').forEach((item, i) => {
+        if(currentOrder[i] === page.correctOrder[i]) item.style.borderColor = 'var(--success)';
+        else item.style.borderColor = 'var(--danger)';
+      });
+    } else if(taskType === 'pairing'){
+      const pairRows = document.querySelectorAll('.pair-row');
+      if(pairRows.length === 0){
+        showFeedback(false, 'Silakan buat pasangan. <span class="tr">Please make pairs.</span>', false);
+        return;
+      }
+      const userPairs = [];
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        userPairs.push({
+          leftText: page._shuffledPairs.lefts[lIdx].text,
+          rightText: page._shuffledPairs.rights[rIdx].text
+        });
+      });
+      const correctPairs = page.pairs.map(p => ({left:p.left, right:p.right}));
+      const correctCount = userPairs.filter(up =>
+        correctPairs.some(cp => cp.left === up.leftText && cp.right === up.rightText)
+      ).length;
+      isCorrect = correctCount === correctPairs.length && userPairs.length === correctPairs.length;
+      userAnswerStr = userPairs.map(p => `${p.leftText}↔${p.rightText}`).join('  |  ');
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        const lText = page._shuffledPairs.lefts[lIdx].text;
+        const rText = page._shuffledPairs.rights[rIdx].text;
+        const ok = correctPairs.some(cp => cp.left === lText && cp.right === rText);
+        row.style.background = ok ? '#d1fae5' : '#fee2e2';
+      });
+    }
+
+    const pageKey = `${currentSection}-${currentPage}`;
+    userAnswers[pageKey] = {userAnswer:userAnswerStr, correct:isCorrect, pageTitle:page.pageTitle};
+    showFeedback(isCorrect, page.explanation, true);
+  }
+
+  function showFeedback(isCorrect, explanation, showAnswer){
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback show ${isCorrect?'correct':'incorrect'}`;
+    if(showAnswer){
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Benar!':'✗ Salah'} <span class="tr">${isCorrect?'Correct!':'Incorrect'}</span></h4>${explanation}`;
+    } else {
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Benar!':'✗ Salah'}</h4>`;
+    }
+    renderMath(feedback);
+  }
+
+  // ================= EVENT LISTENERS =================
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(currentPage > 0){ currentPage--; renderPage(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const total = sectionsData[currentSection].pages.length;
+    if(currentPage < total - 1){ currentPage++; renderPage(); }
+  });
+
+  const modal = document.getElementById('classRulesModal');
+  document.getElementById('classRulesBtn').addEventListener('click', () => modal.classList.add('active'));
+  document.querySelector('.modal-close').addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // ================= PRINT TO PDF =================
+  function getCorrectAnswer(task){
+    if(task.taskType === 'radio'){
+      const c = task.options.find(o => o.correct);
+      return c ? c.text : '';
+    }
+    if(task.taskType === 'checkbox'){
+      return task.options.filter(o => o.correct).map(o => o.text).join(', ');
+    }
+    if(task.taskType === 'fill'){
+      return task.correctAnswer || '';
+    }
+    if(task.taskType === 'truefalse'){
+      return task.correctAnswer === 'true' ? 'Benar' : 'Salah';
+    }
+    if(task.taskType === 'sorting'){
+      return task.correctOrder.map(i => task.items[i]).join(' → ');
+    }
+    if(task.taskType === 'pairing'){
+      return task.pairs.map(p => p.left + ' ↔ ' + p.right).join('; ');
+    }
+    return '';
+  }
+
+  function printTask(sectionKey){
+    const section = sectionsData[sectionKey];
+    if(!section) return;
+    const tasks = section.pages;
+    let correctCount = 0;
+
+    const rows = tasks.map((task, idx) => {
+      const pageKey = sectionKey + '-' + idx;
+      const ua = userAnswers[pageKey];
+      const isCorrect = ua ? ua.correct : false;
+      const userAns = ua ? ua.userAnswer : '(tidak dijawab)';
+      const correctAns = getCorrectAnswer(task);
+      if(ua && ua.correct) correctCount++;
+      return '<tr><td>' + (idx+1) + '</td><td>' + task.question + '</td><td>' + userAns + '</td><td>' + correctAns + '</td><td style="text-align:center;font-size:1.1em">' + (isCorrect ? '✓' : '✗') + '</td></tr>';
+    }).join('');
+
+    const score = correctCount + ' / ' + tasks.length;
+    const today = new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'});
+
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cetak - ' + section.title + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>' +
+      '<style>' +
+      'body{font-family:Segoe UI,sans-serif;padding:30px;color:#1e293b;line-height:1.5}' +
+      'h1{font-size:1.2em;margin-bottom:5px}' +
+      '.info{margin-bottom:15px;font-size:.88em}' +
+      '.info div{margin:3px 0}' +
+      'table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.82em}' +
+      'th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:left;vertical-align:top}' +
+      'th{background:#f1f5f9;font-weight:600}' +
+      '.checked-by{margin-top:30px;text-align:right;font-style:italic}' +
+      '.tr{font-style:italic;font-size:.85em;color:#64748b}' +
+      '@media print{body{padding:15px}}' +
+      '</style></head><body>' +
+      '<h1>Math Tutoring by Deni</h1>' +
+      '<div class="info">' +
+      '<div>Nama: ____________________________ <span class="tr">Name</span></div>' +
+      '<div>Tanggal: ' + today + ' <span class="tr">Date</span></div>' +
+      '<div>Topik: Kesebangunan: Hubungan Antar Sudut <span class="tr">Topic: Similarity: Relationship Between Angles</span></div>' +
+      '<div>Grup Task: ' + section.title + ' <span class="tr">Task Group</span></div>' +
+      '<div>Skor: <strong>' + score + '</strong> <span class="tr">Score</span></div>' +
+      '</div>' +
+      '<table><thead><tr>' +
+      '<th style="width:30px">No.</th>' +
+      '<th>Pertanyaan <span class="tr">Question</span></th>' +
+      '<th>Jawaban Siswa <span class="tr">Student Answer</span></th>' +
+      '<th>Jawaban Benar <span class="tr">Correct Answer</span></th>' +
+      '<th style="width:50px">Ket. <span class="tr">Note</span></th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="checked-by">Dicek oleh,<br>Deni</div>' +
+      '<script>document.addEventListener("DOMContentLoaded",function(){' +
+      'if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}' +
+      'setTimeout(function(){window.print();},500);});<\/script>' +
+      '</body></html>';
+
+    const w = window.open('', '_blank');
+    if(w){
+      w.document.write(html);
+      w.document.close();
+    } else {
+      alert('Mohon izinkan pop-up untuk mencetak. <span class="tr">Please allow pop-ups to print.</span>');
+    }
+  }
+
+  // ================= INIT =================
+  renderSidebar();
+  renderPage();
+});
+</script>
+</body>
+</html>
