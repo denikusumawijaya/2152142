@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Tutoring by Deni - Investigasi Statistika</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1e40af;--secondary:#f59e0b;--success:#10b981;--danger:#ef4444;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.tr{font-style:italic;font-size:.82em;color:var(--muted);display:block;margin-top:2px}
+header{background:var(--primary);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+header .brand{font-weight:700;font-size:1.05em}
+header .topic{font-size:.88em;text-align:center;flex:1}
+header .topic .tr{color:rgba(255,255,255,.85)}
+header button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:.85em;white-space:nowrap}
+header button:hover{background:rgba(255,255,255,.25)}
+.main-container{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--card);border-right:1px solid var(--border);padding:14px;overflow-y:auto;position:sticky;top:52px;height:calc(100vh - 52px)}
+.sidebar h3{font-size:.72em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:1px}
+.nav-link{display:block;padding:8px 10px;border-radius:6px;cursor:pointer;margin-bottom:3px;font-size:.84em;border:1px solid transparent;transition:all .15s}
+.nav-link:hover{background:#eff6ff}
+.nav-link.active{background:var(--primary);color:#fff;pointer-events:none;cursor:default}
+.nav-link .nl-title{display:block;font-weight:600}
+.nav-link .time{font-size:.76em;color:var(--muted);display:block;margin-top:2px}
+.nav-link.active .time,.nav-link.active .tr{color:rgba(255,255,255,.85)}
+.nav-link.disabled{opacity:.45;cursor:not-allowed;font-size:.8em;padding:6px 10px}
+.content-area{padding:22px 28px;overflow-y:auto;max-width:1100px;margin:0 auto;width:100%}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px}
+.page-header h2{color:var(--primary-dark);font-size:1.1em}
+.page-header .badge{background:var(--secondary);color:#fff;padding:4px 10px;border-radius:20px;font-size:.76em;font-weight:600}
+.card{background:var(--card);border-radius:10px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);margin-bottom:16px;border:1px solid var(--border)}
+.card.explain{border-left:4px solid var(--primary)}
+.card.task{border-left:4px solid var(--secondary)}
+.card h3{color:var(--primary-dark);margin-bottom:12px;font-size:1.1em}
+.math-block{background:#f1f5f9;padding:12px 14px;border-radius:8px;margin:12px 0;overflow-x:auto}
+.example-box{background:#fef3c7;border-left:4px solid var(--secondary);padding:12px 16px;margin:12px 0;border-radius:6px}
+.example-box h4{color:#92400e;margin-bottom:6px;font-size:.95em}
+.tip-box{background:#dbeafe;border-left:4px solid var(--primary);padding:10px 14px;margin:10px 0;border-radius:6px}
+.tip-box h4{color:#1e40af;margin-bottom:4px;font-size:.9em}
+.illustration{text-align:center;margin:14px 0;padding:14px;background:#f1f5f9;border-radius:8px}
+.q-text{font-size:1em;margin-bottom:12px;line-height:1.7}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:2px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;transition:all .15s}
+.option:hover{border-color:var(--primary);background:#eff6ff}
+.option.selected{border-color:var(--primary);background:#dbeafe}
+.option.correct{border-color:var(--success);background:#d1fae5}
+.option.incorrect{border-color:var(--danger);background:#fee2e2}
+.option .marker{min-width:18px;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#fff}
+.option.selected .marker{background:var(--primary);border-color:var(--primary)}
+.option.correct .marker{background:var(--success);border-color:var(--success)}
+.option.incorrect .marker{background:var(--danger);border-color:var(--danger)}
+.option.checkbox .marker{border-radius:3px}
+.option .opt-text{flex:1}
+.fill-input{padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-size:1em;width:100%;margin:8px 0;font-family:inherit}
+.fill-input:focus{border-color:var(--primary);outline:none}
+.btn-submit{background:var(--primary);color:#fff;border:none;padding:9px 20px;border-radius:6px;cursor:pointer;font-size:.88em;font-weight:600;margin-top:12px}
+.btn-submit:hover{background:var(--primary-dark)}
+.feedback{margin-top:12px;padding:14px;border-radius:8px;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#d1fae5;border:1px solid var(--success)}
+.feedback.incorrect{background:#fee2e2;border:1px solid var(--danger)}
+.feedback h4{margin-bottom:6px}
+.feedback ol,.feedback ul{margin:6px 0;padding-left:22px}
+.feedback li{margin:4px 0}
+.card ol, .card ul { padding-left: 26px; margin: 10px 0; }
+.card li { margin: 5px 0; }
+.example-box ol, .example-box ul { padding-left: 22px; margin: 8px 0; }
+.tip-box ol, .tip-box ul { padding-left: 22px; margin: 8px 0; }
+.math-block ol, .math-block ul { padding-left: 22px; margin: 8px 0; }
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.pagination button{background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.84em}
+.pagination button:disabled{background:#cbd5e1;cursor:not-allowed}
+.pagination .indicator{font-size:.82em;color:var(--muted);text-align:center;flex:1;padding:0 10px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:#fff;padding:22px;border-radius:12px;max-width:460px;width:90%}
+.modal-content h3{color:var(--primary-dark);margin-bottom:12px}
+.modal-content ul{list-style:none;padding-left:0}
+.modal-content li{padding:10px 0;border-bottom:1px solid var(--border)}
+.modal-content li:last-child{border-bottom:none}
+.modal-close{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px}
+.sort-list{display:flex;flex-direction:column;gap:6px}
+.sort-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.sort-item:hover{border-color:var(--primary)}
+.sort-item.selected{border-color:var(--primary);background:#dbeafe}
+.sort-item .pos{background:var(--primary);color:#fff;min-width:24px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8em;flex-shrink:0}
+.sort-item .sort-text{flex:1}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair-col h4{font-size:.85em;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.pair-col{display:flex;flex-direction:column;gap:6px}
+.pair-item{padding:10px 12px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;font-size:.92em}
+.pair-item.selected{border-color:var(--primary);background:#dbeafe}
+.pair-item.paired{opacity:.5;cursor:default;border-color:var(--success);background:#d1fae5}
+.pairs-list{margin-top:10px}
+.pair-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#f1f5f9;border-radius:6px;margin-bottom:4px;font-size:.85em}
+.pair-row .remove{cursor:pointer;color:var(--danger);font-weight:700;margin-left:6px}
+.page-numbers {display:flex;gap:3px;flex-wrap:nowrap;justify-content:center;flex:1;overflow-x:auto;padding:0 3px;}
+.page-num {min-width:28px;height:26px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;font-size:.7em;display:flex;align-items:center;justify-content:center;padding:0 4px;white-space:nowrap;transition:all .15s;flex-shrink:0;}
+.page-num.page-num-e {background:#eff6ff;border-color:#93c5fd;color:#1e40af;}
+.page-num.page-num-t {background:#fffbeb;border-color:#fcd34d;color:#92400e;}
+.page-num.page-num-e:hover {background:#dbeafe;border-color:var(--primary);}
+.page-num.page-num-t:hover {background:#fef3c7;border-color:var(--secondary);}
+.page-num.page-num-e.active {background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600;}
+.page-num.page-num-t.active {background:var(--secondary);color:#fff;border-color:var(--secondary);font-weight:600;}
+.page-num:disabled {opacity:1;cursor:default;}
+@media(max-width:1100px){.main-container{grid-template-columns:180px 1fr}.content-area{padding:18px 20px}}
+@media(max-width:760px){.main-container{grid-template-columns:1fr}.sidebar{display:none}.content-area{padding:16px}header{font-size:.9em}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Math Tutoring by Deni</div>
+  <div class="topic">Topik: Data dan Diagram: Investigasi Statistika <span class="tr">Topic: Data and Diagrams: Statistical Investigation</span></div>
+  <button id="classRulesBtn">Aturan Kelas <span class="tr">Class Rules</span></button>
+</header>
+<div class="main-container">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="content-area">
+    <div id="pageContent"></div>
+    <div class="pagination">
+      <button id="prevBtn">← Sebelumnya <span class="tr">Previous</span></button>
+      <div class="page-numbers" id="pageNums"></div>
+      <button id="nextBtn">Berikutnya <span class="tr">Next</span> →</button>
+    </div>
+  </main>
+</div>
+<div id="classRulesModal" class="modal">
+  <div class="modal-content">
+    <h3>Aturan Kelas <span class="tr">Class Rules</span></h3>
+    <ul>
+      <li>Berbicara secara bergantian <span class="tr">Speak in turn</span></li>
+      <li>Meminta izin jika ingin meninggalkan kelas <span class="tr">Ask permission before leaving the class</span></li>
+      <li>Menyalakan microphone dan camera jika diperlukan <span class="tr">Turn on microphone and camera when needed</span></li>
+    </ul>
+    <button class="modal-close">Tutup <span class="tr">Close</span></button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  if(!window.renderMathInElement){setTimeout(arguments.callee,50);return;}
+  const sectionsData = {
+    a: {
+      title: 'Spiral Review Warm-up', titleEn: 'Spiral Review Warm-up', time: '00:00 - 00:10',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Bilangan Bulat & Operasi Dasar', pageTitleEn:'Integers & Basic Operations',
+          body:`<p>Dalam statistika, kita sering menghitung jumlah data dan membaginya. Kita perlu menguasai operasi dasar bilangan bulat. <span class="tr">In statistics, we often sum data and divide it. We need to master basic integer operations.</span></p>
+          <div class="math-block"><strong>Aturan Tanda <span class="tr">Sign Rules</span>:</strong><br>
+          $(+) + (+) = (+)$ <span class="tr">Positive plus positive is positive</span><br>
+          $(-) + (-) = (-)$ <span class="tr">Negative plus negative is negative</span><br>
+          $(+) \\times (-) = (-)$ <span class="tr">Positive times negative is negative</span></div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Hitung $5 + (-3)$. <span class="tr">Calculate $5 + (-3)$.</span>
+          <p>$5 + (-3) = 5 - 3 = 2$</p></div>`
+        },
+        { type:'task', pageTitle:'T1: Hitung Penjumlahan', pageTitleEn:'Calculate Addition', taskType:'fill',
+          question:'Hasil dari $8 + (-5) = \\dots$', questionEn:'The result of $8 + (-5) = \\dots$',
+          correctAnswer:'3', acceptableAnswers:['3'],
+          explanation:`<p>$8 + (-5)$ sama dengan $8 - 5 = 3$. <span class="tr">$8 + (-5)$ is equal to $8 - 5 = 3$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Bilangan Terbesar', pageTitleEn:'Largest Number', taskType:'radio',
+          question:'Manakah bilangan yang terbesar? <span class="tr">Which number is the largest?</span>',
+          options:[{text:'$-4$', correct:false},{text:'$-1$', correct:true},{text:'$-10$', correct:false},{text:'$-2$', correct:false}],
+          explanation:`<p>Pada bilangan negatif, semakin ke kanan nilainya semakin besar. $-1$ lebih besar dari $-2, -4, -10$. <span class="tr">On the number line for negatives, further right means larger. $-1$ is greater than $-2, -4, -10$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Perkalian Negatif', pageTitleEn:'Negative Multiplication', taskType:'truefalse',
+          question:'Benar atau Salah: Hasil dari $(-4) \\times (-3)$ adalah $-12$.', questionEn:'True or false: The result of $(-4) \\times (-3)$ is $-12$.',
+          correctAnswer:'false',
+          explanation:`<p>Negatif dikali negatif menghasilkan positif. $(-4) \\times (-3) = 12$. <span class="tr">Negative times negative yields positive. $(-4) \\times (-3) = 12$.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Pecahan & Desimal', pageTitleEn:'Fractions & Decimals',
+          body:`<p>Rata-rata sering menghasilkan bilangan desimal atau pecahan. Kita harus mengubah pecahan menjadi desimal dengan membagi pembilang dengan penyebut. <span class="tr">Averages often result in decimals or fractions. We must convert fractions to decimals by dividing the numerator by the denominator.</span></p>
+          <div class="math-block">$\\dfrac{a}{b} = a \\div b$</div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Ubah $\\dfrac{3}{4}$ ke desimal. <span class="tr">Convert $\\dfrac{3}{4}$ to decimal.</span>
+          <p>$3 \\div 4 = 0.75$</p></div>`
+        },
+        { type:'task', pageTitle:'T4: Ubah ke Desimal', pageTitleEn:'Convert to Decimal', taskType:'fill',
+          question:'Ubah $\\dfrac{1}{2}$ menjadi desimal. $\\dots$', questionEn:'Convert $\\dfrac{1}{2}$ to decimal. $\\dots$',
+          correctAnswer:'0.5', acceptableAnswers:['0.5','0,5'],
+          explanation:`<p>$1 \\div 2 = 0.5$. <span class="tr">$1 \\div 2 = 0.5$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Urutkan Desimal', pageTitleEn:'Order Decimals', taskType:'sorting',
+          question:'Urutkan desimal dari terkecil ke terbesar.', questionEn:'Order decimals from smallest to largest.',
+          items:['$0.25$ <span class="tr">smallest</span>','$0.5$','$0.75$','$1.0$ <span class="tr">largest</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>$0.25 = \\dfrac{1}{4}$, $0.5 = \\dfrac{1}{2}$, $0.75 = \\dfrac{3}{4}$, $1.0 = 1$. <span class="tr">Values increase sequentially.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Pecahan ke Desimal', pageTitleEn:'Fraction to Decimal', taskType:'pairing',
+          question:'Pasangkan pecahan dengan nilai desimalnya.', questionEn:'Match the fraction to its decimal value.',
+          pairs:[{left:'$\\dfrac{1}{4}$', right:'$0.25$'},{left:'$\\dfrac{1}{2}$', right:'$0.5$'},{left:'$\\dfrac{3}{4}$', right:'$0.75$'},{left:'$\\dfrac{1}{5}$', right:'$0.2$'}],
+          explanation:`<p>Bagi pembilang dengan penyebut. <span class="tr">Divide numerator by denominator.</span> $1 \\div 4 = 0.25$, dll.</p>`
+        },
+        { type:'explanation', pageTitle:'E3: Membaca Tabel Sederhana', pageTitleEn:'Reading Simple Tables',
+          body:`<p>Data sering disajikan dalam tabel. Baris menunjukkan kategori, kolom menunjukkan nilai. <span class="tr">Data is often presented in tables. Rows show categories, columns show values.</span></p>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          <table border="1" style="width:100%;text-align:center;border-collapse:collapse;margin:5px 0">
+          <tr><th>Hari <span class="tr">Day</span></th><th>Jumlah Siswa <span class="tr">Students</span></th></tr>
+          <tr><td>Senin <span class="tr">Monday</span></td><td>20</td></tr>
+          <tr><td>Selasa <span class="tr">Tuesday</span></td><td>25</td></tr>
+          </table>
+          Total siswa = $20 + 25 = 45$.</div>`
+        },
+        { type:'task', pageTitle:'T7: Hitung Total', pageTitleEn:'Calculate Total', taskType:'fill',
+          question:'Tabel menunjukkan penjualan Hari 1 (10) dan Hari 2 (15). Total = $\\dots$', questionEn:'Table shows sales Day 1 (10) and Day 2 (15). Total = $\\dots$',
+          correctAnswer:'25', acceptableAnswers:['25'],
+          explanation:`<p>$10 + 15 = 25$. <span class="tr">Sum of both days.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Data dari Tabel', pageTitleEn:'Data from Table', taskType:'checkbox',
+          question:'Pilih semua pernyataan yang benar berdasarkan tabel: Senin=20, Selasa=25, Rabu=15.', questionEn:'Select all true statements based on table: Mon=20, Tue=25, Wed=15.',
+          options:[{text:'Selasa memiliki data tertinggi <span class="tr">Tuesday has highest</span>', correct:true},{text:'Rabu memiliki data tertinggi <span class="tr">Wednesday has highest</span>', correct:false},{text:'Total data adalah 60 <span class="tr">Total data is 60</span>', correct:true},{text:'Senin lebih sedikit dari Rabu <span class="tr">Monday is less than Wednesday</span>', correct:false}],
+          explanation:`<p>Tertinggi adalah Selasa (25). Total = $20+25+15 = 60$. Senin (20) > Rabu (15). <span class="tr">Tuesday is highest. Total is 60. Monday > Wednesday.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Selisih Data', pageTitleEn:'Data Difference', taskType:'radio',
+          question:'Berapa selisih penjualan Selasa dan Rabu? (Selasa=25, Rabu=15)', questionEn:'What is the difference between Tuesday and Wednesday? (Tue=25, Wed=15)',
+          options:[{text:'$40$', correct:false},{text:'$15$', correct:false},{text:'$10$', correct:true},{text:'$5$', correct:false}],
+          explanation:`<p>$25 - 15 = 10$. <span class="tr">Subtract Wednesday from Tuesday.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Urutkan Membaca Tabel', pageTitleEn:'Order Reading Table', taskType:'sorting',
+          question:'Urutkan langkah membaca data dari tabel.', questionEn:'Order steps to read data from a table.',
+          items:['Identifikasi judul tabel <span class="tr">Identify table title</span>','Baca label baris dan kolom <span class="tr">Read row and column labels</span>','Cari nilai pada perpotongan baris/kolom <span class="tr">Find value at intersection</span>','Hitung atau analisis data <span class="tr">Calculate or analyze data</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Ikuti urutan logis tersebut. <span class="tr">Follow logical sequence.</span></p>`
+        }
+      ]
+    },
+    b: {
+      title: 'Introduction & Real-World Connection', titleEn: 'Introduction & Real-World Connection', time: '00:10 - 00:15',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Mengapa Statistika Penting?', pageTitleEn:'Why is Statistics Important?',
+          body:`<p>Statistika membantu kita mengumpulkan, menyajikan, dan menafsirkan data untuk membuat keputusan. <span class="tr">Statistics helps us collect, present, and interpret data to make decisions.</span></p>
+          <div class="illustration"><svg width="280" height="150" viewBox="0 0 280 150"><rect x="10" y="10" width="260" height="130" fill="#dbeafe" stroke="#2563eb" rx="8"/><rect x="30" y="100" width="30" height="30" fill="#2563eb"/><rect x="80" y="70" width="30" height="60" fill="#2563eb"/><rect x="130" y="40" width="30" height="90" fill="#2563eb"/><rect x="180" y="80" width="30" height="50" fill="#2563eb"/><text x="140" y="20" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="bold">Data Penjualan <span class="tr">Sales Data</span></text></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Diagram membantu memvisualisasikan data <span class="tr">Charts help visualize data</span></div></div>
+          <div class="example-box"><h4>Contoh Kehidupan Nyata <span class="tr">Real-World Example</span></h4>
+          BMKG menggunakan statistika cuaca untuk memprediksi hujan. <span class="tr">BMKG uses weather statistics to predict rain.</span></div>`
+        },
+        { type:'task', pageTitle:'T1: Contoh Statistika', pageTitleEn:'Example of Statistics', taskType:'radio',
+          question:'Manakah contoh penggunaan statistika dalam olahraga?', questionEn:'Which is an example of using statistics in sports?',
+          options:[{text:'Menghitung rata-rata gol pemain <span class="tr">Calculating player\'s average goals</span>', correct:true},{text:'Mewarnai lapangan <span class="tr">Painting the field</span>', correct:false},{text:'Membeli bola baru <span class="tr">Buying a new ball</span>', correct:false},{text:'Memasak untuk pemain <span class="tr">Cooking for players</span>', correct:false}],
+          explanation:`<p>Rata-rata gol dihitung dari data pertandingan, itu adalah statistika. <span class="tr">Average goals are calculated from match data, which is statistics.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Tujuan Statistika', pageTitleEn:'Purpose of Statistics', taskType:'truefalse',
+          question:'Benar atau Salah: Statistika hanya digunakan oleh matematikawan, tidak berguna dalam kehidupan sehari-hari.', questionEn:'True or false: Statistics is only used by mathematicians, not useful in daily life.',
+          correctAnswer:'false',
+          explanation:`<p>Statistika sangat berguna sehari-hari, seperti menghitung pengeluaran bulanan. <span class="tr">Statistics is very useful daily, like calculating monthly expenses.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Identifikasi Data', pageTitleEn:'Identify Data', taskType:'fill',
+          question:'Jika kita mencatat suhu udara setiap hari selama seminggu, kita sedang mengumpulkan ....', questionEn:'If we record air temperature daily for a week, we are collecting ....',
+          correctAnswer:'Data', acceptableAnswers:['Data','data'],
+          explanation:`<p>Pengukuran suhu harian menghasilkan data. <span class="tr">Daily temperature measurements produce data.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Tahap Investigasi Statistika', pageTitleEn:'Stages of Statistical Investigation',
+          body:`<p>Investigasi statistika memiliki tahapan sistematis: <span class="tr">Statistical investigation has systematic stages:</span></p>
+          <div class="math-block"><ol><li><strong>Mengajukan Pertanyaan</strong> <span class="tr">Pose Question</span></li><li><strong>Mengumpulkan Data</strong> <span class="tr">Collect Data</span></li><li><strong>Menyajikan Data</strong> <span class="tr">Present Data</span></li><li><strong>Menganalisis Data</strong> <span class="tr">Analyze Data</span></li><li><strong>Menarik Kesimpulan</strong> <span class="tr">Draw Conclusion</span></li></ol></div>`
+        },
+        { type:'task', pageTitle:'T4: Urutan Investigasi', pageTitleEn:'Investigation Order', taskType:'sorting',
+          question:'Urutkan tahap investigasi statistika dengan benar.', questionEn:'Order the stages of statistical investigation correctly.',
+          items:['Mengajukan pertanyaan <span class="tr">Pose question</span>','Mengumpulkan data <span class="tr">Collect data</span>','Menganalisis data <span class="tr">Analyze data</span>','Menarik kesimpulan <span class="tr">Draw conclusion</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Urutan yang benar adalah identifikasi masalah, pengumpulan, analisis, lalu kesimpulan. <span class="tr">Correct order is identify, collect, analyze, then conclude.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Aktivitas Tahap', pageTitleEn:'Stage Activity', taskType:'pairing',
+          question:'Pasangkan tahap investigasi dengan aktivitasnya.', questionEn:'Match investigation stage with its activity.',
+          pairs:[{left:'Mengumpulkan Data <span class="tr">Collect Data</span>', right:'Memberi kuesioner <span class="tr">Giving questionnaire</span>'},{left:'Menyajikan Data <span class="tr">Present Data</span>', right:'Membuat diagram <span class="tr">Making chart</span>'},{left:'Mengajukan Pertanyaan <span class="tr">Pose Question</span>', right:'Menentukan masalah <span class="tr">Defining problem</span>'},{left:'Menganalisis Data <span class="tr">Analyze Data</span>', right:'Menghitung rata-rata <span class="tr">Calculating average</span>'}],
+          explanation:`<p>Pasangkan aktivitas sesuai dengan tahapnya. <span class="tr">Match activities to their stages.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Pertanyaan Statistika', pageTitleEn:'Statistical Questions', taskType:'checkbox',
+          question:'Pilih semua yang termasuk pertanyaan statistika.', questionEn:'Select all that are statistical questions.',
+          options:[{text:'Berapa tinggi badan rata-rata siswa kelas 7? <span class="tr">Average height of 7th graders?</span>', correct:true},{text:'Berapa hasil dari $2+2$? <span class="tr">What is $2+2$?</span>', correct:false},{text:'Apa makanan favorit siswa di kantin? <span class="tr">Favorite food in canteen?</span>', correct:true},{text:'Apakah hari ini hujan? <span class="tr">Is it raining today?</span>', correct:false}],
+          explanation:`<p>Pertanyaan statistika memerlukan pengumpulan data yang bervariasi. <span class="tr">Statistical questions require collecting varied data.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Populasi vs Sampel', pageTitleEn:'Population vs Sample',
+          body:`<p><strong>Populasi</strong> adalah seluruh objek yang diteliti. <strong>Sampel</strong> adalah bagian dari populasi. <span class="tr"><strong>Population</strong> is all objects studied. <strong>Sample</strong> is a part of population.</span></p>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Populasi: Semua siswa SMP di Indonesia. <span class="tr">All junior high students in Indonesia.</span><br>
+          Sampel: 100 siswa SMP di Sekolah X. <span class="tr">100 students in School X.</span></div>`
+        },
+        { type:'task', pageTitle:'T7: Definisi Sampel', pageTitleEn:'Sample Definition', taskType:'fill',
+          question:'Bagian dari populasi yang diteliti disebut ....', questionEn:'A part of the population studied is called ....',
+          correctAnswer:'Sampel', acceptableAnswers:['Sampel','sampel','Sample','sample'],
+          explanation:`<p>Sampel adalah bagian representatif dari populasi. <span class="tr">Sample is a representative part of population.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Identifikasi Sampel', pageTitleEn:'Identify Sample', taskType:'radio',
+          question:'Jika ingin mengetahui favorit seluruh siswa sekolah, lalu hanya menanyai kelas 7A, apa itu?', questionEn:'If wanting to know whole school preference, but only asking class 7A, what is that?',
+          options:[{text:'Populasi <span class="tr">Population</span>', correct:false},{text:'Sampel <span class="tr">Sample</span>', correct:true},{text:'Data <span class="tr">Data</span>', correct:false},{text:'Kesimpulan <span class="tr">Conclusion</span>', correct:false}],
+          explanation:`<p>Kelas 7A adalah bagian dari seluruh sekolah, sehingga merupakan sampel. <span class="tr">Class 7A is part of the whole school, thus a sample.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Sensus vs Sampel', pageTitleEn:'Census vs Sample', taskType:'truefalse',
+          question:'Benar atau Salah: Sensus dilakukan jika kita meneliti seluruh anggota populasi.', questionEn:'True or false: Census is done if we study all population members.',
+          correctAnswer:'true',
+          explanation:`<p>Sensus mengumpulkan data dari seluruh populasi. <span class="tr">Census collects data from the entire population.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Alasan Pakai Sampel', pageTitleEn:'Reason to Use Sample', taskType:'sorting',
+          question:'Urutkan alasan logis menggunakan sampel dibanding sensus untuk populasi besar.', questionEn:'Order logical reasons to use sample over census for large population.',
+          items:['Populasi terlalu besar <span class="tr">Population too large</span>','Biaya sensus sangat mahal <span class="tr">Census too expensive</span>','Waktu yang dibutuhkan terlalu lama <span class="tr">Takes too much time</span>','Sampel lebih cepat dan murah <span class="tr">Sample is faster and cheaper</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Pertimbangan praktis dalam penelitian skala besar. <span class="tr">Practical considerations in large-scale research.</span></p>`
+        }
+      ]
+    },
+    c: {
+      title: 'Review of Prior Knowledge', titleEn: 'Review of Prior Knowledge', time: '00:15 - 00:20',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Mean (Rata-rata)', pageTitleEn:'Mean (Average)',
+          body:`<p><strong>Mean</strong> adalah nilai rata-rata yang didapat dari jumlah semua data dibagi banyaknya data. <span class="tr"><strong>Mean</strong> is the average value obtained from the sum of all data divided by the number of data.</span></p>
+          <div class="math-block">$\\text{Mean} = \\dfrac{\\text{Jumlah semua data}}{\\text{Banyaknya data}} = \\dfrac{\\sum x_i}{n}$</div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Tentukan mean dari data: $4, 5, 6, 7$. <span class="tr">Find mean of: $4, 5, 6, 7$.</span>
+          <ol><li>Jumlah data: $4 + 5 + 6 + 7 = 22$</li><li>Banyak data: $n = 4$</li><li>$\\text{Mean} = \\dfrac{22}{4} = 5.5$</li></ol></div>`
+        },
+        { type:'task', pageTitle:'T1: Hitung Mean', pageTitleEn:'Calculate Mean', taskType:'fill',
+          question:'Tentukan mean dari data $5, 10, 15$. $\\text{Mean} = \\dots$', questionEn:'Find mean of $5, 10, 15$. $\\text{Mean} = \\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>Jumlah $= 5+10+15 = 30$. Banyak $= 3$. $\\text{Mean} = \\dfrac{30}{3} = 10$. <span class="tr">Sum $= 30$, count $= 3$. Mean $= 10$.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Mean dari Tabel', pageTitleEn:'Mean from Table', taskType:'radio',
+          question:'Diketahui data $2, 4, 6, 8$. Berapakah mean-nya?', questionEn:'Given data $2, 4, 6, 8$. What is the mean?',
+          options:[{text:'$4$', correct:false},{text:'$5$', correct:true},{text:'$6$', correct:false},{text:'$10$', correct:false}],
+          explanation:`<p>Jumlah $= 2+4+6+8 = 20$. Banyak $= 4$. $\\text{Mean} = \\dfrac{20}{4} = 5$. <span class="tr">Sum $= 20$, count $= 4$. Mean $= 5$.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Sifat Mean', pageTitleEn:'Property of Mean', taskType:'truefalse',
+          question:'Benar atau Salah: Mean selalu merupakan salah satu angka yang ada di dalam data tersebut.', questionEn:'True or false: Mean is always one of the numbers present in the data.',
+          correctAnswer:'false',
+          explanation:`<p>Mean bisa berupa angka di luar data asli, contoh data $2, 4, 6, 8$ meannya $5$, padahal $5$ tidak ada di data. <span class="tr">Mean can be outside original data, e.g., data $2, 4, 6, 8$ has mean $5$, which is not in data.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Median', pageTitleEn:'Median',
+          body:`<p><strong>Median</strong> adalah nilai tengah dari data yang telah diurutkan. <span class="tr"><strong>Median</strong> is the middle value of sorted data.</span></p>
+          <div class="math-block">Jika $n$ ganjil: Median = nilai ke-$\\dfrac{n+1}{2}$. <span class="tr">If n is odd</span><br>
+          Jika $n$ genap: Median = rata-rata dari nilai ke-$\\dfrac{n}{2}$ dan ke-$\\left(\\dfrac{n}{2} + 1\\right)$. <span class="tr">If n is even</span></div>
+          <div class="example-box"><h4>Contoh (n Genap) <span class="tr">Example (n Even)</span></h4>
+          Data: $4, 2, 8, 6$. <br>Urutkan: $2, 4, 6, 8$. <span class="tr">Sort</span><br>
+          $n = 4$. Tengah = data ke-2 dan ke-3 ($4$ dan $6$). <br>
+          Median = $\\dfrac{4+6}{2} = 5$.</div>`
+        },
+        { type:'task', pageTitle:'T4: Median Genap', pageTitleEn:'Even Median', taskType:'fill',
+          question:'Tentukan median dari $3, 5, 7, 9$. $\\text{Median} = \\dots$', questionEn:'Find median of $3, 5, 7, 9$. $\\text{Median} = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>Urutkan: $3, 5, 7, 9$. Tengahnya $5$ dan $7$. $\\text{Median} = \\dfrac{5+7}{2} = 6$. <span class="tr">Sorted. Middle are 5 and 7. Median $= 6$.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Langkah Median', pageTitleEn:'Median Steps', taskType:'sorting',
+          question:'Urutkan langkah mencari median.', questionEn:'Order steps to find median.',
+          items:['Urutkan data dari terkecil ke terbesar <span class="tr">Sort data ascending</span>','Tentukan banyak data (n) <span class="tr">Determine count (n)</span>','Cari posisi tengah berdasarkan rumus <span class="tr">Find middle position by formula</span>','Tentukan nilai median <span class="tr">Determine median value</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Proses standar mencari nilai tengah. <span class="tr">Standard process to find middle value.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Median Ganjil', pageTitleEn:'Odd Median', taskType:'pairing',
+          question:'Pasangkan data dengan nilai mediannya.', questionEn:'Match data to its median value.',
+          pairs:[{left:'$2, 4, 6$', right:'$4$'},{left:'$1, 3, 5, 7$', right:'$4$'},{left:'$10, 20, 30$', right:'$20$'},{left:'$5, 15, 25, 35$', right:'$20$'}],
+          explanation:`<p>Ganjil ambil tengah, genap ambil rata-rata dua tengah. <span class="tr">Odd takes middle, even takes average of two middles.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Modus dan Jangkauan', pageTitleEn:'Mode and Range',
+          body:`<p><strong>Modus</strong> adalah data yang paling sering muncul. <span class="tr"><strong>Mode</strong> is the most frequently occurring data.</span><br>
+          <strong>Jangkauan</strong> adalah selisih antara data terbesar dan terkecil. <span class="tr"><strong>Range</strong> is the difference between largest and smallest data.</span></p>
+          <div class="math-block">$\\text{Jangkauan} = x_{\\text{max}} - x_{\\text{min}}$</div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Data: $2, 3, 3, 4, 5$. <br>
+          Modus = $3$ (muncul 2 kali). <span class="tr">Mode $= 3$.</span><br>
+          Jangkauan = $5 - 2 = 3$. <span class="tr">Range $= 3$.</span></div>`
+        },
+        { type:'task', pageTitle:'T7: Cari Modus', pageTitleEn:'Find Mode', taskType:'fill',
+          question:'Tentukan modus dari $4, 5, 5, 6, 7$. $\\text{Modus} = \\dots$', questionEn:'Find mode of $4, 5, 5, 6, 7$. $\\text{Mode} = \\dots$',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>Angka $5$ muncul paling banyak (2 kali). <span class="tr">Number 5 appears most (2 times).</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Pernyataan Modus', pageTitleEn:'Mode Statements', taskType:'checkbox',
+          question:'Pilih pernyataan yang benar tentang modus.', questionEn:'Select true statements about mode.',
+          options:[{text:'Modus bisa lebih dari satu <span class="tr">Mode can be more than one</span>', correct:true},{text:'Modus bisa tidak ada <span class="tr">Mode can be none</span>', correct:true},{text:'Modus selalu angka terbesar <span class="tr">Mode is always the largest</span>', correct:false},{text:'Modus harus diurutkan dulu <span class="tr">Mode must be sorted first</span>', correct:false}],
+          explanation:`<p>Modus bisa bimodal (dua) atau tidak ada (jika semua frekuensi sama). Pengurutan tidak wajib. <span class="tr">Mode can be bimodal or none. Sorting not required.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Hitung Jangkauan', pageTitleEn:'Calculate Range', taskType:'radio',
+          question:'Diketahui data $10, 15, 20, 25, 30$. Berapakah jangkauannya?', questionEn:'Given data $10, 15, 20, 25, 30$. What is the range?',
+          options:[{text:'$10$', correct:false},{text:'$15$', correct:false},{text:'$20$', correct:true},{text:'$30$', correct:false}],
+          explanation:`<p>$\\text{Maks} = 30$, $\\text{Min} = 10$. $\\text{Jangkauan} = 30 - 10 = 20$. <span class="tr">Max $= 30$, Min $= 10$. Range $= 20$.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Langkah Jangkauan', pageTitleEn:'Range Steps', taskType:'sorting',
+          question:'Urutkan langkah mencari jangkauan data.', questionEn:'Order steps to find data range.',
+          items:['Identifikasi data terbesar (maks) <span class="tr">Identify largest</span>','Identifikasi data terkecil (min) <span class="tr">Identify smallest</span>','Kurangi min dari maks <span class="tr">Subtract min from max</span>','Tulis hasil sebagai jangkauan <span class="tr">Write result as range</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Ikuti langkah perhitungan jangkauan. <span class="tr">Follow range calculation steps.</span></p>`
+        }
+      ]
+    },
+    d: {
+      title: 'Problem Introduction', titleEn: 'Problem Introduction', time: '00:20 - 00:30',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Tabel Distribusi Frekuensi', pageTitleEn:'Frequency Distribution Table',
+          body:`<p><strong>Frekuensi</strong> adalah berapa kali suatu data muncul. Tabel distribusi frekuensi menyusun data agar lebih mudah dianalisis. <span class="tr"><strong>Frequency</strong> is how often data appears. Frequency distribution tables organize data for easier analysis.</span></p>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Data nilai ulangan 10 siswa: $4, 5, 5, 6, 6, 6, 7, 7, 8, 9$. <span class="tr">Test scores of 10 students.</span><br>
+          <table border="1" style="width:100%;text-align:center;border-collapse:collapse;margin:5px 0">
+          <tr><th>Nilai <span class="tr">Score</span></th><th>Turus <span class="tr">Tally</span></th><th>Frekuensi <span class="tr">Frequency</span></th></tr>
+          <tr><td>4</td><td>|</td><td>1</td></tr>
+          <tr><td>5</td><td>||</td><td>2</td></tr>
+          <tr><td>6</td><td>|||</td><td>3</td></tr>
+          <tr><td>7</td><td>||</td><td>2</td></tr>
+          <tr><td>8</td><td>|</td><td>1</td></tr>
+          <tr><td>9</td><td>|</td><td>1</td></tr>
+          </table>
+          Total frekuensi ($n$) = $1+2+3+2+1+1 = 10$.</div>`
+        },
+        { type:'task', pageTitle:'T1: Hitung Total Frekuensi', pageTitleEn:'Calculate Total Frequency', taskType:'fill',
+          question:'Dari tabel, frekuensi nilai 5 adalah 2, nilai 6 adalah 4, nilai 7 adalah 3. Berapa total data ($n$)? $n = \\dots$', questionEn:'From table, frequency of 5 is 2, 6 is 4, 7 is 3. What is total data ($n$)? $n = \\dots$',
+          correctAnswer:'9', acceptableAnswers:['9'],
+          explanation:`<p>$n = \\sum f = 2 + 4 + 3 = 9$. <span class="tr">Total frequency is the sum of all frequencies.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Modus dari Tabel', pageTitleEn:'Mode from Table', taskType:'radio',
+          question:'Jika frekuensi nilai 6 adalah 4 (paling tinggi), apakah modusnya?', questionEn:'If frequency of 6 is 4 (highest), what is the mode?',
+          options:[{text:'$4$', correct:false},{text:'$6$', correct:true},{text:'$3$', correct:false},{text:'Tidak ada <span class="tr">None</span>', correct:false}],
+          explanation:`<p>Modus adalah data dengan frekuensi tertinggi. Karena nilai 6 muncul 4 kali, modusnya adalah 6. <span class="tr">Mode is the data with highest frequency.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Interpretasi Tabel', pageTitleEn:'Interpret Table', taskType:'truefalse',
+          question:'Benar atau Salah: Tabel distribusi frekuensi digunakan untuk mengelompokkan data agar lebih mudah dibaca.', questionEn:'True or false: Frequency distribution table is used to group data for easier reading.',
+          correctAnswer:'true',
+          explanation:`<p>Tabel distribusi frekuensi sangat membantu dalam menyajikan data dalam jumlah besar. <span class="tr">It helps present large amounts of data.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Diagram Batang', pageTitleEn:'Bar Chart',
+          body:`<p><strong>Diagram Batang</strong> menyajikan data menggunakan batang persegi panjang. Tinggi batang menunjukkan frekuensi. <span class="tr"><strong>Bar Chart</strong> presents data using rectangular bars. Bar height shows frequency.</span></p>
+          <div class="illustration"><svg width="280" height="150" viewBox="0 0 280 150"><line x1="30" y1="120" x2="260" y2="120" stroke="#333" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="120" stroke="#333" stroke-width="2"/><rect x="50" y="70" width="30" height="50" fill="#2563eb"/><rect x="110" y="40" width="30" height="80" fill="#2563eb"/><rect x="170" y="90" width="30" height="30" fill="#2563eb"/><text x="65" y="135" text-anchor="middle" font-size="10">A</text><text x="125" y="135" text-anchor="middle" font-size="10">B</text><text x="185" y="135" text-anchor="middle" font-size="10">C</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Contoh Diagram Batang <span class="tr">Bar Chart Example</span></div></div>
+          <div class="example-box"><h4>Cara Membaca <span class="tr">How to Read</span></h4>
+          Sumbu X menunjukkan kategori (misal: A, B, C). Sumbu Y menunjukkan frekuensi. Batang B paling tinggi (80), berarti B memiliki frekuensi terbesar.</div>`
+        },
+        { type:'task', pageTitle:'T4: Membaca Diagram Batang', pageTitleEn:'Read Bar Chart', taskType:'fill',
+          question:'Pada diagram, tinggi batang A adalah 50, B adalah 80, C adalah 30. Berapa total frekuensi? Total = $\\dots$', questionEn:'In chart, height of A is 50, B is 80, C is 30. What is total frequency? Total = $\\dots$',
+          correctAnswer:'160', acceptableAnswers:['160'],
+          explanation:`<p>Total frekuensi = $50 + 80 + 30 = 160$. <span class="tr">Sum of all bar heights.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Langkah Membuat Diagram', pageTitleEn:'Making Chart Steps', taskType:'sorting',
+          question:'Urutkan langkah membuat diagram batang.', questionEn:'Order steps to make a bar chart.',
+          items:['Gambar sumbu X dan Y <span class="tr">Draw X and Y axes</span>','Beri label kategori di sumbu X <span class="tr">Label categories on X</span>','Tarik batang sesuai frekuensi <span class="tr">Draw bars according to frequency</span>','Beri judul diagram <span class="tr">Give chart a title</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Ikuti langkah standar pembuatan diagram. <span class="tr">Follow standard charting steps.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Komponen Diagram', pageTitleEn:'Chart Components', taskType:'pairing',
+          question:'Pasangkan komponen diagram dengan fungsinya.', questionEn:'Match chart component with its function.',
+          pairs:[{left:'Sumbu X <span class="tr">X-axis</span>', right:'Kategori data <span class="tr">Data category</span>'},{left:'Sumbu Y <span class="tr">Y-axis</span>', right:'Frekuensi <span class="tr">Frequency</span>'},{left:'Judul <span class="tr">Title</span>', right:'Informasi umum <span class="tr">General info</span>'},{left:'Batang <span class="tr">Bar</span>', right:'Nilai data <span class="tr">Data value</span>'}],
+          explanation:`<p>Pasangkan komponen dengan fungsinya yang benar. <span class="tr">Match components with correct functions.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Diagram Garis', pageTitleEn:'Line Chart',
+          body:`<p><strong>Diagram Garis</strong> digunakan untuk menunjukkan perubahan data dari waktu ke waktu. <span class="tr"><strong>Line Chart</strong> is used to show data changes over time.</span></p>
+          <div class="illustration"><svg width="280" height="150" viewBox="0 0 280 150"><line x1="30" y1="120" x2="260" y2="120" stroke="#333" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="120" stroke="#333" stroke-width="2"/><polyline points="50,100 110,70 170,90 230,40" fill="none" stroke="#ef4444" stroke-width="2"/><circle cx="50" cy="100" r="3" fill="#ef4444"/><circle cx="110" cy="70" r="3" fill="#ef4444"/><circle cx="170" cy="90" r="3" fill="#ef4444"/><circle cx="230" cy="40" r="3" fill="#ef4444"/></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Contoh Diagram Garis <span class="tr">Line Chart Example</span></div></div>
+          <div class="example-box"><h4>Interpretasi <span class="tr">Interpretation</span></h4>
+          Garis naik menunjukkan peningkatan, garis turun menunjukkan penurunan.</div>`
+        },
+        { type:'task', pageTitle:'T7: Baca Diagram Garis', pageTitleEn:'Read Line Chart', taskType:'radio',
+          question:'Berdasarkan contoh diagram garis di atas, pada titik berapa data mencapai nilai tertinggi?', questionEn:'Based on line chart example above, at which point does data reach highest value?',
+          options:[{text:'Titik 1 (kiri) <span class="tr">Point 1</span>', correct:false},{text:'Titik 2 <span class="tr">Point 2</span>', correct:false},{text:'Titik 3 <span class="tr">Point 3</span>', correct:false},{text:'Titik 4 (kanan) <span class="tr">Point 4</span>', correct:true}],
+          explanation:`<p>Titik 4 berada di paling atas (y=40), berarti nilai tertinggi. <span class="tr">Point 4 is highest on Y-axis.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Analisis Tren', pageTitleEn:'Analyze Trend', taskType:'checkbox',
+          question:'Pilih pernyataan benar tentang diagram garis yang menunjukkan tren naik-turun-naik.', questionEn:'Select true statements about line chart showing up-down-up trend.',
+          options:[{text:'Data mengalami penurunan di tengah <span class="tr">Data decreases in middle</span>', correct:true},{text:'Data awal lebih besar dari data akhir <span class="tr">Start data is larger than end</span>', correct:false},{text:'Data mengalami kenaikan di akhir <span class="tr">Data increases at the end</span>', correct:true},{text:'Data konstan <span class="tr">Data is constant</span>', correct:false}],
+          explanation:`<p>Tren naik-turun-naik berarti ada penurunan di tengah dan kenaikan di akhir. <span class="tr">Up-down-up means decrease in middle and increase at end.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Selisih Tertinggi-Terendah', pageTitleEn:'Highest-Lowest Difference', taskType:'fill',
+          question:'Nilai tertinggi diagram 80, terendah 30. Selisihnya = $\\dots$', questionEn:'Highest chart value 80, lowest 30. Difference = $\\dots$',
+          correctAnswer:'50', acceptableAnswers:['50'],
+          explanation:`<p>$80 - 30 = 50$. <span class="tr">Highest minus lowest.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Pilih Diagram', pageTitleEn:'Choose Chart', taskType:'sorting',
+          question:'Urutkan langkah memilih diagram yang tepat.', questionEn:'Order steps to choose correct chart.',
+          items:['Identifikasi tujuan data <span class="tr">Identify data purpose</span>','Jika melihat perubahan waktu, pakai garis <span class="tr">If time change, use line</span>','Jika membandingkan kategori, pakai batang <span class="tr">If categories, use bar</span>','Buat diagram <span class="tr">Draw chart</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Pilih diagram sesuai jenis data. <span class="tr">Choose chart based on data type.</span></p>`
+        }
+      ]
+    },
+    e: {
+      title: 'Guided Practice', titleEn: 'Guided Practice', time: '00:30 - 00:45',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Mean dari Data Tabel', pageTitleEn:'Mean from Data Table',
+          body:`<p>Untuk mencari mean dari data pada tabel distribusi frekuensi, kita gunakan rumus: <span class="tr">To find mean from frequency table, use formula:</span></p>
+          <div class="math-block">$\\text{Mean} = \\dfrac{\\sum (x_i \\times f_i)}{\\sum f_i} = \\dfrac{x_1f_1 + x_2f_2 + \\dots}{n}$</div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          <table border="1" style="width:60%;text-align:center;border-collapse:collapse;margin:5px auto">
+          <tr><th>$x_i$</th><th>$f_i$</th><th>$x_i \\times f_i$</th></tr>
+          <tr><td>5</td><td>2</td><td>10</td></tr>
+          <tr><td>6</td><td>3</td><td>18</td></tr>
+          <tr><td>7</td><td>1</td><td>7</td></tr>
+          <tr><th colspan="2">Total</th><th>35</th></tr>
+          </table>
+          $n = 2+3+1 = 6$.<br>
+          $\\text{Mean} = \\dfrac{35}{6} \\approx 5.83$.</div>`
+        },
+        { type:'task', pageTitle:'T1: Hitung Sigma f', pageTitleEn:'Calculate Sigma f', taskType:'fill',
+          question:'Diketahui $f_1=4, f_2=5, f_3=2$. Berapa $\\sum f_i$? $\\sum f_i = \\dots$', questionEn:'Given $f_1=4, f_2=5, f_3=2$. What is $\\sum f_i$? $\\sum f_i = \\dots$',
+          correctAnswer:'11', acceptableAnswers:['11'],
+          explanation:`<p>$\\sum f_i = 4 + 5 + 2 = 11$. <span class="tr">Sum of all frequencies.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Hitung $x \\times f$', pageTitleEn:'Calculate $x \\times f$', taskType:'fill',
+          question:'Jika $x=8$ dan $f=3$, berapa $x \\times f$? $x \\times f = \\dots$', questionEn:'If $x=8$ and $f=3$, what is $x \\times f$? $x \\times f = \\dots$',
+          correctAnswer:'24', acceptableAnswers:['24'],
+          explanation:`<p>$8 \\times 3 = 24$. <span class="tr">Multiply value by its frequency.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Mean Tabel', pageTitleEn:'Table Mean', taskType:'radio',
+          question:'Jika $\\sum (x \\times f) = 50$ dan $n = 10$, berapa mean?', questionEn:'If $\\sum (x \\times f) = 50$ and $n = 10$, what is mean?',
+          options:[{text:'$60$', correct:false},{text:'$40$', correct:false},{text:'$5$', correct:true},{text:'$0.5$', correct:false}],
+          explanation:`<p>$\\text{Mean} = \\dfrac{\\sum (x \\times f)}{n} = \\dfrac{50}{10} = 5$. <span class="tr">Sum of products divided by total frequency.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Median dari Data Tunggal', pageTitleEn:'Median of Single Data',
+          body:`<p>Untuk mencari median dari data tunggal, urutkan data terlebih dahulu. <span class="tr">To find median of single data, sort data first.</span></p>
+          <div class="math-block">Letak Median = $\\dfrac{n+1}{2}$ (untuk $n$ ganjil) <span class="tr">For odd n</span></div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Data: $5, 8, 3, 5, 4$. <br>
+          Urutan: $3, 4, 5, 5, 8$. $n = 5$. <span class="tr">Sorted</span><br>
+          Letak median = $\\dfrac{5+1}{2} = 3$. <br>
+          Median = nilai ke-3 = $5$.</div>`
+        },
+        { type:'task', pageTitle:'T4: Letak Median', pageTitleEn:'Median Position', taskType:'fill',
+          question:'Jika $n=9$, letak median adalah data ke-... (Gunakan rumus $\\frac{n+1}{2}$)', questionEn:'If $n=9$, median position is ... data (Use formula $\\frac{n+1}{2}$)',
+          correctAnswer:'5', acceptableAnswers:['5'],
+          explanation:`<p>$\\dfrac{9+1}{2} = \\dfrac{10}{2} = 5$. Letak median di data ke-5. <span class="tr">Position is 5th data.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Nilai Median', pageTitleEn:'Median Value', taskType:'radio',
+          question:'Data terurut: $10, 12, 15, 18, 20$. Berapakah median?', questionEn:'Sorted data: $10, 12, 15, 18, 20$. What is median?',
+          options:[{text:'$12$', correct:false},{text:'$15$', correct:true},{text:'$18$', correct:false},{text:'$10$', correct:false}],
+          explanation:`<p>$n=5$. Letak ke-3. Data ke-3 adalah $15$. <span class="tr">n=5. Position 3. Value is 15.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Langkah Median', pageTitleEn:'Median Steps', taskType:'sorting',
+          question:'Urutkan langkah mencari median data ganjil.', questionEn:'Order steps to find median of odd data.',
+          items:['Urutkan data <span class="tr">Sort data</span>','Hitung banyak data ($n$) <span class="tr">Count data (n)</span>','Cari letak median dengan $\\frac{n+1}{2}$ <span class="tr">Find position</span>','Tentukan nilai pada letak tersebut <span class="tr">Determine value</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Proses standar mencari median. <span class="tr">Standard median process.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Kuartil dan Jangkauan', pageTitleEn:'Quartiles and Range',
+          body:`<p><strong>Kuartil</strong> membagi data terurut menjadi 4 bagian. <strong>Kuartil Bawah ($Q_1$)</strong> adalah nilai tengah antara data minimum dan median. <strong>Kuartil Atas ($Q_3$)</strong> adalah nilai tengah antara median dan maksimum. <span class="tr"><strong>Quartiles</strong> divide sorted data into 4 parts. Lower Quartile is middle of min and median. Upper Quartile is middle of median and max.</span></p>
+          <div class="math-block">$\\text{Jangkauan Antar Kuartil} = Q_3 - Q_1$</div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Data: $2, 4, 6, 8, 10, 12$. $n=6$. <br>
+          Median = $\\dfrac{6+8}{2} = 7$. <span class="tr">Median</span><br>
+          $Q_1$ = median data bawah = $4$. <span class="tr">Lower half: 2, 4, 6</span><br>
+          $Q_3$ = median data atas = $10$. <span class="tr">Upper half: 8, 10, 12</span></div>`
+        },
+        { type:'task', pageTitle:'T7: Hitung Jangkauan', pageTitleEn:'Calculate Range', taskType:'fill',
+          question:'Data min $= 10$, max $= 50$. Jangkauan = $\\dots$', questionEn:'Min $= 10$, max $= 50$. Range = $\\dots$',
+          correctAnswer:'40', acceptableAnswers:['40'],
+          explanation:`<p>$\\text{Maks} - \\text{Min} = 50 - 10 = 40$. <span class="tr">Max minus Min.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Identifikasi $Q_1$', pageTitleEn:'Identify $Q_1$', taskType:'checkbox',
+          question:'Pilih pernyataan yang benar tentang $Q_1$.', questionEn:'Select true statements about $Q_1$.',
+          options:[{text:'$Q_1$ adalah kuartil bawah <span class="tr">Lower quartile</span>', correct:true},{text:'$Q_1$ membagi data bagian atas <span class="tr">Divides upper data</span>', correct:false},{text:'$Q_1$ berada di bawah median <span class="tr">Below median</span>', correct:true},{text:'$Q_1$ selalu sama dengan mean <span class="tr">Equals mean</span>', correct:false}],
+          explanation:`<p>$Q_1$ (Kuartil Bawah) membagi 25% data terbawah, berada di bawah median. <span class="tr">$Q_1$ divides bottom 25% of data.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Pasangan Definisi', pageTitleEn:'Match Definitions', taskType:'pairing',
+          question:'Pasangkan istilah dengan definisinya.', questionEn:'Match term with definition.',
+          pairs:[{left:'$Q_1$ <span class="tr">Quartile 1</span>', right:'Kuartil Bawah <span class="tr">Lower Quartile</span>'},{left:'$Q_2$ <span class="tr">Quartile 2</span>', right:'Median <span class="tr">Median</span>'},{left:'$Q_3$ <span class="tr">Quartile 3</span>', right:'Kuartil Atas <span class="tr">Upper Quartile</span>'},{left:'Jangkauan <span class="tr">Range</span>', right:'Maks dikurang Min <span class="tr">Max minus Min</span>'}],
+          explanation:`<p>Kuartil 2 adalah median. Kuartil 1 di bawah, Kuartil 3 di atas. <span class="tr">Q2 is median. Q1 below, Q3 above.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Rumus Letak Kuartil', pageTitleEn:'Quartile Position Formula', taskType:'truefalse',
+          question:'Benar atau Salah: Letak $Q_1$ dapat dicari dengan rumus $\\frac{n+1}{4}$.', questionEn:'True or false: Position of $Q_1$ can be found with formula $\\frac{n+1}{4}$.',
+          correctAnswer:'true',
+          explanation:`<p>Rumus letak $Q_1 = \\frac{n+1}{4}$, $Q_2 = \\frac{n+1}{2}$, $Q_3 = \\frac{3(n+1)}{4}$. <span class="tr">Standard quartile position formulas.</span></p>`
+        }
+      ]
+    },
+    f: {
+      title: 'Independent Practice', titleEn: 'Independent Practice', time: '00:45 - 00:55',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Diagram Lingkaran', pageTitleEn:'Pie Chart',
+          body:`<p><strong>Diagram Lingkaran</strong> menunjukkan persentase data dari total keseluruhan. Total sudut selalu $360^\\circ$. <span class="tr"><strong>Pie Chart</strong> shows data percentage of total. Total angle is always $360^\\circ$.</span></p>
+          <div class="math-block">$\\text{Sudut} = \\dfrac{\\text{Frekuensi}}{\\text{Total}} \\times 360^\\circ$</div>
+          <div class="illustration"><svg width="150" height="150" viewBox="0 0 150 150"><circle cx="75" cy="75" r="60" fill="#dbeafe"/><path d="M 75 75 L 75 15 A 60 60 0 0 1 130 60 Z" fill="#2563eb"/><path d="M 75 75 L 130 60 A 60 60 0 0 1 75 135 Z" fill="#f59e0b"/></svg><div style="font-size:.82em;color:var(--muted);margin-top:6px">Diagram Lingkaran <span class="tr">Pie Chart</span></div></div>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Jika frekuensi A = 10 dan total = 40. <br>
+          Sudut A = $\\dfrac{10}{40} \\times 360^\\circ = 90^\\circ$.</div>`
+        },
+        { type:'task', pageTitle:'T1: Hitung Sudut', pageTitleEn:'Calculate Angle', taskType:'fill',
+          question:'Frekuensi B = 20, Total = 80. Sudut B = $\\dots ^\\circ$', questionEn:'Frequency B = 20, Total = 80. Angle B = $\\dots ^\\circ$',
+          correctAnswer:'90', acceptableAnswers:['90','90°'],
+          explanation:`<p>$\\text{Sudut B} = \\dfrac{20}{80} \\times 360^\\circ = \\dfrac{1}{4} \\times 360^\\circ = 90^\\circ$. <span class="tr">Divide freq by total, multiply by 360.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Persentase Data', pageTitleEn:'Data Percentage', taskType:'radio',
+          question:'Jika sudut suatu sektor adalah $90^\\circ$, berapa persentasenya?', questionEn:'If a sector angle is $90^\\circ$, what is its percentage?',
+          options:[{text:'$15\\%$', correct:false},{text:'$25\\%$', correct:true},{text:'$50\\%$', correct:false},{text:'$90\\%$', correct:false}],
+          explanation:`<p>$\\dfrac{90^\\circ}{360^\\circ} \\times 100\\% = 25\\%$. <span class="tr">Angle divided by 360, times 100.</span></p>`
+        },
+        { type:'task', pageTitle:'T3: Sifat Diagram Lingkaran', pageTitleEn:'Pie Chart Property', taskType:'truefalse',
+          question:'Benar atau Salah: Jumlah semua sudut pada diagram lingkaran adalah $360^\\circ$.', questionEn:'True or false: Sum of all angles in pie chart is $360^\\circ$.',
+          correctAnswer:'true',
+          explanation:`<p>Diagram lingkaran berbentuk satu lingkaran penuh, sehingga total sudutnya $360^\\circ$. <span class="tr">A full circle is 360 degrees.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Membandingkan Dua Data', pageTitleEn:'Comparing Two Data',
+          body:`<p>Kita dapat membandingkan dua kelompok data menggunakan ukuran pemusatan (Mean, Median, Modus). <span class="tr">We can compare two data groups using measures of central tendency.</span></p>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Kelas A: Mean = $75$, Median = $76$. <br>
+          Kelas B: Mean = $80$, Median = $78$. <br>
+          Kesimpulan: Kelas B memiliki rata-rata yang lebih tinggi. <span class="tr">Class B has higher average.</span></div>`
+        },
+        { type:'task', pageTitle:'T4: Kesimpulan Perbandingan', pageTitleEn:'Comparison Conclusion', taskType:'sorting',
+          question:'Urutkan langkah membandingkan dua data.', questionEn:'Order steps to compare two data.',
+          items:['Hitung ukuran pemusatan data pertama <span class="tr">Calculate center of first data</span>','Hitung ukuran pemusatan data kedua <span class="tr">Calculate center of second data</span>','Bandingkan nilai mean atau median <span class="tr">Compare mean or median values</span>','Tarik kesimpulan mana yang lebih tinggi <span class="tr">Conclude which is higher</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Langkah sistematis membandingkan data. <span class="tr">Systematic data comparison steps.</span></p>`
+        },
+        { type:'task', pageTitle:'T5: Selisih Mean', pageTitleEn:'Mean Difference', taskType:'fill',
+          question:'Mean Kelas A = 70, Mean Kelas B = 85. Selisih mean = $\\dots$', questionEn:'Mean Class A = 70, Mean Class B = 85. Mean difference = $\\dots$',
+          correctAnswer:'15', acceptableAnswers:['15'],
+          explanation:`<p>$85 - 70 = 15$. <span class="tr">Subtract lower mean from higher mean.</span></p>`
+        },
+        { type:'task', pageTitle:'T6: Ukuran Pemusatan', pageTitleEn:'Measures of Center', taskType:'pairing',
+          question:'Pasangkan ukuran pemusatan dengan fungsinya.', questionEn:'Match measure of center with function.',
+          pairs:[{left:'Mean', right:'Nilai rata-rata <span class="tr">Average</span>'},{left:'Median', right:'Nilai tengah <span class="tr">Middle</span>'},{left:'Modus', right:'Nilai paling sering <span class="tr">Most frequent</span>'},{left:'Jangkauan', right:'Sebaran data <span class="tr">Spread</span>'}],
+          explanation:`<p>Mean rata-rata, Median tengah, Modus sering muncul. <span class="tr">Mean avg, Median middle, Mode frequent.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E3: Menafsirkan Outlier (Pencilan)', pageTitleEn:'Interpreting Outliers',
+          body:`<p><strong>Outlier</strong> adalah data yang nilainya sangat berbeda jauh dari data lainnya. Outlier sangat memengaruhi nilai Mean, tetapi tidak terlalu memengaruhi Median. <span class="tr"><strong>Outlier</strong> is data far different from others. Outliers heavily affect Mean, but not Median.</span></p>
+          <div class="example-box"><h4>Contoh <span class="tr">Example</span></h4>
+          Data gaji: $3, 4, 4, 5, 100$. (100 adalah outlier). <br>
+          Mean = $\\dfrac{116}{5} = 23.2$ (sangat besar). <br>
+          Median = $4$ (stabil).</div>`
+        },
+        { type:'task', pageTitle:'T7: Pengaruh Outlier', pageTitleEn:'Outlier Effect', taskType:'radio',
+          question:'Jika ada outlier yang sangat besar pada data, ukuran mana yang paling terpengaruh?', questionEn:'If a very large outlier exists, which measure is most affected?',
+          options:[{text:'Median', correct:false},{text:'Modus', correct:false},{text:'Mean', correct:true},{text:'Jangkauan', correct:false}],
+          explanation:`<p>Mean sangat dipengaruhi outlier karena nilainya ikut dijumlahkan. <span class="tr">Mean is skewed by outliers because it sums all values.</span></p>`
+        },
+        { type:'task', pageTitle:'T8: Identifikasi Outlier', pageTitleEn:'Identify Outlier', taskType:'truefalse',
+          question:'Benar atau Salah: Outlier selalu merupakan kesalahan pengukuran dan harus dihapus.', questionEn:'True or false: Outliers are always measurement errors and must be removed.',
+          correctAnswer:'false',
+          explanation:`<p>Outlier bisa merupakan data asli yang valid, perlu diselidiki, bukan asal dihapus. <span class="tr">Outliers can be valid data, need investigation.</span></p>`
+        },
+        { type:'task', pageTitle:'T9: Cari Median dengan Outlier', pageTitleEn:'Find Median with Outlier', taskType:'checkbox',
+          question:'Data: $5, 6, 7, 8, 50$. (50 adalah outlier). Pilih pernyataan benar.', questionEn:'Data: $5, 6, 7, 8, 50$. Select true statements.',
+          options:[{text:'Median data adalah 7 <span class="tr">Median is 7</span>', correct:true},{text:'Mean data lebih besar dari 10 <span class="tr">Mean is greater than 10</span>', correct:true},{text:'Median terpengaruh besar oleh 50 <span class="tr">Median heavily affected by 50</span>', correct:false},{text:'Modus data tidak ada <span class="tr">No mode</span>', correct:true}],
+          explanation:`<p>Median = 7 (tengah). Mean = $76/5 = 15.2$. Median tidak terpengaruh, mean terpengaruh. <span class="tr">Median stable, Mean affected.</span></p>`
+        },
+        { type:'task', pageTitle:'T10: Kesimpulan Outlier', pageTitleEn:'Outlier Conclusion', taskType:'fill',
+          question:'Jika data memiliki outlier ekstrem, ukuran pemusatan yang paling aman digunakan adalah ....', questionEn:'If data has extreme outlier, safest measure of center is ....',
+          correctAnswer:'Median', acceptableAnswers:['Median','median'],
+          explanation:`<p>Median lebih tahan terhadap nilai ekstrem (robust). <span class="tr">Median is robust against extreme values.</span></p>`
+        }
+      ]
+    }    ,
+    g: {
+      title: 'Consolidation & Reflection', titleEn: 'Consolidation & Reflection', time: '00:55 - 01:00',
+      pages: [
+        { type:'explanation', pageTitle:'E1: Poin Penting', pageTitleEn:'Key Takeaways',
+          body:`<div class="illustration"><svg width="240" height="80" viewBox="0 0 240 80"><circle cx="40" cy="40" r="28" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="40" y="48" text-anchor="middle" font-size="22" fill="#2563eb">Σ</text><text x="85" y="35" font-size="13" fill="#1e40af" font-weight="bold">Statistika Dasar</text><text x="85" y="52" font-size="10" fill="#64748b">Mean, Median, Modus, Diagram</text></svg><div style="font-size:.82em;color:var(--muted);margin-top:4px">Rangkuman Materi <span class="tr">Material Summary</span></div></div>
+          <p>Hari ini kita belajar tentang Investigasi Statistika. Berikut adalah rumus utama: <span class="tr">Today we learned about Statistical Investigation. Here are the key formulas:</span></p>
+          <div class="math-block"><ol><li><strong>Mean (Rata-rata):</strong> $\\dfrac{\\sum x_i}{n}$ atau $\\dfrac{\\sum (x_i \\times f_i)}{n}$ <span class="tr">Average</span></li><li><strong>Median (Nilai Tengah):</strong> Letak ke-$\\dfrac{n+1}{2}$ (ganjil) <span class="tr">Middle value</span></li><li><strong>Modus:</strong> Data dengan frekuensi tertinggi <span class="tr">Most frequent</span></li><li><strong>Jangkauan:</strong> $x_{\\text{max}} - x_{\\text{min}}$ <span class="tr">Range</span></li><li><strong>Sudut Diagram Lingkaran:</strong> $\\dfrac{f}{n} \\times 360^\\circ$ <span class="tr">Pie chart angle</span></li></ol></div>`
+        },
+        { type:'task', pageTitle:'T1: Pertanyaan Refleksi', pageTitleEn:'Reflection Question', taskType:'truefalse',
+          question:'Benar atau Salah: Saya memahami bahwa Mean sangat dipengaruhi oleh nilai outlier (pencilan), sedangkan Median tidak.', questionEn:'True or false: I understand that Mean is heavily affected by outliers, while Median is not.',
+          correctAnswer:'true',
+          explanation:`<p>Benar. Outlier menyebabkan Mean bergeser secara drastis, sedangkan Median tetap stabil karena hanya melihat posisi tengah. <span class="tr">True. Outliers skew Mean drastically, while Median remains stable.</span></p>`
+        },
+        { type:'task', pageTitle:'T2: Exit Ticket', pageTitleEn:'Exit Ticket', taskType:'fill',
+          question:'Diketahui data: $4, 5, 6, 7, 8$. Berapakah nilai Mean dari data tersebut? $\\text{Mean} = \\dots$', questionEn:'Given data: $4, 5, 6, 7, 8$. What is the Mean? $\\text{Mean} = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>$\\text{Mean} = \\dfrac{4+5+6+7+8}{5} = \\dfrac{30}{5} = 6$. <span class="tr">Sum is 30, count is 5. Mean is 6.</span></p>`
+        },
+        { type:'explanation', pageTitle:'E2: Follow-up Practice', pageTitleEn:'Follow-up Practice',
+          body:`<p>Latihan tambahan tersedia di <strong>Bagian H sampai L (Task 1-5)</strong>. Setiap bagian berisi 10 soal dengan berbagai tipe. <span class="tr">Additional practice is available in Sections H-L. Each section contains 10 questions of various types.</span></p>
+          <div class="tip-box"><h4>Tips Mengerjakan <span class="tr">Tips</span></h4><ul><li>Task 1: Mean, Median, Modus Dasar <span class="tr">Basic Measures</span></li><li>Task 2: Tabel Distribusi Frekuensi <span class="tr">Frequency Table</span></li><li>Task 3: Diagram Batang & Garis <span class="tr">Bar & Line Charts</span></li><li>Task 4: Kuartil & Jangkauan <span class="tr">Quartiles & Range</span></li><li>Task 5: Soal Campuran Tipe Ujian <span class="tr">Mixed Exam Questions</span></li></ul></div>`
+        }
+      ]
+    },
+    h: {
+      title: 'Task 1', titleEn: 'Task 1', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Hitung Mean', pageTitleEn:'Calculate Mean', taskType:'fill',
+          question:'Tentukan mean dari data $2, 4, 6, 8, 10$. $\\text{Mean} = \\dots$', questionEn:'Find mean of $2, 4, 6, 8, 10$. $\\text{Mean} = \\dots$',
+          correctAnswer:'6', acceptableAnswers:['6'],
+          explanation:`<p>$\\text{Jumlah} = 2+4+6+8+10 = 30$. Banyak data $= 5$. $\\text{Mean} = \\dfrac{30}{5} = 6$. <span class="tr">Sum is 30, count is 5. Mean is 6.</span></p>`},
+        { type:'task', pageTitle:'T2: Cari Median', pageTitleEn:'Find Median', taskType:'radio',
+          question:'Data: $10, 5, 8, 12, 15$ (belum diurutkan). Berapakah median setelah diurutkan?', questionEn:'Data: $10, 5, 8, 12, 15$ (unsorted). What is median after sorting?',
+          options:[{text:'$8$', correct:false},{text:'$10$', correct:true},{text:'$12$', correct:false},{text:'$5$', correct:false}],
+          explanation:`<p>Urutkan: $5, 8, 10, 12, 15$. Data ke-3 adalah median. Jadi, median $= 10$. <span class="tr">Sorted: $5, 8, 10, 12, 15$. 3rd data is 10.</span></p>`},
+        { type:'task', pageTitle:'T3: Definisi Modus', pageTitleEn:'Mode Definition', taskType:'truefalse',
+          question:'Benar atau Salah: Modus adalah data yang paling jarang muncul.', questionEn:'True or false: Mode is the least frequently appearing data.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Modus adalah data yang paling sering muncul. <span class="tr">False. Mode is the most frequently appearing data.</span></p>`},
+        { type:'task', pageTitle:'T4: Langkah Median', pageTitleEn:'Median Steps', taskType:'sorting',
+          question:'Urutkan langkah mencari median dari data ganjil.', questionEn:'Order steps to find median of odd data.',
+          items:['Urutkan data <span class="tr">Sort data</span>','Hitung banyak data ($n$) <span class="tr">Count data (n)</span>','Cari letak median ($\\frac{n+1}{2}$) <span class="tr">Find position</span>','Tentukan nilai pada letak tersebut <span class="tr">Determine value</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Proses standar mencari median. <span class="tr">Standard median process.</span></p>`},
+        { type:'task', pageTitle:'T5: Pernyataan Statistika', pageTitleEn:'Statistical Statements', taskType:'checkbox',
+          question:'Pilih semua pernyataan yang benar tentang ukuran pemusatan data.', questionEn:'Select all true statements about measures of center.',
+          options:[{text:'Mean adalah nilai rata-rata <span class="tr">Mean is average</span>', correct:true},{text:'Median adalah nilai tengah <span class="tr">Median is middle</span>', correct:true},{text:'Modus bisa lebih dari satu <span class="tr">Mode can be multiple</span>', correct:true},{text:'Median selalu sama dengan Mean <span class="tr">Median always equals Mean</span>', correct:false}],
+          explanation:`<p>Mean, Median, dan Modus memiliki definisi yang berbeda. Median tidak selalu sama dengan Mean. <span class="tr">They have different definitions. Median $\neq$ Mean always.</span></p>`},
+        { type:'task', pageTitle:'T6: Rumus Pemusatan', pageTitleEn:'Center Formulas', taskType:'pairing',
+          question:'Pasangkan ukuran dengan rumus/cara mencarinya.', questionEn:'Match measure with its formula/method.',
+          pairs:[{left:'Mean <span class="tr">Average</span>', right:'$\\dfrac{\\sum x}{n}$'},{left:'Median (ganjil) <span class="tr">Median (odd)</span>', right:'Nilai ke-$\\dfrac{n+1}{2}$'},{left:'Modus <span class="tr">Mode</span>', right:'Frekuensi terbanyak <span class="tr">Most frequent</span>'},{left:'Jangkauan <span class="tr">Range</span>', right:'$x_{\\text{max}} - x_{\\text{min}}$'}],
+          explanation:`<p>Pasangkan rumus yang tepat. <span class="tr">Match correct formulas.</span></p>`},
+        { type:'task', pageTitle:'T7: Hitung Jangkauan', pageTitleEn:'Calculate Range', taskType:'fill',
+          question:'Data tertinggi 100, data terendah 20. Jangkauan = $\\dots$', questionEn:'Highest 100, lowest 20. Range = $\\dots$',
+          correctAnswer:'80', acceptableAnswers:['80'],
+          explanation:`<p>$\\text{Jangkauan} = 100 - 20 = 80$. <span class="tr">Max minus Min.</span></p>`},
+        { type:'task', pageTitle:'T8: Modus Data', pageTitleEn:'Data Mode', taskType:'radio',
+          question:'Manakah modus dari data: $3, 5, 5, 2, 8, 5, 4$?', questionEn:'Which is the mode of data: $3, 5, 5, 2, 8, 5, 4$?',
+          options:[{text:'$2$', correct:false},{text:'$3$', correct:false},{text:'$4$', correct:false},{text:'$5$', correct:true}],
+          explanation:`<p>Angka $5$ muncul sebanyak 3 kali, lebih sering dari yang lain. <span class="tr">5 appears 3 times, most frequent.</span></p>`},
+        { type:'task', pageTitle:'T9: Outlier dan Mean', pageTitleEn:'Outlier and Mean', taskType:'truefalse',
+          question:'Benar atau Salah: Jika ada satu nilai yang sangat besar, Mean akan menjadi lebih besar.', questionEn:'True or false: If one very large value exists, Mean will become larger.',
+          correctAnswer:'true',
+          explanation:`<p>Mean menjumlahkan semua data, sehingga nilai besar akan menarik rata-rata ke atas. <span class="tr">Mean sums all data, large value pulls average up.</span></p>`},
+        { type:'task', pageTitle:'T10: Median Genap', pageTitleEn:'Even Median', taskType:'fill',
+          question:'Data terurut: $4, 8, 12, 16$. Median = $\\dots$', questionEn:'Sorted data: $4, 8, 12, 16$. Median = $\\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>$n=4$ (genap). Tengah = $8$ dan $12$. Median $= \\dfrac{8+12}{2} = 10$. <span class="tr">Middle are 8 and 12. Average is 10.</span></p>`}
+      ]
+    },
+    i: {
+      title: 'Task 2', titleEn: 'Task 2', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Total Frekuensi', pageTitleEn:'Total Frequency', taskType:'fill',
+          question:'Tabel memiliki frekuensi $f_1=5, f_2=8, f_3=4$. Total frekuensi ($n$) = $\\dots$', questionEn:'Table has frequencies $5, 8, 4$. Total frequency ($n$) = $\\dots$',
+          correctAnswer:'17', acceptableAnswers:['17'],
+          explanation:`<p>$n = 5 + 8 + 4 = 17$. <span class="tr">Sum of all frequencies.</span></p>`},
+        { type:'task', pageTitle:'T2: Modus Tabel', pageTitleEn:'Table Mode', taskType:'radio',
+          question:'Nilai 5 frekuensinya 10, Nilai 6 frekuensinya 15, Nilai 7 frekuensinya 5. Modusnya?', questionEn:'Value 5 freq 10, Value 6 freq 15, Value 7 freq 5. Mode?',
+          options:[{text:'$5$', correct:false},{text:'$6$', correct:true},{text:'$7$', correct:false},{text:'$15$', correct:false}],
+          explanation:`<p>Nilai 6 memiliki frekuensi tertinggi (15). Jadi modusnya 6. <span class="tr">Value 6 has highest frequency.</span></p>`},
+        { type:'task', pageTitle:'T3: Fungsi Tabel', pageTitleEn:'Table Function', taskType:'truefalse',
+          question:'Benar atau Salah: Tabel distribusi frekuensi membuat data lebih sulit dibaca.', questionEn:'True or false: Frequency table makes data harder to read.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Tabel justru membuat data lebih terorganisir dan mudah dibaca. <span class="tr">False. Table organizes data for easier reading.</span></p>`},
+        { type:'task', pageTitle:'T4: Komponen Tabel', pageTitleEn:'Table Components', taskType:'pairing',
+          question:'Pasangkan komponen tabel dengan isinya.', questionEn:'Match table component with its content.',
+          pairs:[{left:'Baris <span class="tr">Row</span>', right:'Kategori nilai <span class="tr">Value category</span>'},{left:'Kolom Frekuensi <span class="tr">Freq Column</span>', right:'Banyak kemunculan <span class="tr">Count</span>'},{left:'Turus <span class="tr">Tally</span>', right:'Tanda hitung <span class="tr">Counting mark</span>'},{left:'Total <span class="tr">Total</span>', right:'$n$ <span class="tr">Sum of freq</span>'}],
+          explanation:`<p>Pasangan komponen tabel yang benar. <span class="tr">Correct table components.</span></p>`},
+        { type:'task', pageTitle:'T5: Hitung $xf$', pageTitleEn:'Calculate $xf$', taskType:'fill',
+          question:'Nilai $x=10$, frekuensi $f=4$. Maka $x \\times f = \\dots$', questionEn:'Value $x=10$, freq $f=4$. Then $x \\times f = \\dots$',
+          correctAnswer:'40', acceptableAnswers:['40'],
+          explanation:`<p>$10 \\times 4 = 40$. <span class="tr">Value times frequency.</span></p>`},
+        { type:'task', pageTitle:'T6: Mean Tabel', pageTitleEn:'Table Mean', taskType:'radio',
+          question:'Jika $\\sum (xf) = 50$ dan $n = 10$, Mean = ?', questionEn:'If $\\sum (xf) = 50$ and $n = 10$, Mean = ?',
+          options:[{text:'$60$', correct:false},{text:'$40$', correct:false},{text:'$5$', correct:true},{text:'$0.5$', correct:false}],
+          explanation:`<p>$\\text{Mean} = \\dfrac{\\sum (xf)}{n} = \\dfrac{50}{10} = 5$. <span class="tr">Sum of xf divided by n.</span></p>`},
+        { type:'task', pageTitle:'T7: Membuat Tabel', pageTitleEn:'Make Table', taskType:'sorting',
+          question:'Urutkan langkah membuat tabel distribusi frekuensi.', questionEn:'Order steps to make frequency table.',
+          items:['Kumpulkan data mentah <span class="tr">Collect raw data</span>','Buat daftar nilai unik <span class="tr">List unique values</span>','Hitung frekuensi dengan turus <span class="tr">Count with tally</span>','Tulis angka frekuensi <span class="tr">Write frequencies</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Urutan logis pembuatan tabel. <span class="tr">Logical order of table creation.</span></p>`},
+        { type:'task', pageTitle:'T8: Analisis Tabel', pageTitleEn:'Analyze Table', taskType:'checkbox',
+          question:'Dari tabel diketahui $n=20$. Pilih pernyataan benar.', questionEn:'From table $n=20$. Select true statements.',
+          options:[{text:'Jumlah semua frekuensi adalah 20 <span class="tr">Sum of freq is 20</span>', correct:true},{text:'Nilai 5 muncul 20 kali <span class="tr">Value 5 appears 20 times</span>', correct:false},{text:'Ada 20 data yang disurvei <span class="tr">20 data surveyed</span>', correct:true},{text:'Mean pasti 20 <span class="tr">Mean must be 20</span>', correct:false}],
+          explanation:`<p>$n=20$ berarti ada 20 data total. Mean tidak selalu sama dengan $n$. <span class="tr">$n=20$ means 20 total data. Mean $\neq n$.</span></p>`},
+        { type:'task', pageTitle:'T9: Frekuensi Hilang', pageTitleEn:'Missing Frequency', taskType:'fill',
+          question:'Total $n=30$. Frekuensi yang diketahui $10, 8, 5$. Frekuensi yang hilang = $\\dots$', questionEn:'Total $n=30$. Known freq $10, 8, 5$. Missing freq = $\\dots$',
+          correctAnswer:'7', acceptableAnswers:['7'],
+          explanation:`<p>$10 + 8 + 5 = 23$. Sisa $= 30 - 23 = 7$. <span class="tr">Sum known is 23. Missing is 30-23=7.</span></p>`},
+        { type:'task', pageTitle:'T10: Turus', pageTitleEn:'Tally Marks', taskType:'truefalse',
+          question:'Benar atau Salah: Turus digunakan untuk mempermudah menghitung frekuensi.', questionEn:'True or false: Tally marks are used to ease counting frequency.',
+          correctAnswer:'true',
+          explanation:`<p>Turus (tally) membantu menghitung tanpa hilang hitungan. <span class="tr">Tally helps counting without losing track.</span></p>`}
+      ]
+    },
+    j: {
+      title: 'Task 3', titleEn: 'Task 3', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Baca Batang', pageTitleEn:'Read Bar', taskType:'fill',
+          question:'Tinggi batang A=15, B=25, C=10. Total = $\\dots$', questionEn:'Height A=15, B=25, C=10. Total = $\\dots$',
+          correctAnswer:'50', acceptableAnswers:['50'],
+          explanation:`<p>$15 + 25 + 10 = 50$. <span class="tr">Sum of all bars.</span></p>`},
+        { type:'task', pageTitle:'T2: Tertinggi Batang', pageTitleEn:'Bar Highest', taskType:'radio',
+          question:'Diagram batang menunjukkan A=40, B=55, C=20. Manakah tertinggi?', questionEn:'Bar chart A=40, B=55, C=20. Which is highest?',
+          options:[{text:'A', correct:false},{text:'B', correct:true},{text:'C', correct:false},{text:'Sama <span class="tr">Same</span>', correct:false}],
+          explanation:`<p>B memiliki nilai 55, paling tinggi. <span class="tr">B has 55, highest value.</span></p>`},
+        { type:'task', pageTitle:'T3: Diagram Garis', pageTitleEn:'Line Chart', taskType:'truefalse',
+          question:'Benar atau Salah: Diagram garis paling cocok untuk data perubahan suhu harian.', questionEn:'True or false: Line chart is best for daily temperature changes.',
+          correctAnswer:'true',
+          explanation:`<p>Diagram garis menunjukkan tren dari waktu ke waktu, cocok untuk suhu. <span class="tr">Line chart shows time trend, fits temperature.</span></p>`},
+        { type:'task', pageTitle:'T4: Pasangan Diagram', pageTitleEn:'Match Charts', taskType:'pairing',
+          question:'Pasangkan jenis diagram dengan kegunaannya.', questionEn:'Match chart type with its use.',
+          pairs:[{left:'Diagram Batang <span class="tr">Bar Chart</span>', right:'Membandingkan kategori <span class="tr">Compare categories</span>'},{left:'Diagram Garis <span class="tr">Line Chart</span>', right:'Tren waktu <span class="tr">Time trend</span>'},{left:'Diagram Lingkaran <span class="tr">Pie Chart</span>', right:'Persentase <span class="tr">Percentage</span>'},{left:'Tabel <span class="tr">Table</span>', right:'Data mentah terstruktur <span class="tr">Structured raw data</span>'}],
+          explanation:`<p>Pasangan kegunaan diagram yang tepat. <span class="tr">Correct chart uses.</span></p>`},
+        { type:'task', pageTitle:'T5: Komponen Batang', pageTitleEn:'Bar Components', taskType:'checkbox',
+          question:'Pilih komponen yang ada di diagram batang.', questionEn:'Select components in bar chart.',
+          options:[{text:'Sumbu X <span class="tr">X-axis</span>', correct:true},{text:'Sumbu Y <span class="tr">Y-axis</span>', correct:true},{text:'Batang persegi <span class="tr">Rectangular bars</span>', correct:true},{text:'Sudut pusat <span class="tr">Central angle</span>', correct:false}],
+          explanation:`<p>Sudut pusat ada di diagram lingkaran, bukan batang. <span class="tr">Central angle is for pie chart.</span></p>`},
+        { type:'task', pageTitle:'T6: Selisih Garis', pageTitleEn:'Line Difference', taskType:'fill',
+          question:'Pada diagram garis, Senin=30, Selasa=45. Kenaikan = $\\dots$', questionEn:'In line chart, Mon=30, Tue=45. Increase = $\\dots$',
+          correctAnswer:'15', acceptableAnswers:['15'],
+          explanation:`<p>$45 - 30 = 15$. <span class="tr">Subtract earlier from later.</span></p>`},
+        { type:'task', pageTitle:'T7: Membuat Batang', pageTitleEn:'Make Bar', taskType:'sorting',
+          question:'Urutkan langkah membuat diagram batang.', questionEn:'Order steps to make bar chart.',
+          items:['Gambar sumbu <span class="tr">Draw axes</span>','Tentukan skala <span class="tr">Determine scale</span>','Gambar batang <span class="tr">Draw bars</span>','Beri judul <span class="tr">Add title</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Langkah standar menggambar diagram. <span class="tr">Standard charting steps.</span></p>`},
+        { type:'task', pageTitle:'T8: Baca Tren', pageTitleEn:'Read Trend', taskType:'radio',
+          question:'Garis pada grafik turun dari atas ke bawah. Apa artinya?', questionEn:'Graph line goes down top to bottom. What does it mean?',
+          options:[{text:'Data naik <span class="tr">Increases</span>', correct:false},{text:'Data turun <span class="tr">Decreases</span>', correct:true},{text:'Data tetap <span class="tr">Constant</span>', correct:false},{text:'Data hilang <span class="tr">Lost</span>', correct:false}],
+          explanation:`<p>Garis turun menunjukkan penurunan nilai data. <span class="tr">Downward line means data decreases.</span></p>`},
+        { type:'task', pageTitle:'T9: Bentuk Batang', pageTitleEn:'Bar Shape', taskType:'truefalse',
+          question:'Benar atau Salah: Batang pada diagram batang berbentuk lingkaran.', questionEn:'True or false: Bars in bar chart are circular.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Batang berbentuk persegi panjang. <span class="tr">False. Bars are rectangular.</span></p>`},
+        { type:'task', pageTitle:'T10: Total dari Batang', pageTitleEn:'Bar Total', taskType:'fill',
+          question:'4 batang memiliki tinggi masing-masing 10, 20, 30, 40. Total = $\\dots$', questionEn:'4 bars have heights 10, 20, 30, 40. Total = $\\dots$',
+          correctAnswer:'100', acceptableAnswers:['100'],
+          explanation:`<p>$10 + 20 + 30 + 40 = 100$. <span class="tr">Sum of all heights.</span></p>`}
+      ]
+    },
+    k: {
+      title: 'Task 4', titleEn: 'Task 4', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Hitung Jangkauan', pageTitleEn:'Calculate Range', taskType:'fill',
+          question:'Data: $15, 20, 25, 30, 45$. Jangkauan = $\\dots$', questionEn:'Data: $15, 20, 25, 30, 45$. Range = $\\dots$',
+          correctAnswer:'30', acceptableAnswers:['30'],
+          explanation:`<p>$\\text{Maks} = 45, \\text{Min} = 15$. $45 - 15 = 30$. <span class="tr">Max minus Min.</span></p>`},
+        { type:'task', pageTitle:'T2: Letak $Q_1$', pageTitleEn:'$Q_1$ Position', taskType:'radio',
+          question:'Jika $n=11$, rumus letak $Q_1$ adalah?', questionEn:'If $n=11$, formula for $Q_1$ position is?',
+          options:[{text:'$\\dfrac{11+1}{2}$', correct:false},{text:'$\\dfrac{11+1}{4}$', correct:true},{text:'$\\dfrac{3(11+1)}{4}$', correct:false},{text:'$\\dfrac{11}{4}$', correct:false}],
+          explanation:`<p>Letak $Q_1 = \\dfrac{n+1}{4} = \\dfrac{11+1}{4} = 3$. <span class="tr">Formula for Q1.</span></p>`},
+        { type:'task', pageTitle:'T3: Definisi Kuartil', pageTitleEn:'Quartile Definition', taskType:'truefalse',
+          question:'Benar atau Salah: Kuartil kedua ($Q_2$) adalah sama dengan median.', questionEn:'True or false: Second quartile ($Q_2$) is the same as median.',
+          correctAnswer:'true',
+          explanation:`<p>$Q_2$ membagi data menjadi 50:50, sehingga sama dengan median. <span class="tr">$Q_2$ divides 50:50, equals median.</span></p>`},
+        { type:'task', pageTitle:'T4: Pasangan Kuartil', pageTitleEn:'Match Quartiles', taskType:'pairing',
+          question:'Pasangkan kuartil dengan posisinya.', questionEn:'Match quartile with position.',
+          pairs:[{left:'$Q_1$', right:'Kuartil bawah (25%)'},{left:'$Q_2$', right:'Median (50%)'},{left:'$Q_3$', right:'Kuartil atas (75%)'},{left:'$Q_4$', right:'Data maksimum (100%)'}],
+          explanation:`<p>$Q_1$=25%, $Q_2$=50%, $Q_3$=75%, $Q_4$=100%. <span class="tr">Percentile equivalents.</span></p>`},
+        { type:'task', pageTitle:'T5: Pernyataan Kuartil', pageTitleEn:'Quartile Statements', taskType:'checkbox',
+          question:'Pilih pernyataan benar tentang kuartil.', questionEn:'Select true statements about quartiles.',
+          options:[{text:'Kuartil membagi data jadi 4 bagian <span class="tr">Divides to 4 parts</span>', correct:true},{text:'$Q_3$ di bawah $Q_1$ <span class="tr">Q3 below Q1</span>', correct:false},{text:'Harus diurutkan dulu <span class="tr">Must be sorted</span>', correct:true},{text:'$Q_1$ bisa dihitung tanpa mengurutkan <span class="tr">Q1 without sorting</span>', correct:false}],
+          explanation:`<p>Data harus diurutkan. $Q_3$ selalu di atas $Q_1$. <span class="tr">Must sort. Q3 > Q1.</span></p>`},
+        { type:'task', pageTitle:'T6: Jangkauan Kuartil', pageTitleEn:'Interquartile Range', taskType:'fill',
+          question:'Jika $Q_3 = 20$ dan $Q_1 = 10$. Jangkauan antar kuartil = $\\dots$', questionEn:'If $Q_3 = 20$ and $Q_1 = 10$. Interquartile range = $\\dots$',
+          correctAnswer:'10', acceptableAnswers:['10'],
+          explanation:`<p>$\\text{Jangkauan} = Q_3 - Q_1 = 20 - 10 = 10$. <span class="tr">Q3 minus Q1.</span></p>`},
+        { type:'task', pageTitle:'T7: Langkah Kuartil', pageTitleEn:'Quartile Steps', taskType:'sorting',
+          question:'Urutkan langkah mencari $Q_1$.', questionEn:'Order steps to find $Q_1$.',
+          items:['Urutkan data <span class="tr">Sort data</span>','Hitung $n$ <span class="tr">Count n</span>','Hitung letak $Q_1 = \\frac{n+1}{4}$ <span class="tr">Find Q1 position</span>','Tentukan nilai $Q_1$ <span class="tr">Determine Q1 value</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Urutan standar mencari kuartil. <span class="tr">Standard quartile steps.</span></p>`},
+        { type:'task', pageTitle:'T8: Nilai $Q_1$', pageTitleEn:'$Q_1$ Value', taskType:'radio',
+          question:'Data: $4, 5, 6, 7, 8, 9, 10$. $n=7$. Letak $Q_1 = \\frac{7+1}{4} = 2$. Berapa nilai $Q_1$?', questionEn:'Data: $4, 5, 6, 7, 8, 9, 10$. Position $Q_1=2$. What is $Q_1$ value?',
+          options:[{text:'$4$', correct:false},{text:'$5$', correct:true},{text:'$6$', correct:false},{text:'$7$', correct:false}],
+          explanation:`<p>Letak ke-2 dari data yang sudah diurutkan adalah $5$. <span class="tr">2nd data in sorted list is 5.</span></p>`},
+        { type:'task', pageTitle:'T9: Rumus Jangkauan', pageTitleEn:'Range Formula', taskType:'truefalse',
+          question:'Benar atau Salah: Jangkauan dihitung dengan maksimum ditambah minimum.', questionEn:'True or false: Range is calculated by maximum plus minimum.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Jangkauan = maksimum dikurang minimum. <span class="tr">False. Range = max minus min.</span></p>`},
+        { type:'task', pageTitle:'T10: Median Genap', pageTitleEn:'Even Median', taskType:'fill',
+          question:'Data: $10, 20, 30, 40$. Nilai mediannya = $\\dots$', questionEn:'Data: $10, 20, 30, 40$. Median value = $\\dots$',
+          correctAnswer:'25', acceptableAnswers:['25'],
+          explanation:`<p>$n=4$. Tengah = $20$ dan $30$. Median $= \\dfrac{20+30}{2} = 25$. <span class="tr">Middle are 20 and 30. Average 25.</span></p>`}
+      ]
+    },
+    l: {
+      title: 'Task 5', titleEn: 'Task 5', time: 'Printable',
+      pages: [
+        { type:'task', pageTitle:'T1: Hitung Mean', pageTitleEn:'Calculate Mean', taskType:'fill',
+          question:'5 orang anak memiliki umur $10, 12, 11, 13, 14$. Mean umur = $\\dots$', questionEn:'5 children ages $10, 12, 11, 13, 14$. Mean age = $\\dots$',
+          correctAnswer:'12', acceptableAnswers:['12'],
+          explanation:`<p>Jumlah $= 60$. Banyak $= 5$. Mean $= \\dfrac{60}{5} = 12$. <span class="tr">Sum 60, count 5. Mean 12.</span></p>`},
+        { type:'task', pageTitle:'T2: Outlier', pageTitleEn:'Outlier', taskType:'radio',
+          question:'Data: $10, 10, 10, 10, 100$. Manakah ukuran paling tepat untuk mempusatkan data?', questionEn:'Data: $10, 10, 10, 10, 100$. Which measure best centers data?',
+          options:[{text:'Mean', correct:false},{text:'Median', correct:true},{text:'Jangkauan', correct:false},{text:'Tidak ada', correct:false}],
+          explanation:`<p>Ada outlier (100). Median (10) lebih mewakili pusat data daripada Mean (28). <span class="tr">Outlier exists. Median (10) represents center better.</span></p>`},
+        { type:'task', pageTitle:'T3: Diagram Lingkaran', pageTitleEn:'Pie Chart', taskType:'truefalse',
+          question:'Benar atau Salah: Jumlah semua sudut dalam diagram lingkaran adalah $180^\\circ$.', questionEn:'True or false: Sum of all angles in pie chart is $180^\\circ$.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Total sudut lingkaran penuh adalah $360^\\circ$. <span class="tr">False. Full circle is 360 degrees.</span></p>`},
+        { type:'task', pageTitle:'T4: Pasangan Rumus', pageTitleEn:'Match Formulas', taskType:'pairing',
+          question:'Pasangkan nama dengan rumusnya.', questionEn:'Match name with formula.',
+          pairs:[{left:'Mean', right:'$\\dfrac{\\sum x}{n}$'},{left:'Median (ganjil)', right:'$\\dfrac{n+1}{2}$'},{left:'Sudut Lingkaran', right:'$\\dfrac{f}{n} \\times 360^\\circ$'},{left:'Jangkauan', right:'$\\text{Maks} - \\text{Min}$'}],
+          explanation:`<p>Pasangan rumus statistika yang benar. <span class="tr">Correct statistics formulas.</span></p>`},
+        { type:'task', pageTitle:'T5: Pertanyaan Statistika', pageTitleEn:'Statistical Questions', taskType:'checkbox',
+          question:'Pilih yang termasuk pertanyaan statistika.', questionEn:'Select statistical questions.',
+          options:[{text:'Berapa rata-rata nilai ujian? <span class="tr">Average exam score?</span>', correct:true},{text:'Berapakah $2+2$? <span class="tr">What is $2+2$?</span>', correct:false},{text:'Apa warna kesukaan siswa? <span class="tr">Favorite student color?</span>', correct:true},{text:'Siapa nama presiden? <span class="tr">Who is the president?</span>', correct:false}],
+          explanation:`<p>Pertanyaan statistika butuh pengumpulan data bervariasi. <span class="tr">Requires varied data collection.</span></p>`},
+        { type:'task', pageTitle:'T6: Sudut Lingkaran', pageTitleEn:'Pie Angle', taskType:'fill',
+          question:'Frekuensi=15, Total=60. Sudut sektor = $\\dots ^\\circ$', questionEn:'Freq=15, Total=60. Sector angle = $\\dots ^\\circ$',
+          correctAnswer:'90', acceptableAnswers:['90','90°'],
+          explanation:`<p>$\\dfrac{15}{60} \\times 360^\\circ = \\dfrac{1}{4} \\times 360^\\circ = 90^\\circ$. <span class="tr">Freq/Total * 360.</span></p>`},
+        { type:'task', pageTitle:'T7: Tahap Investigasi', pageTitleEn:'Investigation Stages', taskType:'sorting',
+          question:'Urutkan tahap investigasi statistika.', questionEn:'Order statistical investigation stages.',
+          items:['Mengajukan pertanyaan <span class="tr">Pose question</span>','Mengumpulkan data <span class="tr">Collect data</span>','Menganalisis data <span class="tr">Analyze data</span>','Menarik kesimpulan <span class="tr">Draw conclusion</span>'], correctOrder:[0,1,2,3],
+          explanation:`<p>Tahapan baku investigasi. <span class="tr">Standard investigation stages.</span></p>`},
+        { type:'task', pageTitle:'T8: Ukuran Terbaik', pageTitleEn:'Best Measure', taskType:'radio',
+          question:'Data gaji pekerja sebagian besar Rp3jt, ada satu Rp50jt. Ukuran terbaik?', questionEn:'Worker salaries mostly 3M, one 50M. Best measure?',
+          options:[{text:'Mean', correct:false},{text:'Median', correct:true},{text:'Jangkauan', correct:false},{text:'Modus', correct:false}],
+          explanation:`<p>Outlier membuat Mean melonjak. Median lebih adil mewakili pekerja pada umumnya. <span class="tr">Outlier skews Mean. Median represents majority better.</span></p>`},
+        { type:'task', pageTitle:'T9: Kegunaan Statistika', pageTitleEn:'Statistics Use', taskType:'truefalse',
+          question:'Benar atau Salah: Statistika tidak berguna dalam pengambilan keputusan.', questionEn:'True or false: Statistics is useless for decision making.',
+          correctAnswer:'false',
+          explanation:`<p>Salah. Statistika sangat penting untuk keputusan berbasis data. <span class="tr">False. Crucial for data-driven decisions.</span></p>`},
+        { type:'task', pageTitle:'T10: Modus Data', pageTitleEn:'Data Mode', taskType:'fill',
+          question:'Data: $7, 8, 8, 9, 10$. Modus = $\\dots$', questionEn:'Data: $7, 8, 8, 9, 10$. Mode = $\\dots$',
+          correctAnswer:'8', acceptableAnswers:['8'],
+          explanation:`<p>Angka 8 muncul 2 kali, paling sering. <span class="tr">8 appears most frequently.</span></p>`}
+      ]
+    }
+  };
+
+  // ================= STATE =================
+  let currentSection = 'a';
+  let currentPage = 0;
+  let userAnswers = {};
+
+  // ================= UTILITIES =================
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function renderMath(el){
+    if(window.renderMathInElement){
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$', right:'$', display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  // ================= SIDEBAR =================
+  function renderSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const sectionKeys = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const meta = {
+      a:{t:'Spiral Review', e:'Spiral Review', time:'00:00-00:10'},
+      b:{t:'Intro & Real-World', e:'Intro & Real-World', time:'00:10-00:15'},
+      c:{t:'Prior Knowledge', e:'Prior Knowledge', time:'00:15-00:20'},
+      d:{t:'Problem Intro', e:'Problem Intro', time:'00:20-00:30'},
+      e:{t:'Guided Practice', e:'Guided Practice', time:'00:30-00:45'},
+      f:{t:'Independent Prac', e:'Independent Prac', time:'00:45-00:55'},
+      g:{t:'Consolidation', e:'Consolidation', time:'00:55-01:00'},
+      h:{t:'Task 1', e:'Task 1', time:'Printable'},
+      i:{t:'Task 2', e:'Task 2', time:'Printable'},
+      j:{t:'Task 3', e:'Task 3', time:'Printable'},
+      k:{t:'Task 4', e:'Task 4', time:'Printable'},
+      l:{t:'Task 5', e:'Task 5', time:'Printable'}
+    };
+    let html = '<h3>Bagian <span class="tr">Sections</span></h3>';
+    sectionKeys.forEach(key => {
+      const section = sectionsData[key];
+      const isActive = currentSection === key;
+      if(section){
+        html += `<div class="nav-link ${isActive?'active':''}" data-section="${key}">
+          <span class="nl-title">${key.toUpperCase()}. ${meta[key].t}</span>
+          <span class="tr">${meta[key].e}</span>
+          <span class="time">${meta[key].time}</span>
+        </div>`;
+      } else {
+        html += `<div class="nav-link disabled">${key.toUpperCase()}. ${meta[key].t}<br><span class="tr">${meta[key].e}</span><br><span class="time">${meta[key].time} (segera)</span></div>`;
+      }
+    });
+    sidebar.innerHTML = html;
+    sidebar.querySelectorAll('.nav-link[data-section]').forEach(el => {
+      el.addEventListener('click', () => {
+        currentSection = el.dataset.section;
+        currentPage = 0;
+        renderSidebar();
+        renderPage();
+      });
+    });
+  }
+
+  // ================= PAGE RENDER =================
+  function renderPage(){
+    const section = sectionsData[currentSection];
+    if(!section) return;
+    const page = section.pages[currentPage];
+    const contentEl = document.getElementById('pageContent');
+
+    let printBtnHtml = '';
+    if(['h','i','j','k','l'].includes(currentSection)){
+      printBtnHtml = '<button id="printBtnTop" style="background:var(--success);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.8em;font-weight:600;white-space:nowrap">🖨 Cetak PDF <span class="tr">Print to PDF</span></button>';
+    }
+
+    let html = '<div class="page-header"><h2>' + section.title + ' <span class="tr">' + section.titleEn + '</span></h2><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">' + printBtnHtml + '<span class="badge">' + page.pageTitle.split(':')[0] + '</span></div></div>';
+
+    if(page.type === 'explanation'){
+      html += '<div class="card explain"><h3>' + page.pageTitle + ' <span class="tr">' + page.pageTitleEn + '</span></h3>' + page.body + '</div>';
+    } else if(page.type === 'task'){
+      html += renderTask(page);
+    }
+    contentEl.innerHTML = html;
+    renderMath(contentEl);
+
+    const total = section.pages.length;
+    const pageNumsEl = document.getElementById('pageNums');
+    let pageNumHtml = '';
+    section.pages.forEach(function(p, i){
+      var raw = p.pageTitle.split(':')[0].trim();
+      var type = raw.charAt(0);
+      var num = parseInt(raw.substring(1));
+      var label = type + '-' + String(num).padStart(2, '0');
+      var typeClass = (type === 'E') ? 'page-num-e' : 'page-num-t';
+      var isActive = (i === currentPage);
+      pageNumHtml += '<button class="page-num ' + typeClass + ' ' + (isActive ? 'active' : '') + '" data-page="' + i + '"' + (isActive ? ' disabled' : '') + '>' + label + '</button>';
+    });
+    pageNumsEl.innerHTML = pageNumHtml;
+
+    pageNumsEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.dataset.page);
+        renderPage();
+      });
+    });
+
+    document.getElementById('prevBtn').disabled = (currentPage === 0);
+    document.getElementById('nextBtn').disabled = (currentPage === total - 1);
+
+    var printBtnTop = document.getElementById('printBtnTop');
+    if(printBtnTop){
+      printBtnTop.addEventListener('click', function(){ printTask(currentSection); });
+    }
+
+    if(page.type === 'task'){
+      attachTaskHandlers(page);
+    }
+  }
+
+  function renderTask(page){
+    let html = `<div class="card task"><h3>${page.pageTitle} <span class="tr">${page.pageTitleEn}</span></h3>`;
+    html += `<div class="q-text">${page.question} <span class="tr">${page.questionEn || ''}</span></div>`;
+
+    if(page.taskType === 'radio' || page.taskType === 'checkbox'){
+      const options = shuffle(page.options);
+      page._shuffledOptions = options;
+      html += '<div class="options">';
+      options.forEach((opt, i) => {
+        const cls = page.taskType === 'checkbox' ? 'option checkbox' : 'option radio';
+        html += `<div class="${cls}" data-idx="${i}">
+          <div class="marker"></div>
+          <div class="opt-text">${opt.text}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'fill'){
+      html += `<input type="text" class="fill-input" id="fillInput" placeholder="...">`;
+    } else if(page.taskType === 'truefalse'){
+      const opts = shuffle([
+        {text:'Benar <span class="tr">True</span>', val:'true'},
+        {text:'Salah <span class="tr">False</span>', val:'false'}
+      ]);
+      page._shuffledTF = opts;
+      html += '<div class="options">';
+      opts.forEach((o, i) => {
+        html += `<div class="option radio" data-val="${o.val}" data-idx="${i}"><div class="marker"></div><div class="opt-text">${o.text}</div></div>`;
+      });
+      html += '</div>';
+    } else if(page.taskType === 'sorting'){
+      const shuffled = shuffle(page.items.map((item, idx) => ({text:item, originalIdx:idx})));
+      page._shuffledItems = shuffled;
+      html += '<div class="sort-list">';
+      shuffled.forEach((it, i) => {
+        html += `<div class="sort-item" data-pos="${i}" data-orig="${it.originalIdx}">
+          <span class="pos">${i+1}</span>
+          <span class="sort-text">${it.text}</span>
+        </div>`;
+      });
+      html += '</div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Klik dua item untuk menukar (Drag and drop alternative). <span class="tr">Click two items to swap.</span></p>';
+    } else if(page.taskType === 'pairing'){
+      const lefts = shuffle(page.pairs.map((p, idx) => ({text:p.left, originalIdx:idx})));
+      const rights = shuffle(page.pairs.map((p, idx) => ({text:p.right, originalIdx:idx})));
+      page._shuffledPairs = {lefts, rights};
+      html += '<div class="pair-grid">';
+      html += '<div class="pair-col"><h4>Kiri <span class="tr">Left</span></h4>';
+      lefts.forEach((l, i) => {
+        html += `<div class="pair-item" data-side="left" data-idx="${i}">${l.text}</div>`;
+      });
+      html += '</div>';
+      html += '<div class="pair-col"><h4>Kanan <span class="tr">Right</span></h4>';
+      rights.forEach((r, i) => {
+        html += `<div class="pair-item" data-side="right" data-idx="${i}">${r.text}</div>`;
+      });
+      html += '</div></div>';
+      html += '<div class="pairs-list" id="pairsList"></div>';
+      html += '<p style="font-size:.82em;color:var(--muted);margin-top:6px">Klik kiri lalu kanan untuk memasangkan. <span class="tr">Click left then right to pair.</span></p>';
+    }
+    html += `<button class="btn-submit" id="submitBtn">Periksa Jawaban <span class="tr">Check Answer</span></button>`;
+    html += `<div class="feedback" id="feedback"></div></div>`;
+    return html;
+  }
+
+  function attachTaskHandlers(page){
+    const taskType = page.taskType;
+
+    if(taskType === 'radio' || taskType === 'truefalse'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    } else if(taskType === 'checkbox'){
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', () => opt.classList.toggle('selected'));
+      });
+    } else if(taskType === 'sorting'){
+      let firstClick = null;
+      document.querySelectorAll('.sort-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if(firstClick === null){
+            firstClick = item;
+            item.classList.add('selected');
+          } else if(firstClick === item){
+            item.classList.remove('selected');
+            firstClick = null;
+          } else {
+            const fText = firstClick.querySelector('.sort-text').innerHTML;
+            const sText = item.querySelector('.sort-text').innerHTML;
+            firstClick.querySelector('.sort-text').innerHTML = sText;
+            item.querySelector('.sort-text').innerHTML = fText;
+            const fOrig = firstClick.dataset.orig;
+            firstClick.dataset.orig = item.dataset.orig;
+            item.dataset.orig = fOrig;
+            firstClick.classList.remove('selected');
+            firstClick = null;
+          }
+        });
+      });
+    } else if(taskType === 'pairing'){
+      let selectedLeft = null;
+      document.querySelectorAll('.pair-item[data-side="left"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired')) return;
+          document.querySelectorAll('.pair-item[data-side="left"]').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedLeft = item;
+        });
+      });
+      document.querySelectorAll('.pair-item[data-side="right"]').forEach(item => {
+        item.addEventListener('click', () => {
+          if(item.classList.contains('paired') || !selectedLeft) return;
+          const leftIdx = selectedLeft.dataset.idx;
+          const rightIdx = item.dataset.idx;
+          const pairList = document.getElementById('pairsList');
+          const pairRow = document.createElement('div');
+          pairRow.className = 'pair-row';
+          pairRow.dataset.leftIdx = leftIdx;
+          pairRow.dataset.rightIdx = rightIdx;
+          pairRow.innerHTML = `<span>${selectedLeft.innerHTML}</span> <span>↔</span> <span>${item.innerHTML}</span> <span class="remove" title="Remove">×</span>`;
+          pairRow.querySelector('.remove').addEventListener('click', function() {
+            const lIdx = pairRow.dataset.leftIdx;
+            const rIdx = pairRow.dataset.rightIdx;
+            const lItem = document.querySelector(`.pair-item[data-side="left"][data-idx="${lIdx}"]`);
+            const rItem = document.querySelector(`.pair-item[data-side="right"][data-idx="${rIdx}"]`);
+            if(lItem) lItem.classList.remove('paired');
+            if(rItem) rItem.classList.remove('paired');
+            pairRow.remove();
+          });
+          pairList.appendChild(pairRow);
+          selectedLeft.classList.remove('selected');
+          selectedLeft.classList.add('paired');
+          item.classList.add('paired');
+          selectedLeft = null;
+        });
+      });
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', () => checkAnswer(page));
+  }
+
+  function checkAnswer(page){
+    const taskType = page.taskType;
+    let isCorrect = false;
+    let userAnswerStr = '';
+
+    if(taskType === 'radio'){
+      let selected = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selected = page._shuffledOptions[i];
+          selectedIdx = i;
+        }
+      });
+      if(!selected){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      isCorrect = selected.correct;
+      userAnswerStr = selected.text;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(i === selectedIdx && !selected.correct) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'checkbox'){
+      const selectedIdxs = [];
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')) selectedIdxs.push(i);
+      });
+      if(selectedIdxs.length === 0){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      const correctSet = new Set();
+      page._shuffledOptions.forEach((opt, i) => { if(opt.correct) correctSet.add(i); });
+      const selectedSet = new Set(selectedIdxs);
+      isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(i => selectedSet.has(i));
+      userAnswerStr = selectedIdxs.map(i => page._shuffledOptions[i].text).join(', ');
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(page._shuffledOptions[i].correct) opt.classList.add('correct');
+        else if(selectedSet.has(i)) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'fill'){
+      const val = document.getElementById('fillInput').value.trim();
+      const acceptable = page.acceptableAnswers || [page.correctAnswer];
+      const norm = s => s.toLowerCase().replace(/\s+/g, '').replace(/,/g, '.').trim();
+      isCorrect = acceptable.some(a => norm(a) === norm(val));
+      userAnswerStr = val;
+    } else if(taskType === 'truefalse'){
+      let selectedVal = null, selectedIdx = -1;
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        if(opt.classList.contains('selected')){
+          selectedVal = opt.dataset.val;
+          selectedIdx = i;
+        }
+      });
+      if(!selectedVal){
+        showFeedback(false, 'Silakan pilih jawaban. <span class="tr">Please select an answer.</span>', false);
+        return;
+      }
+      isCorrect = selectedVal === page.correctAnswer;
+      userAnswerStr = selectedVal === 'true' ? 'True' : 'False';
+      document.querySelectorAll('.option').forEach((opt, i) => {
+        opt.classList.remove('selected');
+        if(opt.dataset.val === page.correctAnswer) opt.classList.add('correct');
+        else if(i === selectedIdx) opt.classList.add('incorrect');
+      });
+    } else if(taskType === 'sorting'){
+      const currentOrder = [];
+      document.querySelectorAll('.sort-item').forEach(item => {
+        currentOrder.push(parseInt(item.dataset.orig));
+      });
+      isCorrect = currentOrder.every((idx, i) => idx === page.correctOrder[i]);
+      userAnswerStr = currentOrder.map((idx, i) => `${i+1}. ${page.items[idx] || '?'}`).join('  |  ');
+      document.querySelectorAll('.sort-item').forEach((item, i) => {
+        if(currentOrder[i] === page.correctOrder[i]) item.style.borderColor = 'var(--success)';
+        else item.style.borderColor = 'var(--danger)';
+      });
+    } else if(taskType === 'pairing'){
+      const pairRows = document.querySelectorAll('.pair-row');
+      if(pairRows.length === 0){
+        showFeedback(false, 'Silakan buat pasangan. <span class="tr">Please make pairs.</span>', false);
+        return;
+      }
+      const userPairs = [];
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        userPairs.push({
+          leftText: page._shuffledPairs.lefts[lIdx].text,
+          rightText: page._shuffledPairs.rights[rIdx].text
+        });
+      });
+      const correctPairs = page.pairs.map(p => ({left:p.left, right:p.right}));
+      const correctCount = userPairs.filter(up =>
+        correctPairs.some(cp => cp.left === up.leftText && cp.right === up.rightText)
+      ).length;
+      isCorrect = correctCount === correctPairs.length && userPairs.length === correctPairs.length;
+      userAnswerStr = userPairs.map(p => `${p.leftText}↔${p.rightText}`).join('  |  ');
+      pairRows.forEach(row => {
+        const lIdx = parseInt(row.dataset.leftIdx);
+        const rIdx = parseInt(row.dataset.rightIdx);
+        const lText = page._shuffledPairs.lefts[lIdx].text;
+        const rText = page._shuffledPairs.rights[rIdx].text;
+        const ok = correctPairs.some(cp => cp.left === lText && cp.right === rText);
+        row.style.background = ok ? '#d1fae5' : '#fee2e2';
+      });
+    }
+
+    const pageKey = `${currentSection}-${currentPage}`;
+    userAnswers[pageKey] = {userAnswer:userAnswerStr, correct:isCorrect, pageTitle:page.pageTitle};
+    showFeedback(isCorrect, page.explanation, true);
+  }
+
+  function showFeedback(isCorrect, explanation, showAnswer){
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback show ${isCorrect?'correct':'incorrect'}`;
+    if(showAnswer){
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Benar!':'✗ Salah'} <span class="tr">${isCorrect?'Correct!':'Incorrect'}</span></h4>${explanation}`;
+    } else {
+      feedback.innerHTML = `<h4>${isCorrect?'✓ Benar!':'✗ Salah'}</h4>`;
+    }
+    renderMath(feedback);
+  }
+
+  // ================= EVENT LISTENERS =================
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if(currentPage > 0){ currentPage--; renderPage(); }
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const total = sectionsData[currentSection].pages.length;
+    if(currentPage < total - 1){ currentPage++; renderPage(); }
+  });
+
+  const modal = document.getElementById('classRulesModal');
+  document.getElementById('classRulesBtn').addEventListener('click', () => modal.classList.add('active'));
+  document.querySelector('.modal-close').addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // ================= PRINT TO PDF =================
+  function getCorrectAnswer(task){
+    if(task.taskType === 'radio'){
+      const c = task.options.find(o => o.correct);
+      return c ? c.text : '';
+    }
+    if(task.taskType === 'checkbox'){
+      return task.options.filter(o => o.correct).map(o => o.text).join(', ');
+    }
+    if(task.taskType === 'fill'){
+      return task.correctAnswer || '';
+    }
+    if(task.taskType === 'truefalse'){
+      return task.correctAnswer === 'true' ? 'Benar' : 'Salah';
+    }
+    if(task.taskType === 'sorting'){
+      return task.correctOrder.map(i => task.items[i]).join(' → ');
+    }
+    if(task.taskType === 'pairing'){
+      return task.pairs.map(p => p.left + ' ↔ ' + p.right).join('; ');
+    }
+    return '';
+  }
+
+  function printTask(sectionKey){
+    const section = sectionsData[sectionKey];
+    if(!section) return;
+    const tasks = section.pages;
+    let correctCount = 0;
+
+    const rows = tasks.map((task, idx) => {
+      const pageKey = sectionKey + '-' + idx;
+      const ua = userAnswers[pageKey];
+      const isCorrect = ua ? ua.correct : false;
+      const userAns = ua ? ua.userAnswer : '(tidak dijawab)';
+      const correctAns = getCorrectAnswer(task);
+      if(ua && ua.correct) correctCount++;
+      return '<tr><td>' + (idx+1) + '</td><td>' + task.question + '<br><span class="tr">' + (task.questionEn || '') + '</span></td><td>' + userAns + '</td><td>' + correctAns + '</td><td style="text-align:center;font-size:1.1em">' + (isCorrect ? '✓' : '✗') + '</td></tr>';
+    }).join('');
+
+    const score = correctCount + ' / ' + tasks.length;
+    const today = new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'});
+
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cetak - ' + section.title + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"><\/script>' +
+      '<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"><\/script>' +
+      '<style>' +
+      'body{font-family:Segoe UI,sans-serif;padding:30px;color:#1e293b;line-height:1.5}' +
+      'h1{font-size:1.2em;margin-bottom:5px}' +
+      '.info{margin-bottom:15px;font-size:.88em}' +
+      '.info div{margin:3px 0}' +
+      'table{width:100%;border-collapse:collapse;margin:15px 0;font-size:.82em}' +
+      'th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:left;vertical-align:top}' +
+      'th{background:#f1f5f9;font-weight:600}' +
+      '.checked-by{margin-top:30px;text-align:right;font-style:italic}' +
+      '.tr{font-style:italic;font-size:.85em;color:#64748b}' +
+      '@media print{body{padding:15px}}' +
+      '</style></head><body>' +
+      '<h1>Math Tutoring by Deni</h1>' +
+      '<div class="info">' +
+      '<div>Nama: ____________________________ <span class="tr">Name</span></div>' +
+      '<div>Tanggal: ' + today + ' <span class="tr">Date</span></div>' +
+      '<div>Topik: Data dan Diagram: Investigasi Statistika <span class="tr">Topic: Data and Diagrams: Statistical Investigation</span></div>' +
+      '<div>Grup Tugas: ' + section.title + ' <span class="tr">Task Group</span></div>' +
+      '<div>Skor: <strong>' + score + '</strong> <span class="tr">Score</span></div>' +
+      '</div>' +
+      '<table><thead><tr>' +
+      '<th style="width:30px">No.</th>' +
+      '<th>Pertanyaan <span class="tr">Question</span></th>' +
+      '<th>Jawaban Siswa <span class="tr">Student Answer</span></th>' +
+      '<th>Jawaban Benar <span class="tr">Correct Answer</span></th>' +
+      '<th style="width:50px">Ket. <span class="tr">Note</span></th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="checked-by">Diperiksa oleh, <span class="tr">Checked by,</span><br><br><b>Deni</b></div>' +
+      '<script>document.addEventListener("DOMContentLoaded",function(){' +
+      'if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],throwOnError:false});}' +
+      'setTimeout(function(){window.print();},500);});<\/script>' +
+      '</body></html>';
+
+    const w = window.open('', '_blank');
+    if(w){
+      w.document.write(html);
+      w.document.close();
+    } else {
+      alert('Mohon izinkan pop-up untuk mencetak. <span class="tr">Please allow pop-ups to print.</span>');
+    }
+  }
+
+  // ================= INIT =================
+  renderSidebar();
+  renderPage();
+});
+</script>
+</body>
+</html>
