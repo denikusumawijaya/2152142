@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutoring by Deni - Bilangan Berpangkat Bulat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .katex-display { margin: 0.5em 0; overflow-x: auto; overflow-y: hidden; }
+        .tab-active { border-bottom: 3px solid #4f46e5; color: #4f46e5; font-weight: 700; }
+        details summary::-webkit-details-marker { display:none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Left Info -->
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-brand-600 text-white rounded-xl shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-calculator text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Math Tutoring by Deni</h1>
+                    <div class="text-xs sm:text-sm font-medium text-brand-600">
+                        <span>Topik: Bilangan Berpangkat Bulat</span>
+                        <span class="text-slate-400 mx-1">|</span>
+                        <span class="text-slate-500 italic">Topic: Integer Exponents</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <button onclick="toggleModal('rules-modal')" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm rounded-xl shadow-md transition-all transform active:scale-95">
+                <i class="fa-solid fa-gavel"></i>
+                <span>Aturan Kelas / Class Rules</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- CLASS RULES MODAL -->
+    <div id="rules-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-list text-brand-600"></i> Aturan Kelas / Class Rules
+                </h3>
+                <button onclick="toggleModal('rules-modal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold p-1">&times;</button>
+            </div>
+            <div class="py-4 space-y-4">
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+                    <span class="flex-shrink-0 w-8 h-8 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center font-bold">1</span>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">Berbicara secara bergantian</p>
+                        <p class="text-xs text-slate-500 italic">Speak in turns</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+                    <span class="flex-shrink-0 w-8 h-8 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center font-bold">2</span>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">Meminta izin jika ingin meninggalkan kelas</p>
+                        <p class="text-xs text-slate-500 italic">Ask permission before leaving class</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-xl">
+                    <span class="flex-shrink-0 w-8 h-8 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center font-bold">3</span>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-800">Menyalakan microphone dan camera jika diperlukan</p>
+                        <p class="text-xs text-slate-500 italic">Turn on microphone and camera when needed</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleModal('rules-modal')" class="w-full py-2.5 bg-brand-600 text-white rounded-xl font-semibold text-sm hover:bg-brand-700 transition-colors">
+                Saya Mengerti / I Understand
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER (1:3 GRID) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- LEFT NAVBAR (1 Column) -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-28 bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-1 text-sm max-h-[80vh] overflow-y-auto">
+                    <div class="px-3 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Lesson Timeline</div>
+                    <a href="#section-warmup" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:00 - 00:10</span>
+                        Spiral Review Warm-up
+                    </a>
+                    <a href="#section-intro" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:10 - 00:15</span>
+                        Introduction & Connection
+                    </a>
+                    <a href="#section-prior" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:15 - 00:20</span>
+                        Prior Knowledge Review
+                    </a>
+                    <a href="#section-problem" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:20 - 00:25</span>
+                        Problem Introduction
+                    </a>
+                    <a href="#section-guided" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:25 - 00:40</span>
+                        Guided Practice
+                    </a>
+                    <a href="#section-independent" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:40 - 00:55</span>
+                        Independent Practice
+                    </a>
+                    <a href="#section-consolidation" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                        <span class="text-xs text-brand-500 font-bold block">00:55 - 01:00</span>
+                        Consolidation & Reflection
+                    </a>
+
+                    <div class="px-3 pt-4 pb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Evaluation Tasks</div>
+                    <a href="#task-1" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Task 1: Sifat Dasar / Basic Rules</a>
+                    <a href="#task-2" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Task 2: Pangkat Negatif & Nol</a>
+                    <a href="#task-3" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Task 3: Pangkat dari Pangkat</a>
+                    <a href="#task-4" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Task 4: Penyederhanaan Aljabar</a>
+                    <a href="#task-5" class="nav-link block px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">Task 5: Soal Cerita / Word Problems</a>
+                </div>
+            </div>
+
+            <!-- RIGHT MAIN CONTENT (3 Columns) -->
+            <div class="lg:col-span-3 space-y-12">
+
+                <!-- RUMUS UTAMA BANNER -->
+                <div class="bg-gradient-to-r from-brand-900 via-brand-700 to-indigo-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl">
+                    <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bookmark text-amber-400"></i> Ringkasan Sifat-Sifat Eksponen Bulat
+                    </h2>
+                    <p class="text-brand-100 text-sm mb-6 italic">Summary of Integer Exponents Rules</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-slate-900 text-sm">
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">1. Perkalian / Multiplication</p>
+                            <p class="text-center text-lg font-mono">$a^m \times a^n = a^{m+n}$</p>
+                        </div>
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">2. Pembagian / Division</p>
+                            <p class="text-center text-lg font-mono">$a^m \div a^n = a^{m-n}$</p>
+                        </div>
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">3. Perpangkatan / Power of Power</p>
+                            <p class="text-center text-lg font-mono">$(a^m)^n = a^{m \cdot n}$</p>
+                        </div>
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">4. Perkalian Perkalian / Power Product</p>
+                            <p class="text-center text-lg font-mono">$(a \cdot b)^n = a^n \cdot b^n$</p>
+                        </div>
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">5. Pangkat Negatif / Negative Power</p>
+                            <p class="text-center text-lg font-mono">$a^{-n} = \frac{1}{a^n} \ (a \neq 0)$</p>
+                        </div>
+                        <div class="bg-white/95 p-3.5 rounded-xl shadow border border-white/20">
+                            <p class="font-bold text-brand-700 mb-1">6. Pangkat Nol / Zero Power</p>
+                            <p class="text-center text-lg font-mono">$a^0 = 1 \ (a \neq 0)$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 1: SPIRAL REVIEW WARM-UP -->
+                <section id="section-warmup" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:00 - 00:10</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Spiral Review Warm-up</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Pemanasan Ulang Materi / Reviewing Prior Concepts</p>
+
+                    <!-- Penjelasan Detail -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 mb-8">
+                        <h3 class="font-bold text-slate-800 text-lg border-b pb-2">Konsep Dasar Perkalian Berulang (Repeated Multiplication Concept)</h3>
+                        <p class="text-slate-700 leading-relaxed">
+                            Eksponen atau perpangkatan adalah bentuk penyederhanaan dari perkalian berulang dengan bilangan dasar (basis) yang sama. 
+                            <span class="block text-slate-500 italic text-sm">Exponents represent repeated multiplication of the same base.</span>
+                        </p>
+                        <p class="text-slate-700">Secara umum: $a^n = \underbrace{a \times a \times \dots \times a}_{n \text{ faktor}}$, di mana $a$ adalah basis dan $n$ adalah eksponen/pangkat.</p>
+                        
+                        <!-- Contoh Soal & Langkah -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                            <p class="font-semibold text-brand-700">Contoh Model Perhitungan / Example Calculation:</p>
+                            <p>Hitung nilai dari $3^4$ dan $(-2)^3$:</p>
+                            <ul class="list-disc list-inside text-sm space-y-1 text-slate-700">
+                                <li>$3^4 = 3 \times 3 \times 3 \times 3 = 81$</li>
+                                <li>$(-2)^3 = (-2) \times (-2) \times (-2) = -8$ (Pangkat ganjil dari basis negatif menghasilkan negatif).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5 Exercises -->
+                    <div class="space-y-6">
+                        <h3 class="font-bold text-slate-800 text-lg">Latihan Soal Warm-up / Exercises</h3>
+                        <div id="warmup-exercises" class="space-y-6"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: INTRODUCTION & REAL-WORLD CONNECTION -->
+                <section id="section-intro" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:10 - 00:15</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Introduction & Real-World Connection</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Penerapan Dunia Nyata / Real-World Applications</p>
+
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 mb-8">
+                        <h3 class="font-bold text-slate-800 text-lg border-b pb-2">Mengapa Kita Belajar Eksponen? (Why Exponents Matter)</h3>
+                        <p class="text-slate-700">
+                            Dalam dunia nyata, eksponen digunakan untuk mengekspresikan angka yang sangat besar (seperti populasi bakteri, jarak astronomis) atau angka yang sangat kecil (seperti ukuran virus, tebal sel).
+                        </p>
+                        <!-- SVG Illustration -->
+                        <div class="flex justify-center py-4">
+                            <svg class="w-full max-w-md h-40" viewBox="0 0 400 150">
+                                <rect width="400" height="150" rx="15" fill="#EEF2FF"/>
+                                <circle cx="80" cy="75" r="25" fill="#6366F1"/>
+                                <text x="80" y="80" text-anchor="middle" fill="white" font-size="12" font-weight="bold">1 Sel ($2^0$)</text>
+                                <line x1="110" y1="75" x2="150" y2="75" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow)"/>
+                                <circle cx="180" cy="50" r="18" fill="#818CF8"/>
+                                <circle cx="180" cy="100" r="18" fill="#818CF8"/>
+                                <text x="180" y="54" text-anchor="middle" fill="white" font-size="10">2 ($2^1$)</text>
+                                <text x="180" y="104" text-anchor="middle" fill="white" font-size="10">2 ($2^1$)</text>
+                                <line x1="205" y1="50" x2="245" y2="35" stroke="#4F46E5" stroke-width="2"/>
+                                <line x1="205" y1="50" x2="245" y2="65" stroke="#4F46E5" stroke-width="2"/>
+                                <line x1="205" y1="100" x2="245" y2="85" stroke="#4F46E5" stroke-width="2"/>
+                                <line x1="205" y1="100" x2="245" y2="115" stroke="#4F46E5" stroke-width="2"/>
+                                <circle cx="270" cy="35" r="12" fill="#C7D2FE"/><text x="270" y="39" text-anchor="middle" fill="#312E81" font-size="8">4 ($2^2$)</text>
+                                <circle cx="270" cy="65" r="12" fill="#C7D2FE"/>
+                                <circle cx="270" cy="85" r="12" fill="#C7D2FE"/>
+                                <circle cx="270" cy="115" r="12" fill="#C7D2FE"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-slate-600 italic text-center">Pembelahan Sel Bakteri: Setiap pembelahan berlipat ganda sesuai $2^n$.</p>
+                    </div>
+
+                    <div id="intro-exercises" class="space-y-6"></div>
+                </section>
+
+                <!-- SECTION 3: REVIEW OF PRIOR KNOWLEDGE -->
+                <section id="section-prior" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:15 - 00:20</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Review of Prior Knowledge</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Ulasan Sifat Perkalian dan Pembagian Basis Sama</p>
+
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 mb-8">
+                        <h3 class="font-bold text-slate-800 text-lg border-b pb-2">Penjumlahan & Pengurangan Pangkat (Sum & Difference of Exponents)</h3>
+                        <p class="text-slate-700">
+                            1. **Sifat Perkalian:** $a^m \times a^n = a^{m+n}$<br>
+                            2. **Sifat Pembagian:** $a^m \div a^n = a^{m-n}$
+                        </p>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 text-sm space-y-1">
+                            <p class="font-semibold text-brand-700">Langkah Penyelesaian / Solution Steps:</p>
+                            <p>Sederhanakan $\frac{2^5 \times 2^3}{2^4}$:</p>
+                            <p>Step 1: Operasikan pembilang $\rightarrow 2^{5+3} = 2^8$</p>
+                            <p>Step 2: Bagikan dengan penyebut $\rightarrow 2^{8-4} = 2^4 = 16$</p>
+                        </div>
+                    </div>
+
+                    <div id="prior-exercises" class="space-y-6"></div>
+                </section>
+
+                <!-- SECTION 4: PROBLEM INTRODUCTION -->
+                <section id="section-problem" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:20 - 00:25</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Problem Introduction</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Pengenalan Pangkat Negatif & Nol / Introducing Negative & Zero Exponents</p>
+
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 mb-8">
+                        <h3 class="font-bold text-slate-800 text-lg border-b pb-2">Darimana Datangnya Pangkat Nol dan Negatif?</h3>
+                        <p class="text-slate-700">
+                            Perhatikan pola pembagian berikut:
+                        </p>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 font-mono text-sm space-y-2">
+                            <p>$\frac{2^3}{2^3} = 2^{3-3} = 2^0$ --- tetapi $\frac{8}{8} = 1$. Maka $2^0 = 1$.</p>
+                            <p>$\frac{2^2}{2^5} = 2^{2-5} = 2^{-3}$ --- tetapi $\frac{4}{32} = \frac{1}{8} = \frac{1}{2^3}$. Maka $2^{-3} = \frac{1}{2^3}$.</p>
+                        </div>
+                    </div>
+
+                    <div id="problem-exercises" class="space-y-6"></div>
+                </section>
+
+                <!-- SECTION 5: GUIDED PRACTICE -->
+                <section id="section-guided" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:25 - 00:40</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Guided Practice</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Latihan Terbimbing Gabungan Sifat Eksponen</p>
+
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-4 mb-8">
+                        <h3 class="font-bold text-slate-800 text-lg border-b pb-2">Menggabungkan Sifat-Sifat Pangkat (Combining Rules)</h3>
+                        <p class="text-slate-700">Sederhanakan bentuk: $\left(\frac{a^3 b^{-2}}{a^{-1} b^4}\right)^2$</p>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 text-sm space-y-1 font-mono">
+                            <p>1. Sederhanakan bagian dalam kurung:</p>
+                            <p>&nbsp;&nbsp; Untuk $a$: $a^{3 - (-1)} = a^{3+1} = a^4$</p>
+                            <p>&nbsp;&nbsp; Untuk $b$: $b^{-2 - 4} = b^{-6}$</p>
+                            <p>2. Kalikan pangkat dengan eksponen luar $(2)$:</p>
+                            <p>&nbsp;&nbsp; $(a^4 b^{-6})^2 = a^{4 \cdot 2} b^{-6 \cdot 2} = a^8 b^{-12} = \frac{a^8}{b^{12}}$</p>
+                        </div>
+                    </div>
+
+                    <div id="guided-exercises" class="space-y-6"></div>
+                </section>
+
+                <!-- SECTION 6: INDEPENDENT PRACTICE -->
+                <section id="section-independent" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:40 - 00:55</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Independent Practice</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Latihan Mandiri Pemecahan Masalah Eksponen Kompleks</p>
+
+                    <div id="independent-exercises" class="space-y-6"></div>
+                </section>
+
+                <!-- SECTION 7: CONSOLIDATION & REFLECTION -->
+                <section id="section-consolidation" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 bg-brand-100 text-brand-700 font-bold rounded-full text-xs">00:55 - 01:00</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Consolidation & Reflection</h2>
+                    </div>
+                    <p class="text-slate-500 italic text-sm mb-6">Konsolidasi & Refleksi Pembelajaran</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- Key Points -->
+                        <div class="bg-brand-50 p-6 rounded-2xl border border-brand-100">
+                            <h3 class="font-bold text-brand-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-star text-amber-500"></i> Poin Penting / Key Points
+                            </h3>
+                            <ul class="list-disc list-inside text-sm text-brand-800 space-y-2">
+                                <li>$a^0$ selalu bernilai $1$ untuk $a \neq 0$.</li>
+                                <li>Pangkat negatif membalikkan basis: $a^{-n} = \frac{1}{a^n}$.</li>
+                                <li>Saat mengalikan basis sama, jumlahkan pangkatnya.</li>
+                                <li>Saat membagi basis sama, kurangkan pangkatnya.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Reflection -->
+                        <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200">
+                            <h3 class="font-bold text-amber-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-lightbulb text-amber-600"></i> Pertanyaan Refleksi / Reflection
+                            </h3>
+                            <div class="text-sm text-amber-800 space-y-3">
+                                <p>1. Bagian sifat eksponen mana yang paling mudah kamu pahami? Kenapa?</p>
+                                <p>2. Kesalahan apa yang paling sering terjadi saat mengerjakan pangkat negatif?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exit Ticket -->
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                        <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-ticket text-indigo-600"></i> Exit Ticket Quiz
+                        </h3>
+                        <p class="text-sm text-slate-600">Sederhanakan nilai dari $\frac{3^{-2} \times 3^5}{3^2}$</p>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="checkExitTicket(this, false)" class="px-4 py-2 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 text-sm font-semibold">A. $3^3 = 27$</button>
+                            <button onclick="checkExitTicket(this, true)" class="px-4 py-2 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 text-sm font-semibold">B. $3^1 = 3$</button>
+                            <button onclick="checkExitTicket(this, false)" class="px-4 py-2 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 text-sm font-semibold">C. $3^0 = 1$</button>
+                        </div>
+                        <div id="exit-feedback" class="text-sm font-bold hidden"></div>
+                    </div>
+                </section>
+
+                <!-- EVALUATION TASKS 1 - 5 CONTAINER -->
+                <div class="pt-8 border-t border-slate-200 space-y-12">
+                    
+                    <div class="text-center space-y-2">
+                        <h2 class="text-3xl font-extrabold text-slate-900">Tugas & Evaluasi / Evaluation Tasks</h2>
+                        <p class="text-slate-500">Uji pemahamanmu secara menyeluruh dengan 50 soal interaktif acak.</p>
+                    </div>
+
+                    <!-- TASK 1 -->
+                    <section id="task-1" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                        <div class="border-b pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Task 1: Konsep & Sifat Perkalian/Pembagian</h3>
+                            <p class="text-xs text-slate-500 italic">Concept & Product/Quotient Rules (10 Soal)</p>
+                        </div>
+                        <details class="mb-6 bg-brand-50 p-4 rounded-xl text-sm border border-brand-100">
+                            <summary class="font-bold text-brand-700 cursor-pointer">Lihat Penjelasan Konsep / View Concept Summary</summary>
+                            <p class="mt-2 text-slate-700">
+                                Gunakan sifat $a^m \times a^n = a^{m+n}$ dan $a^m \div a^n = a^{m-n}$. Pastikan basisnya sudah sama sebelum menjumlahkan/mengurangkan pangkat.
+                            </p>
+                        </details>
+                        <div id="task-1-questions" class="space-y-6"></div>
+                    </section>
+
+                    <!-- TASK 2 -->
+                    <section id="task-2" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                        <div class="border-b pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Task 2: Pangkat Bulat Negatif & Nol</h3>
+                            <p class="text-xs text-slate-500 italic">Negative & Zero Exponents (10 Soal)</p>
+                        </div>
+                        <details class="mb-6 bg-brand-50 p-4 rounded-xl text-sm border border-brand-100">
+                            <summary class="font-bold text-brand-700 cursor-pointer">Lihat Penjelasan Konsep / View Concept Summary</summary>
+                            <p class="mt-2 text-slate-700">
+                                $a^0 = 1$ untuk $a \neq 0$. Dan $a^{-n} = \frac{1}{a^n}$. Jika pecahan $\left(\frac{a}{b}\right)^{-n} = \left(\frac{b}{a}\right)^n$.
+                            </p>
+                        </details>
+                        <div id="task-2-questions" class="space-y-6"></div>
+                    </section>
+
+                    <!-- TASK 3 -->
+                    <section id="task-3" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                        <div class="border-b pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Task 3: Pangkat dari Pangkat & Perkalian/Pembagian</h3>
+                            <p class="text-xs text-slate-500 italic">Power of Power & Products (10 Soal)</p>
+                        </div>
+                        <details class="mb-6 bg-brand-50 p-4 rounded-xl text-sm border border-brand-100">
+                            <summary class="font-bold text-brand-700 cursor-pointer">Lihat Penjelasan Konsep / View Concept Summary</summary>
+                            <p class="mt-2 text-slate-700">
+                                $(a^m)^n = a^{m \cdot n}$ dan $(a \cdot b)^n = a^n \cdot b^n$.
+                            </p>
+                        </details>
+                        <div id="task-3-questions" class="space-y-6"></div>
+                    </section>
+
+                    <!-- TASK 4 -->
+                    <section id="task-4" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                        <div class="border-b pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Task 4: Sederhanakan Bentuk Aljabar Berpangkat</h3>
+                            <p class="text-xs text-slate-500 italic">Simplifying Algebraic Exponent Expressions (10 Soal)</p>
+                        </div>
+                        <details class="mb-6 bg-brand-50 p-4 rounded-xl text-sm border border-brand-100">
+                            <summary class="font-bold text-brand-700 cursor-pointer">Lihat Penjelasan Konsep / View Concept Summary</summary>
+                            <p class="mt-2 text-slate-700">
+                                Kelompokkan koefisien angka dengan koefisien angka, dan variabel yang sama dengan variabel yang sama.
+                            </p>
+                        </details>
+                        <div id="task-4-questions" class="space-y-6"></div>
+                    </section>
+
+                    <!-- TASK 5 -->
+                    <section id="task-5" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+                        <div class="border-b pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900">Task 5: Soal Cerita & Aplikasi Kehidupan Nyata</h3>
+                            <p class="text-xs text-slate-500 italic">Word Problems & Real-World Applications (10 Soal)</p>
+                        </div>
+                        <details class="mb-6 bg-brand-50 p-4 rounded-xl text-sm border border-brand-100">
+                            <summary class="font-bold text-brand-700 cursor-pointer">Lihat Penjelasan Konsep / View Concept Summary</summary>
+                            <p class="mt-2 text-slate-700">
+                                Terjemahkan soal cerita ke dalam model eksponen (misal: pembelahan ganda $N = N_0 \times 2^t$).
+                            </p>
+                        </details>
+                        <div id="task-5-questions" class="space-y-6"></div>
+                    </section>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & QUESTION GENERATION -->
+    <script>
+        // Modal toggler
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        // Shuffle helper
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Helper to render KaTeX safely across elements
+        function renderAllMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+
+        // Render Math via KaTeX after DOM Content Loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            generateExercises();
+            generateAllTasks();
+            renderAllMath();
+        });
+
+        // Exit Ticket Logic
+        function checkExitTicket(btn, isCorrect) {
+            const feedback = document.getElementById('exit-feedback');
+            feedback.classList.remove('hidden');
+            if (isCorrect) {
+                feedback.className = "text-sm font-bold text-emerald-600 mt-2";
+                feedback.innerHTML = "<i class='fa-solid fa-circle-check'></i> Benar / Correct! $\\frac{3^{-2} \\times 3^5}{3^2} = 3^{-2+5-2} = 3^1 = 3$.";
+            } else {
+                feedback.className = "text-sm font-bold text-rose-600 mt-2";
+                feedback.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> Kurang Tepat / Incorrect. Coba lagi!";
+            }
+            renderMathInElement(feedback, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+
+        // ----------------------------------------------------
+        // EXERCISES GENERATOR (SECTION EXERCISES 5 PER SECTION)
+        // ----------------------------------------------------
+        function generateExercises() {
+            // Warmup Exercises
+            const warmupData = [
+                { type: 'radio', q: 'Hitung nilai dari $2^5$', opts: ['32', '10', '64', '16'], ans: '32', expl: '$2^5 = 2 \\times 2 \\times 2 \\times 2 \\times 2 = 32$' },
+                { type: 'truefalse', q: 'Pernyataan: $(-3)^4 = -81$', ans: 'False', expl: 'Salah. Karena pangkat genap, $(-3)^4 = (-3) \\times (-3) \\times (-3) \\times (-3) = +81$.' },
+                { type: 'fill', q: 'Nilai dari $5^3$ adalah...', ans: '125', expl: '$5^3 = 5 \\times 5 \\times 5 = 125$' },
+                { type: 'radio', q: 'Bentuk sederhana dari $4 \\times 4 \\times 4 \\times 4 \\times 4$ adalah...', opts: ['$4^5$', '$4^4$', '$5^4$', '$20$'], ans: '$4^5$', expl: 'Perkalian angka 4 sebanyak 5 kali dituliskan $4^5$.' },
+                { type: 'checkbox', q: 'Pilih semua bilangan yang bernilai POSITIF:', opts: ['$(-2)^4$', '$(-5)^3$', '$(-1)^{100}$', '$-3^2$'], ans: ['$(-2)^4$', '$(-1)^{100}$'], expl: 'Bilangan negatif berpangkat genap menghasilkan nilai positif. $(-2)^4 = 16$ dan $(-1)^{100} = 1$. Sedangkan $(-5)^3 = -125$ dan $-3^2 = -(3^2) = -9$.' }
+            ];
+            renderExerciseGroup('warmup-exercises', warmupData);
+
+            // Intro Exercises
+            const introData = [
+                { type: 'radio', q: 'Sebuah amoeba membelah menjadi 2 setiap jam. Berapa jumlahnya setelah 6 jam?', opts: ['64', '12', '32', '128'], ans: '64', expl: 'Jumlah = $2^6 = 64$.' },
+                { type: 'fill', q: '1 Kilobyte adalah $2^{10}$ bytes. Nilai dari $2^{10}$ adalah...', ans: '1024', expl: '$2^{10} = 1024$.' },
+                { type: 'truefalse', q: 'Jarak astronomis sangat besar dapat dituliskan dalam eksponen positif.', ans: 'True', expl: 'Benar, eksponen positif memudahkan penulisan angka besar.' },
+                { type: 'radio', q: 'Luas persegi bertepi $3^3$ cm adalah...', opts: ['$3^6$ $\\text{cm}^2$', '$3^5$ $\\text{cm}^2$', '$9^3$ $\\text{cm}^2$', '$27$ $\\text{cm}^2$'], ans: '$3^6$ $\\text{cm}^2$', expl: 'Luas = $\\text{sisi}^2 = (3^3)^2 = 3^{3 \\cdot 2} = 3^6$.' },
+                { type: 'fill', q: 'Jika sel membelah 3 kali lipat setiap menit, dalam 4 menit jumlahnya $3^x$. Nilai $x$ adalah...', ans: '4', expl: 'Pangkat menunjukkan durasi periode pembelahan, yaitu 4.' }
+            ];
+            renderExerciseGroup('intro-exercises', introData);
+
+            // Prior Exercises
+            const priorData = [
+                { type: 'radio', q: 'Hasil dari $3^4 \\times 3^2$ adalah...', opts: ['$3^6$', '$3^8$', '$9^6$', '$3^2$'], ans: '$3^6$', expl: '$3^{4+2} = 3^6$.' },
+                { type: 'radio', q: 'Hasil dari $7^8 \\div 7^5$ adalah...', opts: ['$7^3$', '$7^{13}$', '$7^{-3}$', '$1^3$'], ans: '$7^3$', expl: '$7^{8-5} = 7^3$.' },
+                { type: 'fill', q: 'Sederhanakan $a^7 \\times a^2 \\div a^4 = a^x$. Nilai $x$ = ...', ans: '5', expl: '$x = 7 + 2 - 4 = 5$.' },
+                { type: 'truefalse', q: 'Sifat $a^m \\times b^n = (a \\cdot b)^{m+n}$ selalu berlaku untuk basis berbeda.', ans: 'False', expl: 'Salah. Sifat penjumlahan pangkat HANYA berlaku jika basisnya sama!' },
+                { type: 'checkbox', q: 'Pilih penyederhanaan yang BENAR:', opts: ['$2^3 \\times 2^4 = 2^7$', '$5^6 \\div 5^2 = 5^3$', '$x^5 \\times x^3 = x^8$', '$a^4 \\div a^4 = a^0$'], ans: ['$2^3 \\times 2^4 = 2^7$', '$x^5 \\times x^3 = x^8$', '$a^4 \\div a^4 = a^0$'], expl: '$5^6 \\div 5^2 = 5^{6-2} = 5^4$, jadi pilihan kedua salah.' }
+            ];
+            renderExerciseGroup('prior-exercises', priorData);
+
+            // Problem Exercises
+            const problemData = [
+                { type: 'radio', q: 'Nilai dari $10^0 + (-5)^0$ adalah...', opts: ['2', '0', '1', '15'], ans: '2', expl: '$10^0 = 1$ dan $(-5)^0 = 1$. Maka $1 + 1 = 2$.' },
+                { type: 'radio', q: 'Bentuk positif dari $2^{-3}$ adalah...', opts: ['$\\frac{1}{2^3}$', '$-2^3$', '$-6$', '$\\frac{1}{-8}$'], ans: '$\\frac{1}{2^3}$', expl: 'Sifat $a^{-n} = \\frac{1}{a^n}$.' },
+                { type: 'fill', q: 'Nilai dari $4^{-2}$ dalam bentuk pecahan biasa adalah 1/...', ans: '16', expl: '$4^{-2} = \\frac{1}{4^2} = \\frac{1}{16}$.' },
+                { type: 'truefalse', q: 'Nilai dari $0^0$ terdefinisi sebagai 1 dalam matematika dasar.', ans: 'False', expl: 'Salah. $0^0$ merupakan bentuk tak tentu (undefined).' },
+                { type: 'radio', q: 'Sederhanakan $5^{-4} \\times 5^4$:', opts: ['1', '0', '$5^{-16}$', '$25$'], ans: '1', expl: '$5^{-4+4} = 5^0 = 1$.' }
+            ];
+            renderExerciseGroup('problem-exercises', problemData);
+
+            // Guided Exercises
+            const guidedData = [
+                { type: 'radio', q: 'Sederhanakan $(2^3)^2$:', opts: ['$2^6$', '$2^5$', '$2^9$', '$8^2$'], ans: '$2^6$', expl: '$(a^m)^n = a^{m \\cdot n} \\rightarrow (2^3)^2 = 2^{3 \\cdot 2} = 2^6$.' },
+                { type: 'radio', q: 'Bentuk sederhana dari $(3a^2b^3)^3$ adalah...', opts: ['$27a^6b^9$', '$9a^6b^9$', '$27a^5b^6$', '$3a^6b^9$'], ans: '$27a^6b^9$', expl: '$3^3 \\cdot a^{2 \\cdot 3} \\cdot b^{3 \\cdot 3} = 27a^6b^9$.' },
+                { type: 'fill', q: 'Sederhanakan $(x^{-2})^3 = x^k$. Nilai $k$ = ...', ans: '-6', expl: '$k = -2 \\times 3 = -6$.' },
+                { type: 'truefalse', q: '$\\left(\\frac{a}{b}\\right)^{-2} = \\frac{b^2}{a^2}$', ans: 'True', expl: 'Benar. Pangkat negatif membalikkan pecahan.' },
+                { type: 'checkbox', q: 'Pilih semua bentuk yang setara dengan $\\frac{x^4}{x^{-2}}$:', opts: ['$x^6$', '$x^{4 - (-2)}$', '$x^2$', '$\\frac{1}{x^{-6}}$'], ans: ['$x^6$', '$x^{4 - (-2)}$', '$\\frac{1}{x^{-6}}$'], expl: '$x^{4 - (-2)} = x^{4+2} = x^6$.' }
+            ];
+            renderExerciseGroup('guided-exercises', guidedData);
+
+            // Independent Exercises
+            const indepData = [
+                { type: 'radio', q: 'Hitung nilai dari $\\frac{2^4 \\times 3^2 \\times 5^{-1}}{2^2 \\times 3^{-1}}$ dalam bentuk paling sederhana:', opts: ['$\\frac{108}{5}$', '$\\frac{36}{5}$', '$72$', '$\\frac{12}{5}$'], ans: '$\\frac{108}{5}$', expl: '$2^{4-2} \\times 3^{2 - (-1)} \\times 5^{-1} = 2^2 \\times 3^3 \\times \\frac{1}{5} = 4 \\times 27 \\times \\frac{1}{5} = \\frac{108}{5}$.' },
+                { type: 'radio', q: 'Jika $2^x = 32$, maka nilai $x$ adalah...', opts: ['5', '4', '6', '3'], ans: '5', expl: '$32 = 2^5$, maka $x = 5$.' },
+                { type: 'fill', q: 'Nilai dari $\\left(2^{-1} + 3^{-1}\\right)^{-1}$ adalah $\\frac{\\text{...}}{5}$', ans: '6', expl: '$\\left(2^{-1} + 3^{-1}\\right)^{-1} = \\left(\\frac{1}{2} + \\frac{1}{3}\\right)^{-1} = \\left(\\frac{5}{6}\\right)^{-1} = \\frac{6}{5}$. Maka pembilangnya adalah 6.' },
+                { type: 'truefalse', q: 'Bentuk $a^{-1} + b^{-1}$ sama dengan $(a+b)^{-1}$.', ans: 'False', expl: 'Salah! $\\frac{1}{a} + \\frac{1}{b} = \\frac{a+b}{ab} \\neq \\frac{1}{a+b}$.' },
+                { type: 'radio', q: 'Sederhanakan $\\left(\\frac{x^{-3}y^2}{x^2y^{-1}}\\right)^{-2}$:', opts: ['$\\frac{x^{10}}{y^6}$', '$\\frac{x^6}{y^{10}}$', '$\\frac{y^6}{x^{10}}$', '$x^{10}y^6$'], ans: '$\\frac{x^{10}}{y^6}$', expl: 'Bagian dalam: $x^{-3-2} y^{2-(-1)} = x^{-5} y^3$. Dipangkatkan -2: $x^{10} y^{-6} = \\frac{x^{10}}{y^6}$.' }
+            ];
+            renderExerciseGroup('independent-exercises', indepData);
+        }
+
+        // Render Exercise Card
+        function renderExerciseGroup(containerId, list) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            list.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = "p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3";
+                
+                let inputHtml = '';
+                if (item.type === 'radio') {
+                    const shuffled = shuffle([...item.opts]);
+                    inputHtml = `<div class="space-y-2 mt-2">` + shuffled.map((o, i) => `
+                        <label class="flex items-center gap-2 text-sm bg-white p-2.5 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <input type="radio" name="${containerId}-${idx}" value="${o.replace(/"/g, '&quot;')}" class="text-brand-600">
+                            <span>${o}</span>
+                        </label>
+                    `).join('') + `</div>`;
+                } else if (item.type === 'checkbox') {
+                    const shuffled = shuffle([...item.opts]);
+                    inputHtml = `<div class="space-y-2 mt-2">` + shuffled.map((o, i) => `
+                        <label class="flex items-center gap-2 text-sm bg-white p-2.5 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <input type="checkbox" name="${containerId}-${idx}" value="${o.replace(/"/g, '&quot;')}" class="text-brand-600 rounded">
+                            <span>${o}</span>
+                        </label>
+                    `).join('') + `</div>`;
+                } else if (item.type === 'truefalse') {
+                    inputHtml = `<div class="flex gap-4 mt-2">
+                        <label class="flex items-center gap-2 text-sm bg-white px-4 py-2 rounded-lg border cursor-pointer"><input type="radio" name="${containerId}-${idx}" value="True"> Benar / True</label>
+                        <label class="flex items-center gap-2 text-sm bg-white px-4 py-2 rounded-lg border cursor-pointer"><input type="radio" name="${containerId}-${idx}" value="False"> Salah / False</label>
+                    </div>`;
+                } else if (item.type === 'fill') {
+                    inputHtml = `<div class="mt-2"><input type="text" id="${containerId}-${idx}-input" class="w-full sm:w-64 p-2.5 bg-white border rounded-lg text-sm" placeholder="Ketik jawabanmu / Type answer..."></div>`;
+                }
+
+                card.innerHTML = `
+                    <p class="font-semibold text-slate-800 text-sm sm:text-base">${idx+1}. ${item.q}</p>
+                    ${inputHtml}
+                    <div class="flex items-center gap-3 pt-2">
+                        <button onclick="checkExAnswer('${containerId}', ${idx}, '${item.type}', ${JSON.stringify(item.ans).replace(/"/g, '&quot;')})" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition">Cek Jawaban / Check</button>
+                    </div>
+                    <div id="${containerId}-${idx}-feedback" class="text-sm font-semibold hidden"></div>
+                    <details class="text-xs bg-white p-3 rounded-lg border border-slate-200 mt-2">
+                        <summary class="font-bold text-brand-600 cursor-pointer">Lihat Pembahasan / View Solution</summary>
+                        <p class="mt-2 text-slate-700">${item.expl}</p>
+                    </details>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Check Exercise Answers
+        function checkExAnswer(containerId, idx, type, expected) {
+            const fb = document.getElementById(`${containerId}-${idx}-feedback`);
+            fb.classList.remove('hidden');
+            let isCorrect = false;
+
+            if (type === 'radio' || type === 'truefalse') {
+                const selected = document.querySelector(`input[name="${containerId}-${idx}"]:checked`);
+                if (selected && selected.value === expected) isCorrect = true;
+            } else if (type === 'fill') {
+                const val = document.getElementById(`${containerId}-${idx}-input`).value.trim();
+                if (val.toLowerCase() === String(expected).toLowerCase()) isCorrect = true;
+            } else if (type === 'checkbox') {
+                const checked = Array.from(document.querySelectorAll(`input[name="${containerId}-${idx}"]:checked`)).map(c => c.value);
+                if (checked.length === expected.length && checked.every(v => expected.includes(v))) isCorrect = true;
+            }
+
+            if (isCorrect) {
+                fb.className = "text-sm font-bold text-emerald-600 mt-2";
+                fb.innerHTML = "<i class='fa-solid fa-circle-check'></i> Jawaban Tepat! / Correct Answer!";
+            } else {
+                fb.className = "text-sm font-bold text-rose-600 mt-2";
+                fb.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> Kurang Tepat, silakan periksa pembahasan. / Incorrect, check solution.";
+            }
+            renderMathInElement(fb, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+
+        // ----------------------------------------------------
+        // TASKS GENERATOR (TASKS 1 - 5, 10 QUESTIONS EACH)
+        // ----------------------------------------------------
+        const taskRawData = {
+            1: [
+                { type: 'radio', q: 'Sederhanakan $a^5 \\times a^3$:', opts: ['$a^8$', '$a^{15}$', '$a^2$', '$a^{53}$'], ans: '$a^8$', expl: '$a^{5+3} = a^8$' },
+                { type: 'radio', q: 'Sederhanakan $x^9 \\div x^4$:', opts: ['$x^5$', '$x^{13}$', '$x^2$', '$x^{36}$'], ans: '$x^5$', expl: '$x^{9-4} = x^5$' },
+                { type: 'fill', q: 'Jika $2^k \\times 2^4 = 2^9$, maka nilai $k$ = ...', ans: '5', expl: '$k + 4 = 9 \\Rightarrow k = 5$' },
+                { type: 'truefalse', q: 'Hasil dari $3^3 \\times 3^0 = 27$', ans: 'True', expl: '$3^3 \\times 1 = 27$' },
+                { type: 'checkbox', q: 'Pilih semua ekspresi yang sama dengan $b^6$:', opts: ['$b^2 \\times b^4$', '$b^{10} \\div b^4$', '$(b^3)^2$', '$b^3 + b^3$'], ans: ['$b^2 \\times b^4$', '$b^{10} \\div b^4$', '$(b^3)^2$'], expl: '$b^3 + b^3 = 2b^3 \\neq b^6$' },
+                { type: 'radio', q: 'Bentuk sederhana dari $\\frac{5^7 \\times 5^2}{5^4}$ adalah...', opts: ['$5^5$', '$5^4$', '$5^{14}$', '$5^1$'], ans: '$5^5$', expl: '$5^{7+2-4} = 5^5$' },
+                { type: 'fill', q: 'Nilai dari $10^5 \\div 10^2$ dalam bentuk desimal adalah...', ans: '1000', expl: '$10^3 = 1000$' },
+                { type: 'radio', q: 'Sederhanakan $m^2 \\times m^4 \\times m^6$:', opts: ['$m^{12}$', '$m^{48}$', '$m^8$', '$m^{10}$'], ans: '$m^{12}$', expl: '$m^{2+4+6} = m^{12}$' },
+                { type: 'truefalse', q: '$2^3 \\times 3^2 = 6^5$', ans: 'False', expl: 'Basis berbeda, tidak bisa menjumlahkan pangkat langsung!' },
+                { type: 'radio', q: 'Hitung nilai dari $4^3 \\div 2^4$:', opts: ['4', '2', '8', '16'], ans: '4', expl: '$(2^2)^3 \\div 2^4 = 2^6 \\div 2^4 = 2^2 = 4$' }
+            ],
+            2: [
+                { type: 'radio', q: 'Nilai dari $7^0 + 8^0 - 9^0$ adalah...', opts: ['1', '0', '3', '-1'], ans: '1', expl: '$1 + 1 - 1 = 1$' },
+                { type: 'radio', q: 'Ubah $3^{-4}$ ke pangkat positif:', opts: ['$\\frac{1}{3^4}$', '$-3^4$', '$-12$', '$\\frac{1}{-81}$'], ans: '$\\frac{1}{3^4}$', expl: '$a^{-n} = \\frac{1}{a^n}$' },
+                { type: 'fill', q: 'Nilai dari $2^{-4}$ dalam pecahan biasa adalah 1/...', ans: '16', expl: '$2^{-4} = 1/16$' },
+                { type: 'truefalse', q: '$\\left(\\frac{2}{3}\\right)^{-1} = \\frac{3}{2}$', ans: 'True', expl: 'Pangkat -1 membalikkan pecahan.' },
+                { type: 'checkbox', q: 'Pilih semua yang bernilai $1$:', opts: ['(-99)^0', '1^{-5}', '5^1', '0^5'], ans: ['(-99)^0', '1^{-5}'], expl: 'Any non-zero to power 0 is 1, and $1^{-5} = 1$.' },
+                { type: 'radio', q: 'Sederhanakan $x^{-5} \\times x^2$:', opts: ['$\\frac{1}{x^3}$', '$x^3$', '$x^{-10}$', '$\\frac{1}{x^{10}}$'], ans: '$\\frac{1}{x^3}$', expl: '$x^{-5+2} = x^{-3} = \\frac{1}{x^3}$' },
+                { type: 'fill', q: 'Hitung nilai $5^{-1} + 2^{-1}$ = .../10', ans: '7', expl: '$\\frac{1}{5} + \\frac{1}{2} = \\frac{7}{10}$' },
+                { type: 'radio', q: 'Hasil dari $\\frac{4^{-2}}{4^{-3}}$ adalah...', opts: ['4', '$\\frac{1}{4}$', '16', '$4^{-5}$'], ans: '4', expl: '$4^{-2 - (-3)} = 4^{1} = 4$' },
+                { type: 'truefalse', q: '$-2^{-2} = \\frac{1}{4}$', ans: 'False', expl: '$-2^{-2} = -\\frac{1}{2^2} = -\\frac{1}{4}$. Tanda minus di luar tidak dipangkatkan.' },
+                { type: 'radio', q: 'Sederhanakan $(a^0 b^{-2})^{-1}$:', opts: ['$b^2$', '$b^{-2}$', '$\\frac{1}{b^2}$', '$a b^2$'], ans: '$b^2$', expl: '$(1 \\cdot b^{-2})^{-1} = b^2$' }
+            ],
+            3: [
+                { type: 'radio', q: 'Sederhanakan $(x^4)^3$:', opts: ['$x^{12}$', '$x^7$', '$x^{64}$', '$x^1$'], ans: '$x^{12}$', expl: '$x^{4 \\cdot 3} = x^{12}$' },
+                { type: 'radio', q: 'Bentuk sederhana dari $(2a^3)^4$ adalah...', opts: ['$16a^{12}$', '$8a^{12}$', '$16a^7$', '$2a^{12}$'], ans: '$16a^{12}$', expl: '$2^4 \\cdot a^{3 \\cdot 4} = 16a^{12}$' },
+                { type: 'fill', q: 'Jika $(3^2)^k = 3^{10}$, maka $k$ = ...', ans: '5', expl: '$2k = 10 \\Rightarrow k = 5$' },
+                { type: 'truefalse', q: '$\\left(\\frac{x^2}{y^3}\\right)^2 = \\frac{x^4}{y^6}$', ans: 'True', expl: 'Pangkat didistribusikan ke pembilang dan penyebut.' },
+                { type: 'checkbox', q: 'Manakah bentuk yang setara dengan $8^2$?', opts: ['(2^3)^2', '2^6', '4^3', '2^5'], ans: ['(2^3)^2', '2^6', '4^3'], expl: '$8^2 = 64$. $(2^3)^2 = 2^6 = 64$. $4^3 = 64$.' },
+                { type: 'radio', q: 'Sederhanakan $(p^{-2})^4$:', opts: ['$\\frac{1}{p^8}$', '$p^8$', '$p^{-6}$', '$\\frac{1}{p^2}$'], ans: '$\\frac{1}{p^8}$', expl: '$p^{-2 \\cdot 4} = p^{-8} = \\frac{1}{p^8}$' },
+                { type: 'fill', q: 'Nilai dari $(2^2)^3 \\div 2^4$ adalah...', ans: '4', expl: '$2^6 \\div 2^4 = 2^2 = 4$' },
+                { type: 'radio', q: 'Bentuk dari $\\left(\\frac{3a^2}{b}\\right)^3$ adalah...', opts: ['$\\frac{27a^6}{b^3}$', '$\\frac{9a^6}{b^3}$', '$\\frac{27a^5}{b^3}$', '$\\frac{3a^6}{b^3}$'], ans: '$\\frac{27a^6}{b^3}$', expl: '$3^3 a^{2 \\cdot 3} / b^3 = 27a^6/b^3$' },
+                { type: 'truefalse', q: '$(a + b)^2 = a^2 + b^2$', ans: 'False', expl: 'Salah! $(a+b)^2 = a^2 + 2ab + b^2$. Sifat perpangkatan perkalian tidak berlaku untuk penjumlahan!' },
+                { type: 'radio', q: 'Sederhanakan $\\left((2^{-1})^{-2}\\right)^{-1}$:', opts: ['$\\frac{1}{4}$', '4', '2', '$\\frac{1}{2}$'], ans: '$\\frac{1}{4}$', expl: 'Pangkat total: $(-1) \\times (-2) \\times (-1) = -2$. Maka $2^{-2} = \\frac{1}{4}$.' }
+            ],
+            4: [
+                { type: 'radio', q: 'Sederhanakan $\\frac{12x^5y^3}{4x^2y}$:', opts: ['$3x^3y^2$', '$3x^7y^4$', '$8x^3y^2$', '$3x^3y^3$'], ans: '$3x^3y^2$', expl: '$\\frac{12}{4} x^{5-2} y^{3-1} = 3x^3y^2$' },
+                { type: 'radio', q: 'Bentuk sederhana dari $(2a^2b^{-3}) \\times (3a^{-1}b^5)$ adalah...', opts: ['$6ab^2$', '$6a^3b^8$', '$5ab^2$', '$\\frac{6a}{b^2}$'], ans: '$6ab^2$', expl: '$(2 \\cdot 3) a^{2-1} b^{-3+5} = 6ab^2$' },
+                { type: 'fill', q: 'Sederhanakan $\\frac{a^6b^4}{a^2b^4} = a^k$. Nilai $k$ = ...', ans: '4', expl: '$a^{6-2} b^{4-4} = a^4 b^0 = a^4$' },
+                { type: 'truefalse', q: 'Bentuk $\\frac{x^{-2}y}{z^{-3}}$ sama dengan $\\frac{y z^3}{x^2}$.', ans: 'True', expl: 'Variabel dengan pangkat negatif berpindah posisi (pembilang/penyebut).' },
+                { type: 'checkbox', q: 'Pilih semua bentuk yang ekuivalen dengan $\\frac{4x^3}{2x^{-1}}$:', opts: ['$2x^4$', '$2x^{3 - (-1)}$', '$2x^2$', '$\\frac{2}{x^{-4}}$'], ans: ['$2x^4$', '$2x^{3 - (-1)}$', '$\\frac{2}{x^{-4}}$'], expl: '$\\frac{4}{2} x^{3 - (-1)} = 2x^4$' },
+                { type: 'radio', q: 'Sederhanakan $\\left(\\frac{2p^3q^{-2}}{p^{-1}q^2}\\right)^2$:', opts: ['$\\frac{4p^8}{q^8}$', '$\\frac{2p^8}{q^8}$', '$\\frac{4p^4}{q^8}$', '$4p^8q^8$'], ans: '$\\frac{4p^8}{q^8}$', expl: 'Dalam: $2 p^{3 - (-1)} q^{-2-2} = 2 p^4 q^{-4}$. Dipangkatkan 2: $4 p^8 q^{-8} = \\frac{4p^8}{q^8}$.' },
+                { type: 'fill', q: 'Koefisien angka dari $(3x^2y^3)^2 \\div (9xy^2)$ adalah...', ans: '1', expl: '$9x^4y^6 \\div 9xy^2 = 1x^3y^4$. Koefisiennya adalah 1.' },
+                { type: 'radio', q: 'Bentuk sederhana $\\frac{(a b)^3}{a^{-1} b^2}$ adalah...', opts: ['$a^4 b$', '$a^2 b$', '$a^4 b^5$', '$a^3 b$'], ans: '$a^4 b$', expl: '$a^{3 - (-1)} b^{3-2} = a^4 b$' },
+                { type: 'truefalse', q: 'Jika $x=2, y=3$, nilai dari $x^{-1} + y^{-1} = \\frac{5}{6}$.', ans: 'True', expl: '$\\frac{1}{2} + \\frac{1}{3} = \\frac{5}{6}$.' },
+                { type: 'radio', q: 'Sederhanakan $\\frac{15m^{-3}n^2}{5m^2n^{-1}}$:', opts: ['$\\frac{3n^3}{m^5}$', '$\\frac{3m^5}{n^3}$', '$3m^{-1}n^1$', '$\\frac{10n^3}{m^5}$'], ans: '$\\frac{3n^3}{m^5}$', expl: '$3 m^{-3-2} n^{2 - (-1)} = 3 m^{-5} n^3 = \\frac{3n^3}{m^5}$' }
+            ],
+            5: [
+                { type: 'radio', q: 'Jumlah bakteri berlipat ganda ($2^t$) setiap jam. Jika mula-mula ada 100 bakteri, berapa jumlahnya setelah 5 jam?', opts: ['3200', '1000', '6400', '1600'], ans: '3200', expl: '$100 \\times 2^5 = 100 \\times 32 = 3200$' },
+                { type: 'radio', q: 'Sebuah komputer melakukan $10^9$ operasi per detik. Berapa operasi dalam $10^3$ detik?', opts: ['$10^{12}$', '$10^{27}$', '$10^6$', '$10^{15}$'], ans: '$10^{12}$', expl: '$10^9 \\times 10^3 = 10^{12}$' },
+                { type: 'fill', q: 'Massa sebutir debu adalah $10^{-6}$ gram. Berapa gram massa $10^4$ butir debu? (dalam pecahan desimal 0.01 / 0.1 / ...)', ans: '0.01', expl: '$10^{-6} \\times 10^4 = 10^{-2} = 0.01$ gram' },
+                { type: 'truefalse', q: 'Ukuran virus $10^{-7}$ meter lebih besar daripada ukuran bakteri $10^{-6}$ meter.', ans: 'False', expl: 'Salah! $10^{-6} = 0.000001$ lebih besar daripada $10^{-7} = 0.0000001$.' },
+                { type: 'checkbox', q: 'Manakah dari situasi berikut yang menggunakan konsep pangkat eksponensial?', opts: ['Pertumbuhan populasi manusia', 'Peluruhan zat radioaktif', 'Perhitungan bunga majemuk bank', 'Menghitung keliling persegi panjang'], ans: ['Pertumbuhan populasi manusia', 'Peluruhan zat radioaktif', 'Perhitungan bunga majemuk bank'], expl: 'Keliling persegi panjang adalah fungsi linear ($2p + 2l$), bukan eksponen.' },
+                { type: 'radio', q: 'Intensitas cahaya berkurang menjadi $2^{-x}$ setiap menembus kedalaman $x$ meter. Pada kedalaman 4 meter, intensitasnya menjadi...', opts: ['$\\frac{1}{16}$', '$\\frac{1}{8}$', '$\\frac{1}{4}$', '$-8$'], ans: '$\\frac{1}{16}$', expl: '$2^{-4} = \\frac{1}{16}$' },
+                { type: 'fill', q: 'Sebuah kubus memiliki panjang rusuk $2^3$ cm. Volume kubus tersebut adalah $2^k$ $\\text{cm}^3$. Nilai $k$ = ...', ans: '9', expl: 'Volume = $\\text{sisi}^3 = (2^3)^3 = 2^9$' },
+                { type: 'radio', q: 'Suatu zat radioaktif meluruh menjadi setengahnya ($2^{-1}$) setiap 10 tahun. Jika mula-mula ada 80 gram, berapa tersisa setelah 30 tahun (3 kali peluruhan)?', opts: ['10 gram', '20 gram', '5 gram', '40 gram'], ans: '10 gram', expl: '$80 \\times (2^{-1})^3 = 80 \\times 2^{-3} = 80 \\times \\frac{1}{8} = 10$ gram' },
+                { type: 'truefalse', q: 'Jika luas persegi adalah $10^6$ $\\text{m}^2$, maka panjang sisinya adalah $10^3$ m.', ans: 'True', expl: 'Sisi = $\\sqrt{10^6} = (10^6)^{1/2} = 10^3$ m.' },
+                { type: 'radio', q: 'Kecepatan cahaya adalah $3 \\times 10^8$ m/s. Waktu yang dibutuhkan cahaya menempuh $9 \\times 10^{11}$ meter adalah... detik.', opts: ['3000', '300', '30000', '30'], ans: '3000', expl: 'Waktu = $\\frac{\\text{Jarak}}{\\text{Kecepatan}} = \\frac{9 \\times 10^{11}}{3 \\times 10^8} = 3 \\times 10^3 = 3000$ detik.' }
+            ]
+        };
+
+        function generateAllTasks() {
+            for (let taskId = 1; taskId <= 5; taskId++) {
+                const container = document.getElementById(`task-${taskId}-questions`);
+                container.innerHTML = '';
+                const questions = taskRawData[taskId];
+
+                questions.forEach((q, idx) => {
+                    const card = document.createElement('div');
+                    card.className = "p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3";
+
+                    let inputHtml = '';
+                    if (q.type === 'radio') {
+                        const shuffled = shuffle([...q.opts]);
+                        inputHtml = `<div class="space-y-2 mt-2">` + shuffled.map(o => `
+                            <label class="flex items-center gap-2 text-sm bg-white p-2.5 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                                <input type="radio" name="task-${taskId}-${idx}" value="${o.replace(/"/g, '&quot;')}" class="text-brand-600">
+                                <span>${o}</span>
+                            </label>
+                        `).join('') + `</div>`;
+                    } else if (q.type === 'checkbox') {
+                        const shuffled = shuffle([...q.opts]);
+                        inputHtml = `<div class="space-y-2 mt-2">` + shuffled.map(o => `
+                            <label class="flex items-center gap-2 text-sm bg-white p-2.5 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                                <input type="checkbox" name="task-${taskId}-${idx}" value="${o.replace(/"/g, '&quot;')}" class="text-brand-600 rounded">
+                                <span>${o}</span>
+                            </label>
+                        `).join('') + `</div>`;
+                    } else if (q.type === 'truefalse') {
+                        inputHtml = `<div class="flex gap-4 mt-2">
+                            <label class="flex items-center gap-2 text-sm bg-white px-4 py-2 rounded-lg border cursor-pointer"><input type="radio" name="task-${taskId}-${idx}" value="True"> Benar / True</label>
+                            <label class="flex items-center gap-2 text-sm bg-white px-4 py-2 rounded-lg border cursor-pointer"><input type="radio" name="task-${taskId}-${idx}" value="False"> Salah / False</label>
+                        </div>`;
+                    } else if (q.type === 'fill') {
+                        inputHtml = `<div class="mt-2"><input type="text" id="task-${taskId}-${idx}-input" class="w-full sm:w-64 p-2.5 bg-white border rounded-lg text-sm" placeholder="Ketik jawabanmu / Type answer..."></div>`;
+                    }
+
+                    card.innerHTML = `
+                        <p class="font-semibold text-slate-800 text-sm sm:text-base">${idx+1}. ${q.q}</p>
+                        ${inputHtml}
+                        <div class="flex items-center gap-3 pt-2">
+                            <button onclick="checkTaskAnswer(${taskId}, ${idx}, '${q.type}', ${JSON.stringify(q.ans).replace(/"/g, '&quot;')})" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition">Cek Jawaban / Check</button>
+                        </div>
+                        <div id="task-${taskId}-${idx}-feedback" class="text-sm font-semibold hidden"></div>
+                        <details class="text-xs bg-white p-3 rounded-lg border border-slate-200 mt-2">
+                            <summary class="font-bold text-brand-600 cursor-pointer">Lihat Pembahasan / View Solution</summary>
+                            <p class="mt-2 text-slate-700">${q.expl}</p>
+                        </details>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // Check Task Answer
+        function checkTaskAnswer(taskId, idx, type, expected) {
+            const fb = document.getElementById(`task-${taskId}-${idx}-feedback`);
+            fb.classList.remove('hidden');
+            let isCorrect = false;
+
+            if (type === 'radio' || type === 'truefalse') {
+                const selected = document.querySelector(`input[name="task-${taskId}-${idx}"]:checked`);
+                if (selected && selected.value === expected) isCorrect = true;
+            } else if (type === 'fill') {
+                const val = document.getElementById(`task-${taskId}-${idx}-input`).value.trim();
+                if (val.toLowerCase() === String(expected).toLowerCase()) isCorrect = true;
+            } else if (type === 'checkbox') {
+                const checked = Array.from(document.querySelectorAll(`input[name="task-${taskId}-${idx}"]:checked`)).map(c => c.value);
+                if (checked.length === expected.length && checked.every(v => expected.includes(v))) isCorrect = true;
+            }
+
+            if (isCorrect) {
+                fb.className = "text-sm font-bold text-emerald-600 mt-2";
+                fb.innerHTML = "<i class='fa-solid fa-circle-check'></i> Jawaban Tepat! / Correct Answer!";
+            } else {
+                fb.className = "text-sm font-bold text-rose-600 mt-2";
+                fb.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> Kurang Tepat, silakan periksa pembahasan. / Incorrect, check solution.";
+            }
+            renderMathInElement(fb, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError : false
+            });
+        }
+    </script>
+</body>
+</html>
