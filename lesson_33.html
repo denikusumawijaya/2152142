@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Segitiga Istimewa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+/* VOICE: a friendly, clear maths classroom - calm, never childish
+   IDEA: a drafting table with two set squares (45-45-90 red, 30-60-90 teal)
+   PICTURE: SVG set squares and labelled triangles throughout
+   COLOUR and TYPE: white paper, ink, set-square red + teal; Lexend
+   LAYOUT: header, nav 1 : content 3, stacked on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#11151d);--panel:light-dark(#f4f6f9,#1a202c);--card:light-dark(#ffffff,#161b25);
+--ink:light-dark(#18202e,#e8ecf3);--muted:light-dark(#566175,#9ba6b8);--line:light-dark(#dde2ea,#2c3446);
+--red:light-dark(#d9482b,#ff7a5c);--sred:light-dark(#fdece6,#38211b);
+--teal:light-dark(#0d7a78,#3cc8bd);--steal:light-dark(#e0f3f2,#12302f);
+--ok:light-dark(#1a7f37,#56d383);--sok:light-dark(#e6f5ea,#173322);
+--bad:light-dark(#c0392b,#ff8a80);--sbad:light-dark(#fdebea,#3a1d1d);
+--gold:light-dark(#9a6b00,#f2c14e);--sgold:light-dark(#fff6dc,#33290f)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Lexend,system-ui,sans-serif;overflow-x:clip}
+button{font:inherit;color:inherit;cursor:pointer}
+.katex{font-size:1.08em}
+.tid{display:block}.ten{display:block;font-style:italic;color:var(--muted);font-size:.86em;line-height:1.45;margin-top:1px}
+.inl .tid,.inl .ten{display:inline}.inl .ten::before{content:" / "}
+header{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px max(3vw,16px);background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:12px;align-items:center}
+.brand svg{flex:none}
+.bname{font-weight:700;font-size:15px;color:var(--red)}
+.topic{font-weight:600;font-size:clamp(17px,2.2vw,22px);line-height:1.2}
+.topic .ten{font-size:14px;font-weight:400}
+.rulesbtn{border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:10px;padding:9px 16px;min-height:44px;font-weight:600;line-height:1.2;text-align:center}
+.rulesbtn .ten{color:inherit;opacity:.8;font-size:12px}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:24px;padding:20px max(3vw,16px) 60px;max-width:1440px;margin:0 auto}
+nav{position:sticky;top:92px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;background:var(--panel);border-radius:16px;padding:10px}
+nav .navh{font-size:13px;font-weight:600;color:var(--muted);padding:8px 10px 4px}
+.nb{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:0;background:none;border-radius:10px;padding:9px 10px;min-height:44px;line-height:1.3}
+.nb:hover{background:var(--card)}
+.nb.on{background:var(--card);box-shadow:inset 3px 0 0 var(--red)}
+.nb svg{flex:none;margin-top:2px;color:var(--teal)}
+.nb .tid{font-weight:600;font-size:14px}.nb .ten{font-size:12px}
+.nb small{display:block;font-size:12px;color:var(--red);font-weight:600}
+main{min-height:60vh}
+.sec{display:none}.sec.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.sec.on{animation:none}}
+.sechead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;padding:22px 24px;border-radius:18px;background-color:var(--panel);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:24px 24px;margin-bottom:20px}
+.sechead h2{margin:0;font-size:clamp(24px,3.2vw,36px);line-height:1.1;text-wrap:balance}
+.sechead h2 .ten{font-size:.5em;font-weight:400;margin-top:6px}
+.time{display:inline-block;background:var(--red);color:#fff;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap}
+.score{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:10px 16px;text-align:center;font-weight:700;font-size:22px;white-space:nowrap}
+.score .tid,.score .ten{font-size:12px;font-weight:500}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:clamp(16px,2.5vw,28px);margin-bottom:22px}
+.card>h3:first-child{margin-top:0}
+h3.bi{font-size:20px;margin:26px 0 8px;line-height:1.25}h3.bi .ten{font-size:15px;font-weight:400}
+p.bi{margin:10px 0;max-width:75ch}
+.m{margin:10px 0;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.box{border-radius:14px;padding:14px 18px;margin:16px 0}
+.box.red{background:var(--sred);border:1.5px solid var(--red)}.box.teal{background:var(--steal);border:1.5px solid var(--teal)}.box.gold{background:var(--sgold);border:1.5px solid var(--gold)}
+.boxt{font-weight:700;margin-bottom:4px}
+.exm{border-left:4px solid var(--teal);background:var(--panel);border-radius:0 12px 12px 0;padding:12px 18px;margin:16px 0}
+.exmt{font-weight:700;color:var(--teal)}
+ul.bl{padding-left:22px;margin:8px 0}ul.bl li{margin:6px 0}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px;align-items:start}
+figure.fg{margin:12px 0;text-align:center}
+figure.fg svg{width:100%;max-width:320px;height:auto}
+figcaption{font-size:14px;margin-top:4px}
+.svgt{font:600 15px Lexend,system-ui,sans-serif;fill:var(--ink)}
+.svga{font:500 13px Lexend,system-ui,sans-serif;fill:var(--muted)}
+table.tb{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+.tb th,.tb td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.tb th{background:var(--panel)}
+.scroll{overflow-x:auto}
+.exhead{display:flex;align-items:center;gap:10px;margin:28px 0 12px}
+.exhead h3{margin:0;font-size:20px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px clamp(14px,2.2vw,24px);margin-bottom:16px}
+.qhead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px}
+.qnum{background:var(--ink);color:var(--bg);border-radius:8px;padding:3px 10px;font-weight:700;font-size:14px}
+.qnum .ten{color:inherit;opacity:.75;font-size:11px}
+.qtype{font-size:13px;color:var(--teal);font-weight:600}
+.qtype .ten{font-size:12px;font-weight:400}
+.qtext{font-weight:500}
+.hint{font-size:13px;color:var(--muted);margin:6px 0 10px}
+.hint .ten{font-size:12px}
+.opts{display:grid;gap:8px;margin:10px 0}
+.opt{display:flex;gap:12px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;min-height:48px;cursor:pointer;background:var(--card)}
+.opt:hover{border-color:var(--teal)}
+.opt input{width:20px;height:20px;flex:none;accent-color:var(--teal)}
+.opt.ok{border-color:var(--ok);background:var(--sok)}.opt.no{border-color:var(--bad);background:var(--sbad)}
+.blank{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0;font-size:17px}
+.blank input{width:110px;font:inherit;font-size:16px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-height:44px}
+.blank input:focus,.opt:focus-within{outline:2.5px solid var(--teal);outline-offset:2px}
+.blank input.ok{border-color:var(--ok);background:var(--sok)}.blank input.no{border-color:var(--bad);background:var(--sbad)}
+.tfrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.tfrow.ok{border-color:var(--ok);background:var(--sok)}.tfrow.no{border-color:var(--bad);background:var(--sbad)}
+.tfb{display:flex;gap:6px}
+.tfb label{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;min-height:44px;cursor:pointer;font-size:14px;line-height:1.15;background:var(--card)}
+.tfb label .ten{font-size:11px}
+.tfb input{accent-color:var(--teal);width:18px;height:18px}
+.slist{list-style:none;padding:0;margin:10px 0;display:grid;gap:8px}
+.sitem{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--panel);cursor:grab}
+.sitem.dragging{opacity:.4}
+.sitem .grip{color:var(--muted);flex:none}
+.sitem .stx{flex:1}
+.sitem.ok{border-color:var(--ok);background:var(--sok)}.sitem.no{border-color:var(--bad);background:var(--sbad)}
+.mv{border:1.5px solid var(--line);background:var(--card);border-radius:8px;width:40px;height:40px;flex:none}
+.pairs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 18px;margin:10px 0}
+.pcol{display:grid;gap:8px;align-content:start}
+.pc{position:relative;text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px 10px 40px;min-height:48px}
+.pc .pb{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;border:1.5px dashed var(--muted);font-size:12px;font-weight:700;display:grid;place-items:center;color:#fff}
+.pc.sel{outline:3px solid var(--teal);outline-offset:1px}
+.pc.ok{border-color:var(--ok);background:var(--sok)}.pc.no{border-color:var(--bad);background:var(--sbad)}
+.ddwrap{margin:10px 0}
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:60px;padding:10px;border:2px dashed var(--line);border-radius:12px;background:var(--panel)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px;margin-top:10px}
+.bin{border:2px solid var(--teal);border-radius:12px;padding:8px;min-height:120px;background:var(--steal)}
+.bin.alt{border-color:var(--red);background:var(--sred)}
+.bin.alt2{border-color:var(--gold);background:var(--sgold)}
+.bin .bt{font-weight:700;font-size:14px;margin-bottom:6px;line-height:1.3}
+.bin .bt .ten{font-size:12px}
+.bin .drop{display:flex;flex-wrap:wrap;gap:8px;min-height:50px}
+.bin.hot,.pool.hot{outline:3px solid var(--gold)}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;cursor:grab;max-width:100%;text-align:left;line-height:1.3;min-height:44px}
+.chip .ten{font-size:11px}
+.chip.sel{outline:3px solid var(--gold)}
+.chip.ok{border-color:var(--ok);background:var(--sok)}.chip.no{border-color:var(--bad);background:var(--sbad)}
+.qact{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center}
+.btn{border:0;background:var(--teal);color:#fff;border-radius:10px;padding:8px 16px;min-height:44px;font-weight:600;line-height:1.15}
+.btn .ten{color:inherit;opacity:.85;font-size:11px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:focus-visible,.nb:focus-visible,.pc:focus-visible,.chip:focus-visible,.mv:focus-visible,.rulesbtn:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px}
+.fb{font-weight:600;font-size:15px}
+.fb.ok{color:var(--ok)}.fb.no{color:var(--bad)}.fb.wait{color:var(--gold)}
+details.sol{margin-top:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel)}
+details.sol summary{cursor:pointer;padding:10px 14px;font-weight:600;color:var(--teal);min-height:44px;list-style-position:inside}
+details.sol summary .tid{display:inline}details.sol summary .ten{display:inline;font-size:13px}details.sol summary .ten::before{content:" / "}
+details.sol>div{padding:0 16px 12px}
+.refl{counter-reset:r}
+.refl li{margin:10px 0}
+.modal{position:fixed;inset:0;background:rgba(10,14,22,.55);display:none;place-items:center;z-index:50;padding:16px}
+.modal.on{display:grid}
+.mbox{background:var(--card);border-radius:18px;max-width:520px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.mbox h3{margin:0 0 12px;font-size:22px}
+.mbox h3 .ten{font-size:15px;font-weight:400}
+.rule{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.rule svg{flex:none;color:var(--red)}
+.fu{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:10px 0}
+@media(max-width:900px){
+ .wrap{grid-template-columns:minmax(0,1fr);gap:14px}
+ nav{position:sticky;top:0;z-index:10;display:flex;gap:6px;overflow-x:auto;max-height:none;border-radius:12px;padding:6px}
+ nav .navh{display:none}
+ .nb{flex:none;width:auto;max-width:220px}
+ header{position:static}
+}
+@media(max-width:600px){
+ .sechead{grid-template-columns:minmax(0,1fr);padding:18px}
+ .tfrow{grid-template-columns:minmax(0,1fr)}
+ .pairs{gap:8px}
+ .pc{padding-left:36px;font-size:15px}
+ table.tb{font-size:13px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">
+  <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><path d="M4 42V6l36 36z" fill="var(--sred)" stroke="var(--red)" stroke-width="2.5" stroke-linejoin="round"/><path d="M11 35V23l12 12z" fill="var(--bg)" stroke="var(--red)" stroke-width="1.5"/><path d="M24 42V20l20 22z" fill="var(--steal)" stroke="var(--teal)" stroke-width="2.5" stroke-linejoin="round"/></svg>
+  <div>
+   <div class="bname">Math Tutoring by Deni</div>
+   <div class="topic"><span class="tid">Topik: Teorema Pythagoras – Segitiga Istimewa</span><span class="ten">Topic: The Pythagorean Theorem – Special Right Triangles</span></div>
+  </div>
+ </div>
+ <button class="rulesbtn" id="rulesBtn" type="button"><span class="tid">Class rules</span><span class="ten">Aturan kelas</span></button>
+</header>
+
+<div class="modal" id="rules" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+ <div class="mbox">
+  <h3 id="rulesTitle"><span class="tid">Aturan Kelas</span><span class="ten">Class Rules</span></h3>
+  <div class="rule"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg><div><span class="tid">Berbicara secara bergantian.</span><span class="ten">Take turns when speaking.</span></div></div>
+  <div class="rule"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8a8 8 0 0 0 16 0v-2a2 2 0 0 0-4 0"/></svg><div><span class="tid">Meminta izin jika ingin meninggalkan kelas.</span><span class="ten">Ask for permission if you want to leave the class.</span></div></div>
+  <div class="rule"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v4"/><path d="M15 21h-6"/></svg><div><span class="tid">Menyalakan microphone dan camera jika diperlukan.</span><span class="ten">Turn on your microphone and camera when needed.</span></div></div>
+  <div style="text-align:right;margin-top:12px"><button class="btn" id="rulesClose" type="button"><span class="tid">Tutup</span><span class="ten">Close</span></button></div>
+ </div>
+</div>
+
+<div class="wrap">
+ <nav id="nav" aria-label="Bagian pelajaran / Lesson sections"></nav>
+ <main id="main"></main>
+</div>
+
+<script type="text/plain" id="lesson-data">
+({
+sections:[
+/* ================= 1. SPIRAL REVIEW WARM-UP ================= */
+{id:"warmup",time:"00:00 – 00:10",icon:"flame",title:["Pemanasan: Ulasan Spiral","Spiral Review Warm-up"],
+expl:
+H("Mengingat kembali: bentuk akar dan Teorema Pythagoras","Recall: square roots (surds) and the Pythagorean Theorem")+
+P("Pada pelajaran segitiga istimewa, kita akan sering bekerja dengan bentuk akar seperti $\sqrt{2}$ dan $\sqrt{3}$. Mari kita pemanasan dengan tiga keterampilan dasar yang akan dipakai di seluruh pelajaran.","In the special right triangles lesson we will often work with surds such as $\sqrt{2}$ and $\sqrt{3}$. Let's warm up with three basic skills that we will use throughout the lesson.")+
+H("Keterampilan 1: Menyederhanakan bentuk akar","Skill 1: Simplifying square roots")+
+P("Cari <b>faktor kuadrat sempurna terbesar</b> dari bilangan di dalam akar, lalu gunakan sifat berikut:","Find the <b>largest perfect-square factor</b> of the number under the root, then use this property:")+
+BOX("red",["Sifat perkalian akar","Product property of square roots"],M("$$\sqrt{a\cdot b}=\sqrt{a}\cdot\sqrt{b}$$")+P("Bilangan kuadrat sempurna: $4, 9, 16, 25, 36, 49, 64, 81, 100, \dots$","Perfect squares: $4, 9, 16, 25, 36, 49, 64, 81, 100, \dots$"))+
+EXM(["Contoh 1: Sederhanakan $\sqrt{50}$ dan $\sqrt{48}$","Example 1: Simplify $\sqrt{50}$ and $\sqrt{48}$"],[
+["Langkah 1: Faktor kuadrat sempurna terbesar dari 50 adalah 25, karena $50 = 25\times 2$.","Step 1: The largest perfect-square factor of 50 is 25, because $50 = 25\times 2$."],
+"$$\sqrt{50}=\sqrt{25\cdot 2}=\sqrt{25}\cdot\sqrt{2}=5\sqrt{2}$$",
+["Langkah 2: Faktor kuadrat sempurna terbesar dari 48 adalah 16, karena $48 = 16\times 3$.","Step 2: The largest perfect-square factor of 48 is 16, because $48 = 16\times 3$."],
+"$$\sqrt{48}=\sqrt{16\cdot 3}=\sqrt{16}\cdot\sqrt{3}=4\sqrt{3}$$",
+["Hati-hati: jika memakai faktor yang bukan terbesar (misalnya $\sqrt{48}=\sqrt{4\cdot12}=2\sqrt{12}$), hasilnya belum paling sederhana.","Be careful: if you use a factor that is not the largest (e.g. $\sqrt{48}=\sqrt{4\cdot12}=2\sqrt{12}$), the answer is not fully simplified yet."]])+
+H("Keterampilan 2: Merasionalkan penyebut","Skill 2: Rationalising the denominator")+
+P("Bentuk akar di penyebut dihilangkan dengan mengalikan pembilang dan penyebut dengan akar yang sama. Ingat bahwa $\sqrt{b}\cdot\sqrt{b}=b$.","A surd in the denominator is removed by multiplying the numerator and denominator by the same root. Remember that $\sqrt{b}\cdot\sqrt{b}=b$.")+
+BOX("red",["Rumus merasionalkan","Rationalising formula"],M("$$\frac{a}{\sqrt{b}}=\frac{a}{\sqrt{b}}\cdot\frac{\sqrt{b}}{\sqrt{b}}=\frac{a\sqrt{b}}{b}$$"))+
+EXM(["Contoh 2: Rasionalkan $\dfrac{10}{\sqrt{2}}$ dan $\dfrac{12}{\sqrt{3}}$","Example 2: Rationalise $\dfrac{10}{\sqrt{2}}$ and $\dfrac{12}{\sqrt{3}}$"],[
+"$$\frac{10}{\sqrt{2}}=\frac{10}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{10\sqrt{2}}{2}=5\sqrt{2}$$",
+"$$\frac{12}{\sqrt{3}}=\frac{12}{\sqrt{3}}\cdot\frac{\sqrt{3}}{\sqrt{3}}=\frac{12\sqrt{3}}{3}=4\sqrt{3}$$",
+["Fakta penting: $\sqrt{2}\cdot\sqrt{2}=2$ (bukan 4) dan $(2\sqrt{3})^2=2^2\cdot(\sqrt{3})^2=4\cdot 3=12$.","Key fact: $\sqrt{2}\cdot\sqrt{2}=2$ (not 4) and $(2\sqrt{3})^2=2^2\cdot(\sqrt{3})^2=4\cdot 3=12$."]])+
+H("Keterampilan 3: Teorema Pythagoras","Skill 3: The Pythagorean Theorem")+
+ROW(FIG(F45({a:"a",b:"b",c:"c",plain:1}),["Segitiga siku-siku: $a$ dan $b$ sisi siku-siku, $c$ sisi miring.","Right triangle: $a$ and $b$ are the legs, $c$ is the hypotenuse."]),
+BOX("teal",["Teorema Pythagoras","Pythagorean Theorem"],M("$$c^2=a^2+b^2$$")+P("$c$ = sisi miring (sisi terpanjang, di depan sudut siku-siku).","$c$ = hypotenuse (the longest side, opposite the right angle).")))+
+EXM(["Contoh 3: Sisi siku-siku 6 dan 8. Tentukan sisi miring.","Example 3: The legs are 6 and 8. Find the hypotenuse."],[
+"$$c^2=6^2+8^2=36+64=100$$",
+"$$c=\sqrt{100}=10$$",
+["Jadi, sisi miringnya 10.","So, the hypotenuse is 10."]]),
+ex:[
+{t:"mc",q:["Bentuk paling sederhana dari $\sqrt{72}$ adalah …","The simplest form of $\sqrt{72}$ is …"],o:["$6\sqrt{2}$","$9\sqrt{2}$","$6\sqrt{3}$","$36\sqrt{2}$"],
+sol:[["Faktor kuadrat sempurna terbesar dari 72 adalah 36, karena $72=36\times2$.","The largest perfect-square factor of 72 is 36, because $72=36\times2$."],"$$\sqrt{72}=\sqrt{36\cdot2}=\sqrt{36}\cdot\sqrt{2}=6\sqrt{2}$$",["Jawaban: $6\sqrt{2}$.","Answer: $6\sqrt{2}$."]]},
+{t:"fill",q:["Sederhanakan $\sqrt{48}$. Isi kotak kosong.","Simplify $\sqrt{48}$. Fill in the box."],b:[{pre:"$\sqrt{48}=$",post:"$\sqrt{3}$",a:["4"]}],
+sol:[["$48=16\times3$ dan 16 adalah kuadrat sempurna terbesar.","$48=16\times3$ and 16 is the largest perfect square."],"$$\sqrt{48}=\sqrt{16}\cdot\sqrt{3}=4\sqrt{3}$$",["Isian: 4.","Answer: 4."]]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[
+[["$\dfrac{10}{\sqrt{2}}=5\sqrt{2}$","$\dfrac{10}{\sqrt{2}}=5\sqrt{2}$"],true],
+[["$\sqrt{27}=3\sqrt{3}$","$\sqrt{27}=3\sqrt{3}$"],true],
+[["$\sqrt{2}\cdot\sqrt{2}=4$","$\sqrt{2}\cdot\sqrt{2}=4$"],false]],
+sol:["$$\frac{10}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{10\sqrt{2}}{2}=5\sqrt{2}\ \Rightarrow\ \text{Benar / True}$$","$$\sqrt{27}=\sqrt{9\cdot3}=3\sqrt{3}\ \Rightarrow\ \text{Benar / True}$$","$$\sqrt{2}\cdot\sqrt{2}=2\neq4\ \Rightarrow\ \text{Salah / False}$$"]},
+{t:"fill",q:["Sebuah segitiga siku-siku memiliki sisi siku-siku 6 cm dan 8 cm. Berapa panjang sisi miringnya?","A right triangle has legs of 6 cm and 8 cm. What is the length of its hypotenuse?"],fig:F45({a:"6 cm",b:"8 cm",c:"?",plain:1}),b:[{pre:"$c=$",post:"cm",a:["10"]}],
+sol:[["Gunakan $c^2=a^2+b^2$.","Use $c^2=a^2+b^2$."],"$$c^2=6^2+8^2=36+64=100$$","$$c=\sqrt{100}=10\text{ cm}$$"]},
+{t:"pair",q:["Pasangkan setiap bentuk di kiri dengan bentuk sederhananya di kanan.","Match each expression on the left with its simplified form on the right."],p:[["$\sqrt{18}$","$3\sqrt{2}$"],["$\sqrt{75}$","$5\sqrt{3}$"],["$\dfrac{12}{\sqrt{3}}$","$4\sqrt{3}$"],["$(2\sqrt{3})^2$","$12$"]],
+sol:["$$\sqrt{18}=\sqrt{9\cdot2}=3\sqrt{2}$$","$$\sqrt{75}=\sqrt{25\cdot3}=5\sqrt{3}$$","$$\frac{12}{\sqrt{3}}\cdot\frac{\sqrt{3}}{\sqrt{3}}=\frac{12\sqrt{3}}{3}=4\sqrt{3}$$","$$(2\sqrt{3})^2=4\cdot3=12$$"]}
+]},
+
+/* ================= 2. INTRODUCTION & REAL-WORLD ================= */
+{id:"intro",time:"00:10 – 00:15",icon:"globe",title:["Pengantar & Hubungan dengan Dunia Nyata","Introduction & Real-World Connection"],
+expl:
+ROW(FIG(SETSQ(),["Dua penggaris segitiga di kotak pensilmu adalah segitiga istimewa!","The two set squares in your pencil case are special right triangles!"]),
+H("Apa itu segitiga istimewa?","What are special right triangles?")+
+P("<b>Segitiga istimewa</b> adalah segitiga siku-siku dengan besar sudut tertentu sehingga perbandingan panjang sisinya <b>selalu tetap</b>. Ada dua jenis:","<b>Special right triangles</b> are right triangles with particular angle sizes, so the ratio of their sides is <b>always the same</b>. There are two types:")+
+UL([["<b style='color:var(--red)'>Segitiga 45°–45°–90°</b>: segitiga siku-siku sama kaki.","<b style='color:var(--red)'>45°–45°–90° triangle</b>: an isosceles right triangle."],["<b style='color:var(--teal)'>Segitiga 30°–60°–90°</b>: setengah dari segitiga sama sisi.","<b style='color:var(--teal)'>30°–60°–90° triangle</b>: half of an equilateral triangle."]])+
+P("Karena perbandingannya tetap, jika kita tahu <b>satu</b> sisi, kita bisa langsung mencari dua sisi lainnya tanpa menghitung Pythagoras dari awal.","Because the ratio is fixed, if we know <b>one</b> side we can find the other two sides directly, without doing Pythagoras from scratch."))+
+H("Di mana kita menemukannya?","Where do we find them?")+
+UL([["Diagonal ubin lantai persegi dan serbet persegi yang dilipat menurut diagonal → segitiga 45°–45°–90°.","The diagonal of a square floor tile and a square napkin folded along its diagonal → 45°–45°–90° triangle."],
+["Rangka atap atau rambu berbentuk segitiga sama sisi yang dibagi dua oleh garis tinggi → segitiga 30°–60°–90°.","A roof truss or a sign shaped like an equilateral triangle, split in half by its height → 30°–60°–90° triangle."],
+["Tangga yang bersandar di dinding dengan sudut 60° terhadap tanah, atau jalur landai (ramp) kursi roda dengan sudut 30°.","A ladder leaning on a wall at 60° to the ground, or a wheelchair ramp at 30°."]])+
+ROW(FIG(SQ(),["Diagonal membagi persegi menjadi dua segitiga 45°–45°–90°.","A diagonal splits a square into two 45°–45°–90° triangles."]),FIG(EQ(),["Garis tinggi membagi segitiga sama sisi menjadi dua segitiga 30°–60°–90°.","The height splits an equilateral triangle into two 30°–60°–90° triangles."]))+
+EXM(["Contoh 1: Ubin persegi bersisi 30 cm. Berapa panjang diagonalnya?","Example 1: A square tile has sides of 30 cm. How long is its diagonal?"],[
+["Diagonal adalah sisi miring segitiga siku-siku dengan kedua sisi siku-siku 30 cm. Gunakan Pythagoras:","The diagonal is the hypotenuse of a right triangle whose legs are both 30 cm. Use Pythagoras:"],
+"$$d^2=30^2+30^2=900+900=1800$$",
+"$$d=\sqrt{1800}=\sqrt{900\cdot2}=30\sqrt{2}\approx30\times1.414=42.42\text{ cm}$$",
+["Perhatikan: diagonal = sisi $\times\sqrt{2}$. Pola ini akan kita buktikan nanti. (Catatan: desimal ditulis dengan titik, 42.42 = 42,42.)","Notice: diagonal = side $\times\sqrt{2}$. We will prove this pattern later. (Note: decimals are written with a point, 42.42 = 42,42.)"]])+
+EXM(["Contoh 2: Rangka atap berbentuk segitiga sama sisi bersisi 4 m dibagi dua oleh tiang tegak di tengahnya.","Example 2: A roof truss shaped like an equilateral triangle with 4 m sides is split in two by a vertical post in the middle."],[
+["Setiap bagian adalah segitiga siku-siku dengan sudut $30^\circ$ (di puncak), $60^\circ$ (di dasar), dan $90^\circ$ (di kaki tiang).","Each half is a right triangle with angles $30^\circ$ (at the top), $60^\circ$ (at the base) and $90^\circ$ (at the foot of the post)."],
+["Sisi miringnya 4 m dan alasnya setengah sisi, yaitu 2 m. Tinggi tiang dengan Pythagoras:","Its hypotenuse is 4 m and its base is half the side, 2 m. The height of the post by Pythagoras:"],
+"$$t^2=4^2-2^2=16-4=12\ \Rightarrow\ t=\sqrt{12}=2\sqrt{3}\approx3.46\text{ m}$$"])+
+BOX("gold",["Ingat","Remember"],P("Jumlah sudut dalam segitiga selalu $180^\circ$: $45^\circ+45^\circ+90^\circ=180^\circ$ dan $30^\circ+60^\circ+90^\circ=180^\circ$.","The angles in a triangle always add up to $180^\circ$: $45^\circ+45^\circ+90^\circ=180^\circ$ and $30^\circ+60^\circ+90^\circ=180^\circ$.")),
+ex:[
+{t:"mc",q:["Manakah pasangan sudut yang membentuk segitiga istimewa?","Which set of angles forms a special right triangle?"],o:["$30^\circ, 60^\circ, 90^\circ$","$40^\circ, 50^\circ, 90^\circ$","$30^\circ, 70^\circ, 80^\circ$","$45^\circ, 55^\circ, 80^\circ$"],
+sol:[["Segitiga istimewa hanya ada dua: $45^\circ$–$45^\circ$–$90^\circ$ dan $30^\circ$–$60^\circ$–$90^\circ$.","There are only two special right triangles: $45^\circ$–$45^\circ$–$90^\circ$ and $30^\circ$–$60^\circ$–$90^\circ$."],["$40^\circ,50^\circ,90^\circ$ memang segitiga siku-siku, tetapi bukan segitiga istimewa. Dua pilihan lain bahkan tidak siku-siku.","$40^\circ,50^\circ,90^\circ$ is a right triangle, but not a special one. The other two options are not even right triangles."],["Jawaban: $30^\circ, 60^\circ, 90^\circ$.","Answer: $30^\circ, 60^\circ, 90^\circ$."]]},
+{t:"multi",q:["Manakah yang memuat segitiga $45^\circ$–$45^\circ$–$90^\circ$? (Pilih semua yang benar.)","Which of these contain a $45^\circ$–$45^\circ$–$90^\circ$ triangle? (Select all that apply.)"],o:[
+[["Ubin persegi yang dipotong menurut diagonalnya","A square tile cut along its diagonal"],true],
+[["Serbet persegi yang dilipat menjadi segitiga","A square napkin folded into a triangle"],true],
+[["Penggaris segitiga yang memiliki dua sudut $45^\circ$","A set square with two $45^\circ$ angles"],true],
+[["Setengah dari segitiga sama sisi","Half of an equilateral triangle"],false],
+[["Segitiga siku-siku dengan sisi 3, 4, 5","A right triangle with sides 3, 4, 5"],false]],
+sol:[["Diagonal persegi dan lipatan serbet persegi membagi sudut $90^\circ$ menjadi $45^\circ+45^\circ$, sehingga terbentuk segitiga $45^\circ$–$45^\circ$–$90^\circ$. Penggaris dengan dua sudut $45^\circ$ juga demikian.","A square's diagonal and a folded square napkin split the $90^\circ$ corner into $45^\circ+45^\circ$, giving a $45^\circ$–$45^\circ$–$90^\circ$ triangle. The set square with two $45^\circ$ angles is the same."],["Setengah segitiga sama sisi adalah segitiga $30^\circ$–$60^\circ$–$90^\circ$. Segitiga 3, 4, 5 tidak memiliki dua sisi yang sama, jadi bukan $45^\circ$–$45^\circ$–$90^\circ$.","Half an equilateral triangle is a $30^\circ$–$60^\circ$–$90^\circ$ triangle. A 3, 4, 5 triangle has no two equal sides, so it is not $45^\circ$–$45^\circ$–$90^\circ$."]]},
+{t:"dd",q:["Seret setiap benda ke jenis segitiga istimewa yang sesuai.","Drag each object to the matching type of special right triangle."],bins:[["Segitiga 45°–45°–90°","45°–45°–90° triangle"],["Segitiga 30°–60°–90°","30°–60°–90° triangle"]],items:[
+[["Diagonal persegi membagi persegi","A diagonal splitting a square"],0],
+[["Garis tinggi segitiga sama sisi","The height of an equilateral triangle"],1],
+[["Penggaris segitiga dengan sudut 45°","Set square with 45° angles"],0],
+[["Penggaris segitiga dengan sudut 30° dan 60°","Set square with 30° and 60° angles"],1],
+[["Segitiga siku-siku sama kaki","Isosceles right triangle"],0],
+[["Tangga dengan sudut 60° terhadap tanah","Ladder at 60° to the ground"],1]],
+sol:[["45°–45°–90°: diagonal persegi, penggaris 45°, segitiga siku-siku sama kaki (kedua sudut lancipnya sama, yaitu $90^\circ\div2=45^\circ$).","45°–45°–90°: a square's diagonal, the 45° set square, an isosceles right triangle (both acute angles are equal: $90^\circ\div2=45^\circ$)."],["30°–60°–90°: garis tinggi segitiga sama sisi, penggaris 30°/60°, tangga 60° (sudut lancip lainnya $90^\circ-60^\circ=30^\circ$).","30°–60°–90°: the height of an equilateral triangle, the 30°/60° set square, the 60° ladder (the other acute angle is $90^\circ-60^\circ=30^\circ$)."]]},
+{t:"fill",q:["Sebuah ubin persegi bersisi 20 cm. Tentukan panjang diagonalnya.","A square tile has 20 cm sides. Find the length of its diagonal."],fig:SQ("20 cm","?"),b:[{pre:"$d=$",post:"$\sqrt{2}$ cm",a:["20"]}],
+sol:[["Diagonal adalah sisi miring segitiga dengan kedua sisi siku-siku 20 cm.","The diagonal is the hypotenuse of a triangle whose legs are both 20 cm."],"$$d^2=20^2+20^2=400+400=800$$","$$d=\sqrt{800}=\sqrt{400\cdot2}=20\sqrt{2}\text{ cm}$$",["Isian: 20.","Answer: 20."]]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[
+[["Jumlah sudut dalam setiap segitiga adalah $180^\circ$.","The angles in every triangle add up to $180^\circ$."],true],
+[["Segitiga $45^\circ$–$45^\circ$–$90^\circ$ memiliki dua sisi yang sama panjang.","A $45^\circ$–$45^\circ$–$90^\circ$ triangle has two equal sides."],true],
+[["Segitiga $30^\circ$–$60^\circ$–$90^\circ$ memiliki dua sisi yang sama panjang.","A $30^\circ$–$60^\circ$–$90^\circ$ triangle has two equal sides."],false]],
+sol:[["1) Benar. Sifat semua segitiga.","1) True. This holds for all triangles."],["2) Benar. Dua sudutnya sama ($45^\circ$), maka sisi di depannya juga sama panjang (segitiga sama kaki).","2) True. Two angles are equal ($45^\circ$), so the sides opposite them are equal too (isosceles)."],["3) Salah. Ketiga sudutnya berbeda, sehingga ketiga sisinya berbeda panjang.","3) False. All three angles are different, so all three sides have different lengths."]]}
+]},
+
+/* ================= 3. REVIEW OF PRIOR KNOWLEDGE ================= */
+{id:"review",time:"00:15 – 00:20",icon:"refresh",title:["Mengulang Pengetahuan Sebelumnya","Review of Prior Knowledge"],
+expl:
+H("Bagian-bagian segitiga siku-siku","Parts of a right triangle")+
+ROW(FIG(F45({a:"sisi siku-siku / leg",b:"",c:"sisi miring / hypotenuse",plain:1,small:1}),["Sisi miring selalu berada di depan sudut siku-siku.","The hypotenuse is always opposite the right angle."]),
+UL([["<b>Sisi siku-siku (kaki)</b>: dua sisi yang membentuk sudut $90^\circ$.","<b>Legs</b>: the two sides that form the $90^\circ$ angle."],["<b>Sisi miring (hipotenusa)</b>: sisi di depan sudut $90^\circ$; selalu sisi <b>terpanjang</b>.","<b>Hypotenuse</b>: the side opposite the $90^\circ$ angle; always the <b>longest</b> side."],["Sisi terpendek berada di depan sudut terkecil, sisi terpanjang di depan sudut terbesar.","The shortest side is opposite the smallest angle; the longest side is opposite the largest angle."]]))+
+H("Teorema Pythagoras dua arah","Pythagoras in both directions")+
+BOX("teal",["Rumus","Formulas"],M("$$c=\sqrt{a^2+b^2}\qquad\qquad a=\sqrt{c^2-b^2}$$")+P("Mencari sisi miring: <b>jumlahkan</b> kuadrat. Mencari sisi siku-siku: <b>kurangkan</b> kuadrat.","Finding the hypotenuse: <b>add</b> the squares. Finding a leg: <b>subtract</b> the squares."))+
+EXM(["Contoh 1: Sisi miring 13, satu sisi siku-siku 5. Cari sisi siku-siku lainnya.","Example 1: The hypotenuse is 13 and one leg is 5. Find the other leg."],[
+"$$a=\sqrt{13^2-5^2}=\sqrt{169-25}=\sqrt{144}=12$$"])+
+EXM(["Contoh 2: Langkah mencari sisi miring jika sisi siku-siku 4 dan 4.","Example 2: Steps to find the hypotenuse when the legs are 4 and 4."],[
+["1) Tentukan sisi siku-siku: $a=4$, $b=4$.","1) Identify the legs: $a=4$, $b=4$."],
+["2) Tulis rumus: $c^2=a^2+b^2$.","2) Write the formula: $c^2=a^2+b^2$."],
+["3) Substitusi: $c^2=4^2+4^2$.","3) Substitute: $c^2=4^2+4^2$."],
+["4) Hitung: $c^2=16+16=32$.","4) Calculate: $c^2=16+16=32$."],
+["5) Tarik akar dan sederhanakan: $c=\sqrt{32}=\sqrt{16\cdot2}=4\sqrt{2}$.","5) Take the square root and simplify: $c=\sqrt{32}=\sqrt{16\cdot2}=4\sqrt{2}$."]])+
+H("Sudut dalam segitiga","Angles in a triangle")+
+P("Pada segitiga siku-siku, dua sudut lancip berjumlah $90^\circ$ (karena $180^\circ-90^\circ=90^\circ$).","In a right triangle the two acute angles add up to $90^\circ$ (because $180^\circ-90^\circ=90^\circ$).")+
+EXM(["Contoh 3: Satu sudut lancip $30^\circ$. Berapa sudut lancip lainnya?","Example 3: One acute angle is $30^\circ$. What is the other acute angle?"],["$$90^\circ-30^\circ=60^\circ$$"])+
+H("Segitiga sama kaki dan segitiga sama sisi","Isosceles and equilateral triangles")+
+ROW(UL([["<b>Segitiga sama kaki</b>: dua sisi sama panjang dan dua sudut alas sama besar. Jika siku-siku, sudut alasnya $\frac{90^\circ}{2}=45^\circ$.","<b>Isosceles triangle</b>: two equal sides and two equal base angles. If it is right-angled, each base angle is $\frac{90^\circ}{2}=45^\circ$."],
+["<b>Segitiga sama sisi</b>: ketiga sisi sama panjang, ketiga sudut $60^\circ$.","<b>Equilateral triangle</b>: all three sides equal, all three angles $60^\circ$."],
+["Garis tinggi segitiga sama sisi tegak lurus alas, membagi alas menjadi dua bagian sama panjang, dan membagi sudut puncak $60^\circ$ menjadi $30^\circ+30^\circ$.","The height of an equilateral triangle is perpendicular to the base, cuts the base into two equal parts, and splits the $60^\circ$ top angle into $30^\circ+30^\circ$."]]),FIG(EQ(),["Garis tinggi segitiga sama sisi","The height of an equilateral triangle"])),
+ex:[
+{t:"fill",q:["Sisi miring sebuah segitiga siku-siku 13 cm dan satu sisi siku-sikunya 5 cm. Berapa panjang sisi siku-siku lainnya?","A right triangle has a hypotenuse of 13 cm and one leg of 5 cm. How long is the other leg?"],b:[{pre:"$a=$",post:"cm",a:["12"]}],
+sol:[["Mencari sisi siku-siku → kurangkan kuadrat.","Finding a leg → subtract the squares."],"$$a=\sqrt{13^2-5^2}=\sqrt{169-25}=\sqrt{144}=12\text{ cm}$$"]},
+{t:"mc",q:["Pada segitiga siku-siku, salah satu sudut lancipnya $30^\circ$. Besar sudut lancip lainnya adalah …","In a right triangle one acute angle is $30^\circ$. The other acute angle is …"],o:["$60^\circ$","$30^\circ$","$90^\circ$","$150^\circ$"],
+sol:[["Dua sudut lancip pada segitiga siku-siku berjumlah $90^\circ$.","The two acute angles in a right triangle add up to $90^\circ$."],"$$90^\circ-30^\circ=60^\circ$$"]},
+{t:"sort",q:["Urutkan langkah-langkah mencari sisi miring segitiga siku-siku.","Put the steps for finding the hypotenuse of a right triangle in order."],items:[
+["Tentukan kedua sisi siku-siku $a$ dan $b$","Identify the two legs $a$ and $b$"],
+["Tulis rumus $c^2=a^2+b^2$","Write the formula $c^2=a^2+b^2$"],
+["Substitusikan nilai $a$ dan $b$","Substitute the values of $a$ and $b$"],
+["Hitung jumlah kuadratnya","Calculate the sum of the squares"],
+["Tarik akar kuadrat dan sederhanakan","Take the square root and simplify"]],
+sol:[["Urutannya sama dengan Contoh 2: identifikasi → rumus → substitusi → hitung → tarik akar.","The order is the same as Example 2: identify → formula → substitute → calculate → square root."]]},
+{t:"multi",q:["Manakah sifat segitiga sama sisi? (Pilih semua yang benar.)","Which are properties of an equilateral triangle? (Select all that apply.)"],o:[
+[["Ketiga sisinya sama panjang","All three sides are equal"],true],
+[["Setiap sudutnya $60^\circ$","Each angle is $60^\circ$"],true],
+[["Garis tingginya membagi alas menjadi dua bagian sama panjang","Its height cuts the base into two equal parts"],true],
+[["Salah satu sudutnya $90^\circ$","One of its angles is $90^\circ$"],false],
+[["Garis tingginya sama panjang dengan sisinya","Its height is the same length as its side"],false]],
+sol:[["Segitiga sama sisi: sisi sama, sudut $\frac{180^\circ}{3}=60^\circ$, dan garis tinggi membagi alas sama besar.","Equilateral triangle: equal sides, angles $\frac{180^\circ}{3}=60^\circ$, and the height cuts the base in half."],["Tidak ada sudut $90^\circ$. Garis tinggi adalah sisi siku-siku dari segitiga kecil yang sisi miringnya adalah sisi segitiga, jadi garis tinggi <b>lebih pendek</b> dari sisi.","There is no $90^\circ$ angle. The height is a leg of a smaller triangle whose hypotenuse is the side, so the height is <b>shorter</b> than the side."]]},
+{t:"fill",q:["Segitiga siku-siku dengan kedua sisi siku-siku 4 cm. Tentukan sisi miringnya dalam bentuk akar paling sederhana.","A right triangle has both legs equal to 4 cm. Find the hypotenuse in simplest surd form."],fig:F45({a:"4",b:"4",c:"?",plain:1}),b:[{pre:"$c=$",post:"$\sqrt{2}$ cm",a:["4"]}],
+sol:["$$c^2=4^2+4^2=16+16=32$$","$$c=\sqrt{32}=\sqrt{16\cdot2}=4\sqrt{2}\text{ cm}$$",["Isian: 4.","Answer: 4."]]}
+]},
+
+/* ================= 4. PROBLEM INTRODUCTION ================= */
+{id:"problem",time:"00:20 – 00:25",icon:"question",title:["Pengenalan Masalah","Problem Introduction"],
+expl:
+BOX("gold",["Masalah","The problem"],P("Haruskah kita menghitung Pythagoras setiap kali bertemu segitiga $45^\circ$–$45^\circ$–$90^\circ$ atau $30^\circ$–$60^\circ$–$90^\circ$? Atau adakah <b>pola tetap</b> yang bisa langsung dipakai? Mari kita temukan polanya dengan sisi umum $a$.","Do we have to do Pythagoras every time we meet a $45^\circ$–$45^\circ$–$90^\circ$ or $30^\circ$–$60^\circ$–$90^\circ$ triangle? Or is there a <b>fixed pattern</b> we can use directly? Let's discover the pattern using a general side $a$."))+
+H("Penemuan 1: Segitiga 45°–45°–90°","Discovery 1: the 45°–45°–90° triangle")+
+ROW(FIG(SQ("a","d"),["Persegi bersisi $a$ dengan diagonal $d$","A square with side $a$ and diagonal $d$"]),
+EXM(["Langkah-langkah","Steps"],[
+["1) Gambar persegi bersisi $a$ dan tarik diagonal $d$.","1) Draw a square with side $a$ and draw its diagonal $d$."],
+["2) Diagonal membagi persegi menjadi dua segitiga $45^\circ$–$45^\circ$–$90^\circ$.","2) The diagonal splits the square into two $45^\circ$–$45^\circ$–$90^\circ$ triangles."],
+["3) Terapkan Pythagoras:","3) Apply Pythagoras:"],"$$d^2=a^2+a^2$$",
+["4) Sederhanakan:","4) Simplify:"],"$$d^2=2a^2$$",
+["5) Tarik akar:","5) Take the square root:"],"$$d=\sqrt{2a^2}=\sqrt{2}\cdot\sqrt{a^2}=a\sqrt{2}$$"]))+
+BOX("red",["Pola 45°–45°–90°","45°–45°–90° pattern"],M("$$\text{kaki}:\text{kaki}:\text{sisi miring}=a:a:a\sqrt{2}=1:1:\sqrt{2}$$")+P("Sisi miring = kaki $\times\sqrt{2}$.","Hypotenuse = leg $\times\sqrt{2}$."))+
+EXM(["Contoh: persegi bersisi 7","Example: a square with side 7"],["$$d^2=7^2+7^2=49+49=98\ \Rightarrow\ d=\sqrt{98}=\sqrt{49\cdot2}=7\sqrt{2}$$",["Sesuai pola: $7\times\sqrt{2}=7\sqrt{2}$.","It matches the pattern: $7\times\sqrt{2}=7\sqrt{2}$."]])+
+H("Penemuan 2: Segitiga 30°–60°–90°","Discovery 2: the 30°–60°–90° triangle")+
+ROW(FIG(EQ(),["Segitiga sama sisi bersisi $2a$ dibagi oleh garis tinggi $h$","An equilateral triangle with side $2a$ split by its height $h$"]),
+EXM(["Langkah-langkah","Steps"],[
+["1) Ambil segitiga sama sisi bersisi $2a$ (semua sudut $60^\circ$).","1) Take an equilateral triangle with side $2a$ (all angles $60^\circ$)."],
+["2) Garis tinggi $h$ membagi alas menjadi $a$ dan $a$, dan sudut puncak menjadi $30^\circ$.","2) The height $h$ cuts the base into $a$ and $a$, and the top angle into $30^\circ$."],
+["3) Segitiga separuhnya: sisi miring $2a$, sisi terpendek $a$ (di depan $30^\circ$), tinggi $h$ (di depan $60^\circ$).","3) The half triangle: hypotenuse $2a$, shortest side $a$ (opposite $30^\circ$), height $h$ (opposite $60^\circ$)."],
+["4) Pythagoras:","4) Pythagoras:"],"$$h^2=(2a)^2-a^2=4a^2-a^2=3a^2$$",
+["5) Tarik akar:","5) Take the square root:"],"$$h=\sqrt{3a^2}=a\sqrt{3}$$"]))+
+BOX("teal",["Pola 30°–60°–90°","30°–60°–90° pattern"],M("$$\underbrace{a}_{\text{depan }30^\circ}:\underbrace{a\sqrt{3}}_{\text{depan }60^\circ}:\underbrace{2a}_{\text{depan }90^\circ}=1:\sqrt{3}:2$$")+P("Sisi miring = 2 × sisi terpendek; sisi panjang = sisi terpendek $\times\sqrt{3}$.","Hypotenuse = 2 × shortest side; long leg = shortest side $\times\sqrt{3}$.")+P("(<i>depan</i> = berhadapan dengan sudut)","(<i>depan</i> = opposite the angle)"))+
+EXM(["Contoh: segitiga sama sisi bersisi 10","Example: an equilateral triangle with side 10"],[["Separuh alas $a=10\div2=5$, maka tinggi $h=a\sqrt{3}$:","Half the base is $a=10\div2=5$, so the height is $h=a\sqrt{3}$:"],"$$h=5\sqrt{3}\qquad\left(\text{cek: }h^2=10^2-5^2=75,\ \sqrt{75}=5\sqrt{3}\right)$$"]),
+ex:[
+{t:"sort",q:["Urutkan langkah membuktikan pola segitiga $45^\circ$–$45^\circ$–$90^\circ$.","Put the steps for proving the $45^\circ$–$45^\circ$–$90^\circ$ pattern in order."],items:[
+["Gambar persegi bersisi $a$ dan tarik diagonal $d$","Draw a square with side $a$ and its diagonal $d$"],
+["Diagonal membagi persegi menjadi dua segitiga $45^\circ$–$45^\circ$–$90^\circ$","The diagonal splits the square into two $45^\circ$–$45^\circ$–$90^\circ$ triangles"],
+["Terapkan Pythagoras: $d^2=a^2+a^2$","Apply Pythagoras: $d^2=a^2+a^2$"],
+["Sederhanakan: $d^2=2a^2$","Simplify: $d^2=2a^2$"],
+["Tarik akar: $d=a\sqrt{2}$","Take the square root: $d=a\sqrt{2}$"]],
+sol:[["Urutan sesuai Penemuan 1: gambar → bagi → Pythagoras → sederhanakan → tarik akar.","The order follows Discovery 1: draw → split → Pythagoras → simplify → square root."]]},
+{t:"fill",q:["Sebuah persegi bersisi 9 cm memiliki diagonal $d$. Berapa nilai $d^2$?","A square with 9 cm sides has a diagonal $d$. What is the value of $d^2$?"],fig:SQ("9","d"),b:[{pre:"$d^2=$",post:"",a:["162"]}],
+sol:["$$d^2=9^2+9^2=81+81=162$$",["Selanjutnya $d=\sqrt{162}=\sqrt{81\cdot2}=9\sqrt{2}$ cm, sesuai pola $a\sqrt{2}$.","Then $d=\sqrt{162}=\sqrt{81\cdot2}=9\sqrt{2}$ cm, matching the pattern $a\sqrt{2}$."]]},
+{t:"mc",q:["Segitiga sama sisi bersisi 14 cm. Tinggi segitiga tersebut adalah …","An equilateral triangle has 14 cm sides. Its height is …"],o:["$7\sqrt{3}$ cm","$14\sqrt{3}$ cm","$7\sqrt{2}$ cm","$7$ cm"],
+sol:[["Garis tinggi membagi alas menjadi dua: $a=14\div2=7$. Tinggi berada di depan sudut $60^\circ$, jadi $h=a\sqrt{3}$.","The height cuts the base in half: $a=14\div2=7$. The height is opposite the $60^\circ$ angle, so $h=a\sqrt{3}$."],"$$h=7\sqrt{3}\text{ cm}\qquad\left(\text{cek: }14^2-7^2=196-49=147=49\cdot3\right)$$"]},
+{t:"tf",q:["Pada segitiga $30^\circ$–$60^\circ$–$90^\circ$, tentukan benar atau salah.","For a $30^\circ$–$60^\circ$–$90^\circ$ triangle, decide true or false."],s:[
+[["Sisi miring = 2 × sisi terpendek.","Hypotenuse = 2 × shortest side."],true],
+[["Sisi panjang = sisi terpendek $\times\sqrt{2}$.","Long leg = shortest side $\times\sqrt{2}$."],false],
+[["Sisi terpendek berada di depan sudut $30^\circ$.","The shortest side is opposite the $30^\circ$ angle."],true]],
+sol:[["Pola $a : a\sqrt{3} : 2a$.","Pattern $a : a\sqrt{3} : 2a$."],["1) Benar, sisi miring $2a$.","1) True, the hypotenuse is $2a$."],["2) Salah, sisi panjang $= a\sqrt{3}$, bukan $a\sqrt{2}$ ($\sqrt{2}$ milik segitiga $45^\circ$–$45^\circ$–$90^\circ$).","2) False, the long leg $= a\sqrt{3}$, not $a\sqrt{2}$ ($\sqrt{2}$ belongs to the $45^\circ$–$45^\circ$–$90^\circ$ triangle)."],["3) Benar, sudut terkecil berhadapan dengan sisi terpendek.","3) True, the smallest angle is opposite the shortest side."]]},
+{t:"pair",q:["Pasangkan setiap sisi dengan panjangnya (kaki terpendek $= a$).","Match each side with its length (shortest leg $= a$)."],p:[
+[["Sisi di depan $30^\circ$ (segitiga 30–60–90)","Side opposite $30^\circ$ (30–60–90 triangle)"],"$a$"],
+[["Sisi di depan $60^\circ$ (segitiga 30–60–90)","Side opposite $60^\circ$ (30–60–90 triangle)"],"$a\sqrt{3}$"],
+[["Sisi di depan $90^\circ$ (segitiga 30–60–90)","Side opposite $90^\circ$ (30–60–90 triangle)"],"$2a$"],
+[["Sisi miring segitiga 45–45–90 dengan kaki $a$","Hypotenuse of a 45–45–90 triangle with leg $a$"],"$a\sqrt{2}$"]],
+sol:["$$30^\circ\!-\!60^\circ\!-\!90^\circ:\quad a : a\sqrt{3} : 2a$$","$$45^\circ\!-\!45^\circ\!-\!90^\circ:\quad a : a : a\sqrt{2}$$"]}
+]},
+
+/* ================= 5. GUIDED PRACTICE ================= */
+{id:"guided",time:"00:25 – 00:40",icon:"steps",title:["Latihan Terbimbing","Guided Practice"],
+expl:
+H("Strategi 4 langkah","4-step strategy")+
+UL([["<b>1. Kenali</b> jenis segitiga dari sudutnya ($45^\circ$–$45^\circ$–$90^\circ$ atau $30^\circ$–$60^\circ$–$90^\circ$).","<b>1. Identify</b> the type of triangle from its angles ($45^\circ$–$45^\circ$–$90^\circ$ or $30^\circ$–$60^\circ$–$90^\circ$)."],
+["<b>2. Tentukan</b> sisi mana yang diketahui: lihat sudut di depannya.","<b>2. Decide</b> which side is known: look at the angle opposite it."],
+["<b>3. Pilih</b> rumus dari tabel di bawah.","<b>3. Choose</b> the formula from the table below."],
+["<b>4. Hitung</b> dan sederhanakan (rasionalkan jika ada akar di penyebut).","<b>4. Calculate</b> and simplify (rationalise if there is a root in the denominator)."]])+
+'<div class="scroll"><table class="tb"><tr><th><span class="tid">Diketahui</span><span class="ten">Given</span></th><th><span class="tid">Segitiga 45°–45°–90°</span><span class="ten">45°–45°–90° triangle</span></th><th><span class="tid">Segitiga 30°–60°–90°</span><span class="ten">30°–60°–90° triangle</span></th></tr>'+
+'<tr><td><span class="tid">Kaki / kaki pendek $a$</span><span class="ten">Leg / short leg $a$</span></td><td>$c=a\sqrt{2}$</td><td>$b=a\sqrt{3},\ c=2a$</td></tr>'+
+'<tr><td><span class="tid">Sisi miring $c$</span><span class="ten">Hypotenuse $c$</span></td><td>$a=\dfrac{c}{\sqrt{2}}=\dfrac{c\sqrt{2}}{2}$</td><td>$a=\dfrac{c}{2},\ b=a\sqrt{3}$</td></tr>'+
+'<tr><td><span class="tid">Kaki panjang $b$</span><span class="ten">Long leg $b$</span></td><td>–</td><td>$a=\dfrac{b}{\sqrt{3}}=\dfrac{b\sqrt{3}}{3},\ c=2a$</td></tr></table></div>'+
+ROW(FIG(F45({a:"a",b:"a",c:"a√2"}),["$45^\circ$–$45^\circ$–$90^\circ$","$45^\circ$–$45^\circ$–$90^\circ$"]),FIG(F3060({s:"a",l:"a√3",h:"2a"}),["$30^\circ$–$60^\circ$–$90^\circ$","$30^\circ$–$60^\circ$–$90^\circ$"]))+
+EXM(["Kasus A (45–45–90): kaki → sisi miring. Kaki = 6.","Case A (45–45–90): leg → hypotenuse. Leg = 6."],["$$c=a\sqrt{2}=6\sqrt{2}$$"])+
+EXM(["Kasus B (45–45–90): sisi miring → kaki. Sisi miring = 8.","Case B (45–45–90): hypotenuse → leg. Hypotenuse = 8."],["$$a=\frac{8}{\sqrt{2}}=\frac{8}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{8\sqrt{2}}{2}=4\sqrt{2}$$",["Jika sisi miring sudah berbentuk $k\sqrt{2}$, misalnya $7\sqrt{2}$, maka kaki langsung $= 7$.","If the hypotenuse is already in the form $k\sqrt{2}$, e.g. $7\sqrt{2}$, then the leg is simply $7$."]])+
+EXM(["Kasus C (30–60–90): kaki pendek → sisi lain. Kaki pendek = 4.","Case C (30–60–90): short leg → other sides. Short leg = 4."],["$$b=a\sqrt{3}=4\sqrt{3}\qquad c=2a=2\cdot4=8$$"])+
+EXM(["Kasus D (30–60–90): sisi miring → sisi lain. Sisi miring = 14.","Case D (30–60–90): hypotenuse → other sides. Hypotenuse = 14."],["$$a=\frac{c}{2}=\frac{14}{2}=7\qquad b=a\sqrt{3}=7\sqrt{3}$$"])+
+EXM(["Kasus E (30–60–90): kaki panjang → sisi lain. Kaki panjang = 9.","Case E (30–60–90): long leg → other sides. Long leg = 9."],["$$a=\frac{9}{\sqrt{3}}=\frac{9}{\sqrt{3}}\cdot\frac{\sqrt{3}}{\sqrt{3}}=\frac{9\sqrt{3}}{3}=3\sqrt{3}$$","$$c=2a=2\cdot3\sqrt{3}=6\sqrt{3}$$",["Jika kaki panjang berbentuk $k\sqrt{3}$, misalnya $5\sqrt{3}$, maka kaki pendek $=5$ dan sisi miring $=10$.","If the long leg is in the form $k\sqrt{3}$, e.g. $5\sqrt{3}$, then the short leg $=5$ and the hypotenuse $=10$."]])+
+BOX("gold",["Nilai pendekatan","Approximate values"],M("$$\sqrt{2}\approx1.414\qquad\sqrt{3}\approx1.732$$")),
+ex:[
+{t:"fill",q:["Segitiga $45^\circ$–$45^\circ$–$90^\circ$ memiliki kaki 9 cm. Tentukan sisi miringnya.","A $45^\circ$–$45^\circ$–$90^\circ$ triangle has legs of 9 cm. Find the hypotenuse."],fig:F45({a:"9",b:"9",c:"?"}),b:[{pre:"$c=$",post:"$\sqrt{2}$ cm",a:["9"]}],
+sol:[["Kasus A: kaki → sisi miring, kalikan $\sqrt{2}$.","Case A: leg → hypotenuse, multiply by $\sqrt{2}$."],"$$c=a\sqrt{2}=9\sqrt{2}\text{ cm}$$"]},
+{t:"fill",q:["Sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 10 cm. Tentukan panjang kakinya.","The hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 10 cm. Find the length of a leg."],fig:F45({a:"?",b:"?",c:"10"}),b:[{pre:"$a=$",post:"$\sqrt{2}$ cm",a:["5"]}],
+sol:[["Kasus B: sisi miring → kaki, bagi $\sqrt{2}$ lalu rasionalkan.","Case B: hypotenuse → leg, divide by $\sqrt{2}$ then rationalise."],"$$a=\frac{10}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{10\sqrt{2}}{2}=5\sqrt{2}\text{ cm}$$"]},
+{t:"fill",q:["Segitiga $30^\circ$–$60^\circ$–$90^\circ$ memiliki kaki pendek 6 cm. Tentukan kaki panjang dan sisi miringnya.","A $30^\circ$–$60^\circ$–$90^\circ$ triangle has a short leg of 6 cm. Find the long leg and the hypotenuse."],fig:F3060({s:"6",l:"?",h:"?"}),b:[{pre:"$b=$",post:"$\sqrt{3}$ cm",a:["6"]},{pre:"$c=$",post:"cm",a:["12"]}],
+sol:[["Kasus C: kaki pendek $a=6$.","Case C: short leg $a=6$."],"$$b=a\sqrt{3}=6\sqrt{3}\text{ cm}\qquad c=2a=12\text{ cm}$$"]},
+{t:"mc",q:["Segitiga $30^\circ$–$60^\circ$–$90^\circ$ memiliki sisi miring 18 cm. Panjang kaki panjangnya adalah …","A $30^\circ$–$60^\circ$–$90^\circ$ triangle has a hypotenuse of 18 cm. The long leg is …"],fig:F3060({s:"",l:"?",h:"18"}),o:["$9\sqrt{3}$ cm","$18\sqrt{3}$ cm","$9\sqrt{2}$ cm","$6\sqrt{3}$ cm"],
+sol:[["Kasus D: cari dulu kaki pendek, lalu kalikan $\sqrt{3}$.","Case D: find the short leg first, then multiply by $\sqrt{3}$."],"$$a=\frac{18}{2}=9\qquad b=9\sqrt{3}\text{ cm}$$"]},
+{t:"multi",q:["Segitiga $30^\circ$–$60^\circ$–$90^\circ$ memiliki kaki panjang 15 cm. Pernyataan mana yang benar? (Pilih semua yang benar.)","A $30^\circ$–$60^\circ$–$90^\circ$ triangle has a long leg of 15 cm. Which statements are true? (Select all that apply.)"],fig:F3060({s:"?",l:"15",h:"?"}),o:[
+[["Kaki pendek $=5\sqrt{3}$ cm","Short leg $=5\sqrt{3}$ cm"],true],[["Sisi miring $=10\sqrt{3}$ cm","Hypotenuse $=10\sqrt{3}$ cm"],true],[["Kaki pendek $\approx8.66$ cm","Short leg $\approx8.66$ cm"],true],[["Kaki pendek $=5$ cm","Short leg $=5$ cm"],false],[["Sisi miring $=30$ cm","Hypotenuse $=30$ cm"],false]],
+sol:[["Kasus E: kaki panjang → bagi $\sqrt{3}$ lalu rasionalkan.","Case E: long leg → divide by $\sqrt{3}$ then rationalise."],"$$a=\frac{15}{\sqrt{3}}\cdot\frac{\sqrt{3}}{\sqrt{3}}=\frac{15\sqrt{3}}{3}=5\sqrt{3}\approx5\times1.732=8.66\text{ cm}$$","$$c=2a=10\sqrt{3}\text{ cm}$$",["$5$ cm salah karena 15 belum berbentuk $k\sqrt{3}$; $30$ cm salah karena itu $2\times15$ (kaki panjang, bukan kaki pendek).","$5$ cm is wrong because 15 is not in the form $k\sqrt{3}$; $30$ cm is wrong because it is $2\times15$ (the long leg, not the short leg)."]]}
+]},
+
+/* ================= 6. INDEPENDENT PRACTICE ================= */
+{id:"independent",time:"00:40 – 00:55",icon:"pencil",title:["Latihan Mandiri","Independent Practice"],
+expl:
+H("Segitiga istimewa dalam soal cerita","Special triangles in word problems")+
+P("Dalam soal cerita, langkah terpenting adalah <b>membuat sketsa</b> dan menandai sudut. Jika sebuah benda membentuk sudut $\theta$ dengan tanah, sisi <b>tegak</b> (tinggi) berada di depan sudut $\theta$ tersebut.","In word problems the most important step is to <b>draw a sketch</b> and mark the angles. If an object makes an angle $\theta$ with the ground, the <b>vertical</b> side (height) is opposite that angle $\theta$.")+
+ROW(FIG(LADDER(),["Tangga 8 m bersandar dengan sudut $60^\circ$ terhadap tanah","An 8 m ladder leaning at $60^\circ$ to the ground"]),
+EXM(["Contoh 1: Tangga 8 m membentuk sudut $60^\circ$ dengan tanah. Berapa tinggi ujung tangga di dinding dan jarak kaki tangga ke dinding?","Example 1: An 8 m ladder makes a $60^\circ$ angle with the ground. How high up the wall does it reach, and how far is its foot from the wall?"],[
+["Tangga = sisi miring $c=8$. Sudut di atas $= 90^\circ-60^\circ=30^\circ$.","Ladder = hypotenuse $c=8$. The top angle is $90^\circ-60^\circ=30^\circ$."],
+["Jarak kaki tangga berada di depan $30^\circ$ → kaki pendek:","The distance from the wall is opposite $30^\circ$ → short leg:"],"$$a=\frac{8}{2}=4\text{ m}$$",
+["Tinggi berada di depan $60^\circ$ → kaki panjang:","The height is opposite $60^\circ$ → long leg:"],"$$b=4\sqrt{3}\approx4\times1.732=6.93\text{ m}$$"]))+
+EXM(["Contoh 2: Jalur landai (ramp) sepanjang 4 m membentuk sudut $30^\circ$ dengan tanah. Berapa tingginya?","Example 2: A 4 m ramp makes a $30^\circ$ angle with the ground. How high is it?"],[
+["Ramp = sisi miring $=4$. Tinggi berada di depan $30^\circ$ → kaki pendek $=\frac{4}{2}=2$ m. Panjang mendatarnya $=2\sqrt{3}\approx3.46$ m.","Ramp = hypotenuse $=4$. The height is opposite $30^\circ$ → short leg $=\frac{4}{2}=2$ m. Its horizontal length $=2\sqrt{3}\approx3.46$ m."]])+
+EXM(["Contoh 3: Taman persegi memiliki jalan diagonal 50 m. Berapa panjang sisinya?","Example 3: A square park has a 50 m diagonal path. How long is each side?"],[
+"$$s=\frac{50}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{50\sqrt{2}}{2}=25\sqrt{2}\approx25\times1.414=35.35\text{ m}$$",
+["Pembulatan dua tempat desimal memakai $\sqrt{2}\approx1.414$ dan $\sqrt{3}\approx1.732$.","Round to two decimal places using $\sqrt{2}\approx1.414$ and $\sqrt{3}\approx1.732$."]])+
+EXM(["Contoh 4: Mengenali jenis segitiga dari panjang sisinya, misalnya $3,\ 3\sqrt{3},\ 6$.","Example 4: Identifying the triangle type from its sides, e.g. $3,\ 3\sqrt{3},\ 6$."],[
+["<b>45–45–90</b>: dua sisi sama dan sisi terpanjang $=$ sisi itu $\times\sqrt{2}$.","<b>45–45–90</b>: two equal sides and the longest side $=$ that side $\times\sqrt{2}$."],
+["<b>30–60–90</b>: sisi terpanjang $=2\times$ sisi terpendek dan sisi tengah $=$ sisi terpendek $\times\sqrt{3}$.","<b>30–60–90</b>: longest side $=2\times$ shortest side and middle side $=$ shortest side $\times\sqrt{3}$."],
+"$$3\times\sqrt{3}=3\sqrt{3}\ \checkmark\qquad 2\times3=6\ \checkmark\ \Rightarrow\ 30^\circ\!-\!60^\circ\!-\!90^\circ$$"])+
+EXM(["Contoh 5: Segitiga sama sisi bersisi 12 cm: tinggi dan luas.","Example 5: An equilateral triangle with 12 cm sides: height and area."],[
+"$$h=\frac{12}{2}\sqrt{3}=6\sqrt{3}\approx6\times1.732=10.39\text{ cm}$$",
+"$$L=\frac{1}{2}\times\text{alas}\times\text{tinggi}=\frac{1}{2}\times12\times6\sqrt{3}=36\sqrt{3}\text{ cm}^2$$",["(alas = base, tinggi = height, L = luas = area)","(alas = base, tinggi = height, L = luas = area)"]]),
+ex:[
+{t:"fill",q:["Tangga sepanjang 10 m bersandar di dinding dan membentuk sudut $60^\circ$ dengan tanah. Berapa tinggi ujung atas tangga dari tanah?","A 10 m ladder leans against a wall and makes a $60^\circ$ angle with the ground. How high is the top of the ladder above the ground?"],fig:LADDER("10 m","?"),b:[{pre:"$t=$",post:"$\sqrt{3}$ m",a:["5"]}],
+sol:[["Sketsa: tangga = sisi miring $=10$. Tinggi berada di depan sudut $60^\circ$ → kaki panjang.","Sketch: ladder = hypotenuse $=10$. The height is opposite the $60^\circ$ angle → long leg."],"$$a=\frac{10}{2}=5\qquad t=a\sqrt{3}=5\sqrt{3}\text{ m}\approx8.66\text{ m}$$"]},
+{t:"mc",q:["Sebuah ramp sepanjang 6 m membentuk sudut $30^\circ$ dengan tanah. Tinggi ujung ramp adalah …","A 6 m ramp makes a $30^\circ$ angle with the ground. The height of the top of the ramp is …"],fig:RAMP("6 m"),o:["$3$ m","$3\sqrt{3}$ m","$2\sqrt{3}$ m","$3\sqrt{2}$ m"],
+sol:[["Ramp = sisi miring $=6$. Tinggi berada di depan $30^\circ$ → kaki pendek.","Ramp = hypotenuse $=6$. The height is opposite $30^\circ$ → short leg."],"$$t=\frac{6}{2}=3\text{ m}$$",["$3\sqrt{3}$ m adalah panjang mendatarnya, bukan tingginya.","$3\sqrt{3}$ m is the horizontal length, not the height."]]},
+{t:"fill",q:["Sebuah kebun persegi bersisi 15 m. Berapa panjang diagonalnya? Gunakan $\sqrt{2}\approx1.414$ dan bulatkan dua tempat desimal.","A square garden has 15 m sides. How long is its diagonal? Use $\sqrt{2}\approx1.414$ and round to two decimal places."],fig:SQ("15 m","?"),b:[{pre:"$d\approx$",post:"m",a:["21.21"],tol:0.02}],
+sol:["$$d=15\sqrt{2}\approx15\times1.414=21.21\text{ m}$$"]},
+{t:"dd",q:["Seret setiap kumpulan panjang sisi ke jenis segitiga yang tepat.","Drag each set of side lengths to the correct type of triangle."],bins:[["Segitiga 45°–45°–90°","45°–45°–90° triangle"],["Segitiga 30°–60°–90°","30°–60°–90° triangle"]],items:[
+["$5,\ 5,\ 5\sqrt{2}$",0],["$3,\ 3\sqrt{3},\ 6$",1],["$7\sqrt{2},\ 7\sqrt{2},\ 14$",0],["$4,\ 4\sqrt{3},\ 8$",1],["$\sqrt{2},\ \sqrt{2},\ 2$",0],["$2\sqrt{3},\ 6,\ 4\sqrt{3}$",1]],
+sol:[["Cek 45–45–90 (dua sisi sama, sisi terpanjang = sisi $\times\sqrt{2}$):","Check 45–45–90 (two equal sides, longest = side $\times\sqrt{2}$):"],"$$5\sqrt{2}\ \checkmark\qquad 7\sqrt{2}\cdot\sqrt{2}=14\ \checkmark\qquad \sqrt{2}\cdot\sqrt{2}=2\ \checkmark$$",["Cek 30–60–90 (terpanjang $=2\times$ terpendek, tengah $=$ terpendek $\times\sqrt{3}$):","Check 30–60–90 (longest $=2\times$ shortest, middle $=$ shortest $\times\sqrt{3}$):"],"$$3,\,3\sqrt{3},\,6\ \checkmark\qquad 4,\,4\sqrt{3},\,8\ \checkmark\qquad 2\sqrt{3}\cdot\sqrt{3}=6,\ 2\cdot2\sqrt{3}=4\sqrt{3}\ \checkmark$$",["Untuk $2\sqrt{3},6,4\sqrt{3}$: terpendek $2\sqrt{3}\approx3.46$, tengah $6$, terpanjang $4\sqrt{3}\approx6.93$.","For $2\sqrt{3},6,4\sqrt{3}$: shortest $2\sqrt{3}\approx3.46$, middle $6$, longest $4\sqrt{3}\approx6.93$."]]},
+{t:"multi",q:["Sebuah segitiga sama sisi bersisi 12 cm. Pernyataan mana yang benar? (Pilih semua yang benar.)","An equilateral triangle has 12 cm sides. Which statements are true? (Select all that apply.)"],o:[
+[["Tinggi $=6\sqrt{3}$ cm","Height $=6\sqrt{3}$ cm"],true],[["Tinggi $\approx10.39$ cm","Height $\approx10.39$ cm"],true],[["Luas $=36\sqrt{3}$ cm²","Area $=36\sqrt{3}$ cm²"],true],[["Tinggi $=12\sqrt{3}$ cm","Height $=12\sqrt{3}$ cm"],false],[["Tinggi $=6\sqrt{2}$ cm","Height $=6\sqrt{2}$ cm"],false]],
+sol:[["Setengah alas $=6$ adalah kaki pendek, tinggi di depan $60^\circ$ adalah kaki panjang (lihat Contoh 5).","Half the base $=6$ is the short leg; the height opposite $60^\circ$ is the long leg (see Example 5)."],"$$h=6\sqrt{3}\approx10.39\text{ cm}\qquad L=\tfrac{1}{2}\cdot12\cdot6\sqrt{3}=36\sqrt{3}\text{ cm}^2$$",["$12\sqrt{3}$ salah (memakai sisi penuh), $6\sqrt{2}$ salah (memakai rumus 45–45–90). (Tinggi = height, Luas = area.)","$12\sqrt{3}$ is wrong (uses the whole side), $6\sqrt{2}$ is wrong (uses the 45–45–90 rule). (Tinggi = height, Luas = area.)"]]}
+]},
+
+/* ================= 7. CONSOLIDATION ================= */
+{id:"consolidation",time:"00:55 – 01:00",icon:"flag",title:["Konsolidasi & Refleksi","Consolidation & Reflection"],
+expl:
+H("Poin penting","Key points")+
+ROW(BOX("red",["Segitiga 45°–45°–90°","45°–45°–90° triangle"],M("$$a : a : a\sqrt{2}$$")+UL([["Sisi miring = kaki $\times\sqrt{2}$","Hypotenuse = leg $\times\sqrt{2}$"],["Kaki = $\dfrac{\text{sisi miring}}{\sqrt{2}}=\dfrac{\text{sisi miring}\cdot\sqrt{2}}{2}$","Leg = $\dfrac{\text{hypotenuse}}{\sqrt{2}}=\dfrac{\text{hypotenuse}\cdot\sqrt{2}}{2}$"],["Berasal dari persegi yang dibagi diagonal","Comes from a square cut by its diagonal"]])),
+BOX("teal",["Segitiga 30°–60°–90°","30°–60°–90° triangle"],M("$$a : a\sqrt{3} : 2a$$")+UL([["Sisi miring = 2 × kaki pendek","Hypotenuse = 2 × short leg"],["Kaki panjang = kaki pendek $\times\sqrt{3}$","Long leg = short leg $\times\sqrt{3}$"],["Berasal dari segitiga sama sisi yang dibagi garis tinggi","Comes from an equilateral triangle cut by its height"]])))+
+UL([["Selalu cari sisi di depan setiap sudut: terpendek ↔ $30^\circ$, terpanjang ↔ $90^\circ$.","Always find the side opposite each angle: shortest ↔ $30^\circ$, longest ↔ $90^\circ$."],["Jika ada akar di penyebut, rasionalkan.","If there is a root in the denominator, rationalise it."],["Pendekatan: $\sqrt{2}\approx1.414$, $\sqrt{3}\approx1.732$.","Approximations: $\sqrt{2}\approx1.414$, $\sqrt{3}\approx1.732$."]])+
+H("Pertanyaan refleksi","Reflection questions")+
+'<ol class="refl">'+
+'<li>'+T(["Mengapa sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ selalu kaki $\times\sqrt{2}$? Jelaskan dengan kata-katamu sendiri.","Why is the hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle always leg $\times\sqrt{2}$? Explain in your own words."])+'</li>'+
+'<li>'+T(["Bagaimana cara kamu menentukan sisi mana yang berada di depan sudut $30^\circ$ dan $60^\circ$?","How do you decide which side is opposite the $30^\circ$ angle and which is opposite the $60^\circ$ angle?"])+'</li>'+
+'<li>'+T(["Kesalahan apa yang paling mungkin kamu lakukan hari ini (misalnya tertukar $\sqrt{2}$ dan $\sqrt{3}$)? Bagaimana cara menghindarinya?","What mistake are you most likely to make today (for example mixing up $\sqrt{2}$ and $\sqrt{3}$)? How can you avoid it?"])+'</li>'+
+'<li>'+T(["Sebutkan satu benda di rumahmu yang memuat segitiga istimewa.","Name one object at home that contains a special right triangle."])+'</li>'+
+'</ol>'+
+H("Latihan lanjutan (dikerjakan di rumah)","Follow-up practice (homework)")+
+FU([
+[["Kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 13 cm. Tentukan sisi miringnya.","The leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 13 cm. Find the hypotenuse."],["$$c=13\sqrt{2}\text{ cm}$$"]],
+[["Sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 18 cm. Tentukan kakinya.","The hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 18 cm. Find a leg."],["$$a=\frac{18}{\sqrt{2}}=\frac{18\sqrt{2}}{2}=9\sqrt{2}\text{ cm}$$"]],
+[["Kaki pendek segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 11 cm. Tentukan kaki panjang dan sisi miring.","The short leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 11 cm. Find the long leg and the hypotenuse."],["$$b=11\sqrt{3}\text{ cm}\qquad c=22\text{ cm}$$"]],
+[["Kaki panjang segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 21 cm. Tentukan kaki pendek dan sisi miring.","The long leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 21 cm. Find the short leg and the hypotenuse."],["$$a=\frac{21}{\sqrt{3}}=\frac{21\sqrt{3}}{3}=7\sqrt{3}\text{ cm}\qquad c=14\sqrt{3}\text{ cm}$$"]],
+[["Tangga 12 m membentuk sudut $60^\circ$ dengan tanah. Tentukan tinggi ujung tangga dan jarak kakinya dari dinding.","A 12 m ladder makes a $60^\circ$ angle with the ground. Find the height it reaches and the distance of its foot from the wall."],["$$\text{jarak / distance}=\frac{12}{2}=6\text{ m}\qquad t=6\sqrt{3}\approx10.39\text{ m}$$"]],
+[["Keliling sebuah persegi 48 cm. Tentukan panjang diagonalnya (bulatkan dua desimal).","A square has a perimeter of 48 cm. Find its diagonal (round to two decimal places)."],["$$s=\frac{48}{4}=12\qquad d=12\sqrt{2}\approx12\times1.414=16.97\text{ cm}$$"]]])+
+H("Exit ticket","Exit ticket")+P("Jawab tiga soal singkat di bawah sebelum kelas berakhir.","Answer the three short questions below before the class ends."),
+ex:[
+{t:"mc",q:["Kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 7. Sisi miringnya adalah …","The leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 7. Its hypotenuse is …"],o:["$7\sqrt{2}$","$7\sqrt{3}$","$14$","$\dfrac{7}{2}$"],sol:["$$c=a\sqrt{2}=7\sqrt{2}$$"]},
+{t:"fill",q:["Sisi miring segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 14. Tentukan kaki panjangnya.","The hypotenuse of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 14. Find the long leg."],b:[{pre:"$b=$",post:"$\sqrt{3}$",a:["7"]}],sol:["$$a=\frac{14}{2}=7\qquad b=7\sqrt{3}$$"]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[[["Sisi terpendek segitiga $30^\circ$–$60^\circ$–$90^\circ$ berada di depan sudut $30^\circ$.","The shortest side of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is opposite the $30^\circ$ angle."],true],[["Sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 2 × kakinya.","The hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 2 × its leg."],false]],
+sol:[["1) Benar: sudut terkecil ↔ sisi terpendek.","1) True: smallest angle ↔ shortest side."],["2) Salah: sisi miring $=$ kaki $\times\sqrt{2}$. Aturan “× 2” milik segitiga $30^\circ$–$60^\circ$–$90^\circ$.","2) False: hypotenuse $=$ leg $\times\sqrt{2}$. The “× 2” rule belongs to the $30^\circ$–$60^\circ$–$90^\circ$ triangle."]]}
+]}
+],
+
+/* ================= TASKS ================= */
+tasks:[
+{id:"task1",title:["Tugas 1: Segitiga 45°–45°–90°","Task 1: The 45°–45°–90° Triangle"],intro:["Gunakan pola $a : a : a\sqrt{2}$.","Use the pattern $a : a : a\sqrt{2}$."],ex:[
+{t:"mc",q:["Kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 5 cm. Sisi miringnya adalah …","The leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 5 cm. Its hypotenuse is …"],fig:F45({a:"5",b:"5",c:"?"}),o:["$5\sqrt{2}$ cm","$10$ cm","$5\sqrt{3}$ cm","$25$ cm"],sol:["$$c=a\sqrt{2}=5\sqrt{2}\text{ cm}$$",["$10$ cm salah karena memakai aturan “× 2” milik segitiga 30–60–90.","$10$ cm is wrong because it uses the “× 2” rule of the 30–60–90 triangle."]]},
+{t:"fill",q:["Kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 11 cm. Tentukan sisi miringnya.","The leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 11 cm. Find its hypotenuse."],b:[{pre:"$c=$",post:"$\sqrt{2}$ cm",a:["11"]}],sol:["$$c=11\sqrt{2}\text{ cm}$$"]},
+{t:"fill",q:["Sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah $8\sqrt{2}$ cm. Tentukan panjang kakinya.","The hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is $8\sqrt{2}$ cm. Find the length of a leg."],b:[{pre:"$a=$",post:"cm",a:["8"]}],sol:["$$a=\frac{8\sqrt{2}}{\sqrt{2}}=8\text{ cm}$$"]},
+{t:"fill",q:["Sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 14 cm. Tentukan panjang kakinya.","The hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 14 cm. Find the length of a leg."],fig:F45({a:"?",b:"?",c:"14"}),b:[{pre:"$a=$",post:"$\sqrt{2}$ cm",a:["7"]}],sol:["$$a=\frac{14}{\sqrt{2}}\cdot\frac{\sqrt{2}}{\sqrt{2}}=\frac{14\sqrt{2}}{2}=7\sqrt{2}\text{ cm}$$"]},
+{t:"tf",q:["Tentukan benar atau salah untuk segitiga $45^\circ$–$45^\circ$–$90^\circ$.","Decide true or false for a $45^\circ$–$45^\circ$–$90^\circ$ triangle."],s:[[["Kedua kakinya sama panjang.","Both legs are equal."],true],[["Sisi miring = kaki × 2.","Hypotenuse = leg × 2."],false],[["Jika kakinya $\sqrt{2}$, sisi miringnya 2.","If the leg is $\sqrt{2}$, the hypotenuse is 2."],true]],
+sol:[["1) Benar (dua sudut $45^\circ$).","1) True (two $45^\circ$ angles)."],["2) Salah, sisi miring = kaki $\times\sqrt{2}$.","2) False, hypotenuse = leg $\times\sqrt{2}$."],"$$3)\ \sqrt{2}\cdot\sqrt{2}=2\ \Rightarrow\ \text{Benar / True}$$"]},
+{t:"multi",q:["Manakah yang dapat menjadi panjang sisi segitiga $45^\circ$–$45^\circ$–$90^\circ$? (Pilih semua yang benar.)","Which could be the side lengths of a $45^\circ$–$45^\circ$–$90^\circ$ triangle? (Select all that apply.)"],o:[["$4,\ 4,\ 4\sqrt{2}$",true],["$\sqrt{5},\ \sqrt{5},\ \sqrt{10}$",true],["$3\sqrt{2},\ 3\sqrt{2},\ 6$",true],["$2,\ 2,\ 4$",false],["$5,\ 5\sqrt{2},\ 10$",false]],
+sol:[["Syarat: dua sisi sama ($a, a$) dan sisi ketiga $a\sqrt{2}$.","Condition: two equal sides ($a, a$) and the third side $a\sqrt{2}$."],"$$\sqrt{5}\cdot\sqrt{2}=\sqrt{10}\ \checkmark\qquad 3\sqrt{2}\cdot\sqrt{2}=6\ \checkmark$$",["$2,2,4$: $2\sqrt{2}\approx2.83\neq4$ ✗. $5,5\sqrt{2},10$: dua sisi pendeknya tidak sama ✗.","$2,2,4$: $2\sqrt{2}\approx2.83\neq4$ ✗. $5,5\sqrt{2},10$: the two shorter sides are not equal ✗."]]},
+{t:"pair",q:["Pasangkan panjang kaki dengan sisi miringnya.","Match each leg length with its hypotenuse."],p:[["$3$","$3\sqrt{2}$"],["$\sqrt{2}$","$2$"],["$2\sqrt{2}$","$4$"],["$5\sqrt{2}$","$10$"]],
+sol:["$$3\cdot\sqrt{2}=3\sqrt{2}\qquad \sqrt{2}\cdot\sqrt{2}=2$$","$$2\sqrt{2}\cdot\sqrt{2}=2\cdot2=4\qquad 5\sqrt{2}\cdot\sqrt{2}=5\cdot2=10$$"]},
+{t:"sort",q:["Urutkan langkah mencari kaki jika sisi miring = 12.","Put the steps for finding a leg when the hypotenuse = 12 in order."],items:[["Tulis rumus $a=\dfrac{c}{\sqrt{2}}$","Write the formula $a=\dfrac{c}{\sqrt{2}}$"],["Substitusi: $a=\dfrac{12}{\sqrt{2}}$","Substitute: $a=\dfrac{12}{\sqrt{2}}$"],["Rasionalkan: $\dfrac{12}{\sqrt{2}}\cdot\dfrac{\sqrt{2}}{\sqrt{2}}=\dfrac{12\sqrt{2}}{2}$","Rationalise: $\dfrac{12}{\sqrt{2}}\cdot\dfrac{\sqrt{2}}{\sqrt{2}}=\dfrac{12\sqrt{2}}{2}$"],["Sederhanakan: $a=6\sqrt{2}$","Simplify: $a=6\sqrt{2}$"]],
+sol:["$$a=\frac{12}{\sqrt{2}}=\frac{12\sqrt{2}}{2}=6\sqrt{2}$$"]},
+{t:"mc",q:["Diagonal sebuah persegi adalah $6\sqrt{2}$ cm. Keliling persegi tersebut adalah …","The diagonal of a square is $6\sqrt{2}$ cm. The perimeter of the square is …"],fig:SQ("?","6√2 cm"),o:["$24$ cm","$24\sqrt{2}$ cm","$12$ cm","$36$ cm"],
+sol:[["Diagonal = sisi miring segitiga 45–45–90, jadi sisi persegi $=\frac{6\sqrt{2}}{\sqrt{2}}=6$ cm.","Diagonal = hypotenuse of a 45–45–90 triangle, so the side of the square $=\frac{6\sqrt{2}}{\sqrt{2}}=6$ cm."],"$$K=4\times6=24\text{ cm}$$",["($K$ = keliling = perimeter; $36$ adalah luasnya, bukan keliling.)","($K$ = perimeter; $36$ is the area, not the perimeter.)"]]},
+{t:"dd",q:["Setiap kartu adalah sisi miring sebuah segitiga $45^\circ$–$45^\circ$–$90^\circ$. Seret ke kotak yang menunjukkan panjang kakinya.","Each card is the hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle. Drag it to the box showing its leg length."],bins:[["Kaki = 4","Leg = 4"],["Kaki = 5","Leg = 5"]],items:[["$4\sqrt{2}$",0],["$\sqrt{32}$",0],["$\dfrac{8}{\sqrt{2}}$",0],["$5\sqrt{2}$",1],["$\sqrt{50}$",1],["$\dfrac{10}{\sqrt{2}}$",1]],
+sol:[["Ubah setiap kartu ke bentuk $k\sqrt{2}$; maka kakinya $k$.","Write every card in the form $k\sqrt{2}$; then the leg is $k$."],"$$\sqrt{32}=4\sqrt{2}\qquad \frac{8}{\sqrt{2}}=\frac{8\sqrt{2}}{2}=4\sqrt{2}\ \Rightarrow\ \text{kaki / leg }4$$","$$\sqrt{50}=5\sqrt{2}\qquad \frac{10}{\sqrt{2}}=\frac{10\sqrt{2}}{2}=5\sqrt{2}\ \Rightarrow\ \text{kaki / leg }5$$"]}
+]},
+
+{id:"task2",title:["Tugas 2: Segitiga 30°–60°–90°","Task 2: The 30°–60°–90° Triangle"],intro:["Gunakan pola $a : a\sqrt{3} : 2a$.","Use the pattern $a : a\sqrt{3} : 2a$."],ex:[
+{t:"mc",q:["Kaki pendek segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 4 cm. Sisi miringnya adalah …","The short leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 4 cm. Its hypotenuse is …"],fig:F3060({s:"4",l:"",h:"?"}),o:["$8$ cm","$4\sqrt{3}$ cm","$4\sqrt{2}$ cm","$16$ cm"],sol:["$$c=2a=2\times4=8\text{ cm}$$"]},
+{t:"fill",q:["Kaki pendek segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 7 cm. Tentukan kaki panjangnya.","The short leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 7 cm. Find the long leg."],b:[{pre:"$b=$",post:"$\sqrt{3}$ cm",a:["7"]}],sol:["$$b=a\sqrt{3}=7\sqrt{3}\text{ cm}$$"]},
+{t:"fill",q:["Sisi miring segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 20 cm. Tentukan kaki pendek dan kaki panjangnya.","The hypotenuse of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 20 cm. Find the short leg and the long leg."],fig:F3060({s:"?",l:"?",h:"20"}),b:[{pre:"$a=$",post:"cm",a:["10"]},{pre:"$b=$",post:"$\sqrt{3}$ cm",a:["10"]}],sol:["$$a=\frac{20}{2}=10\text{ cm}\qquad b=10\sqrt{3}\text{ cm}$$"]},
+{t:"fill",q:["Kaki panjang segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah $9\sqrt{3}$ cm. Tentukan kaki pendek dan sisi miringnya.","The long leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is $9\sqrt{3}$ cm. Find the short leg and the hypotenuse."],b:[{pre:"$a=$",post:"cm",a:["9"]},{pre:"$c=$",post:"cm",a:["18"]}],sol:["$$a=\frac{9\sqrt{3}}{\sqrt{3}}=9\text{ cm}\qquad c=2\times9=18\text{ cm}$$"]},
+{t:"mc",q:["Kaki panjang segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 12 cm. Kaki pendeknya adalah …","The long leg of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 12 cm. Its short leg is …"],fig:F3060({s:"?",l:"12",h:""}),o:["$4\sqrt{3}$ cm","$12\sqrt{3}$ cm","$6$ cm","$6\sqrt{3}$ cm"],sol:["$$a=\frac{12}{\sqrt{3}}\cdot\frac{\sqrt{3}}{\sqrt{3}}=\frac{12\sqrt{3}}{3}=4\sqrt{3}\text{ cm}$$",["$6$ cm salah: itu setengah kaki panjang, padahal yang setengah adalah sisi miring.","$6$ cm is wrong: that is half the long leg, but it is the hypotenuse that gets halved."]]},
+{t:"tf",q:["Tentukan benar atau salah untuk segitiga $30^\circ$–$60^\circ$–$90^\circ$.","Decide true or false for a $30^\circ$–$60^\circ$–$90^\circ$ triangle."],s:[[["Sisi di depan sudut $60^\circ$ adalah sisi terpanjang.","The side opposite the $60^\circ$ angle is the longest side."],false],[["Kaki pendek adalah setengah dari sisi miring.","The short leg is half of the hypotenuse."],true],[["Kaki panjang = kaki pendek $\times\sqrt{3}$.","Long leg = short leg $\times\sqrt{3}$."],true]],
+sol:[["1) Salah: sisi terpanjang adalah sisi miring (di depan $90^\circ$).","1) False: the longest side is the hypotenuse (opposite $90^\circ$)."],["2) Benar: $a=\frac{c}{2}$.","2) True: $a=\frac{c}{2}$."],["3) Benar: $b=a\sqrt{3}$.","3) True: $b=a\sqrt{3}$."]]},
+{t:"pair",q:["Pasangkan kaki pendek dengan sisi miringnya.","Match each short leg with its hypotenuse."],p:[["$3$","$6$"],["$\sqrt{3}$","$2\sqrt{3}$"],["$2.5$","$5$"],["$5\sqrt{3}$","$10\sqrt{3}$"]],sol:[["Sisi miring $=2\times$ kaki pendek.","Hypotenuse $=2\times$ short leg."],"$$2\cdot3=6\qquad 2\cdot\sqrt{3}=2\sqrt{3}\qquad 2\cdot2.5=5\qquad 2\cdot5\sqrt{3}=10\sqrt{3}$$"]},
+{t:"sort",q:["Urutkan langkah mencari kaki panjang jika sisi miring = 16.","Put the steps for finding the long leg when the hypotenuse = 16 in order."],items:[["Kenali sisi miring $c=16$","Identify the hypotenuse $c=16$"],["Kaki pendek: $a=16\div2=8$","Short leg: $a=16\div2=8$"],["Kaki panjang: $b=8\sqrt{3}$","Long leg: $b=8\sqrt{3}$"],["Pendekatan: $b\approx8\times1.732=13.86$","Approximate: $b\approx8\times1.732=13.86$"]],sol:["$$a=\frac{16}{2}=8\qquad b=8\sqrt{3}\approx13.86$$"]},
+{t:"multi",q:["Sisi miring segitiga $30^\circ$–$60^\circ$–$90^\circ$ adalah 10. Pernyataan mana yang benar? (Pilih semua yang benar.)","The hypotenuse of a $30^\circ$–$60^\circ$–$90^\circ$ triangle is 10. Which statements are true? (Select all that apply.)"],o:[[["Kaki pendek $=5$","Short leg $=5$"],true],[["Kaki panjang $=5\sqrt{3}$","Long leg $=5\sqrt{3}$"],true],[["Kaki panjang $\approx8.66$","Long leg $\approx8.66$"],true],[["Kaki pendek $=5\sqrt{3}$","Short leg $=5\sqrt{3}$"],false],[["Kaki panjang $=10\sqrt{3}$","Long leg $=10\sqrt{3}$"],false]],
+sol:["$$a=\frac{10}{2}=5\qquad b=5\sqrt{3}\approx5\times1.732=8.66$$",["(Kaki pendek = short leg, kaki panjang = long leg.)","(Kaki pendek = short leg, kaki panjang = long leg.)"]]},
+{t:"dd",q:["Untuk segitiga $30^\circ$–$60^\circ$–$90^\circ$ dengan kaki pendek 6, seret setiap panjang ke sudut yang berhadapan dengannya.","For a $30^\circ$–$60^\circ$–$90^\circ$ triangle with short leg 6, drag each length to the angle it is opposite."],bins:[["Di depan 30°","Opposite 30°"],["Di depan 60°","Opposite 60°"],["Di depan 90°","Opposite 90°"]],items:[["$6$",0],["$\sqrt{36}$",0],["$6\sqrt{3}$",1],["$\sqrt{108}$",1],["$12$",2],["$\sqrt{144}$",2]],
+sol:["$$\text{depan / opposite }30^\circ: a=6=\sqrt{36}$$","$$\text{depan / opposite }60^\circ: 6\sqrt{3}=\sqrt{36\cdot3}=\sqrt{108}$$","$$\text{depan / opposite }90^\circ: 2\cdot6=12=\sqrt{144}$$"]}
+]},
+
+{id:"task3",title:["Tugas 3: Campuran dan Identifikasi","Task 3: Mixed Practice and Identification"],intro:["Tentukan dulu jenis segitiganya, lalu pilih rumus yang tepat.","First decide the type of triangle, then choose the right formula."],ex:[
+{t:"mc",q:["Segitiga dengan sisi $9,\ 9,\ 9\sqrt{2}$ adalah …","A triangle with sides $9,\ 9,\ 9\sqrt{2}$ is …"],o:[["segitiga $45^\circ$–$45^\circ$–$90^\circ$","a $45^\circ$–$45^\circ$–$90^\circ$ triangle"],["segitiga $30^\circ$–$60^\circ$–$90^\circ$","a $30^\circ$–$60^\circ$–$90^\circ$ triangle"],["segitiga sama sisi","an equilateral triangle"],["bukan segitiga siku-siku","not a right triangle"]],sol:[["Dua sisi sama (9 dan 9) dan sisi ketiga $9\sqrt{2}$ sesuai pola $a:a:a\sqrt{2}$.","Two equal sides (9 and 9) and the third side $9\sqrt{2}$ fit the pattern $a:a:a\sqrt{2}$."]]},
+{t:"mc",q:["Segitiga $30^\circ$–$60^\circ$–$90^\circ$ memiliki sisi miring $4\sqrt{3}$. Kaki panjangnya adalah …","A $30^\circ$–$60^\circ$–$90^\circ$ triangle has a hypotenuse of $4\sqrt{3}$. Its long leg is …"],o:["$6$","$2\sqrt{3}$","$6\sqrt{3}$","$12$"],sol:["$$a=\frac{4\sqrt{3}}{2}=2\sqrt{3}\qquad b=a\sqrt{3}=2\sqrt{3}\cdot\sqrt{3}=2\cdot3=6$$",["$2\sqrt{3}$ adalah kaki pendek, bukan kaki panjang.","$2\sqrt{3}$ is the short leg, not the long leg."]]},
+{t:"dd",q:["Seret setiap kumpulan sisi ke kotak yang tepat.","Drag each set of sides into the correct box."],bins:[["45°–45°–90°","45°–45°–90°"],["30°–60°–90°","30°–60°–90°"],["Bukan keduanya","Neither"]],items:[["$6,\ 6,\ 6\sqrt{2}$",0],["$\sqrt{3},\ \sqrt{3},\ \sqrt{6}$",0],["$1,\ \sqrt{3},\ 2$",1],["$5,\ 5\sqrt{3},\ 10$",1],["$3,\ 4,\ 5$",2],["$2,\ 2,\ 2\sqrt{3}$",2]],
+sol:["$$\sqrt{3}\cdot\sqrt{2}=\sqrt{6}\ \Rightarrow 45^\circ\!-\!45^\circ\!-\!90^\circ$$","$$1,\sqrt{3},2\ \text{dan / and}\ 5,5\sqrt{3},10\ \Rightarrow a:a\sqrt{3}:2a$$",["$3,4,5$ siku-siku tetapi bukan segitiga istimewa. $2,2,2\sqrt{3}$: $2^2+2^2=8\neq(2\sqrt{3})^2=12$, jadi bukan segitiga siku-siku.","$3,4,5$ is right-angled but not special. $2,2,2\sqrt{3}$: $2^2+2^2=8\neq(2\sqrt{3})^2=12$, so it is not a right triangle."]]},
+{t:"fill",q:["Diagonal sebuah persegi adalah 10 cm. Tentukan panjang sisinya.","The diagonal of a square is 10 cm. Find the length of its side."],b:[{pre:"$s=$",post:"$\sqrt{2}$ cm",a:["5"]}],sol:["$$s=\frac{10}{\sqrt{2}}=\frac{10\sqrt{2}}{2}=5\sqrt{2}\text{ cm}$$"]},
+{t:"fill",q:["Segitiga sama sisi bersisi 8 cm. Tentukan tingginya.","An equilateral triangle has 8 cm sides. Find its height."],b:[{pre:"$h=$",post:"$\sqrt{3}$ cm",a:["4"]}],sol:["$$a=\frac{8}{2}=4\qquad h=a\sqrt{3}=4\sqrt{3}\text{ cm}$$"]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[[["Setiap segitiga siku-siku sama kaki adalah segitiga $45^\circ$–$45^\circ$–$90^\circ$.","Every isosceles right triangle is a $45^\circ$–$45^\circ$–$90^\circ$ triangle."],true],[["Setengah persegi yang dipotong diagonal adalah segitiga $30^\circ$–$60^\circ$–$90^\circ$.","Half of a square cut along its diagonal is a $30^\circ$–$60^\circ$–$90^\circ$ triangle."],false],[["Segitiga dengan sisi $2,\ 2\sqrt{3},\ 4$ adalah segitiga $30^\circ$–$60^\circ$–$90^\circ$.","A triangle with sides $2,\ 2\sqrt{3},\ 4$ is a $30^\circ$–$60^\circ$–$90^\circ$ triangle."],true]],
+sol:[["1) Benar: sudut alas sama, $\frac{90^\circ}{2}=45^\circ$.","1) True: equal base angles, $\frac{90^\circ}{2}=45^\circ$."],["2) Salah: hasilnya $45^\circ$–$45^\circ$–$90^\circ$.","2) False: it gives $45^\circ$–$45^\circ$–$90^\circ$."],["3) Benar: $a=2$, $a\sqrt{3}=2\sqrt{3}$, $2a=4$.","3) True: $a=2$, $a\sqrt{3}=2\sqrt{3}$, $2a=4$."]]},
+{t:"pair",q:["Pasangkan setiap deskripsi dengan nilainya.","Match each description with its value."],p:[[["Diagonal persegi bersisi 3","Diagonal of a square with side 3"],"$3\sqrt{2}$"],[["Tinggi segitiga sama sisi bersisi 6","Height of an equilateral triangle with side 6"],"$3\sqrt{3}$"],[["Sisi miring 30–60–90 dengan kaki pendek 3","Hypotenuse of a 30–60–90 triangle with short leg 3"],"$6$"],[["Kaki pendek 30–60–90 dengan kaki panjang 3","Short leg of a 30–60–90 triangle with long leg 3"],"$\sqrt{3}$"]],
+sol:["$$3\sqrt{2}\qquad \frac{6}{2}\sqrt{3}=3\sqrt{3}\qquad 2\cdot3=6\qquad \frac{3}{\sqrt{3}}=\frac{3\sqrt{3}}{3}=\sqrt{3}$$"]},
+{t:"multi",q:["Pada perhitungan mana kita mengalikan dengan $\sqrt{3}$? (Pilih semua yang benar.)","In which calculations do we multiply by $\sqrt{3}$? (Select all that apply.)"],o:[[["Mencari kaki panjang dari kaki pendek (30–60–90)","Finding the long leg from the short leg (30–60–90)"],true],[["Mencari tinggi segitiga sama sisi dari setengah sisinya","Finding the height of an equilateral triangle from half its side"],true],[["Mencari sisi miring dari kaki (45–45–90)","Finding the hypotenuse from a leg (45–45–90)"],false],[["Mencari sisi miring dari kaki pendek (30–60–90)","Finding the hypotenuse from the short leg (30–60–90)"],false]],
+sol:[["Kali $\sqrt{3}$: kaki pendek → kaki panjang (termasuk tinggi segitiga sama sisi). Sisi miring 45–45–90 memakai $\times\sqrt{2}$, sisi miring 30–60–90 memakai $\times2$.","Multiply by $\sqrt{3}$: short leg → long leg (including the height of an equilateral triangle). The 45–45–90 hypotenuse uses $\times\sqrt{2}$; the 30–60–90 hypotenuse uses $\times2$."]]},
+{t:"fill",q:["Kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah $3\sqrt{2}$. Tentukan sisi miringnya.","The leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is $3\sqrt{2}$. Find its hypotenuse."],b:[{pre:"$c=$",post:"",a:["6"]}],sol:["$$c=3\sqrt{2}\cdot\sqrt{2}=3\cdot2=6$$"]},
+{t:"sort",q:["Urutkan dari yang terkecil ke yang terbesar.","Order from smallest to largest."],items:["$4$","$4\sqrt{2}$","$4\sqrt{3}$","$7$","$8$"],sol:["$$4\sqrt{2}\approx4\times1.414=5.66\qquad 4\sqrt{3}\approx4\times1.732=6.93$$","$$4\lt5.66\lt6.93\lt7\lt8$$"]}
+]},
+
+{id:"task4",title:["Tugas 4: Soal Cerita","Task 4: Word Problems"],intro:["Buat sketsa dulu. Gunakan $\sqrt{2}\approx1.414$ dan $\sqrt{3}\approx1.732$; bulatkan dua tempat desimal.","Draw a sketch first. Use $\sqrt{2}\approx1.414$ and $\sqrt{3}\approx1.732$; round to two decimal places."],ex:[
+{t:"fill",q:["Ubin persegi bersisi 40 cm. Berapa panjang diagonalnya?","A square tile has 40 cm sides. How long is its diagonal?"],fig:SQ("40 cm","?"),b:[{pre:"$d\approx$",post:"cm",a:["56.56"],tol:0.02}],sol:["$$d=40\sqrt{2}\approx40\times1.414=56.56\text{ cm}$$"]},
+{t:"mc",q:["Tangga 6 m bersandar di dinding dengan sudut $60^\circ$ terhadap tanah. Jarak kaki tangga ke dinding adalah …","A 6 m ladder leans on a wall at $60^\circ$ to the ground. The distance from the foot of the ladder to the wall is …"],fig:LADDER("6 m",""),o:["$3$ m","$3\sqrt{3}$ m","$6\sqrt{3}$ m","$2\sqrt{3}$ m"],
+sol:[["Sudut di puncak tangga $=30^\circ$. Jarak ke dinding berada di depan sudut $30^\circ$ → kaki pendek.","The angle at the top of the ladder is $30^\circ$. The distance to the wall is opposite the $30^\circ$ angle → short leg."],"$$a=\frac{6}{2}=3\text{ m}$$"]},
+{t:"fill",q:["Untuk tangga yang sama (6 m, sudut $60^\circ$), tentukan tinggi ujung tangga dalam bentuk akar dan pendekatannya.","For the same ladder (6 m, $60^\circ$), find the height it reaches as a surd and as an approximation."],b:[{pre:"$t=$",post:"$\sqrt{3}$ m",a:["3"]},{pre:"$t\approx$",post:"m",a:["5.20"],tol:0.01}],sol:["$$t=a\sqrt{3}=3\sqrt{3}\approx3\times1.732=5.196\approx5.20\text{ m}$$"]},
+{t:"fill",q:["Sebuah ramp naik setinggi 1 m dan membentuk sudut $30^\circ$ dengan tanah. Berapa panjang ramp tersebut?","A ramp rises 1 m and makes a $30^\circ$ angle with the ground. How long is the ramp?"],fig:RAMP("?","1 m"),b:[{pre:"$c=$",post:"m",a:["2"]}],sol:[["Tinggi berada di depan $30^\circ$ → kaki pendek $a=1$. Ramp = sisi miring.","The height is opposite $30^\circ$ → short leg $a=1$. The ramp = hypotenuse."],"$$c=2a=2\times1=2\text{ m}$$"]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[[["Lapangan berbentuk persegi bersisi 27 m. Jarak diagonal antar pojok yang berseberangan $\approx38.18$ m.","A square field has 27 m sides. The diagonal distance between opposite corners is $\approx38.18$ m."],true],[["Benang layang-layang sepanjang 50 m membentuk sudut $30^\circ$ dengan tanah, maka tinggi layang-layang 25 m.","A 50 m kite string makes a $30^\circ$ angle with the ground, so the kite is 25 m high."],true],[["Atap berbentuk segitiga sama sisi bersisi 6 m memiliki tinggi $6\sqrt{3}$ m.","A roof shaped like an equilateral triangle with 6 m sides has a height of $6\sqrt{3}$ m."],false]],
+sol:["$$1)\ 27\sqrt{2}\approx27\times1.414=38.178\approx38.18\ \Rightarrow\ \text{Benar / True}$$","$$2)\ \text{tinggi / height}=\frac{50}{2}=25\text{ m}\ \Rightarrow\ \text{Benar / True}$$","$$3)\ h=\frac{6}{2}\sqrt{3}=3\sqrt{3}\neq6\sqrt{3}\ \Rightarrow\ \text{Salah / False}$$"]},
+{t:"multi",q:["Sebuah taman persegi memiliki jalan diagonal sepanjang 100 m. Pernyataan mana yang benar? (Pilih semua yang benar.)","A square park has a 100 m diagonal path. Which statements are true? (Select all that apply.)"],o:[[["Sisi taman $=50\sqrt{2}$ m","Side of the park $=50\sqrt{2}$ m"],true],[["Sisi taman $\approx70.70$ m","Side of the park $\approx70.70$ m"],true],[["Keliling taman $=200\sqrt{2}$ m","Perimeter of the park $=200\sqrt{2}$ m"],true],[["Luas taman $=5000$ m²","Area of the park $=5000$ m²"],true],[["Sisi taman $=50$ m","Side of the park $=50$ m"],false]],
+sol:["$$s=\frac{100}{\sqrt{2}}=\frac{100\sqrt{2}}{2}=50\sqrt{2}\approx50\times1.414=70.70\text{ m}$$","$$K=4\cdot50\sqrt{2}=200\sqrt{2}\text{ m}\qquad L=(50\sqrt{2})^2=2500\cdot2=5000\text{ m}^2$$"]},
+{t:"pair",q:["Pasangkan setiap situasi dengan jawabannya.","Match each situation with its answer."],p:[[["Tangga 4 m, sudut $60^\circ$ dengan tanah: tinggi","4 m ladder, $60^\circ$ to the ground: height"],"$2\sqrt{3}$ m"],[["Tangga 4 m, sudut $60^\circ$ dengan tanah: jarak kaki","4 m ladder, $60^\circ$ to the ground: distance of the foot"],"$2$ m"],[["Diagonal lantai persegi bersisi 4 m","Diagonal of a square floor with 4 m sides"],"$4\sqrt{2}$ m"],[["Tangga 4 m, sudut $45^\circ$ dengan tanah: tinggi","4 m ladder, $45^\circ$ to the ground: height"],"$2\sqrt{2}$ m"]],
+sol:["$$60^\circ:\ a=\frac{4}{2}=2,\ t=2\sqrt{3}$$","$$\text{persegi / square}:\ d=4\sqrt{2}$$","$$45^\circ:\ t=\frac{4}{\sqrt{2}}=\frac{4\sqrt{2}}{2}=2\sqrt{2}$$"]},
+{t:"sort",q:["Urutkan langkah menyelesaikan soal cerita segitiga istimewa.","Put the steps for solving a special-triangle word problem in order."],items:[["Baca soal dan tentukan yang ditanyakan","Read the problem and decide what is asked"],["Buat sketsa dan tandai sudut serta sisi yang diketahui","Draw a sketch and mark the known angles and sides"],["Kenali jenis segitiga dan sisi yang diketahui","Identify the triangle type and the known side"],["Terapkan pola perbandingan sisi","Apply the side-ratio pattern"],["Hitung pendekatan dan tulis satuan","Calculate the approximation and write the units"]],sol:[["Urutan: pahami → sketsa → kenali → hitung dengan pola → pendekatan dan satuan.","Order: understand → sketch → identify → use the pattern → approximate with units."]]},
+{t:"fill",q:["Penampang atap berbentuk segitiga sama kaki dengan alas 12 m dan kedua sudut alas $30^\circ$. Tentukan tinggi atap.","A roof cross-section is an isosceles triangle with a 12 m base and both base angles $30^\circ$. Find the height of the roof."],fig:ROOF(),b:[{pre:"$t=$",post:"$\sqrt{3}$ m",a:["2"]}],
+sol:[["Garis tinggi membagi atap menjadi dua segitiga $30^\circ$–$60^\circ$–$90^\circ$. Setengah alas $=6$ m berada di depan sudut $60^\circ$ (sudut di puncak) → kaki panjang. Tinggi berada di depan $30^\circ$ → kaki pendek.","The height splits the roof into two $30^\circ$–$60^\circ$–$90^\circ$ triangles. Half the base $=6$ m is opposite the $60^\circ$ angle (at the top) → long leg. The height is opposite $30^\circ$ → short leg."],"$$t=\frac{6}{\sqrt{3}}=\frac{6\sqrt{3}}{3}=2\sqrt{3}\approx3.46\text{ m}$$"]},
+{t:"dd",q:["Seret setiap situasi ke operasi yang dipakai.","Drag each situation to the operation that is used."],bins:[["Kalikan $\sqrt{2}$","Multiply by $\sqrt{2}$"],["Kalikan $\sqrt{3}$","Multiply by $\sqrt{3}$"],["Kalikan 2 atau bagi 2","Multiply or divide by 2"]],items:[[["Diagonal layar persegi dari sisinya","Diagonal of a square screen from its side"],0],[["Jarak antar pojok berseberangan lapangan persegi","Distance between opposite corners of a square field"],0],[["Tinggi tangga (sudut 60°) dari jarak kakinya","Height of a ladder (60°) from the distance of its foot"],1],[["Tinggi segitiga sama sisi dari setengah sisinya","Height of an equilateral triangle from half its side"],1],[["Panjang tangga (sudut 60°) dari jarak kakinya","Length of a ladder (60°) from the distance of its foot"],2],[["Tinggi ramp 30° dari panjang ramp","Height of a 30° ramp from the ramp length"],2]],
+sol:[["$\times\sqrt{2}$: kaki → sisi miring 45–45–90 (diagonal persegi).","$\times\sqrt{2}$: leg → hypotenuse in 45–45–90 (a square's diagonal)."],["$\times\sqrt{3}$: kaki pendek → kaki panjang 30–60–90.","$\times\sqrt{3}$: short leg → long leg in 30–60–90."],["$\times2$ / $\div2$: kaki pendek ↔ sisi miring 30–60–90. Jarak kaki tangga 60° adalah kaki pendek; tangga = sisi miring; tinggi ramp 30° = kaki pendek.","$\times2$ / $\div2$: short leg ↔ hypotenuse in 30–60–90. The foot distance of a 60° ladder is the short leg; the ladder is the hypotenuse; the height of a 30° ramp is the short leg."]]}
+]},
+
+{id:"task5",title:["Tugas 5: Tantangan (HOTS)","Task 5: Challenge (HOTS)"],intro:["Gabungkan segitiga istimewa dengan keliling dan luas.","Combine special triangles with perimeter and area."],ex:[
+{t:"fill",q:["Keliling sebuah persegi 32 cm. Tentukan panjang diagonalnya.","A square has a perimeter of 32 cm. Find the length of its diagonal."],b:[{pre:"$d=$",post:"$\sqrt{2}$ cm",a:["8"]}],sol:["$$s=\frac{32}{4}=8\text{ cm}\qquad d=8\sqrt{2}\text{ cm}$$"]},
+{t:"mc",q:["Tinggi sebuah segitiga sama sisi adalah $6\sqrt{3}$ cm. Panjang sisinya adalah …","The height of an equilateral triangle is $6\sqrt{3}$ cm. The length of its side is …"],o:["$12$ cm","$6$ cm","$12\sqrt{3}$ cm","$18$ cm"],sol:[["Tinggi $=a\sqrt{3}$ dengan $a$ = setengah sisi. Dari $a\sqrt{3}=6\sqrt{3}$ diperoleh $a=6$.","Height $=a\sqrt{3}$ where $a$ = half the side. From $a\sqrt{3}=6\sqrt{3}$ we get $a=6$."],"$$s=2a=12\text{ cm}$$"]},
+{t:"fill",q:["Tentukan luas segitiga sama sisi bersisi 10 cm.","Find the area of an equilateral triangle with 10 cm sides."],b:[{pre:"$L=$",post:"$\sqrt{3}$ cm²",a:["25"]}],sol:["$$h=5\sqrt{3}\qquad L=\frac{1}{2}\times10\times5\sqrt{3}=25\sqrt{3}\text{ cm}^2$$"]},
+{t:"mc",q:["Diagonal sebuah persegi panjang 16 cm dan membentuk sudut $30^\circ$ dengan sisi yang lebih panjang. Luas persegi panjang adalah …","The diagonal of a rectangle is 16 cm and makes a $30^\circ$ angle with the longer side. The area of the rectangle is …"],fig:RECT(),o:["$64\sqrt{3}$ cm²","$128$ cm²","$32\sqrt{3}$ cm²","$64\sqrt{2}$ cm²"],
+sol:[["Diagonal membagi persegi panjang menjadi segitiga $30^\circ$–$60^\circ$–$90^\circ$ dengan sisi miring 16. Lebar berada di depan $30^\circ$ → kaki pendek; panjang → kaki panjang.","The diagonal splits the rectangle into $30^\circ$–$60^\circ$–$90^\circ$ triangles with hypotenuse 16. The width is opposite $30^\circ$ → short leg; the length → long leg."],"$$l=\frac{16}{2}=8\qquad p=8\sqrt{3}\qquad L=p\times l=8\sqrt{3}\times8=64\sqrt{3}\text{ cm}^2$$",["($p$ = panjang = length, $l$ = lebar = width)","($p$ = length, $l$ = width)"]]},
+{t:"fill",q:["Segi enam beraturan bersisi 4 cm tersusun atas 6 segitiga sama sisi. Tentukan luasnya.","A regular hexagon with 4 cm sides is made of 6 equilateral triangles. Find its area."],fig:HEX(),b:[{pre:"$L=$",post:"$\sqrt{3}$ cm²",a:["24"]}],
+sol:[["Satu segitiga sama sisi bersisi 4: tinggi $=2\sqrt{3}$.","One equilateral triangle with side 4: height $=2\sqrt{3}$."],"$$L_{\triangle}=\frac{1}{2}\times4\times2\sqrt{3}=4\sqrt{3}\qquad L=6\times4\sqrt{3}=24\sqrt{3}\text{ cm}^2$$"]},
+{t:"tf",q:["Tentukan benar atau salah.","Decide true or false."],s:[[["Jika sisi miring segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah 10, luasnya 25.","If the hypotenuse of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is 10, its area is 25."],true],[["Keliling segitiga $30^\circ$–$60^\circ$–$90^\circ$ dengan kaki pendek 2 adalah $6+2\sqrt{3}$.","The perimeter of a $30^\circ$–$60^\circ$–$90^\circ$ triangle with short leg 2 is $6+2\sqrt{3}$."],true],[["Jika kaki segitiga $45^\circ$–$45^\circ$–$90^\circ$ dijadikan dua kali, luasnya juga menjadi dua kali.","If the leg of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is doubled, its area also doubles."],false]],
+sol:["$$1)\ a=\frac{10}{\sqrt{2}}=5\sqrt{2},\ L=\tfrac{1}{2}(5\sqrt{2})^2=\tfrac{1}{2}\cdot50=25\ \Rightarrow\ \text{Benar / True}$$","$$2)\ 2+2\sqrt{3}+4=6+2\sqrt{3}\ \Rightarrow\ \text{Benar / True}$$","$$3)\ \tfrac{1}{2}(2a)^2=2a^2=4\cdot\tfrac{1}{2}a^2\ \Rightarrow\ \text{empat kali / four times}\Rightarrow\ \text{Salah / False}$$"]},
+{t:"multi",q:["Segitiga $ABC$ siku-siku di $C$, $\angle A=30^\circ$, dan $AB=20$. Pernyataan mana yang benar? (Pilih semua yang benar.)","Triangle $ABC$ is right-angled at $C$, $\angle A=30^\circ$ and $AB=20$. Which statements are true? (Select all that apply.)"],fig:ABC(),o:[["$BC=10$",true],["$AC=10\sqrt{3}$",true],["$\angle B=60^\circ$",true],[["Luas $=50\sqrt{3}$","Area $=50\sqrt{3}$"],true],["$AC=10$",false]],
+sol:[["$AB$ = sisi miring. $BC$ berada di depan $\angle A=30^\circ$ → kaki pendek; $AC$ di depan $\angle B=60^\circ$ → kaki panjang.","$AB$ = hypotenuse. $BC$ is opposite $\angle A=30^\circ$ → short leg; $AC$ is opposite $\angle B=60^\circ$ → long leg."],"$$BC=\frac{20}{2}=10\qquad AC=10\sqrt{3}\qquad \angle B=90^\circ-30^\circ=60^\circ$$","$$L=\frac{1}{2}\times10\times10\sqrt{3}=50\sqrt{3}\quad(\text{Luas = Area})$$"]},
+{t:"sort",q:["Urutkan bangun berikut dari luas terkecil ke terbesar.","Order these shapes from the smallest area to the largest."],items:[["Segitiga 45–45–90 dengan kaki 4","45–45–90 triangle with leg 4"],["Segitiga 30–60–90 dengan kaki pendek 4","30–60–90 triangle with short leg 4"],["Segitiga sama sisi bersisi 6","Equilateral triangle with side 6"],["Persegi bersisi 4","Square with side 4"]],
+sol:["$$45\text{–}45\text{–}90:\ \tfrac{1}{2}\cdot4\cdot4=8$$","$$30\text{–}60\text{–}90:\ \tfrac{1}{2}\cdot4\cdot4\sqrt{3}=8\sqrt{3}\approx13.86$$","$$\text{sama sisi / equilateral}:\ \tfrac{1}{2}\cdot6\cdot3\sqrt{3}=9\sqrt{3}\approx15.59$$","$$\text{persegi / square}:\ 4^2=16$$","$$8\lt13.86\lt15.59\lt16$$"]},
+{t:"fill",q:["Keliling segitiga $45^\circ$–$45^\circ$–$90^\circ$ adalah $12+6\sqrt{2}$. Tentukan panjang kakinya.","The perimeter of a $45^\circ$–$45^\circ$–$90^\circ$ triangle is $12+6\sqrt{2}$. Find the length of a leg."],b:[{pre:"$a=$",post:"",a:["6"]}],sol:["$$K=a+a+a\sqrt{2}=2a+a\sqrt{2}$$","$$2a+a\sqrt{2}=12+6\sqrt{2}\ \Rightarrow\ a=6\quad(2\cdot6=12,\ 6\sqrt{2})$$"]},
+{t:"pair",q:["Pasangkan setiap bangun dengan panjang yang diminta.","Match each shape with the requested length."],p:[[["Diagonal persegi dengan luas 50","Diagonal of a square with area 50"],"$10$"],[["Diagonal persegi dengan keliling 20","Diagonal of a square with perimeter 20"],"$5\sqrt{2}$"],[["Tinggi segitiga sama sisi dengan keliling 18","Height of an equilateral triangle with perimeter 18"],"$3\sqrt{3}$"],[["Tinggi segitiga sama sisi bersisi $2\sqrt{3}$","Height of an equilateral triangle with side $2\sqrt{3}$"],"$3$"]],
+sol:["$$s=\sqrt{50}=5\sqrt{2},\ d=5\sqrt{2}\cdot\sqrt{2}=10$$","$$s=\frac{20}{4}=5,\ d=5\sqrt{2}$$","$$s=\frac{18}{3}=6,\ h=3\sqrt{3}$$","$$h=\frac{2\sqrt{3}}{2}\cdot\sqrt{3}=\sqrt{3}\cdot\sqrt{3}=3$$"]}
+]}
+]
+})
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+{
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const T=x=>Array.isArray(x)?`<span class="tid">${x[0]}</span><span class="ten">${x[1]}</span>`:`<span class="tm">${x}</span>`;
+const sol=arr=>arr.map(x=>Array.isArray(x)?`<p class="bi">${T(x)}</p>`:`<div class="m">${x}</div>`).join('');
+window.T=T;
+window.P=(a,b)=>`<p class="bi">${T([a,b])}</p>`;
+window.H=(a,b)=>`<h3 class="bi">${T([a,b])}</h3>`;
+window.M=s=>`<div class="m">${s}</div>`;
+window.BOX=(k,t,b)=>`<div class="box ${k}"><div class="boxt">${T(t)}</div>${b}</div>`;
+window.EXM=(t,s)=>`<div class="exm"><div class="exmt">${T(t)}</div>${sol(s)}</div>`;
+window.UL=it=>`<ul class="bl">${it.map(x=>`<li>${T(x)}</li>`).join('')}</ul>`;
+window.FIG=(svg,cap)=>`<figure class="fg">${svg}${cap?`<figcaption>${T(cap)}</figcaption>`:''}</figure>`;
+window.ROW=(...h)=>`<div class="row2">${h.map(x=>`<div>${x}</div>`).join('')}</div>`;
+window.FU=list=>list.map((x,i)=>`<div class="fu"><b>${i+1}.</b> ${T(x[0])}<details class="sol"><summary>${T(['Lihat jawaban','See answer'])}</summary><div>${sol(x[1])}</div></details></div>`).join('');
+const tx=(x,y,s,a='middle',c='svgt')=>s?`<text x="${x}" y="${y}" text-anchor="${a}" class="${c}">${s}</text>`:'';
+const sv=(w,h,b)=>`<svg viewBox="0 0 ${w} ${h}" role="img" aria-hidden="true">${b}</svg>`;
+window.F45=o=>{const red=o.plain?'var(--teal)':'var(--red)',f=o.plain?'var(--steal)':'var(--sred)';
+ return sv(o.small?360:280,240,`<path d="M50 200 L230 200 L50 20 Z" fill="${f}" stroke="${red}" stroke-width="3" stroke-linejoin="round"/><path d="M50 182 h18 v18" fill="none" stroke="${red}" stroke-width="2"/>`+
+ tx(140,226,o.a)+tx(40,114,o.b,'end')+(o.small?tx(150,92,o.c,'start','svga'):tx(152,96,o.c,'start'))+(o.plain?'':tx(196,192,'45°','middle','svga')+tx(55,70,'45°','start','svga')))};
+window.F3060=o=>sv(290,230,`<path d="M40 190 L230 190 L40 80 Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/><path d="M40 172 h18 v18" fill="none" stroke="var(--teal)" stroke-width="2"/>`+
+ tx(186,183,'30°','middle','svga')+tx(50,112,'60°','start','svga')+tx(30,140,o.s,'end')+tx(135,214,o.l)+tx(146,122,o.h,'start'));
+window.SQ=(s,d)=>{s=s===undefined?'a':s;d=d===undefined?'d = a√2':d;return sv(260,230,`<rect x="50" y="20" width="170" height="170" fill="var(--sred)" stroke="var(--red)" stroke-width="3"/><path d="M50 190 L220 20" stroke="var(--red)" stroke-width="3" stroke-dasharray="7 5"/><path d="M202 190 v-18 h18 M50 38 h18 v-18" fill="none" stroke="var(--red)" stroke-width="2"/>`+
+ tx(135,214,s)+tx(42,110,s,'end')+tx(150,128,d,'start')+tx(80,182,'45°','start','svga'))};
+window.EQ=()=>sv(300,240,`<path d="M150 20 L40 210 L260 210 Z" fill="var(--sred)" stroke="var(--red)" stroke-width="3" stroke-linejoin="round"/><path d="M150 20 L150 210 L260 210 Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/><path d="M150 192 h18 v18" fill="none" stroke="var(--teal)" stroke-width="2"/>`+
+ tx(84,112,'2a','end')+tx(214,112,'2a','start')+tx(95,232,'a')+tx(205,232,'a')+tx(144,150,'h = a√3','end')+tx(62,202,'60°','start','svga')+tx(240,202,'60°','end','svga')+tx(153,82,'30°','start','svga'));
+window.SETSQ=()=>sv(330,240,`<path d="M20 220 L20 50 L190 220 Z" fill="var(--sred)" stroke="var(--red)" stroke-width="3" stroke-linejoin="round"/><path d="M44 196 L44 108 L132 196 Z" fill="var(--bg)" stroke="var(--red)" stroke-width="1.5"/><path d="M170 220 L310 220 L170 139 Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/><path d="M188 208 L262 208 L188 166 Z" fill="var(--bg)" stroke="var(--teal)" stroke-width="1.5"/>`+
+ tx(150,214,'45°','middle','svga')+tx(25,94,'45°','start','svga')+tx(286,214,'30°','middle','svga')+tx(175,160,'60°','start','svga'));
+window.LADDER=(c,t)=>{c=c===undefined?'8 m':c;t=t===undefined?'?':t;return sv(260,240,`<rect x="40" y="10" width="16" height="200" fill="var(--panel)" stroke="var(--muted)"/><path d="M20 210 H250" stroke="var(--muted)" stroke-width="3"/><path d="M56 210 V40" stroke="var(--teal)" stroke-width="2" stroke-dasharray="6 4"/><path d="M56 192 h18 v18" fill="none" stroke="var(--teal)" stroke-width="2"/><path d="M56 40 L154 210" stroke="var(--red)" stroke-width="6" stroke-linecap="round"/>`+
+ [1,2,3,4,5,6].map(i=>`<circle cx="${(56+i*14).toFixed(1)}" cy="${(40+i*24.3).toFixed(1)}" r="3" fill="var(--bg)"/>`).join('')+
+ `<path d="M124 210 A30 30 0 0 1 139 184" fill="none" stroke="var(--ink)" stroke-width="2"/>`+
+ tx(116,200,'60°','end','svga')+tx(59,106,'30°','start','svga')+tx(116,118,c,'start')+tx(62,160,t,'start'))};
+window.RAMP=(c,t)=>{c=c===undefined?'6 m':c;t=t===undefined?'?':t;return sv(300,200,`<path d="M30 170 H280" stroke="var(--muted)" stroke-width="3"/><path d="M40 170 L250 170 L250 49 Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/><path d="M232 170 v-18 h18" fill="none" stroke="var(--teal)" stroke-width="2"/><path d="M90 170 A50 50 0 0 0 84 146" fill="none" stroke="var(--ink)" stroke-width="2"/>`+
+ tx(100,160,'30°','start','svga')+tx(136,98,c,'end')+tx(260,116,t,'start'))};
+window.ROOF=()=>sv(320,190,`<path d="M30 160 L290 160 L160 85 Z" fill="var(--sred)" stroke="var(--red)" stroke-width="3" stroke-linejoin="round"/><path d="M160 85 V160" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="6 4"/><path d="M160 142 h18 v18" fill="none" stroke="var(--teal)" stroke-width="2"/>`+
+ tx(64,154,'30°','start','svga')+tx(256,154,'30°','end','svga')+tx(160,184,'12 m')+tx(152,128,'t = ?','end'));
+window.RECT=()=>sv(300,170,`<rect x="40" y="20" width="208" height="120" fill="var(--steal)" stroke="var(--teal)" stroke-width="3"/><path d="M40 140 L248 20" stroke="var(--red)" stroke-width="3"/>`+
+ tx(92,134,'30°','start','svga')+tx(140,72,'16 cm','end')+tx(144,162,'p')+tx(258,84,'l','start'));
+window.HEX=()=>{const p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i;p.push([150+90*Math.cos(a),110+90*Math.sin(a)])}
+ return sv(300,220,`<path d="M${p.map(x=>x.map(v=>v.toFixed(1)).join(' ')).join(' L')} Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3"/>`+p.map(x=>`<path d="M150 110 L${x[0].toFixed(1)} ${x[1].toFixed(1)}" stroke="var(--teal)" stroke-width="1.5"/>`).join('')+tx(198,212,'4 cm'))};
+window.ABC=()=>sv(300,200,`<path d="M40 160 L250 160 L250 40 Z" fill="var(--steal)" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round"/><path d="M232 160 v-18 h18" fill="none" stroke="var(--teal)" stroke-width="2"/>`+
+ tx(28,170,'A','end')+tx(262,170,'C','start')+tx(262,40,'B','start')+tx(96,152,'30°','start','svga')+tx(140,92,'20','end'));
+
+const raw=document.getElementById('lesson-data').textContent.replace(/\\/g,'\\\\');
+const D=new Function('return '+raw.trim())();
+
+const ICON={flame:'<path d="M12 22c4 0 7-3 7-7 0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2-4-3 3-5 5-5 8 0 4 3 7 7 7z"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',refresh:'<path d="M20 11a8 8 0 1 0-2 6"/><path d="M20 4v7h-7"/>',question:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5h.01"/>',steps:'<path d="M4 20h5v-5h5v-5h6"/>',pencil:'<path d="M4 20l4-1 11-11-3-3L5 16z"/>',flag:'<path d="M5 21V4h11l-2 4 2 4H5"/>',task:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 11l2 2 4-4M9 17h6"/>'};
+const ic=n=>`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[n]}</svg>`;
+
+const TYPES={mc:[['Pilihan ganda','Multiple choice'],['Pilih satu jawaban.','Choose one answer.']],
+multi:[['Pilihan ganda kompleks','Multiple response'],['Pilih semua jawaban yang benar (bisa lebih dari satu).','Select all correct answers (there may be more than one).']],
+fill:[['Isian singkat','Fill in the blank'],['Ketik bilangan saja. Desimal boleh memakai titik atau koma.','Type a number only. You may use a point or a comma for decimals.']],
+tf:[['Benar / Salah','True / False'],['Tentukan Benar atau Salah untuk setiap pernyataan.','Choose True or False for each statement.']],
+sort:[['Mengurutkan','Sorting'],['Seret kartu atau gunakan tombol ↑ ↓ untuk mengurutkan.','Drag the cards or use the ↑ ↓ buttons to put them in order.']],
+pair:[['Menjodohkan','Matching pairs'],['Klik satu kartu di kiri, lalu klik pasangannya di kanan.','Click a card on the left, then click its match on the right.']],
+dd:[['Seret dan lepas','Drag and drop'],['Seret setiap kartu ke kotak yang tepat, atau klik kartu lalu klik kotaknya.','Drag each card into the correct box, or click a card and then click a box.']]};
+const COLORS=['#e4572e','#0d7a78','#9a6b00','#6a4cc2','#2b6cb0'];
+
+const REG={};let QN=0;
+
+function qBody(id){
+ const R=REG[id],q=R.q;let h='';
+ if(q.t==='mc'){R.opts=shuffle(q.o.map((x,i)=>({x,c:i===0})));h=`<div class="opts">${R.opts.map((o,k)=>`<label class="opt"><input type="radio" name="${id}" value="${k}"><span>${T(o.x)}</span></label>`).join('')}</div>`}
+ else if(q.t==='multi'){R.opts=shuffle(q.o.map(x=>({x:x[0],c:x[1]})));h=`<div class="opts">${R.opts.map((o,k)=>`<label class="opt"><input type="checkbox" value="${k}"><span>${T(o.x)}</span></label>`).join('')}</div>`}
+ else if(q.t==='fill'){h=q.b.map((b,k)=>`<div class="blank">${b.pre}<input type="text" inputmode="decimal" autocomplete="off" data-k="${k}" aria-label="jawaban / answer ${k+1}">${b.post}</div>`).join('')}
+ else if(q.t==='tf'){R.rows=shuffle(q.s);h=R.rows.map((r,k)=>`<div class="tfrow"><div>${T(r[0])}</div><div class="tfb"><label><input type="radio" name="${id}_${k}" value="1"><span>${T(['Benar','True'])}</span></label><label><input type="radio" name="${id}_${k}" value="0"><span>${T(['Salah','False'])}</span></label></div></div>`).join('')}
+ else if(q.t==='sort'){let o;do{o=shuffle(q.items.map((x,i)=>i))}while(o.every((v,i)=>v===i));h=`<ol class="slist">${o.map(i=>`<li class="sitem" draggable="true" data-k="${i}"><span class="grip">⠿</span><span class="stx">${T(q.items[i])}</span><button type="button" class="mv" data-mv="-1" aria-label="naik / up">↑</button><button type="button" class="mv" data-mv="1" aria-label="turun / down">↓</button></li>`).join('')}</ol>`}
+ else if(q.t==='pair'){R.map={};R.sel=null;const L=shuffle(q.p.map((x,i)=>i)),Rr=shuffle(q.p.map((x,i)=>i));R.L=L;
+  h=`<div class="pairs"><div class="pcol">${L.map(i=>`<button type="button" class="pc pl" data-i="${i}"><span class="pb"></span>${T(q.p[i][0])}</button>`).join('')}</div><div class="pcol">${Rr.map(j=>`<button type="button" class="pc pr" data-j="${j}"><span class="pb"></span>${T(q.p[j][1])}</button>`).join('')}</div></div>`}
+ else if(q.t==='dd'){R.sel=null;const it=shuffle(q.items.map((x,i)=>i));const cls=['','alt','alt2'];
+  h=`<div class="ddwrap"><div class="pool" data-bin="-1">${it.map(i=>`<button type="button" class="chip" draggable="true" data-k="${i}">${T(q.items[i][0])}</button>`).join('')}</div><div class="bins">${q.bins.map((b,k)=>`<div class="bin ${cls[k%3]}" data-bin="${k}"><div class="bt">${T(b)}</div><div class="drop"></div></div>`).join('')}</div></div>`}
+ return h;
+}
+function qHTML(q,num,group,solLabel){
+ const id='q'+(++QN);REG[id]={q,num,group,solLabel,ok:false};
+ return `<article class="q" id="${id}">${qInner(id)}</article>`;
+}
+function qInner(id){
+ const R=REG[id],q=R.q,ty=TYPES[q.t];
+ return `<div class="qhead"><span class="qnum">${T(['Soal '+R.num,'Question '+R.num])}</span><span class="qtype">${T(ty[0])}</span></div>
+ <div class="qtext">${T(q.q)}</div>${q.fig?`<figure class="fg">${q.fig}</figure>`:''}<div class="hint">${T(ty[1])}</div>
+ <div class="qbody">${qBody(id)}</div>
+ <div class="qact"><button type="button" class="btn" data-act="check">${T(['Periksa','Check'])}</button><button type="button" class="btn ghost" data-act="reset">${T(['Ulangi (acak ulang)','Retry (reshuffle)'])}</button><div class="fb" aria-live="polite"></div></div>
+ <details class="sol"><summary>${T(R.solLabel)}</summary><div>${sol(q.sol)}</div></details>`;
+}
+const norm=s=>s.trim().toLowerCase().replace(/\s+/g,'').replace(',','.');
+const isNum=s=>/^-?\d+(\.\d+)?$/.test(s);
+function check(id){
+ const R=REG[id],q=R.q,el=document.getElementById(id);let ok=false,done=true;
+ el.querySelectorAll('.ok,.no').forEach(e=>e.classList.remove('ok','no'));
+ if(q.t==='mc'){const s=el.querySelector('input:checked');if(!s)done=false;else{ok=R.opts[s.value].c;s.closest('.opt').classList.add(ok?'ok':'no')}}
+ else if(q.t==='multi'){const ins=[...el.querySelectorAll('.opts input')];if(!ins.some(i=>i.checked))done=false;else{ok=true;ins.forEach(i=>{const c=R.opts[i.value].c;if(i.checked!==c)ok=false;if(i.checked)i.closest('.opt').classList.add(c?'ok':'no')})}}
+ else if(q.t==='fill'){const ins=[...el.querySelectorAll('.blank input')];if(ins.some(i=>!i.value.trim()))done=false;else{ok=true;ins.forEach(i=>{const b=q.b[i.dataset.k],v=norm(i.value);const g=b.a.some(a=>{a=norm(a);if(v===a)return true;if(isNum(v)&&isNum(a))return Math.abs(parseFloat(v)-parseFloat(a))<=(b.tol||1e-9);return false});i.classList.add(g?'ok':'no');if(!g)ok=false})}}
+ else if(q.t==='tf'){const rows=[...el.querySelectorAll('.tfrow')];if(rows.some(r=>!r.querySelector('input:checked')))done=false;else{ok=true;rows.forEach((r,k)=>{const v=r.querySelector('input:checked').value==='1';const g=v===R.rows[k][1];r.classList.add(g?'ok':'no');if(!g)ok=false})}}
+ else if(q.t==='sort'){const li=[...el.querySelectorAll('.sitem')];ok=true;li.forEach((l,i)=>{const g=+l.dataset.k===i;l.classList.add(g?'ok':'no');if(!g)ok=false})}
+ else if(q.t==='pair'){if(Object.keys(R.map).length<q.p.length)done=false;else{ok=true;el.querySelectorAll('.pl').forEach(b=>{const i=+b.dataset.i,g=R.map[i]===i;b.classList.add(g?'ok':'no');el.querySelector(`.pr[data-j="${R.map[i]}"]`).classList.add(g?'ok':'no');if(!g)ok=false})}}
+ else if(q.t==='dd'){if(el.querySelector('.pool .chip'))done=false;else{ok=true;el.querySelectorAll('.bin').forEach(b=>{b.querySelectorAll('.chip').forEach(c=>{const g=q.items[c.dataset.k][1]===+b.dataset.bin;c.classList.add(g?'ok':'no');if(!g)ok=false})})}}
+ const fb=el.querySelector('.fb');
+ if(!done){fb.className='fb wait';fb.innerHTML=T(['Lengkapi jawabanmu terlebih dahulu.','Please complete your answer first.']);return}
+ R.ok=ok;fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML=ok?T(['Benar! Kerja bagus.','Correct! Well done.']):T(['Belum tepat. Perbaiki yang merah atau buka pembahasan.','Not quite. Fix the red parts or open the solution.']);
+ score(R.group);
+}
+function score(g){const s=document.getElementById('score-'+g);if(!s)return;const all=Object.values(REG).filter(r=>r.group===g);s.querySelector('b').textContent=all.filter(r=>r.ok).length+' / '+all.length}
+function math(el){if(window.renderMathInElement)renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})}
+function reset(id){const R=REG[id];R.ok=false;R.selEl=null;const el=document.getElementById(id);el.innerHTML=qInner(id);math(el);score(R.group)}
+function paintPairs(id){const R=REG[id],el=document.getElementById(id);el.querySelectorAll('.pc').forEach(b=>{b.classList.remove('sel','ok','no');const pb=b.querySelector('.pb');pb.textContent='';pb.style.background='';pb.style.borderStyle=''});
+ R.L.forEach((i,n)=>{if(R.map[i]!==undefined){const c=COLORS[n%COLORS.length];[el.querySelector(`.pl[data-i="${i}"] .pb`),el.querySelector(`.pr[data-j="${R.map[i]}"] .pb`)].forEach(pb=>{pb.textContent=n+1;pb.style.background=c;pb.style.borderStyle='solid';pb.style.borderColor=c})}});
+ if(R.sel!==null)el.querySelector(`.pl[data-i="${R.sel}"]`).classList.add('sel')}
+
+/* build page */
+const SOL=['Lihat pembahasan','See solution'],EXPL=['Lihat penjelasan','See explanation'];
+const nav=document.getElementById('nav'),main=document.getElementById('main');
+let navH=`<div class="navh">${T(['Alur pelajaran','Lesson flow'])}</div>`,mainH='';
+D.sections.forEach(s=>{
+ navH+=`<button type="button" class="nb" data-go="${s.id}">${ic(s.icon)}<span><small>${s.time}</small>${T(s.title)}</span></button>`;
+ const isC=s.id==='consolidation';
+ mainH+=`<section class="sec" id="${s.id}"><div class="sechead"><div><span class="time">${s.time}</span><h2>${T(s.title)}</h2></div>${isC?`<div class="score" id="score-${s.id}"><b>0 / ${s.ex.length}</b>${T(['Exit ticket','Exit ticket'])}</div>`:''}</div>
+ <div class="card">${s.expl}</div>
+ ${isC?'':`<div class="exhead">${ic('pencil')}<h3>${T(['Latihan (5 soal)','Exercises (5 questions)'])}</h3></div>`}
+ ${s.ex.map((q,i)=>qHTML(q,i+1,s.id,SOL)).join('')}</section>`;
+});
+navH+=`<div class="navh">${T(['Tugas','Tasks'])}</div>`;
+D.tasks.forEach((t,ti)=>{
+ navH+=`<button type="button" class="nb" data-go="${t.id}">${ic('task')}<span><small>10 soal / 10 questions</small>${T(['Tugas '+(ti+1),'Task '+(ti+1)])}</span></button>`;
+ mainH+=`<section class="sec" id="${t.id}"><div class="sechead"><div><span class="time">Tugas ${ti+1} · Task ${ti+1}</span><h2>${T(t.title)}</h2></div><div class="score" id="score-${t.id}"><b>0 / ${t.ex.length}</b>${T(['Skor','Score'])}</div></div>
+ <div class="card"><p class="bi">${T(t.intro)}</p><p class="bi">${T(['Kerjakan setiap soal, tekan <b>Periksa</b>, lalu buka <b>Lihat penjelasan</b> untuk langkah lengkapnya.','Work through each question, press <b>Check</b>, then open <b>See explanation</b> for the full steps.'])}</p></div>
+ ${t.ex.map((q,i)=>qHTML(q,i+1,t.id,EXPL)).join('')}</section>`;
+});
+nav.innerHTML=navH;main.innerHTML=mainH;
+math(document.body);
+
+const ids=[...D.sections.map(s=>s.id),...D.tasks.map(t=>t.id)];
+function go(id,push){if(!ids.includes(id))id=ids[0];document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id===id));document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+ if(push){try{history.replaceState(null,'','#'+id)}catch(e){}const top=main.getBoundingClientRect().top+scrollY-90;if(scrollY>top)scrollTo({top:Math.max(0,top)})}
+ const nb=nav.querySelector('.nb.on');if(nb&&nb.scrollIntoView&&innerWidth<=900)nb.scrollIntoView({block:'nearest',inline:'center'})}
+go(location.hash.slice(1),false);
+addEventListener('hashchange',()=>go(location.hash.slice(1),false));
+
+/* modal */
+const modal=document.getElementById('rules');
+document.getElementById('rulesBtn').addEventListener('click',()=>{modal.classList.add('on');document.getElementById('rulesClose').focus()});
+document.getElementById('rulesClose').addEventListener('click',()=>modal.classList.remove('on'));
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('on')});
+addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.remove('on')});
+
+/* interactions */
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(g){go(g.dataset.go,true);return}
+ const qel=e.target.closest('.q');if(!qel)return;const id=qel.id,R=REG[id];
+ const act=e.target.closest('[data-act]');if(act){act.dataset.act==='check'?check(id):reset(id);return}
+ const mv=e.target.closest('.mv');if(mv){const li=mv.closest('.sitem'),ul=li.parentNode;if(mv.dataset.mv==='-1'&&li.previousElementSibling)ul.insertBefore(li,li.previousElementSibling);else if(mv.dataset.mv==='1'&&li.nextElementSibling)ul.insertBefore(li.nextElementSibling,li);ul.querySelectorAll('.ok,.no').forEach(x=>x.classList.remove('ok','no'));mv.focus();return}
+ const pl=e.target.closest('.pl');if(pl){const i=+pl.dataset.i;R.sel=R.sel===i?null:i;paintPairs(id);return}
+ const pr=e.target.closest('.pr');if(pr){if(R.sel===null){const fb=qel.querySelector('.fb');fb.className='fb wait';fb.innerHTML=T(['Pilih kartu di kiri terlebih dahulu.','Choose a card on the left first.']);return}
+  const j=+pr.dataset.j;for(const k in R.map)if(R.map[k]===j)delete R.map[k];R.map[R.sel]=j;R.sel=null;paintPairs(id);return}
+ if(R&&R.q.t==='dd'){
+  const chip=e.target.closest('.chip');
+  if(chip){if(R.selEl===chip){chip.classList.remove('sel');R.selEl=null}else{qel.querySelectorAll('.chip.sel').forEach(c=>c.classList.remove('sel'));chip.classList.add('sel');R.selEl=chip}return}
+  const bin=e.target.closest('.bin,.pool');if(bin&&R.selEl){(bin.classList.contains('bin')?bin.querySelector('.drop'):bin).appendChild(R.selEl);R.selEl.classList.remove('sel','ok','no');R.selEl=null}
+ }
+});
+let dragEl=null;
+document.addEventListener('dragstart',e=>{const t=e.target.closest&&e.target.closest('.sitem,.chip');if(!t)return;dragEl=t;t.classList.add('dragging');try{e.dataTransfer.setData('text/plain','x');e.dataTransfer.effectAllowed='move'}catch(_){}});
+document.addEventListener('dragend',()=>{if(dragEl)dragEl.classList.remove('dragging');dragEl=null;document.querySelectorAll('.hot').forEach(x=>x.classList.remove('hot'))});
+document.addEventListener('dragover',e=>{if(!dragEl)return;const q=dragEl.closest('.q');
+ if(dragEl.classList.contains('sitem')){const ul=e.target.closest&&e.target.closest('.slist');if(!ul||ul.closest('.q')!==q)return;e.preventDefault();const after=[...ul.querySelectorAll('.sitem:not(.dragging)')].find(li=>e.clientY<li.getBoundingClientRect().top+li.offsetHeight/2);ul.insertBefore(dragEl,after||null);ul.querySelectorAll('.ok,.no').forEach(x=>x.classList.remove('ok','no'))}
+ else{const b=e.target.closest&&e.target.closest('.bin,.pool');if(!b||b.closest('.q')!==q)return;e.preventDefault();document.querySelectorAll('.hot').forEach(x=>x!==b&&x.classList.remove('hot'));b.classList.add('hot')}});
+document.addEventListener('drop',e=>{if(!dragEl)return;if(dragEl.classList.contains('chip')){const b=e.target.closest&&e.target.closest('.bin,.pool');if(b&&b.closest('.q')===dragEl.closest('.q')){e.preventDefault();(b.classList.contains('bin')?b.querySelector('.drop'):b).appendChild(dragEl);dragEl.classList.remove('ok','no','sel')}}else e.preventDefault()});
+}
+</script>
+</body>
+</html>
