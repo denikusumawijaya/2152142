@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teorema Pythagoras: Rumus Jarak | Math Tutoring by Deni</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1e3a5f;--teal:#0f9d8a;--teal2:#14b8a6;--sun:#f59e0b;--rose:#e11d48;--ink:#1f2937;--muted:#64748b;--bg:#f4f7fb;--card:#fff;--line:#e2e8f0;--ok:#16a34a;--bad:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+.ten{display:block;font-style:italic;font-size:.86em;color:var(--muted);font-weight:400}
+.tid{display:block}
+i{font-style:italic}
+header{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,var(--navy),#27527f 60%,var(--teal));color:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.brand{font-weight:800;font-size:1.25rem;letter-spacing:.3px}
+.brand span{color:#fde68a}
+.topic{font-size:.95rem;font-weight:600}
+.topic .en2{font-style:italic;opacity:.85;font-weight:400;font-size:.88rem}
+.rulesbtn{background:#fde68a;color:var(--navy);border:none;padding:10px 18px;border-radius:999px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.95rem;box-shadow:0 3px 0 #d4a017}
+.rulesbtn:hover{transform:translateY(-1px)}
+.wrap{display:grid;grid-template-columns:1fr 3fr;gap:22px;padding:22px;max-width:1500px;margin:0 auto}
+nav{position:sticky;top:92px;align-self:start;background:var(--card);border-radius:16px;padding:14px;box-shadow:0 2px 10px rgba(30,58,95,.08);max-height:calc(100vh - 110px);overflow:auto}
+nav h3{margin:4px 8px 10px;font-size:.95rem;color:var(--navy)}
+.navbtn{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:none;background:none;padding:9px 10px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:.92rem;color:var(--ink);margin-bottom:3px}
+.navbtn:hover{background:#eef6ff}
+.navbtn.active{background:linear-gradient(90deg,#d1fae5,#e0f2fe);font-weight:700;box-shadow:inset 4px 0 0 var(--teal)}
+.navbtn .ic{font-size:1.2rem;line-height:1.3}
+.navbtn small{display:block;color:var(--muted);font-style:italic;font-weight:400}
+.navbtn .tm{display:inline-block;background:#e2e8f0;border-radius:6px;padding:0 6px;font-size:.75rem;color:var(--navy);font-weight:700;font-style:normal;margin-top:2px}
+.navsep{border-top:1px dashed var(--line);margin:10px 4px}
+main section{display:none;animation:fade .35s}
+main section.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.hero{background:var(--card);border-radius:18px;padding:22px 26px;box-shadow:0 2px 10px rgba(30,58,95,.08);margin-bottom:18px;border-top:6px solid var(--teal)}
+.hero h2{margin:0 0 4px;color:var(--navy);font-size:1.6rem}
+.hero h2 .ten{font-size:.75em}
+.timechip{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:3px 12px;font-size:.8rem;font-weight:700;margin-bottom:8px}
+.box{background:var(--card);border-radius:16px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(30,58,95,.06);border-left:6px solid var(--teal2)}
+.box h3{margin:0 0 8px;color:var(--navy);font-size:1.2rem}
+.box h3 .ten{font-size:.8em}
+.box.sun{border-left-color:var(--sun)} .box.rose{border-left-color:var(--rose)} .box.navy{border-left-color:var(--navy)} .box.violet{border-left-color:#7c3aed}
+.formula{background:linear-gradient(135deg,#ecfeff,#f0fdf4);border:2px dashed var(--teal);border-radius:14px;padding:14px;margin:12px 0;text-align:center;font-size:1.15rem}
+.example{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 16px;margin:10px 0}
+.example .exh{font-weight:800;color:#b45309}
+.warnbox{background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:12px 16px;margin:10px 0}
+.steps{counter-reset:st;list-style:none;padding:0;margin:8px 0}
+.steps>li{counter-increment:st;position:relative;padding:6px 0 6px 44px;margin-bottom:6px}
+.steps>li::before{content:counter(st);position:absolute;left:0;top:6px;width:32px;height:32px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.fig{text-align:center;margin:10px 0}
+.gsvg{width:100%;height:auto}
+.sqgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.sqgrid div{background:#eef6ff;border-radius:10px;padding:6px;text-align:center;font-size:.95rem}
+table.tb{border-collapse:collapse;width:100%;margin:8px 0;font-size:.95rem}
+.tb th,.tb td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.tb th{background:#f1f5f9;color:var(--navy)}
+.reallist{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}
+.reallist div{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.reallist .em{font-size:2rem}
+.sechead{display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px;gap:10px;flex-wrap:wrap}
+.sechead h3{margin:0;color:var(--navy);font-size:1.3rem}
+.scorebar{background:var(--navy);color:#fff;border-radius:999px;padding:6px 16px;font-weight:700;font-size:.9rem}
+.qcard{background:var(--card);border-radius:16px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(30,58,95,.07);border:1px solid var(--line)}
+.qhead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.qnum{font-weight:800;color:var(--navy)}
+.badge{font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:999px;background:#e0f2fe;color:#075985}
+.b-multi{background:#ede9fe;color:#5b21b6}.b-fill{background:#fef3c7;color:#92400e}.b-tf{background:#fce7f3;color:#9d174d}.b-sort{background:#dcfce7;color:#166534}.b-pair{background:#ffedd5;color:#9a3412}.b-dnd{background:#e0e7ff;color:#3730a3}
+.qtext{font-size:1.02rem;margin-bottom:6px}
+.hint{font-size:.85rem;color:var(--muted);background:#f8fafc;border-radius:8px;padding:6px 10px;margin:8px 0}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;transition:.15s}
+.opt:hover{border-color:var(--teal2);background:#f0fdfa}
+.opt input{width:18px;height:18px;accent-color:var(--teal)}
+.opt.ok{border-color:var(--ok);background:#f0fdf4}.opt.bad{border-color:var(--bad);background:#fef2f2}
+.frow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0}
+.fin{width:110px;padding:8px 10px;border:2px solid #cbd5e1;border-radius:10px;font-size:1rem;font-family:inherit;text-align:center}
+.fin:focus{outline:none;border-color:var(--teal)}
+.fin.ok{border-color:var(--ok);background:#f0fdf4}.fin.bad{border-color:var(--bad);background:#fef2f2}
+.sortlist{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.sitem{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;cursor:grab}
+.sitem.dragging{opacity:.45}
+.sitem.ok{border-color:var(--ok);background:#f0fdf4}.sitem.bad{border-color:var(--bad);background:#fef2f2}
+.grip{color:#94a3b8;font-size:1.2rem}
+.stxt{flex:1}
+.sbtns button{border:1px solid var(--line);background:#f8fafc;border-radius:6px;cursor:pointer;padding:2px 8px;margin-left:2px}
+.slots{display:grid;gap:10px;margin:6px 0 12px}
+.srow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.slab{min-width:160px;background:#f1f5f9;border-radius:10px;padding:8px 12px;font-weight:600}
+.arrow{color:var(--muted);font-weight:800}
+.slot{min-width:130px;min-height:46px;border:2px dashed #94a3b8;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;padding:4px;background:#fafafa;cursor:pointer}
+.slot .ph{color:#94a3b8;font-weight:800}
+.slot.ok{border-color:var(--ok);border-style:solid;background:#f0fdf4}.slot.bad{border-color:var(--bad);border-style:solid;background:#fef2f2}
+.pool{background:#f8fafc;border-radius:12px;padding:10px}
+.pooltitle{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
+.chip{background:#fff;border:2px solid #6366f1;color:#312e81;border-radius:10px;padding:6px 12px;cursor:grab;font-weight:600;box-shadow:0 2px 0 #c7d2fe;user-select:none}
+.chip.sel{background:#e0e7ff;outline:3px solid #f59e0b}
+.qbtns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{border:none;border-radius:10px;padding:9px 16px;font-weight:800;cursor:pointer;font-family:inherit;font-size:.92rem}
+.btn.chk{background:var(--teal);color:#fff;box-shadow:0 3px 0 #0b7568}
+.btn.rst{background:#e2e8f0;color:var(--navy);box-shadow:0 3px 0 #cbd5e1}
+.btn i{font-weight:600;opacity:.85}
+.fb{margin-top:10px;border-radius:10px;font-weight:700}
+.fb.okk{background:#dcfce7;color:#166534;padding:8px 12px}
+.fb.nok{background:#fee2e2;color:#991b1b;padding:8px 12px}
+.fb.warn{background:#fef9c3;color:#854d0e;padding:8px 12px}
+details.sol{margin-top:12px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff}
+details.sol summary{cursor:pointer;padding:10px 14px;font-weight:800;color:#075985}
+.solbody{padding:4px 16px 14px}
+.solbody p{margin:6px 0}
+.mblock{overflow-x:auto;padding:4px 0}
+details.fu{background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0}
+details.fu summary{cursor:pointer;padding:10px 14px;font-weight:700}
+details.fu>div{padding:0 16px 12px}
+textarea{width:100%;min-height:70px;border:2px solid var(--line);border-radius:10px;padding:8px;font-family:inherit;font-size:.95rem}
+.pager{display:flex;justify-content:space-between;margin:20px 0 40px}
+.pager button{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;font-family:inherit}
+.pager button[disabled]{visibility:hidden}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.open{display:flex}
+.mcard{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:22px 26px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:fade .25s}
+.mcard h3{margin:0 0 12px;color:var(--navy)}
+.rule{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:12px;background:#f8fafc;margin-bottom:10px}
+.rule .em{font-size:1.6rem}
+.closeb{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-weight:800;cursor:pointer;float:right;font-family:inherit}
+.tag{display:inline-block;background:#fef3c7;color:#92400e;border-radius:6px;padding:0 6px;font-weight:700;font-size:.85em}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}nav{position:static;max-height:none}.twocol{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start}.sqgrid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand">📐 Math Tutoring <span>by Deni</span></div>
+    <div class="topic">Topik: Teorema Pythagoras: Rumus Jarak</div>
+    <div class="topic"><span class="en2">Topic: The Pythagorean Theorem: The Distance Formula</span></div>
+  </div>
+  <button class="rulesbtn" id="openRules">📋 Class rules</button>
+</header>
+
+<div class="modal" id="rulesModal">
+  <div class="mcard">
+    <h3>📋 Aturan Kelas <span class="ten">Class Rules</span></h3>
+    <div class="rule"><span class="em">🗣️</span><div><span class="tid">Berbicara secara bergantian.</span><span class="ten">Take turns speaking.</span></div></div>
+    <div class="rule"><span class="em">🙋</span><div><span class="tid">Meminta izin jika ingin meninggalkan kelas.</span><span class="ten">Ask for permission if you want to leave the class.</span></div></div>
+    <div class="rule"><span class="em">🎤</span><div><span class="tid">Menyalakan microphone dan camera jika diperlukan.</span><span class="ten">Turn on your microphone and camera when needed.</span></div></div>
+    <button class="closeb" id="closeRules">Tutup <i>/ Close</i></button>
+    <div style="clear:both"></div>
+  </div>
+</div>
+
+<div class="wrap">
+<nav id="nav">
+  <h3>🧭 Alur Pelajaran <span class="ten">Lesson Flow</span></h3>
+  <button class="navbtn active" data-go="s1"><span class="ic">🔥</span><span>Pemanasan Review Spiral<small>Spiral Review Warm-up</small><span class="tm">00:00–00:10</span></span></button>
+  <button class="navbtn" data-go="s2"><span class="ic">🌍</span><span>Pengantar &amp; Kaitan Dunia Nyata<small>Introduction &amp; Real-World Connection</small><span class="tm">00:10–00:15</span></span></button>
+  <button class="navbtn" data-go="s3"><span class="ic">🔁</span><span>Mengulas Pengetahuan Awal<small>Review of Prior Knowledge</small><span class="tm">00:15–00:20</span></span></button>
+  <button class="navbtn" data-go="s4"><span class="ic">❓</span><span>Pengenalan Masalah<small>Problem Introduction</small><span class="tm">00:20–00:25</span></span></button>
+  <button class="navbtn" data-go="s5"><span class="ic">🤝</span><span>Latihan Terbimbing<small>Guided Practice</small><span class="tm">00:25–00:40</span></span></button>
+  <button class="navbtn" data-go="s6"><span class="ic">🧠</span><span>Latihan Mandiri<small>Independent Practice</small><span class="tm">00:40–00:55</span></span></button>
+  <button class="navbtn" data-go="s7"><span class="ic">🎯</span><span>Konsolidasi &amp; Refleksi<small>Consolidation &amp; Reflection</small><span class="tm">00:55–01:00</span></span></button>
+  <div class="navsep"></div>
+  <button class="navbtn" data-go="t1"><span class="ic">📝</span><span>Tugas 1<small>Task 1 · Jarak Dasar / Basic Distance</small></span></button>
+  <button class="navbtn" data-go="t2"><span class="ic">📝</span><span>Tugas 2<small>Task 2 · Koordinat Negatif &amp; Akar / Negatives &amp; Surds</small></span></button>
+  <button class="navbtn" data-go="t3"><span class="ic">📝</span><span>Tugas 3<small>Task 3 · Soal Cerita / Word Problems</small></span></button>
+  <button class="navbtn" data-go="t4"><span class="ic">📝</span><span>Tugas 4<small>Task 4 · Aplikasi Geometri / Geometry Applications</small></span></button>
+  <button class="navbtn" data-go="t5"><span class="ic">📝</span><span>Tugas 5<small>Task 5 · Tantangan HOTS / HOTS Challenge</small></span></button>
+</nav>
+
+<main id="main">
+
+<!-- ================= S1 ================= -->
+<section id="s1" class="show">
+  <div class="hero">
+    <span class="timechip">⏱ 00:00 – 00:10</span>
+    <h2>🔥 Pemanasan: Review Spiral <span class="ten">Spiral Review Warm-up</span></h2>
+    <p><span class="tid">Sebelum belajar rumus jarak, kita perlu menguasai lima keterampilan dasar: mengkuadratkan bilangan (termasuk bilangan negatif), mencari akar kuadrat, menyederhanakan bentuk akar, menghitung selisih bilangan bulat, dan membaca koordinat Kartesius.</span><span class="ten">Before learning the distance formula, we need to master five basic skills: squaring numbers (including negative numbers), finding square roots, simplifying surds, finding the difference of integers, and reading Cartesian coordinates.</span></p>
+  </div>
+
+  <div class="box">
+    <h3>A. Kuadrat Bilangan <span class="ten">A. Squaring Numbers</span></h3>
+    <p><span class="tid">Kuadrat suatu bilangan artinya bilangan itu dikalikan dengan dirinya sendiri.</span><span class="ten">The square of a number means the number multiplied by itself.</span></p>
+    <div class="formula">\( a^2 = a \times a \)</div>
+    <p><span class="tid">Ingat aturan tanda: negatif × negatif = positif. Jadi kuadrat bilangan apa pun <b>tidak pernah negatif</b>.</span><span class="ten">Remember the sign rule: negative × negative = positive. So the square of any number is <b>never negative</b>.</span></p>
+    <div class="example"><div class="exh">Contoh / Example</div>
+      \[ (-7)^2 = (-7)\times(-7) = 49 \qquad (-4)^2 = (-4)\times(-4)=16 \]
+    </div>
+    <div class="warnbox">⚠️ <span class="tid"><b>Hati-hati!</b> \((-5)^2\) berbeda dengan \(-5^2\). Tanda kurung menentukan apa yang dikuadratkan.</span><span class="ten"><b>Careful!</b> \((-5)^2\) is different from \(-5^2\). The brackets decide what gets squared.</span>
+      \[ (-5)^2 = 25 \qquad\text{tetapi / but}\qquad -5^2 = -(5\times5) = -25 \]
+      <span class="tid">Kesalahan umum lain: \((-6)^2 \neq 12\). Mengkuadratkan bukan mengalikan dengan 2.</span><span class="ten">Another common mistake: \((-6)^2 \neq 12\). Squaring is not multiplying by 2.</span>
+    </div>
+  </div>
+
+  <div class="box sun">
+    <h3>B. Akar Kuadrat &amp; Bilangan Kuadrat Sempurna <span class="ten">B. Square Roots &amp; Perfect Squares</span></h3>
+    <p><span class="tid">Akar kuadrat adalah kebalikan dari kuadrat. \(\sqrt{n}=m\) artinya \(m^2=n\) (dengan \(m \ge 0\)). Bilangan seperti 49 dan 64 disebut <b>bilangan kuadrat sempurna</b> karena akarnya bilangan bulat.</span><span class="ten">The square root is the inverse of squaring. \(\sqrt{n}=m\) means \(m^2=n\) (with \(m \ge 0\)). Numbers such as 49 and 64 are called <b>perfect squares</b> because their roots are whole numbers.</span></p>
+    <div class="sqgrid">
+      <div>\(1^2=1\)</div><div>\(2^2=4\)</div><div>\(3^2=9\)</div><div>\(4^2=16\)</div><div>\(5^2=25\)</div>
+      <div>\(6^2=36\)</div><div>\(7^2=49\)</div><div>\(8^2=64\)</div><div>\(9^2=81\)</div><div>\(10^2=100\)</div>
+      <div>\(11^2=121\)</div><div>\(12^2=144\)</div><div>\(13^2=169\)</div><div>\(14^2=196\)</div><div>\(15^2=225\)</div>
+    </div>
+    <div class="example"><div class="exh">Contoh / Example</div>
+      <span class="tid">Tentukan \(\sqrt{169}\). Cari bilangan yang jika dikuadratkan menghasilkan 169.</span><span class="ten">Find \(\sqrt{169}\). Look for the number whose square is 169.</span>
+      \[ 13^2 = 169 \;\Rightarrow\; \sqrt{169} = 13 \]
+      <span class="tid">Bilangan 50 <b>bukan</b> kuadrat sempurna karena berada di antara \(7^2=49\) dan \(8^2=64\).</span><span class="ten">The number 50 is <b>not</b> a perfect square because it lies between \(7^2=49\) and \(8^2=64\).</span>
+    </div>
+  </div>
+
+  <div class="box violet">
+    <h3>C. Menyederhanakan Bentuk Akar <span class="ten">C. Simplifying Surds</span></h3>
+    <p><span class="tid">Jika hasil akar bukan bilangan bulat, sederhanakan dengan sifat berikut:</span><span class="ten">If the root is not a whole number, simplify it using this property:</span></p>
+    <div class="formula">\( \sqrt{a \times b} = \sqrt{a}\times\sqrt{b} \)</div>
+    <ol class="steps">
+      <li><span class="tid">Cari faktor kuadrat sempurna <b>terbesar</b> dari bilangan di dalam akar.</span><span class="ten">Find the <b>largest</b> perfect-square factor of the number under the root.</span></li>
+      <li><span class="tid">Tulis bilangan sebagai perkalian (kuadrat sempurna) × (sisa).</span><span class="ten">Write the number as (perfect square) × (the rest).</span></li>
+      <li><span class="tid">Akarkan bagian kuadrat sempurna, keluarkan dari tanda akar.</span><span class="ten">Take the root of the perfect square and move it outside the root sign.</span></li>
+    </ol>
+    <div class="example"><div class="exh">Contoh / Example</div>
+      \[ \sqrt{72} = \sqrt{36\times 2} = \sqrt{36}\times\sqrt{2} = 6\sqrt{2} \]
+      \[ \sqrt{20} = \sqrt{4\times 5} = 2\sqrt{5} \qquad \sqrt{32}=\sqrt{16\times2}=4\sqrt2 \]
+    </div>
+  </div>
+
+  <div class="box rose">
+    <h3>D. Selisih Bilangan Bulat <span class="ten">D. Difference of Integers</span></h3>
+    <p><span class="tid">Pada rumus jarak kita sering mengurangkan bilangan negatif. Ingat: mengurangi bilangan negatif sama dengan menambah bilangan positif.</span><span class="ten">In the distance formula we often subtract negative numbers. Remember: subtracting a negative number is the same as adding a positive number.</span></p>
+    <div class="formula">\( a-(-b) = a+b \)</div>
+    <div class="example"><div class="exh">Contoh / Example</div>
+      \[ 3-(-4) = 3+4 = 7 \qquad -2-5 = -7 \qquad -1-(-6) = -1+6 = 5 \]
+    </div>
+  </div>
+
+  <div class="box navy">
+    <h3>E. Membaca Koordinat Kartesius <span class="ten">E. Reading Cartesian Coordinates</span></h3>
+    <div class="twocol">
+      <div>
+        <p><span class="tid">Titik ditulis \((x,y)\). Nilai \(x\) (absis) = geser <b>mendatar</b> dari titik asal O: kanan (+), kiri (−). Nilai \(y\) (ordinat) = geser <b>tegak</b>: atas (+), bawah (−).</span><span class="ten">A point is written \((x,y)\). The \(x\)-value (abscissa) = <b>horizontal</b> move from origin O: right (+), left (−). The \(y\)-value (ordinate) = <b>vertical</b> move: up (+), down (−).</span></p>
+        <div class="example"><div class="exh">Contoh / Example</div>
+          <span class="tid">\(A(2,3)\): kanan 2, atas 3. \(B(-4,1)\): kiri 4, atas 1. \(C(-2,-3)\): kiri 2, bawah 3. \(D(3,-2)\): kanan 3, bawah 2.</span><span class="ten">\(A(2,3)\): right 2, up 3. \(B(-4,1)\): left 4, up 1. \(C(-2,-3)\): left 2, down 3. \(D(3,-2)\): right 3, down 2.</span>
+        </div>
+        <p><span class="tid">💡 Tips: selalu baca <b>\(x\) dulu, baru \(y\)</b> — "jalan dulu, baru naik/turun lift".</span><span class="ten">💡 Tip: always read <b>\(x\) first, then \(y\)</b> — "walk first, then take the lift up/down".</span></p>
+      </div>
+      <div class="fig" data-fig="s1coord"></div>
+    </div>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s1"></div></div>
+  <div class="qlist" data-group="s1"></div>
+</section>
+
+<!-- ================= S2 ================= -->
+<section id="s2">
+  <div class="hero">
+    <span class="timechip">⏱ 00:10 – 00:15</span>
+    <h2>🌍 Pengantar &amp; Kaitan Dunia Nyata <span class="ten">Introduction &amp; Real-World Connection</span></h2>
+    <p><span class="tid">Pertanyaan besar hari ini: <b>Bagaimana cara menghitung jarak garis lurus antara dua titik pada bidang koordinat?</b></span><span class="ten">Today's big question: <b>How do we calculate the straight-line distance between two points on a coordinate plane?</b></span></p>
+  </div>
+
+  <div class="box">
+    <h3>🗺️ Cerita: Rumah Dina ke Sekolah <span class="ten">Story: From Dina's House to School</span></h3>
+    <div class="twocol">
+      <div>
+        <p><span class="tid">Peta kota berbentuk grid. Setiap kotak = 1 blok. Rumah Dina 🏠 di \((1,1)\) dan sekolah 🏫 di \((5,4)\).</span><span class="ten">The city map is a grid. Each square = 1 block. Dina's house 🏠 is at \((1,1)\) and the school 🏫 is at \((5,4)\).</span></p>
+        <p><span class="tid">🟧 <b>Dina berjalan kaki</b> menyusuri jalan: ke timur lalu ke utara.</span><span class="ten">🟧 <b>Dina walks</b> along the streets: east, then north.</span></p>
+        \[ \text{mendatar/horizontal} = 5-1 = 4 \text{ blok} \]
+        \[ \text{tegak/vertical} = 4-1 = 3 \text{ blok} \]
+        \[ \text{jalan kaki/walking} = 4+3 = 7 \text{ blok} \]
+        <p><span class="tid">🟦 <b>Drone terbang lurus</b> dari rumah ke sekolah. Lintasannya menjadi sisi miring segitiga siku-siku dengan sisi tegak 4 dan 3:</span><span class="ten">🟦 <b>A drone flies straight</b> from the house to the school. Its path is the hypotenuse of a right triangle with legs 4 and 3:</span></p>
+        \[ \text{drone} = \sqrt{4^2+3^2} = \sqrt{16+9} = \sqrt{25} = 5 \text{ blok} \]
+      </div>
+      <div class="fig" data-fig="s2map"></div>
+    </div>
+    <p><span class="tid">Kesimpulan: jarak garis lurus (5 blok) <b>lebih pendek</b> daripada jarak menyusuri jalan grid (7 blok). Untuk menghitung jarak garis lurus, kita memakai <b>Teorema Pythagoras</b>.</span><span class="ten">Conclusion: the straight-line distance (5 blocks) is <b>shorter</b> than the distance along the grid streets (7 blocks). To find a straight-line distance we use the <b>Pythagorean Theorem</b>.</span></p>
+    <table class="tb">
+      <tr><th>Jenis jarak <span class="ten">Type of distance</span></th><th>Cara menghitung <span class="ten">How to calculate</span></th><th>Contoh Dina <span class="ten">Dina's example</span></th></tr>
+      <tr><td>Menyusuri jalan grid <span class="ten">Along grid streets</span></td><td>\(\text{mendatar}+\text{tegak}\) <span class="ten">horizontal + vertical</span></td><td>\(4+3=7\)</td></tr>
+      <tr><td>Garis lurus <span class="ten">Straight line</span></td><td>\(\sqrt{\text{mendatar}^2+\text{tegak}^2}\) <span class="ten">√(horizontal² + vertical²)</span></td><td>\(\sqrt{16+9}=5\)</td></tr>
+    </table>
+    <div class="example"><div class="exh">Kasus khusus / Special case</div>
+      <span class="tid">Jika dua tempat berada pada garis mendatar yang sama (nilai \(y\) sama), jaraknya cukup selisih nilai \(x\). Contoh: \((2,3)\) dan \((8,3)\) berjarak \(8-2=6\) blok. Begitu juga jika nilai \(x\) sama, jaraknya = selisih nilai \(y\).</span><span class="ten">If two places are on the same horizontal line (same \(y\)-value), the distance is simply the difference of the \(x\)-values. Example: \((2,3)\) and \((8,3)\) are \(8-2=6\) blocks apart. Likewise, if the \(x\)-values are equal, the distance = difference of the \(y\)-values.</span>
+    </div>
+  </div>
+
+  <div class="box sun">
+    <h3>🚀 Di Mana Rumus Jarak Dipakai? <span class="ten">Where Is the Distance Formula Used?</span></h3>
+    <div class="reallist">
+      <div><div class="em">🛰️</div><span class="tid">GPS &amp; peta digital</span><span class="ten">GPS &amp; digital maps</span></div>
+      <div><div class="em">🚁</div><span class="tid">Rute drone &amp; pesawat</span><span class="ten">Drone &amp; plane routes</span></div>
+      <div><div class="em">🎮</div><span class="tid">Gim: jarak karakter ke musuh</span><span class="ten">Games: character-to-enemy distance</span></div>
+      <div><div class="em">📶</div><span class="tid">Jangkauan sinyal Wi-Fi</span><span class="ten">Wi-Fi signal range</span></div>
+      <div><div class="em">⚽</div><span class="tid">Jarak umpan di lapangan</span><span class="ten">Pass distance on a field</span></div>
+    </div>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s2"></div></div>
+  <div class="qlist" data-group="s2"></div>
+</section>
+
+<!-- ================= S3 ================= -->
+<section id="s3">
+  <div class="hero">
+    <span class="timechip">⏱ 00:15 – 00:20</span>
+    <h2>🔁 Mengulas Pengetahuan Awal <span class="ten">Review of Prior Knowledge</span></h2>
+    <p><span class="tid">Rumus jarak dibangun dari Teorema Pythagoras. Mari kita ulas kembali teorema ini.</span><span class="ten">The distance formula is built on the Pythagorean Theorem. Let's review the theorem.</span></p>
+  </div>
+
+  <div class="box">
+    <h3>📐 Teorema Pythagoras <span class="ten">The Pythagorean Theorem</span></h3>
+    <div class="twocol">
+      <div>
+        <p><span class="tid">Pada segitiga siku-siku, sisi di depan sudut siku-siku disebut <b>sisi miring (hipotenusa)</b> \(c\) — sisi <b>terpanjang</b>. Dua sisi lain \(a\) dan \(b\) disebut <b>sisi siku-siku</b>.</span><span class="ten">In a right triangle, the side opposite the right angle is the <b>hypotenuse</b> \(c\) — the <b>longest</b> side. The other two sides \(a\) and \(b\) are the <b>legs</b>.</span></p>
+        <div class="formula">\( a^2 + b^2 = c^2 \)</div>
+        <p><span class="tid">Bentuk lain:</span><span class="ten">Other forms:</span></p>
+        \[ c=\sqrt{a^2+b^2} \qquad a=\sqrt{c^2-b^2} \qquad b=\sqrt{c^2-a^2} \]
+      </div>
+      <div class="fig" data-fig="s3tri"></div>
+    </div>
+  </div>
+
+  <div class="box sun">
+    <h3>🧮 Contoh Soal &amp; Langkah <span class="ten">Worked Examples &amp; Steps</span></h3>
+    <p><span class="tid"><b>Langkah mencari sisi miring:</b></span><span class="ten"><b>Steps to find the hypotenuse:</b></span></p>
+    <ol class="steps">
+      <li><span class="tid">Identifikasi kedua sisi siku-siku \(a\) dan \(b\).</span><span class="ten">Identify the two legs \(a\) and \(b\).</span></li>
+      <li><span class="tid">Kuadratkan masing-masing sisi siku-siku.</span><span class="ten">Square each leg.</span></li>
+      <li><span class="tid">Jumlahkan kedua hasil kuadrat.</span><span class="ten">Add the two squares.</span></li>
+      <li><span class="tid">Tarik akar kuadrat dari jumlahnya.</span><span class="ten">Take the square root of the sum.</span></li>
+    </ol>
+    <div class="example"><div class="exh">Contoh 1 — mencari sisi miring / Example 1 — finding the hypotenuse</div>
+      <span class="tid">Sisi siku-siku 6 cm dan 8 cm.</span><span class="ten">The legs are 6 cm and 8 cm.</span>
+      \[ c=\sqrt{6^2+8^2}=\sqrt{36+64}=\sqrt{100}=10 \text{ cm} \]
+    </div>
+    <div class="example"><div class="exh">Contoh 2 — mencari sisi siku-siku / Example 2 — finding a leg</div>
+      <span class="tid">Sisi miring 13 cm, satu sisi siku-siku 5 cm. Gunakan <b>pengurangan</b>, bukan penjumlahan.</span><span class="ten">Hypotenuse 13 cm, one leg 5 cm. Use <b>subtraction</b>, not addition.</span>
+      \[ b=\sqrt{13^2-5^2}=\sqrt{169-25}=\sqrt{144}=12 \text{ cm} \]
+    </div>
+    <div class="example"><div class="exh">Contoh 3 — hasil bentuk akar / Example 3 — surd answer</div>
+      \[ c=\sqrt{2^2+3^2}=\sqrt{4+9}=\sqrt{13}\approx 3{,}61 \]
+    </div>
+    <div class="example"><div class="exh">Contoh 4 — kebalikan teorema / Example 4 — the converse</div>
+      <span class="tid">Untuk mengecek apakah segitiga siku-siku: bandingkan (jumlah kuadrat dua sisi terpendek) dengan (kuadrat sisi terpanjang).</span><span class="ten">To check if a triangle is right-angled: compare (sum of squares of the two shorter sides) with (square of the longest side).</span>
+      \[ 5,12,13:\; 5^2+12^2=25+144=169=13^2 \;\checkmark \text{ siku-siku / right} \]
+      \[ 4,5,6:\; 4^2+5^2=16+25=41 \neq 36=6^2 \;\times \text{ bukan siku-siku / not right} \]
+    </div>
+  </div>
+
+  <div class="box violet">
+    <h3>🔢 Tripel Pythagoras <span class="ten">Pythagorean Triples</span></h3>
+    <p><span class="tid">Tiga bilangan bulat \(a,b,c\) yang memenuhi \(a^2+b^2=c^2\). Kelipatannya juga tripel (misal \(3,4,5 \to 6,8,10 \to 9,12,15\)). Menghafal tripel membuat hitungan jarak jauh lebih cepat!</span><span class="ten">Three whole numbers \(a,b,c\) satisfying \(a^2+b^2=c^2\). Their multiples are triples too (e.g. \(3,4,5 \to 6,8,10 \to 9,12,15\)). Memorising triples makes distance calculations much faster!</span></p>
+    <table class="tb">
+      <tr><th>Tripel dasar <span class="ten">Basic triple</span></th><th>Bukti <span class="ten">Proof</span></th><th>Kelipatan <span class="ten">Multiples</span></th></tr>
+      <tr><td>\(3,4,5\)</td><td>\(9+16=25\)</td><td>\(6,8,10;\ 9,12,15\)</td></tr>
+      <tr><td>\(5,12,13\)</td><td>\(25+144=169\)</td><td>\(10,24,26\)</td></tr>
+      <tr><td>\(8,15,17\)</td><td>\(64+225=289\)</td><td>\(16,30,34\)</td></tr>
+      <tr><td>\(7,24,25\)</td><td>\(49+576=625\)</td><td>\(14,48,50\)</td></tr>
+      <tr><td>\(9,40,41\)</td><td>\(81+1600=1681\)</td><td>\(18,80,82\)</td></tr>
+    </table>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s3"></div></div>
+  <div class="qlist" data-group="s3"></div>
+</section>
+
+<!-- ================= S4 ================= -->
+<section id="s4">
+  <div class="hero">
+    <span class="timechip">⏱ 00:20 – 00:25</span>
+    <h2>❓ Pengenalan Masalah <span class="ten">Problem Introduction</span></h2>
+    <p><span class="tid"><b>Masalah:</b> Titik \(A(1,2)\) dan \(B(7,10)\) terletak pada bidang koordinat. Ruas garis \(AB\) miring, sehingga kita tidak bisa menghitung kotaknya secara langsung. Berapa panjang \(AB\)?</span><span class="ten"><b>Problem:</b> Points \(A(1,2)\) and \(B(7,10)\) lie on a coordinate plane. Segment \(AB\) is slanted, so we cannot simply count the squares. How long is \(AB\)?</span></p>
+  </div>
+
+  <div class="box">
+    <h3>🔍 Membangun Segitiga Siku-siku <span class="ten">Building a Right Triangle</span></h3>
+    <div class="twocol">
+      <div>
+        <ol class="steps">
+          <li><span class="tid">Gambar titik \(A(1,2)\) dan \(B(7,10)\).</span><span class="ten">Plot points \(A(1,2)\) and \(B(7,10)\).</span></li>
+          <li><span class="tid">Tarik garis mendatar dari \(A\) dan garis tegak dari \(B\). Keduanya bertemu di titik sudut siku-siku \(C(7,2)\) — ambil \(x\) dari \(B\) dan \(y\) dari \(A\).</span><span class="ten">Draw a horizontal line from \(A\) and a vertical line from \(B\). They meet at the right-angle corner \(C(7,2)\) — take \(x\) from \(B\) and \(y\) from \(A\).</span></li>
+          <li><span class="tid">Hitung panjang sisi siku-siku dengan selisih koordinat:</span><span class="ten">Find the leg lengths using coordinate differences:</span>
+            \[ AC = 7-1 = 6 \qquad BC = 10-2 = 8 \]</li>
+          <li><span class="tid">Terapkan Teorema Pythagoras:</span><span class="ten">Apply the Pythagorean Theorem:</span>
+            \[ AB^2 = 6^2+8^2 = 36+64 = 100 \]</li>
+          <li><span class="tid">Tarik akar: \(AB=\sqrt{100}=10\) satuan.</span><span class="ten">Take the root: \(AB=\sqrt{100}=10\) units.</span></li>
+        </ol>
+      </div>
+      <div class="fig" data-fig="s4tri"></div>
+    </div>
+  </div>
+
+  <div class="box sun">
+    <h3>✨ Dari Contoh ke Rumus Umum <span class="ten">From the Example to the General Formula</span></h3>
+    <p><span class="tid">Ganti angka dengan huruf: \(A(x_1,y_1)\) dan \(B(x_2,y_2)\). Titik sudut siku-siku \(C(x_2,y_1)\).</span><span class="ten">Replace the numbers with letters: \(A(x_1,y_1)\) and \(B(x_2,y_2)\). The right-angle corner is \(C(x_2,y_1)\).</span></p>
+    \[ \underbrace{\Delta x = x_2-x_1}_{\text{selisih mendatar / horizontal change}} \qquad \underbrace{\Delta y = y_2-y_1}_{\text{selisih tegak / vertical change}} \]
+    <div class="formula">
+      <b>Rumus Jarak / The Distance Formula</b>
+      \[ d=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2} \quad\text{atau / or}\quad d=\sqrt{(\Delta x)^2+(\Delta y)^2} \]
+    </div>
+    <p><span class="tid">📌 <b>Mengapa dikuadratkan?</b> Selisih bisa negatif (misalnya \(-8\)), tetapi panjang tidak mungkin negatif. Karena \((-8)^2=8^2=64\), kuadrat menghapus tanda negatif. Akibatnya, <b>urutan titik tidak berpengaruh</b>: \((x_2-x_1)^2=(x_1-x_2)^2\).</span><span class="ten">📌 <b>Why square?</b> A difference can be negative (for example \(-8\)), but a length cannot be negative. Because \((-8)^2=8^2=64\), squaring removes the negative sign. As a result, <b>the order of the points does not matter</b>: \((x_2-x_1)^2=(x_1-x_2)^2\).</span></p>
+    <div class="example"><div class="exh">Contoh 2 / Example 2: \(P(-2,1)\) dan / and \(Q(4,-7)\)</div>
+      <span class="tid">Cara 1 (dari P ke Q):</span><span class="ten">Method 1 (from P to Q):</span>
+      \[ \Delta x = 4-(-2) = 6,\quad \Delta y = -7-1 = -8,\quad d=\sqrt{6^2+(-8)^2}=\sqrt{36+64}=\sqrt{100}=10 \]
+      <span class="tid">Cara 2 (dari Q ke P) — hasilnya sama:</span><span class="ten">Method 2 (from Q to P) — same result:</span>
+      \[ \Delta x = -2-4 = -6,\quad \Delta y = 1-(-7) = 8,\quad d=\sqrt{36+64}=10 \]
+    </div>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s4"></div></div>
+  <div class="qlist" data-group="s4"></div>
+</section>
+
+<!-- ================= S5 ================= -->
+<section id="s5">
+  <div class="hero">
+    <span class="timechip">⏱ 00:25 – 00:40</span>
+    <h2>🤝 Latihan Terbimbing <span class="ten">Guided Practice</span></h2>
+    <p><span class="tid">Kita akan memakai <b>4 langkah tetap</b> untuk setiap soal jarak. Ikuti langkah ini dengan teliti, terutama saat ada bilangan negatif.</span><span class="ten">We will use <b>4 fixed steps</b> for every distance problem. Follow them carefully, especially when there are negative numbers.</span></p>
+  </div>
+
+  <div class="box">
+    <h3>🪜 Metode 4 Langkah <span class="ten">The 4-Step Method</span></h3>
+    <ol class="steps">
+      <li><span class="tid"><b>Label</b> titik: \((x_1,y_1)\) dan \((x_2,y_2)\).</span><span class="ten"><b>Label</b> the points: \((x_1,y_1)\) and \((x_2,y_2)\).</span></li>
+      <li><span class="tid"><b>Hitung selisih</b>: \(\Delta x=x_2-x_1\) dan \(\Delta y=y_2-y_1\). Tulis kurung untuk bilangan negatif!</span><span class="ten"><b>Find the differences</b>: \(\Delta x=x_2-x_1\) and \(\Delta y=y_2-y_1\). Use brackets for negative numbers!</span></li>
+      <li><span class="tid"><b>Kuadratkan dan jumlahkan</b>: \((\Delta x)^2+(\Delta y)^2\).</span><span class="ten"><b>Square and add</b>: \((\Delta x)^2+(\Delta y)^2\).</span></li>
+      <li><span class="tid"><b>Tarik akar</b> dan sederhanakan bila perlu.</span><span class="ten"><b>Take the square root</b> and simplify if needed.</span></li>
+    </ol>
+  </div>
+
+  <div class="box sun">
+    <h3>🧮 Contoh Soal Terbimbing <span class="ten">Guided Worked Examples</span></h3>
+    <div class="twocol">
+      <div class="example"><div class="exh">Contoh A: koordinat negatif / Example A: negative coordinates</div>
+        <span class="tid">Jarak \(C(-3,4)\) ke \(D(5,-2)\).</span><span class="ten">Distance from \(C(-3,4)\) to \(D(5,-2)\).</span>
+        \[\begin{aligned} \Delta x &= 5-(-3)=8\\ \Delta y &= -2-4=-6\\ d^2 &= 8^2+(-6)^2=64+36=100\\ d &= \sqrt{100}=10 \end{aligned}\]
+      </div>
+      <div class="fig" data-fig="s5ex"></div>
+    </div>
+    <div class="example"><div class="exh">Contoh B: jawaban bentuk akar / Example B: surd answer</div>
+      <span class="tid">Jarak \(E(1,-1)\) ke \(F(4,5)\).</span><span class="ten">Distance from \(E(1,-1)\) to \(F(4,5)\).</span>
+      \[\begin{aligned} \Delta x &= 4-1=3, \quad \Delta y = 5-(-1)=6\\ d &= \sqrt{3^2+6^2}=\sqrt{9+36}=\sqrt{45}=\sqrt{9\times5}=3\sqrt5\approx 6{,}71 \end{aligned}\]
+    </div>
+    <div class="example"><div class="exh">Contoh C: garis mendatar / Example C: horizontal line</div>
+      <span class="tid">\(G(-4,3)\) dan \(H(6,3)\) punya nilai \(y\) sama, jadi \(\Delta y=0\).</span><span class="ten">\(G(-4,3)\) and \(H(6,3)\) have the same \(y\)-value, so \(\Delta y=0\).</span>
+      \[ d=\sqrt{(6-(-4))^2+0^2}=\sqrt{100}=10 \]
+    </div>
+    <div class="example"><div class="exh">Contoh D: dari titik asal / Example D: from the origin</div>
+      <span class="tid">Jarak \(O(0,0)\) ke \(P(x,y)\) adalah \(\sqrt{x^2+y^2}\). Contoh \(P(-5,12)\):</span><span class="ten">The distance from \(O(0,0)\) to \(P(x,y)\) is \(\sqrt{x^2+y^2}\). Example \(P(-5,12)\):</span>
+      \[ d=\sqrt{(-5)^2+12^2}=\sqrt{25+144}=\sqrt{169}=13 \]
+    </div>
+  </div>
+
+  <div class="box rose">
+    <h3>🚫 Kesalahan yang Sering Terjadi <span class="ten">Common Mistakes</span></h3>
+    <table class="tb">
+      <tr><th>❌ Salah <span class="ten">Wrong</span></th><th>✅ Benar <span class="ten">Correct</span></th></tr>
+      <tr><td>\(5-(-3)=2\)</td><td>\(5-(-3)=5+3=8\)</td></tr>
+      <tr><td>\((-6)^2=-36\)</td><td>\((-6)^2=36\)</td></tr>
+      <tr><td>\(\sqrt{8^2+6^2}=8+6=14\)</td><td>\(\sqrt{64+36}=\sqrt{100}=10\)</td></tr>
+      <tr><td>\(\Delta x = x_2-y_2\) <span class="ten">(mixing \(x\) and \(y\))</span></td><td>\(\Delta x = x_2-x_1\), \(\Delta y = y_2-y_1\)</td></tr>
+    </table>
+    <p><span class="tid">Ingat: \(\sqrt{a^2+b^2}\neq a+b\). Akar tidak bisa "dipecah" pada penjumlahan.</span><span class="ten">Remember: \(\sqrt{a^2+b^2}\neq a+b\). A root cannot be "split" over addition.</span></p>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s5"></div></div>
+  <div class="qlist" data-group="s5"></div>
+</section>
+
+<!-- ================= S6 ================= -->
+<section id="s6">
+  <div class="hero">
+    <span class="timechip">⏱ 00:40 – 00:55</span>
+    <h2>🧠 Latihan Mandiri <span class="ten">Independent Practice</span></h2>
+    <p><span class="tid">Sekarang kita gunakan rumus jarak untuk masalah geometri: keliling, jenis segitiga, koordinat yang hilang, dan membandingkan jarak.</span><span class="ten">Now we use the distance formula for geometry problems: perimeter, types of triangle, missing coordinates, and comparing distances.</span></p>
+  </div>
+
+  <div class="box">
+    <h3>A. Keliling Bangun dari Koordinat <span class="ten">A. Perimeter from Coordinates</span></h3>
+    <p><span class="tid">Hitung panjang setiap sisi dengan rumus jarak, lalu jumlahkan.</span><span class="ten">Find each side length with the distance formula, then add them.</span></p>
+    <div class="example"><div class="exh">Contoh / Example: \(A(0,0),\ B(6,0),\ C(6,8)\)</div>
+      \[ AB = 6-0 = 6,\quad BC = 8-0 = 8,\quad AC=\sqrt{6^2+8^2}=\sqrt{100}=10 \]
+      \[ K = AB+BC+AC = 6+8+10 = 24 \text{ satuan / units} \]
+    </div>
+  </div>
+
+  <div class="box sun">
+    <h3>B. Menentukan Jenis Segitiga <span class="ten">B. Classifying a Triangle</span></h3>
+    <div class="twocol">
+      <div>
+        <ul>
+          <li><span class="tid"><b>Sama kaki</b>: dua sisi sama panjang.</span><span class="ten"><b>Isosceles</b>: two equal sides.</span></li>
+          <li><span class="tid"><b>Sama sisi</b>: ketiga sisi sama panjang.</span><span class="ten"><b>Equilateral</b>: all three sides equal.</span></li>
+          <li><span class="tid"><b>Siku-siku</b>: kuadrat sisi terpanjang = jumlah kuadrat dua sisi lain.</span><span class="ten"><b>Right</b>: square of the longest side = sum of squares of the other two.</span></li>
+        </ul>
+        <div class="example"><div class="exh">Contoh / Example: \(P(1,1),\ Q(4,5),\ R(8,2)\)</div>
+          \[\begin{aligned} PQ&=\sqrt{3^2+4^2}=\sqrt{25}=5\\ QR&=\sqrt{4^2+(-3)^2}=\sqrt{25}=5\\ PR&=\sqrt{7^2+1^2}=\sqrt{50}=5\sqrt2 \end{aligned}\]
+          <span class="tid">\(PQ=QR\) → sama kaki. Cek: \(PQ^2+QR^2=25+25=50=PR^2\) → siku-siku. Jadi <b>segitiga siku-siku sama kaki</b>.</span><span class="ten">\(PQ=QR\) → isosceles. Check: \(PQ^2+QR^2=25+25=50=PR^2\) → right-angled. So it is a <b>right isosceles triangle</b>.</span>
+        </div>
+      </div>
+      <div class="fig" data-fig="s6tri"></div>
+    </div>
+  </div>
+
+  <div class="box violet">
+    <h3>C. Mencari Koordinat yang Hilang <span class="ten">C. Finding a Missing Coordinate</span></h3>
+    <p><span class="tid">Masukkan data ke rumus jarak, kuadratkan kedua ruas, lalu selesaikan persamaannya. Biasanya ada <b>dua</b> jawaban (\(\pm\)).</span><span class="ten">Substitute into the distance formula, square both sides, then solve. There are usually <b>two</b> answers (\(\pm\)).</span></p>
+    <div class="example"><div class="exh">Contoh / Example: \(A(2,3),\ B(x,7),\ AB=5\)</div>
+      \[\begin{aligned} \sqrt{(x-2)^2+(7-3)^2}&=5\\ (x-2)^2+16&=25\\ (x-2)^2&=9\\ x-2&=\pm 3\\ x=5 \ \text{atau/or}\ x&=-1 \end{aligned}\]
+    </div>
+  </div>
+
+  <div class="box navy">
+    <h3>D. Membandingkan Jarak <span class="ten">D. Comparing Distances</span></h3>
+    <p><span class="tid">Untuk mengurutkan jarak, cukup bandingkan \(d^2\) (tidak perlu menarik akar), karena jika \(d_1^2 \lt d_2^2\) maka \(d_1 \lt d_2\).</span><span class="ten">To order distances, just compare \(d^2\) (no need to take roots), because if \(d_1^2 \lt d_2^2\) then \(d_1 \lt d_2\).</span></p>
+    <div class="example"><div class="exh">Contoh / Example</div>
+      <span class="tid">Dari \(O(0,0)\): \(M(2,4)\to d^2=4+16=20\); \(N(-3,3)\to d^2=9+9=18\). Jadi \(N\) lebih dekat ke \(O\) daripada \(M\).</span><span class="ten">From \(O(0,0)\): \(M(2,4)\to d^2=4+16=20\); \(N(-3,3)\to d^2=9+9=18\). So \(N\) is closer to \(O\) than \(M\).</span>
+    </div>
+  </div>
+
+  <div class="sechead"><h3>✍️ Latihan <span class="ten">Exercises</span></h3><div class="scorebar" id="score-s6"></div></div>
+  <div class="qlist" data-group="s6"></div>
+</section>
+
+<!-- ================= S7 ================= -->
+<section id="s7">
+  <div class="hero">
+    <span class="timechip">⏱ 00:55 – 01:00</span>
+    <h2>🎯 Konsolidasi &amp; Refleksi <span class="ten">Consolidation &amp; Reflection</span></h2>
+  </div>
+
+  <div class="box">
+    <h3>📌 Poin Penting <span class="ten">Key Points</span></h3>
+    <ol class="steps">
+      <li><span class="tid">Jarak dua titik adalah panjang sisi miring segitiga siku-siku yang sisi siku-sikunya \(\Delta x\) dan \(\Delta y\).</span><span class="ten">The distance between two points is the hypotenuse of a right triangle whose legs are \(\Delta x\) and \(\Delta y\).</span></li>
+      <li><span class="tid">Rumus jarak:</span><span class="ten">The distance formula:</span> \[ d=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2} \]</li>
+      <li><span class="tid">Urutan titik tidak berpengaruh karena kuadrat selalu positif.</span><span class="ten">The order of the points does not matter because squares are always positive.</span></li>
+      <li><span class="tid">Hati-hati dengan tanda negatif: \(a-(-b)=a+b\) dan \((-a)^2=a^2\).</span><span class="ten">Be careful with negatives: \(a-(-b)=a+b\) and \((-a)^2=a^2\).</span></li>
+      <li><span class="tid">\(\sqrt{a^2+b^2}\neq a+b\). Sederhanakan bentuk akar, misalnya \(\sqrt{45}=3\sqrt5\).</span><span class="ten">\(\sqrt{a^2+b^2}\neq a+b\). Simplify surds, e.g. \(\sqrt{45}=3\sqrt5\).</span></li>
+      <li><span class="tid">Rumus jarak dipakai untuk keliling, jenis segitiga, koordinat yang hilang, dan masalah dunia nyata (peta, GPS, drone).</span><span class="ten">The distance formula is used for perimeter, classifying triangles, missing coordinates, and real-world problems (maps, GPS, drones).</span></li>
+    </ol>
+  </div>
+
+  <div class="box sun">
+    <h3>💭 Pertanyaan Refleksi <span class="ten">Reflection Questions</span></h3>
+    <p><b>1.</b> <span class="tid">Jelaskan dengan kata-katamu sendiri hubungan antara Teorema Pythagoras dan rumus jarak.</span><span class="ten">Explain in your own words the connection between the Pythagorean Theorem and the distance formula.</span></p>
+    <textarea placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+    <p><b>2.</b> <span class="tid">Mengapa jarak tidak pernah negatif walaupun \(\Delta x\) atau \(\Delta y\) negatif?</span><span class="ten">Why is a distance never negative even when \(\Delta x\) or \(\Delta y\) is negative?</span></p>
+    <textarea placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+    <p><b>3.</b> <span class="tid">Langkah mana yang paling sering membuatmu salah? Apa strategimu agar tidak salah lagi?</span><span class="ten">Which step most often causes your mistakes? What is your strategy to avoid it?</span></p>
+    <textarea placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+    <p><b>4.</b> <span class="tid">Sebutkan satu situasi di kehidupanmu yang bisa memakai rumus jarak.</span><span class="ten">Name one situation in your life where the distance formula could be used.</span></p>
+    <textarea placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+  </div>
+
+  <div class="box rose">
+    <h3>🎟️ Exit Ticket <span class="ten">Tiket Keluar — jawab 3 soal sebelum kelas berakhir / answer 3 questions before class ends</span></h3>
+    <div class="scorebar" id="score-exit" style="display:inline-block;margin-bottom:10px"></div>
+    <div class="qlist" data-group="exit"></div>
+  </div>
+
+  <div class="box violet">
+    <h3>📚 Latihan Lanjutan <span class="ten">Follow-Up Practice</span></h3>
+    <p><span class="tid">Kerjakan di buku tulis, lalu buka pembahasan untuk mengecek.</span><span class="ten">Work these out in your notebook, then open the solution to check.</span></p>
+    <details class="fu"><summary>1. <span class="tid">Hitung jarak \(A(-4,-3)\) dan \(B(4,3)\).</span><span class="ten">Find the distance between \(A(-4,-3)\) and \(B(4,3)\).</span></summary><div>
+      \[ \Delta x=4-(-4)=8,\ \Delta y=3-(-3)=6,\ d=\sqrt{64+36}=\sqrt{100}=10 \]</div></details>
+    <details class="fu"><summary>2. <span class="tid">Hitung jarak \(P(2,5)\) dan \(Q(-1,1)\).</span><span class="ten">Find the distance between \(P(2,5)\) and \(Q(-1,1)\).</span></summary><div>
+      \[ \Delta x=-1-2=-3,\ \Delta y=1-5=-4,\ d=\sqrt{9+16}=\sqrt{25}=5 \]</div></details>
+    <details class="fu"><summary>3. <span class="tid">Hitung jarak \(M(1,-2)\) dan \(N(7,1)\) dalam bentuk akar paling sederhana.</span><span class="ten">Find the distance between \(M(1,-2)\) and \(N(7,1)\) in simplest surd form.</span></summary><div>
+      \[ \Delta x=6,\ \Delta y=1-(-2)=3,\ d=\sqrt{36+9}=\sqrt{45}=\sqrt{9\times5}=3\sqrt5 \]</div></details>
+    <details class="fu"><summary>4. <span class="tid">Segitiga \(A(-2,1),\ B(2,4),\ C(5,0)\). Tentukan jenis dan kelilingnya.</span><span class="ten">Triangle \(A(-2,1),\ B(2,4),\ C(5,0)\). Determine its type and perimeter.</span></summary><div>
+      \[ AB=\sqrt{4^2+3^2}=5,\quad BC=\sqrt{3^2+(-4)^2}=5,\quad AC=\sqrt{7^2+(-1)^2}=\sqrt{50}=5\sqrt2 \]
+      <span class="tid">\(AB=BC\) dan \(5^2+5^2=50=AC^2\) → segitiga siku-siku sama kaki. Keliling \(=10+5\sqrt2\approx 17{,}07\).</span><span class="ten">\(AB=BC\) and \(5^2+5^2=50=AC^2\) → right isosceles triangle. Perimeter \(=10+5\sqrt2\approx 17.07\).</span></div></details>
+    <details class="fu"><summary>5. <span class="tid">Jarak \((k,1)\) ke \((4,-3)\) adalah 5. Tentukan semua nilai \(k\).</span><span class="ten">The distance from \((k,1)\) to \((4,-3)\) is 5. Find all values of \(k\).</span></summary><div>
+      \[ (4-k)^2+(-3-1)^2=25 \Rightarrow (4-k)^2=9 \Rightarrow 4-k=\pm3 \Rightarrow k=1\ \text{atau/or}\ k=7 \]</div></details>
+  </div>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section id="t1">
+  <div class="hero"><h2>📝 Tugas 1: Menghitung Jarak Dasar <span class="ten">Task 1: Basic Distance Calculations</span></h2>
+  <p><span class="tid">10 soal. Gunakan metode 4 langkah. Buka pembahasan setelah menjawab.</span><span class="ten">10 questions. Use the 4-step method. Open the solution after answering.</span></p></div>
+  <div class="sechead"><h3>📋 Soal <span class="ten">Questions</span></h3><div class="scorebar" id="score-t1"></div></div>
+  <div class="qlist" data-group="t1"></div>
+</section>
+<section id="t2">
+  <div class="hero"><h2>📝 Tugas 2: Koordinat Negatif &amp; Bentuk Akar <span class="ten">Task 2: Negative Coordinates &amp; Surds</span></h2>
+  <p><span class="tid">10 soal. Perhatikan tanda negatif dan sederhanakan bentuk akar.</span><span class="ten">10 questions. Watch the negative signs and simplify surds.</span></p></div>
+  <div class="sechead"><h3>📋 Soal <span class="ten">Questions</span></h3><div class="scorebar" id="score-t2"></div></div>
+  <div class="qlist" data-group="t2"></div>
+</section>
+<section id="t3">
+  <div class="hero"><h2>📝 Tugas 3: Soal Cerita Dunia Nyata <span class="ten">Task 3: Real-World Word Problems</span></h2>
+  <p><span class="tid">10 soal. Ubah cerita menjadi koordinat, lalu hitung jaraknya.</span><span class="ten">10 questions. Turn the story into coordinates, then calculate the distance.</span></p></div>
+  <div class="sechead"><h3>📋 Soal <span class="ten">Questions</span></h3><div class="scorebar" id="score-t3"></div></div>
+  <div class="qlist" data-group="t3"></div>
+</section>
+<section id="t4">
+  <div class="hero"><h2>📝 Tugas 4: Aplikasi Geometri <span class="ten">Task 4: Geometry Applications</span></h2>
+  <p><span class="tid">10 soal tentang keliling, jenis segitiga, dan bangun datar pada bidang koordinat.</span><span class="ten">10 questions on perimeter, types of triangles, and shapes on the coordinate plane.</span></p></div>
+  <div class="sechead"><h3>📋 Soal <span class="ten">Questions</span></h3><div class="scorebar" id="score-t4"></div></div>
+  <div class="qlist" data-group="t4"></div>
+</section>
+<section id="t5">
+  <div class="hero"><h2>📝 Tugas 5: Tantangan HOTS <span class="ten">Task 5: HOTS Challenge</span></h2>
+  <p><span class="tid">10 soal penalaran tingkat tinggi: koordinat yang hilang, lingkaran, dan perbandingan jarak.</span><span class="ten">10 higher-order thinking questions: missing coordinates, circles, and comparing distances.</span></p></div>
+  <div class="sechead"><h3>📋 Soal <span class="ten">Questions</span></h3><div class="scorebar" id="score-t5"></div></div>
+  <div class="qlist" data-group="t5"></div>
+</section>
+
+<div class="pager"><button id="prevB">◀ Sebelumnya <i>/ Previous</i></button><button id="nextB">Berikutnya <i>/ Next</i> ▶</button></div>
+</main>
+</div>
+
+<script>
+/* ================= FIGURES ================= */
+function gridSVG(c){
+  const [x0,x1,y0,y1]=c.r, u=c.u||30, p=26;
+  const W=(x1-x0)*u+2*p, H=(y1-y0)*u+2*p;
+  const X=x=>p+(x-x0)*u, Y=y=>p+(y1-y)*u;
+  let s=`<svg class="gsvg" viewBox="0 0 ${W} ${H}" style="max-width:${Math.min(W*1.2,520)}px" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" rx="12" fill="${c.map?'#ecfdf5':'#ffffff'}" stroke="#e2e8f0"/>`;
+  for(let x=x0;x<=x1;x++) s+=`<line x1="${X(x)}" y1="${Y(y0)}" x2="${X(x)}" y2="${Y(y1)}" stroke="${c.map?'#cbd5e1':'#e5e7eb'}" stroke-width="${c.map?6:1}" stroke-linecap="round"/>`;
+  for(let y=y0;y<=y1;y++) s+=`<line x1="${X(x0)}" y1="${Y(y)}" x2="${X(x1)}" y2="${Y(y)}" stroke="${c.map?'#cbd5e1':'#e5e7eb'}" stroke-width="${c.map?6:1}" stroke-linecap="round"/>`;
+  const hasX=(y0<=0&&y1>=0)&&!c.map, hasY=(x0<=0&&x1>=0)&&!c.map;
+  if(hasY) s+=`<line x1="${X(0)}" y1="${Y(y0)-4}" x2="${X(0)}" y2="${Y(y1)+4}" stroke="#334155" stroke-width="1.8"/><text x="${X(0)+6}" y="${Y(y1)+2}" font-size="12" font-style="italic" fill="#334155">y</text>`;
+  if(hasX) s+=`<line x1="${X(x0)-4}" y1="${Y(0)}" x2="${X(x1)+4}" y2="${Y(0)}" stroke="#334155" stroke-width="1.8"/><text x="${X(x1)-2}" y="${Y(0)-6}" font-size="12" font-style="italic" fill="#334155">x</text>`;
+  const ly = hasX?Y(0)+13:Y(y0)+15, lx = hasY?X(0)-5:X(x0)-7;
+  for(let x=x0;x<=x1;x++){ if(x===0&&hasY) continue; s+=`<text x="${X(x)}" y="${ly}" font-size="9.5" fill="#64748b" text-anchor="middle">${x}</text>`; }
+  for(let y=y0;y<=y1;y++){ if(y===0&&hasX) continue; s+=`<text x="${lx}" y="${Y(y)+3.5}" font-size="9.5" fill="#64748b" text-anchor="end">${y}</text>`; }
+  if(hasX&&hasY) s+=`<text x="${X(0)-5}" y="${Y(0)+13}" font-size="10" fill="#334155" text-anchor="end">O</text>`;
+  if(c.circ){const [cx,cy,r]=c.circ; s+=`<circle cx="${X(cx)}" cy="${Y(cy)}" r="${r*u}" fill="rgba(245,158,11,.08)" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 4"/>`;}
+  if(c.poly) s+=`<polygon points="${c.poly.map(([a,b])=>X(a)+','+Y(b)).join(' ')}" fill="rgba(20,184,166,.15)" stroke="#0f766e" stroke-width="2.4" stroke-linejoin="round"/>`;
+  (c.segs||[]).forEach(g=>{const [a,b,cc,d,st,col,lab]=g; s+=`<line x1="${X(a)}" y1="${Y(b)}" x2="${X(cc)}" y2="${Y(d)}" stroke="${col||'#2563eb'}" stroke-width="${st==='bold'?5:2.8}" ${st==='dash'?'stroke-dasharray="7 5"':''} stroke-linecap="round"/>`;
+    if(lab){const mx=(X(a)+X(cc))/2+(lab[1]||0), my=(Y(b)+Y(d))/2+(lab[2]||0); s+=`<text x="${mx}" y="${my}" font-size="13" font-weight="800" fill="${col||'#2563eb'}" text-anchor="middle" stroke="#fff" stroke-width="4" paint-order="stroke">${lab[0]}</text>`;}});
+  if(c.ra){const [x,y,sx,sy]=c.ra, k=u*0.38; s+=`<path d="M ${X(x)+sx*k} ${Y(y)} L ${X(x)+sx*k} ${Y(y)-sy*k} L ${X(x)} ${Y(y)-sy*k}" fill="none" stroke="#0f172a" stroke-width="1.6"/>`;}
+  (c.icons||[]).forEach(([x,y,e,lab])=>{ s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="15" fill="#fff" stroke="#0f9d8a" stroke-width="2"/><text x="${X(x)}" y="${Y(y)+6}" font-size="17" text-anchor="middle">${e}</text>`; if(lab) s+=`<text x="${X(x)}" y="${Y(y)-20}" font-size="11" font-weight="800" fill="#1e3a5f" text-anchor="middle" stroke="#fff" stroke-width="4" paint-order="stroke">${lab}</text>`;});
+  (c.pts||[]).forEach(([x,y,lab,col,dx,dy])=>{ s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="5" fill="${col||'#e11d48'}" stroke="#fff" stroke-width="1.5"/>`; if(lab) s+=`<text x="${X(x)+(dx==null?8:dx)}" y="${Y(y)+(dy==null?-8:dy)}" font-size="12" font-weight="800" fill="${col||'#e11d48'}" stroke="#fff" stroke-width="4" paint-order="stroke">${lab}</text>`;});
+  return s+'</svg>';
+}
+function triSVG(t){
+  const h=t.h*34, w=t.w*34, ox=50, oy=24;
+  const A=[ox,oy], B=[ox,oy+h], C=[ox+w,oy+h];
+  const W=ox+w+60, H=oy+h+44;
+  return `<svg class="gsvg" viewBox="0 0 ${W} ${H}" style="max-width:${Math.min(W*1.2,360)}px" xmlns="http://www.w3.org/2000/svg" font-family="Nunito,sans-serif">
+  <polygon points="${A} ${B} ${C}" fill="rgba(20,184,166,.15)" stroke="#0f766e" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M ${B[0]+14} ${B[1]} L ${B[0]+14} ${B[1]-14} L ${B[0]} ${B[1]-14}" fill="none" stroke="#0f172a" stroke-width="1.6"/>
+  <text x="${ox-12}" y="${oy+h/2+5}" font-size="16" font-weight="800" fill="#2563eb" text-anchor="end">${t.a}</text>
+  <text x="${ox+w/2}" y="${oy+h+26}" font-size="16" font-weight="800" fill="#f59e0b" text-anchor="middle">${t.b}</text>
+  <text x="${ox+w/2+16}" y="${oy+h/2-6}" font-size="16" font-weight="800" fill="#e11d48">${t.c}</text>
+  ${t.note?`<text x="${ox+w/2+16}" y="${oy+h/2+12}" font-size="10.5" fill="#e11d48">${t.note}</text>`:''}
+  </svg>`;
+}
+function fig(c){ return c.tri?triSVG(c.tri):gridSVG(c); }
+const FIGS={
+  s1coord:{r:[-5,5,-4,4],u:30,pts:[[2,3,'A(2, 3)','#2563eb'],[-4,1,'B(−4, 1)','#e11d48',-10,-8],[-2,-3,'C(−2, −3)','#7c3aed',-14,16],[3,-2,'D(3, −2)','#0f9d8a']]},
+  s2map:{r:[0,7,0,5],u:44,map:true,segs:[[1,1,5,1,'bold','#f97316',['4',0,18]],[5,1,5,4,'bold','#f97316',['3',14,0]],[1,1,5,4,'dash','#2563eb',['5',-12,-8]]],icons:[[1,1,'🏠','Rumah/House'],[5,4,'🏫','Sekolah/School']]},
+  s3tri:{tri:{a:'a',b:'b',c:'c',h:3,w:4,note:'sisi miring / hypotenuse'}},
+  s4tri:{r:[0,8,0,11],u:28,segs:[[1,2,7,2,'dash','#f59e0b',['6',0,16]],[7,2,7,10,'dash','#7c3aed',['8',14,0]],[1,2,7,10,'','#e11d48',['?',-14,-6]]],ra:[7,2,-1,1],pts:[[1,2,'A(1, 2)','#2563eb',-10,16],[7,10,'B(7, 10)','#2563eb',-60,-6],[7,2,'C(7, 2)','#0f172a',6,16]]},
+  s5ex:{r:[-4,6,-3,5],u:28,segs:[[-3,4,5,4,'dash','#f59e0b',['Δx = 8',0,-8]],[5,4,5,-2,'dash','#7c3aed',['Δy = −6',-34,0]],[-3,4,5,-2,'','#e11d48',['d = 10',-8,18]]],ra:[5,4,-1,-1],pts:[[-3,4,'C(−3, 4)','#2563eb',-10,-8],[5,-2,'D(5, −2)','#2563eb',-26,16]]},
+  s6tri:{r:[0,9,0,6],u:32,poly:[[1,1],[4,5],[8,2]],segs:[[1,1,4,5,'','#2563eb',['5',-10,-4]],[4,5,8,2,'','#2563eb',['5',10,-4]],[1,1,8,2,'','#e11d48',['5√2',0,16]]],pts:[[1,1,'P','#0f172a',-12,4],[4,5,'Q','#0f172a',-4,-10],[8,2,'R','#0f172a',8,4]]}
+};
+
+/* ================= HELPERS ================= */
+const R=String.raw;
+function L(x){ if(Array.isArray(x)) return `<span class="tid">${x[0]}</span><span class="ten">${x[1]}</span>`; return `<span>${x}</span>`; }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function math(el){ if(window.renderMathInElement) renderMathInElement(el,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false}); }
+function numMatch(v,a){ const s=String(v).replace(/\s/g,'').replace(/[−–]/g,'-').replace(',','.').replace(/[^0-9.\-]/g,''); if(s===''||s==='-'||s==='.') return false; return Math.abs(parseFloat(s)-parseFloat(a))<1e-6; }
+const TYPE={mc:['Pilihan Ganda','Multiple Choice'],multi:['Pilihan Ganda Kompleks','Multiple Answers'],fill:['Isian Singkat','Fill in the Blank'],tf:['Benar atau Salah','True or False'],sort:['Mengurutkan','Sorting'],pair:['Menjodohkan','Matching'],dnd:['Seret & Lepas','Drag and Drop']};
+const HINT={mc:['Pilih satu jawaban yang benar.','Choose one correct answer.'],multi:['Pilih SEMUA jawaban yang benar (bisa lebih dari satu).','Select ALL correct answers (there may be more than one).'],fill:['Ketik jawaban berupa bilangan pada setiap kotak (desimal boleh memakai koma).','Type a number in each box (decimals may use a comma).'],tf:['Tentukan apakah pernyataan tersebut benar atau salah.','Decide whether the statement is true or false.'],sort:['Seret kartu atau gunakan tombol ▲ ▼ untuk mengurutkan.','Drag the cards or use the ▲ ▼ buttons to put them in order.'],pair:['Klik kartu jawaban, lalu klik kotak pasangannya (atau seret kartu ke kotak). Klik kartu di kotak untuk mengembalikannya.','Click an answer card, then click its matching box (or drag the card). Click a placed card to send it back.'],dnd:['Seret kartu ke kotak yang tepat (atau klik kartu, lalu klik kotak). Tidak semua kartu dipakai.','Drag each card into the correct box (or click a card, then a box). Not all cards are used.']};
+const SCORE={};
+let UID=0;
+
+/* ================= BODY BUILDERS ================= */
+function bodyChoice(body,q){
+  const multi=q.t==='multi';
+  const opts=q.t==='tf'?[['Benar','True'],['Salah','False']]:q.opts;
+  const ans=q.t==='tf'?[q.a?0:1]:(multi?q.ans:[q.ans]);
+  const name='q'+(UID++);
+  body.innerHTML='<div class="opts">'+shuffle(opts.map((_,i)=>i)).map(i=>`<label class="opt"><input type="${multi?'checkbox':'radio'}" name="${name}" value="${i}"><span>${L(opts[i])}</span></label>`).join('')+'</div>';
+  body.addEventListener('change',()=>body.querySelectorAll('.opt').forEach(l=>l.classList.remove('ok','bad')));
+  return ()=>{
+    const sel=[...body.querySelectorAll('input:checked')].map(e=>+e.value);
+    if(!sel.length) return null;
+    body.querySelectorAll('.opt').forEach(l=>{const inp=l.querySelector('input'); l.classList.remove('ok','bad'); if(inp.checked) l.classList.add(ans.includes(+inp.value)?'ok':'bad');});
+    const ok=sel.length===ans.length&&sel.every(v=>ans.includes(v));
+    let part=null; if(multi) part=[sel.filter(v=>ans.includes(v)).length,ans.length];
+    return {ok,part};
+  };
+}
+function bodyFill(body,q){
+  body.innerHTML='<div class="fills">'+q.fields.map((f,i)=>`<div class="frow"><span class="fpre">${L(f.pre)}</span><input class="fin" data-i="${i}" autocomplete="off" placeholder="?"><span class="fpost">${f.post?L(f.post):''}</span></div>`).join('')+'</div>';
+  return ()=>{
+    let n=0,empty=true;
+    body.querySelectorAll('.fin').forEach(inp=>{const f=q.fields[+inp.dataset.i]; const has=inp.value.trim()!==''; if(has) empty=false; const g=numMatch(inp.value,f.ans); inp.classList.toggle('ok',g); inp.classList.toggle('bad',has&&!g); if(g) n++;});
+    if(empty) return null;
+    return {ok:n===q.fields.length,part:[n,q.fields.length]};
+  };
+}
+function bodySort(body,q){
+  let order=shuffle(q.items.map((_,i)=>i));
+  if(order.every((v,i)=>v===i)) order.reverse();
+  body.innerHTML='<ol class="sortlist">'+order.map(i=>`<li class="sitem" draggable="true" data-i="${i}"><span class="grip">⠿</span><span class="stxt">${L(q.items[i])}</span><span class="sbtns"><button class="up" type="button">▲</button><button class="dn" type="button">▼</button></span></li>`).join('')+'</ol>';
+  const ol=body.querySelector('ol'); let drag=null;
+  const clr=()=>ol.querySelectorAll('li').forEach(li=>li.classList.remove('ok','bad'));
+  ol.addEventListener('click',e=>{const li=e.target.closest('li'); if(!li) return;
+    if(e.target.classList.contains('up')&&li.previousElementSibling){ol.insertBefore(li,li.previousElementSibling);clr();}
+    if(e.target.classList.contains('dn')&&li.nextElementSibling){ol.insertBefore(li.nextElementSibling,li);clr();}});
+  ol.addEventListener('dragstart',e=>{drag=e.target.closest('li'); if(!drag) return; drag.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; try{e.dataTransfer.setData('text/plain','x');}catch(_){} });
+  ol.addEventListener('dragend',()=>{if(drag) drag.classList.remove('dragging'); drag=null; clr();});
+  ol.addEventListener('dragover',e=>{e.preventDefault(); if(!drag) return; const li=e.target.closest('li'); if(!li||li===drag) return; const r=li.getBoundingClientRect(); ol.insertBefore(drag,(e.clientY>r.top+r.height/2)?li.nextElementSibling:li);});
+  ol.addEventListener('drop',e=>e.preventDefault());
+  return ()=>{ const lis=[...ol.children]; let n=0; lis.forEach((li,pos)=>{const g=+li.dataset.i===pos; li.classList.toggle('ok',g); li.classList.toggle('bad',!g); if(g) n++;}); return {ok:n===lis.length,part:[n,lis.length]}; };
+}
+function bodySlots(body,q){
+  const order=shuffle(q.chips.map((_,i)=>i));
+  body.innerHTML='<div class="slots">'+q.rows.map(r=>`<div class="srow"><span class="slab">${L(r.lab)}</span><span class="arrow">${q.t==='pair'?'⟷':'→'}</span><span class="slot" data-exp="${r.ans}"><span class="ph">?</span></span></div>`).join('')+
+    `</div><div class="pool"><div class="pooltitle">${L(['🃏 Kartu jawaban:','Answer cards:'])}</div><div class="chips">`+order.map(i=>`<span class="chip" draggable="true" data-k="${i}">${L(q.chips[i])}</span>`).join('')+'</div></div>';
+  const pool=body.querySelector('.chips'); let sel=null, drag=null;
+  const clr=()=>body.querySelectorAll('.slot').forEach(s=>s.classList.remove('ok','bad'));
+  const fixPh=s=>{ if(s) s.querySelector('.ph').style.display=s.querySelector('.chip')?'none':''; };
+  function place(chip,slot){ const from=chip.closest('.slot'); const ex=slot.querySelector('.chip'); if(ex&&ex!==chip){ if(from) from.appendChild(ex); else pool.appendChild(ex);} slot.appendChild(chip); chip.classList.remove('sel'); sel=null; fixPh(slot); fixPh(from); clr(); }
+  function back(chip){ const from=chip.closest('.slot'); pool.appendChild(chip); chip.classList.remove('sel'); sel=null; fixPh(from); clr(); }
+  body.addEventListener('click',e=>{
+    const chip=e.target.closest('.chip'), slot=e.target.closest('.slot');
+    if(chip){ if(chip.closest('.slot')){ if(sel&&sel!==chip) place(sel,chip.closest('.slot')); else back(chip); return; }
+      if(sel===chip){chip.classList.remove('sel'); sel=null;} else { if(sel) sel.classList.remove('sel'); sel=chip; chip.classList.add('sel'); } return; }
+    if(slot&&sel) place(sel,slot);
+  });
+  body.addEventListener('dragstart',e=>{const c=e.target.closest&&e.target.closest('.chip'); if(!c) return; drag=c; try{e.dataTransfer.setData('text/plain','x');}catch(_){} });
+  body.addEventListener('dragover',e=>{ if(drag&&(e.target.closest('.slot')||e.target.closest('.pool'))) e.preventDefault(); });
+  body.addEventListener('drop',e=>{ if(!drag) return; e.preventDefault(); const slot=e.target.closest('.slot'); if(slot) place(drag,slot); else if(e.target.closest('.pool')) back(drag); drag=null; });
+  body.addEventListener('dragend',()=>{drag=null;});
+  return ()=>{ const slots=[...body.querySelectorAll('.slot')]; let n=0,filled=0;
+    slots.forEach(s=>{const c=s.querySelector('.chip'); if(c) filled++; const g=!!c&&c.dataset.k===s.dataset.exp; s.classList.toggle('ok',g); s.classList.toggle('bad',!!c&&!g); if(g) n++;});
+    if(!filled) return null; return {ok:n===slots.length,part:[n,slots.length]}; };
+}
+function buildBody(body,q){
+  if(q.t==='mc'||q.t==='multi'||q.t==='tf') return bodyChoice(body,q);
+  if(q.t==='fill') return bodyFill(body,q);
+  if(q.t==='sort') return bodySort(body,q);
+  return bodySlots(body,q);
+}
+function updateScore(g){ const el=document.getElementById('score-'+g); if(!el) return; const tot=(DATA[g]||[]).length; const c=Object.values(SCORE[g]||{}).filter(Boolean).length; el.innerHTML=`⭐ Skor: ${c}/${tot} <i style="opacity:.8">/ Score</i>`; }
+function buildCard(q,num,g){
+  const card=document.createElement('div'); card.className='qcard';
+  const sol=(q.sol||[]).map(x=>Array.isArray(x)?`<p>${L(x)}</p>`:`<div class="mblock">${x}</div>`).join('');
+  card.innerHTML=`<div class="qhead"><span class="qnum">Soal ${num} <i>/ Question ${num}</i></span><span class="badge b-${q.t}">${TYPE[q.t][0]} <i>/ ${TYPE[q.t][1]}</i></span></div>
+  <div class="qtext">${L(q.q)}</div>${q.fig?`<div class="fig">${fig(q.fig)}</div>`:''}
+  <div class="hint">💡 ${L(HINT[q.t])}</div><div class="qbody"></div>
+  <div class="qbtns"><button class="btn chk" type="button">✔ Periksa <i>/ Check</i></button><button class="btn rst" type="button">↺ Ulangi <i>/ Reset</i></button></div>
+  <div class="fb"></div>
+  <details class="sol"><summary>📘 Pembahasan <i>/ Solution</i></summary><div class="solbody">${sol}</div></details>`;
+  let checker;
+  const mount=()=>{ const old=card.querySelector('.qbody'); const nb=document.createElement('div'); nb.className='qbody'; old.replaceWith(nb); checker=buildBody(nb,q); math(nb); };
+  mount();
+  const fb=card.querySelector('.fb');
+  card.querySelector('.chk').onclick=()=>{
+    const r=checker();
+    if(!r){ fb.className='fb warn'; fb.innerHTML=L(['⚠️ Jawab dulu sebelum memeriksa.','Please answer before checking.']); return; }
+    if(r.ok){ fb.className='fb okk'; fb.innerHTML=L(['✅ Benar! Kerja bagus!','Correct! Great job!']); }
+    else { fb.className='fb nok'; const pt=r.part?` (${r.part[0]}/${r.part[1]})`:''; fb.innerHTML=L([`❌ Belum tepat${pt}. Perbaiki jawaban yang merah, atau buka pembahasan.`,`Not quite${pt}. Fix the answers marked red, or open the solution.`]); }
+    (SCORE[g]=SCORE[g]||{})[num]=r.ok; updateScore(g);
+  };
+  card.querySelector('.rst').onclick=()=>{ mount(); fb.className='fb'; fb.innerHTML=''; if(SCORE[g]) delete SCORE[g][num]; updateScore(g); };
+  return card;
+}
+
+/* ================= DATA ================= */
+const DATA={
+/* ---------- S1 Spiral Review ---------- */
+s1:[
+ {t:'mc',q:[R`Berapakah hasil dari \((-6)^2\)?`,R`What is the value of \((-6)^2\)?`],opts:[R`\(36\)`,R`\(-36\)`,R`\(12\)`,R`\(-12\)`],ans:0,
+  sol:[[R`Kuadrat artinya bilangan dikalikan dengan dirinya sendiri. Negatif × negatif = positif.`,R`Squaring means multiplying the number by itself. Negative × negative = positive.`],
+   R`\[(-6)^2=(-6)\times(-6)=36\]`,
+   [R`Jawaban \(12\) salah karena itu \(6\times2\), bukan \(6\times6\). Jawaban \(-36\) salah karena tanda kurung membuat \(-6\) ikut dikuadratkan.`,R`The answer \(12\) is wrong because it is \(6\times2\), not \(6\times6\). The answer \(-36\) is wrong because the brackets mean \(-6\) itself is squared.`]]},
+ {t:'fill',q:[R`Tentukan nilai akar kuadrat berikut.`,R`Find the value of each square root.`],fields:[{pre:R`\(\sqrt{144}=\)`,ans:'12'},{pre:R`\(\sqrt{225}=\)`,ans:'15'}],
+  sol:[[R`Cari bilangan yang jika dikuadratkan menghasilkan bilangan di dalam akar (lihat tabel kuadrat sempurna).`,R`Look for the number whose square equals the number under the root (see the perfect-squares table).`],
+   R`\[12^2=12\times12=144\;\Rightarrow\;\sqrt{144}=12\]`,R`\[15^2=15\times15=225\;\Rightarrow\;\sqrt{225}=15\]`]},
+ {t:'pair',q:[R`Pasangkan setiap bentuk akar dengan bentuk paling sederhananya.`,R`Match each surd with its simplest form.`],
+  rows:[{lab:R`\(\sqrt{8}\)`,ans:0},{lab:R`\(\sqrt{18}\)`,ans:1},{lab:R`\(\sqrt{45}\)`,ans:2},{lab:R`\(\sqrt{50}\)`,ans:3}],
+  chips:[R`\(2\sqrt2\)`,R`\(3\sqrt2\)`,R`\(3\sqrt5\)`,R`\(5\sqrt2\)`,R`\(4\sqrt2\)`],
+  sol:[[R`Cari faktor kuadrat sempurna terbesar, lalu keluarkan akarnya.`,R`Find the largest perfect-square factor, then take its root outside.`],
+   R`\[\begin{aligned}\sqrt8&=\sqrt{4\times2}=2\sqrt2\\ \sqrt{18}&=\sqrt{9\times2}=3\sqrt2\\ \sqrt{45}&=\sqrt{9\times5}=3\sqrt5\\ \sqrt{50}&=\sqrt{25\times2}=5\sqrt2\end{aligned}\]`,
+   [R`Kartu \(4\sqrt2\) tidak dipakai (itu \(=\sqrt{32}\)).`,R`The card \(4\sqrt2\) is not used (it equals \(\sqrt{32}\)).`]]},
+ {t:'multi',q:[R`Pilih <b>semua</b> bilangan kuadrat sempurna.`,R`Select <b>all</b> the perfect squares.`],opts:[R`\(49\)`,R`\(50\)`,R`\(64\)`,R`\(90\)`,R`\(121\)`,R`\(200\)`],ans:[0,2,4],
+  sol:[[R`Bilangan kuadrat sempurna adalah hasil kuadrat bilangan bulat.`,R`A perfect square is the square of a whole number.`],
+   R`\[49=7^2\checkmark\qquad 64=8^2\checkmark\qquad 121=11^2\checkmark\]`,
+   [R`\(50\) berada di antara \(7^2=49\) dan \(8^2=64\); \(90\) di antara \(9^2=81\) dan \(10^2=100\); \(200\) di antara \(14^2=196\) dan \(15^2=225\). Ketiganya bukan kuadrat sempurna.`,R`\(50\) lies between \(7^2=49\) and \(8^2=64\); \(90\) between \(9^2=81\) and \(10^2=100\); \(200\) between \(14^2=196\) and \(15^2=225\). None of these is a perfect square.`]]},
+ {t:'mc',q:[R`Perhatikan bidang koordinat. Apa koordinat titik \(P\)?`,R`Look at the coordinate plane. What are the coordinates of point \(P\)?`],fig:{r:[-5,5,-4,4],u:28,pts:[[-3,2,'P','#e11d48']]},
+  opts:[R`\((-3,\,2)\)`,R`\((2,\,-3)\)`,R`\((3,\,-2)\)`,R`\((-2,\,3)\)`],ans:0,
+  sol:[[R`Mulai dari titik asal O. Geser mendatar dulu: \(P\) berada 3 satuan ke <b>kiri</b>, jadi \(x=-3\). Lalu geser tegak: 2 satuan ke <b>atas</b>, jadi \(y=2\).`,R`Start at the origin O. Move horizontally first: \(P\) is 3 units to the <b>left</b>, so \(x=-3\). Then vertically: 2 units <b>up</b>, so \(y=2\).`],
+   R`\[P=(x,y)=(-3,\,2)\]`,[R`Pilihan \((2,-3)\) salah karena urutan \(x\) dan \(y\) tertukar.`,R`The option \((2,-3)\) is wrong because \(x\) and \(y\) are swapped.`]]}
+],
+/* ---------- S2 Intro ---------- */
+s2:[
+ {t:'mc',q:[R`Rumah Budi 🏠 di \((1,2)\) dan perpustakaan 📚 di \((7,2)\). Berapa blok jarak keduanya?`,R`Budi's house 🏠 is at \((1,2)\) and the library 📚 is at \((7,2)\). How many blocks apart are they?`],
+  fig:{r:[0,8,0,4],u:38,map:true,icons:[[1,2,'🏠','Budi'],[7,2,'📚','Perpustakaan/Library']]},
+  opts:[R`\(6\)`,R`\(8\)`,R`\(9\)`,R`\(3\)`],ans:0,
+  sol:[[R`Kedua tempat memiliki nilai \(y\) yang sama (\(y=2\)), sehingga terletak pada satu garis mendatar. Jaraknya cukup selisih nilai \(x\).`,R`Both places have the same \(y\)-value (\(y=2\)), so they lie on one horizontal line. The distance is just the difference of the \(x\)-values.`],
+   R`\[d=7-1=6 \text{ blok / blocks}\]`]},
+ {t:'fill',q:[R`Kafe ☕ di \((2,1)\) dan bioskop 🎬 di \((5,5)\). Lengkapi jaraknya.`,R`A café ☕ is at \((2,1)\) and a cinema 🎬 is at \((5,5)\). Complete the distances.`],
+  fig:{r:[0,6,0,6],u:36,map:true,segs:[[2,1,5,1,'bold','#f97316'],[5,1,5,5,'bold','#f97316'],[2,1,5,5,'dash','#2563eb']],icons:[[2,1,'☕','Kafe/Café'],[5,5,'🎬','Bioskop/Cinema']]},
+  fields:[{pre:['Jarak menyusuri jalan grid =','Distance along the grid streets ='],post:['blok','blocks'],ans:'7'},{pre:['Jarak garis lurus =','Straight-line distance ='],post:['blok','blocks'],ans:'5'}],
+  sol:[[R`Langkah 1: hitung selisih mendatar dan tegak.`,R`Step 1: find the horizontal and vertical changes.`],R`\[\text{mendatar/horizontal}=5-2=3,\qquad \text{tegak/vertical}=5-1=4\]`,
+   [R`Langkah 2: jarak menyusuri jalan = jumlah keduanya.`,R`Step 2: the distance along the streets = their sum.`],R`\[3+4=7 \text{ blok}\]`,
+   [R`Langkah 3: jarak garis lurus = sisi miring segitiga siku-siku.`,R`Step 3: the straight-line distance = the hypotenuse of the right triangle.`],R`\[\sqrt{3^2+4^2}=\sqrt{9+16}=\sqrt{25}=5 \text{ blok}\]`]},
+ {t:'tf',q:[R`Pernyataan: "Jarak garis lurus antara dua tempat selalu <b>kurang dari atau sama dengan</b> jarak menyusuri jalan grid."`,R`Statement: "The straight-line distance between two places is always <b>less than or equal to</b> the distance along the grid streets."`],a:true,
+  sol:[[R`<b>Benar.</b> Garis lurus adalah lintasan terpendek antara dua titik. Pada segitiga siku-siku, sisi miring selalu lebih pendek daripada jumlah dua sisi lainnya. Keduanya sama hanya jika kedua tempat berada pada satu garis mendatar atau tegak.`,R`<b>True.</b> A straight line is the shortest path between two points. In a right triangle, the hypotenuse is always shorter than the sum of the other two sides. They are equal only when both places lie on the same horizontal or vertical line.`],
+   R`\[\text{Contoh/Example: } \sqrt{3^2+4^2}=5 \lt 3+4=7\]`]},
+ {t:'multi',q:[R`Situasi mana yang memakai <b>jarak garis lurus</b>? Pilih semua yang benar.`,R`Which situations use the <b>straight-line distance</b>? Select all that apply.`],
+  opts:[['🚁 Drone mengantar paket terbang lurus ke tujuan','🚁 A drone delivering a parcel flies straight to the destination'],['📶 Jangkauan sinyal Wi-Fi dari router','📶 The Wi-Fi signal range from a router'],['🐦 Burung terbang langsung dari satu pohon ke pohon lain','🐦 A bird flies directly from one tree to another'],['🚕 Taksi menyusuri jalan-jalan kota','🚕 A taxi driving along the city streets'],['🚶 Berjalan mengelilingi blok perumahan','🚶 Walking around a housing block']],ans:[0,1,2],
+  sol:[[R`Jarak garis lurus dipakai jika sesuatu bergerak/menyebar <b>langsung</b> tanpa mengikuti jalan: drone, sinyal Wi-Fi, dan burung.`,R`The straight-line distance is used when something moves/spreads <b>directly</b> without following roads: the drone, the Wi-Fi signal, and the bird.`],
+   [R`Taksi dan orang berjalan kaki harus mengikuti jalan, jadi mereka memakai jarak menyusuri jalan (mendatar + tegak).`,R`The taxi and the walker must follow the roads, so they use the distance along the streets (horizontal + vertical).`]]},
+ {t:'dnd',q:[R`Taman 🌳 di \((1,2)\) dan sekolah 🏫 di \((9,8)\). Seret kartu ke kotak yang tepat.`,R`A park 🌳 is at \((1,2)\) and a school 🏫 is at \((9,8)\). Drag the cards into the correct boxes.`],
+  fig:{r:[0,10,0,9],u:28,map:true,segs:[[1,2,9,2,'bold','#f97316'],[9,2,9,8,'bold','#f97316'],[1,2,9,8,'dash','#2563eb']],icons:[[1,2,'🌳','Taman/Park'],[9,8,'🏫','Sekolah/School']]},
+  rows:[{lab:['Jarak mendatar','Horizontal distance'],ans:0},{lab:['Jarak tegak','Vertical distance'],ans:1},{lab:['Jarak garis lurus','Straight-line distance'],ans:2}],
+  chips:[R`\(8\)`,R`\(6\)`,R`\(10\)`,R`\(14\)`,R`\(7\)`],
+  sol:[R`\[\text{mendatar/horizontal}=9-1=8\]`,R`\[\text{tegak/vertical}=8-2=6\]`,R`\[\text{garis lurus/straight line}=\sqrt{8^2+6^2}=\sqrt{64+36}=\sqrt{100}=10\]`,
+   [R`Kartu \(14=8+6\) adalah jarak menyusuri jalan, bukan garis lurus.`,R`The card \(14=8+6\) is the distance along the streets, not the straight line.`]]}
+],
+/* ---------- S3 Review ---------- */
+s3:[
+ {t:'mc',q:[R`Sebuah segitiga siku-siku memiliki sisi siku-siku 9 cm dan 12 cm. Berapa panjang sisi miringnya?`,R`A right triangle has legs of 9 cm and 12 cm. How long is its hypotenuse?`],fig:{tri:{a:'9',b:'12',c:'c = ?',h:3,w:4}},
+  opts:[R`\(15\text{ cm}\)`,R`\(21\text{ cm}\)`,R`\(13\text{ cm}\)`,R`\(17\text{ cm}\)`],ans:0,
+  sol:[[R`Sisi miring: kuadratkan kedua sisi siku-siku, jumlahkan, lalu tarik akarnya.`,R`Hypotenuse: square both legs, add them, then take the square root.`],
+   R`\[c=\sqrt{9^2+12^2}=\sqrt{81+144}=\sqrt{225}=15\text{ cm}\]`,[R`\(21=9+12\) adalah kesalahan umum (menjumlahkan tanpa kuadrat). Catatan: \(9,12,15\) adalah kelipatan 3 dari tripel \(3,4,5\).`,R`\(21=9+12\) is a common mistake (adding without squaring). Note: \(9,12,15\) is 3 times the triple \(3,4,5\).`]]},
+ {t:'fill',q:[R`Sisi miring sebuah segitiga siku-siku 17 cm dan satu sisi siku-sikunya 8 cm. Tentukan panjang sisi siku-siku lainnya \(b\).`,R`The hypotenuse of a right triangle is 17 cm and one leg is 8 cm. Find the other leg \(b\).`],fields:[{pre:R`\(b=\)`,post:'cm',ans:'15'}],
+  sol:[[R`Untuk mencari sisi siku-siku, <b>kurangkan</b> kuadrat sisi siku-siku yang diketahui dari kuadrat sisi miring.`,R`To find a leg, <b>subtract</b> the square of the known leg from the square of the hypotenuse.`],
+   R`\[b=\sqrt{17^2-8^2}=\sqrt{289-64}=\sqrt{225}=15\text{ cm}\]`]},
+ {t:'tf',q:[R`Pernyataan: "Segitiga dengan sisi 6, 7, dan 9 adalah segitiga siku-siku."`,R`Statement: "A triangle with sides 6, 7, and 9 is a right triangle."`],a:false,
+  sol:[[R`<b>Salah.</b> Bandingkan jumlah kuadrat dua sisi terpendek dengan kuadrat sisi terpanjang.`,R`<b>False.</b> Compare the sum of the squares of the two shorter sides with the square of the longest side.`],
+   R`\[6^2+7^2=36+49=85 \qquad 9^2=81 \qquad 85\neq81\]`,[R`Karena tidak sama, segitiga tersebut bukan segitiga siku-siku.`,R`Since they are not equal, the triangle is not a right triangle.`]]},
+ {t:'sort',q:[R`Urutkan langkah mencari panjang sisi miring segitiga siku-siku.`,R`Put the steps for finding the hypotenuse of a right triangle in order.`],
+  items:[['Identifikasi kedua sisi siku-siku \\(a\\) dan \\(b\\)','Identify the two legs \\(a\\) and \\(b\\)'],['Kuadratkan setiap sisi siku-siku: \\(a^2\\) dan \\(b^2\\)','Square each leg: \\(a^2\\) and \\(b^2\\)'],['Jumlahkan: \\(a^2+b^2\\)','Add them: \\(a^2+b^2\\)'],['Tarik akar kuadrat: \\(c=\\sqrt{a^2+b^2}\\)','Take the square root: \\(c=\\sqrt{a^2+b^2}\\)']],
+  sol:[[R`Urutan yang benar: identifikasi → kuadratkan → jumlahkan → akarkan. Contoh dengan sisi 6 dan 8:`,R`The correct order: identify → square → add → take the root. Example with legs 6 and 8:`],
+   R`\[a=6,\ b=8 \;\to\; 36,\ 64 \;\to\; 36+64=100 \;\to\; c=\sqrt{100}=10\]`]},
+ {t:'multi',q:[R`Pilih semua yang merupakan <b>tripel Pythagoras</b>.`,R`Select all that are <b>Pythagorean triples</b>.`],opts:[R`\(3,4,5\)`,R`\(6,8,10\)`,R`\(5,12,13\)`,R`\(4,5,6\)`,R`\(7,8,9\)`,R`\(9,40,41\)`],ans:[0,1,2,5],
+  sol:[[R`Cek apakah \(a^2+b^2=c^2\) (\(c\) = bilangan terbesar).`,R`Check whether \(a^2+b^2=c^2\) (\(c\) = the largest number).`],
+   R`\[\begin{aligned}3,4,5&:\ 9+16=25\ \checkmark\\ 6,8,10&:\ 36+64=100\ \checkmark\\ 5,12,13&:\ 25+144=169\ \checkmark\\ 4,5,6&:\ 16+25=41\neq36\ \times\\ 7,8,9&:\ 49+64=113\neq81\ \times\\ 9,40,41&:\ 81+1600=1681=41^2\ \checkmark\end{aligned}\]`]}
+],
+/* ---------- S4 Problem Intro ---------- */
+s4:[
+ {t:'mc',q:[R`Titik \(A(2,1)\) dan \(B(5,5)\). Untuk membentuk segitiga siku-siku dengan \(AB\) sebagai sisi miring, titik sudut siku-siku \(C\) dapat diletakkan di ...`,R`Points \(A(2,1)\) and \(B(5,5)\). To build a right triangle with \(AB\) as the hypotenuse, the right-angle corner \(C\) can be placed at ...`],
+  fig:{r:[0,6,0,6],u:34,segs:[[2,1,5,5,'','#e11d48']],pts:[[2,1,'A','#2563eb',-14,4],[5,5,'B','#2563eb',8,-4]]},
+  opts:[R`\((5,1)\)`,R`\((1,5)\)`,R`\((3,4)\)`,R`\((2,2)\)`],ans:0,
+  sol:[[R`Titik sudut siku-siku diperoleh dengan mengambil \(x\) dari salah satu titik dan \(y\) dari titik lainnya. Ambil \(x\) dari \(B\) (\(x=5\)) dan \(y\) dari \(A\) (\(y=1\)): \(C(5,1)\).`,R`The right-angle corner takes \(x\) from one point and \(y\) from the other. Take \(x\) from \(B\) (\(x=5\)) and \(y\) from \(A\) (\(y=1\)): \(C(5,1)\).`],
+   [R`Cek: \(AC\) mendatar (sama-sama \(y=1\)) dan \(BC\) tegak (sama-sama \(x=5\)), jadi \(\angle C=90^\circ\). Titik \((2,5)\) juga bisa, tetapi tidak ada di pilihan. Titik \((1,5)\) salah karena \(x\) dan \(y\) tertukar.`,R`Check: \(AC\) is horizontal (both \(y=1\)) and \(BC\) is vertical (both \(x=5\)), so \(\angle C=90^\circ\). The point \((2,5)\) would also work but is not an option. \((1,5)\) is wrong because \(x\) and \(y\) are swapped.`]]},
+ {t:'fill',q:[R`Masih untuk \(A(2,1)\) dan \(B(5,5)\). Lengkapi perhitungannya.`,R`Still using \(A(2,1)\) and \(B(5,5)\). Complete the calculation.`],
+  fields:[{pre:R`\(\Delta x = x_2-x_1=\)`,ans:'3'},{pre:R`\(\Delta y = y_2-y_1=\)`,ans:'4'},{pre:R`\(AB=\sqrt{(\Delta x)^2+(\Delta y)^2}=\)`,ans:'5'}],
+  sol:[R`\[\Delta x=5-2=3\qquad \Delta y=5-1=4\]`,R`\[AB=\sqrt{3^2+4^2}=\sqrt{9+16}=\sqrt{25}=5\]`]},
+ {t:'dnd',q:[R`Lengkapi bagian-bagian rumus jarak antara \(A(x_1,y_1)\) dan \(B(x_2,y_2)\).`,R`Complete the parts of the distance formula between \(A(x_1,y_1)\) and \(B(x_2,y_2)\).`],
+  rows:[{lab:R`\(\Delta x =\)`,ans:0},{lab:R`\(\Delta y =\)`,ans:1},{lab:R`\(d =\)`,ans:2}],
+  chips:[R`\(x_2-x_1\)`,R`\(y_2-y_1\)`,R`\(\sqrt{(\Delta x)^2+(\Delta y)^2}\)`,R`\(x_2+x_1\)`,R`\((\Delta x)^2+(\Delta y)^2\)`,R`\(x_1-y_1\)`],
+  sol:[[R`\(\Delta x\) = selisih nilai \(x\), \(\Delta y\) = selisih nilai \(y\). Jarak \(d\) adalah sisi miring, jadi harus ada <b>akar</b>.`,R`\(\Delta x\) = difference of the \(x\)-values, \(\Delta y\) = difference of the \(y\)-values. The distance \(d\) is the hypotenuse, so there must be a <b>square root</b>.`],
+   R`\[d=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\]`,[R`Kartu \((\Delta x)^2+(\Delta y)^2\) hanya \(d^2\), belum diakarkan.`,R`The card \((\Delta x)^2+(\Delta y)^2\) is only \(d^2\); it has not been square-rooted.`]]},
+ {t:'tf',q:[R`Pernyataan: "\((x_2-x_1)^2\) selalu sama dengan \((x_1-x_2)^2\), sehingga urutan titik tidak memengaruhi jarak."`,R`Statement: "\((x_2-x_1)^2\) is always equal to \((x_1-x_2)^2\), so the order of the points does not affect the distance."`],a:true,
+  sol:[[R`<b>Benar.</b> \(x_1-x_2\) adalah lawan dari \(x_2-x_1\), dan kuadrat dari suatu bilangan sama dengan kuadrat lawannya.`,R`<b>True.</b> \(x_1-x_2\) is the opposite of \(x_2-x_1\), and a number squared equals its opposite squared.`],
+   R`\[(7-1)^2=6^2=36\qquad (1-7)^2=(-6)^2=36\]`]},
+ {t:'sort',q:[R`Urutkan langkah menemukan jarak \(A(1,2)\) dan \(B(7,10)\) seperti pada pengenalan masalah.`,R`Put the steps for finding the distance between \(A(1,2)\) and \(B(7,10)\) in order, as in the problem introduction.`],
+  items:[['Gambar titik \\(A(1,2)\\) dan \\(B(7,10)\\)','Plot points \\(A(1,2)\\) and \\(B(7,10)\\)'],['Buat segitiga siku-siku dengan sudut siku-siku di \\(C(7,2)\\)','Draw a right triangle with the right angle at \\(C(7,2)\\)'],['Hitung sisi siku-siku: \\(AC=6\\), \\(BC=8\\)','Find the legs: \\(AC=6\\), \\(BC=8\\)'],['Terapkan Pythagoras: \\(AB^2=6^2+8^2=100\\)','Apply Pythagoras: \\(AB^2=6^2+8^2=100\\)'],['Tarik akar: \\(AB=\\sqrt{100}=10\\)','Take the root: \\(AB=\\sqrt{100}=10\\)']],
+  sol:[[R`Urutan logisnya: gambar → bentuk segitiga siku-siku → hitung sisi siku-siku → Pythagoras → akar.`,R`The logical order: plot → form the right triangle → find the legs → Pythagoras → square root.`],
+   R`\[AC=7-1=6,\quad BC=10-2=8,\quad AB=\sqrt{36+64}=10\]`]}
+],
+/* ---------- S5 Guided ---------- */
+s5:[
+ {t:'fill',q:[R`Gunakan metode 4 langkah untuk mencari jarak \(M(-2,3)\) dan \(N(4,11)\).`,R`Use the 4-step method to find the distance between \(M(-2,3)\) and \(N(4,11)\).`],
+  fields:[{pre:R`\(\Delta x=\)`,ans:'6'},{pre:R`\(\Delta y=\)`,ans:'8'},{pre:R`\(MN=\)`,ans:'10'}],
+  sol:[[R`Langkah 1: \((x_1,y_1)=(-2,3)\), \((x_2,y_2)=(4,11)\).`,R`Step 1: \((x_1,y_1)=(-2,3)\), \((x_2,y_2)=(4,11)\).`],
+   [R`Langkah 2: hitung selisih (perhatikan tanda negatif).`,R`Step 2: find the differences (watch the negative sign).`],R`\[\Delta x=4-(-2)=4+2=6\qquad \Delta y=11-3=8\]`,
+   [R`Langkah 3 &amp; 4: kuadratkan, jumlahkan, akarkan.`,R`Steps 3 &amp; 4: square, add, take the root.`],R`\[MN=\sqrt{6^2+8^2}=\sqrt{36+64}=\sqrt{100}=10\]`]},
+ {t:'mc',q:[R`Berapa jarak \(R(2,-3)\) dan \(S(4,1)\) dalam bentuk akar paling sederhana?`,R`What is the distance between \(R(2,-3)\) and \(S(4,1)\) in simplest surd form?`],opts:[R`\(2\sqrt5\)`,R`\(6\)`,R`\(\sqrt{12}\)`,R`\(4\sqrt5\)`],ans:0,
+  sol:[R`\[\Delta x=4-2=2\qquad \Delta y=1-(-3)=4\]`,R`\[RS=\sqrt{2^2+4^2}=\sqrt{4+16}=\sqrt{20}=\sqrt{4\times5}=2\sqrt5\]`,
+   [R`\(6=2+4\) salah karena tidak dikuadratkan. \(\sqrt{12}\) dan \(4\sqrt5\) berasal dari kesalahan hitung; nilai yang benar adalah \(\sqrt{20}=2\sqrt5\).`,R`\(6=2+4\) is wrong because nothing was squared. \(\sqrt{12}\) and \(4\sqrt5\) come from calculation errors; the correct value is \(\sqrt{20}=2\sqrt5\).`]]},
+ {t:'dnd',q:[R`Hitung jarak \(K(-6,-1)\) dan \(L(-1,11)\). Seret kartu ke setiap langkah.`,R`Find the distance between \(K(-6,-1)\) and \(L(-1,11)\). Drag a card to each step.`],
+  rows:[{lab:R`\(\Delta x\)`,ans:0},{lab:R`\(\Delta y\)`,ans:1},{lab:R`\((\Delta x)^2+(\Delta y)^2\)`,ans:2},{lab:R`\(KL\)`,ans:3}],
+  chips:[R`\(5\)`,R`\(12\)`,R`\(169\)`,R`\(13\)`,R`\(-7\)`,R`\(17\)`,R`\(119\)`],
+  sol:[R`\[\Delta x=-1-(-6)=-1+6=5\]`,R`\[\Delta y=11-(-1)=11+1=12\]`,R`\[(\Delta x)^2+(\Delta y)^2=25+144=169\]`,R`\[KL=\sqrt{169}=13\]`,
+   [R`Kartu \(-7\) muncul jika salah menghitung \(-6-1\); \(17=5+12\) adalah kesalahan menjumlahkan tanpa kuadrat; \(119=144-25\) salah karena seharusnya dijumlahkan.`,R`The card \(-7\) comes from wrongly computing \(-6-1\); \(17=5+12\) is adding without squaring; \(119=144-25\) is wrong because the squares must be added.`]]},
+ {t:'multi',q:[R`Pasangan titik mana yang berjarak tepat \(5\) satuan? Pilih semua.`,R`Which pairs of points are exactly \(5\) units apart? Select all.`],
+  opts:[R`\((0,0)\) dan/and \((3,4)\)`,R`\((1,1)\) dan/and \((4,5)\)`,R`\((-2,0)\) dan/and \((3,0)\)`,R`\((1,2)\) dan/and \((6,7)\)`,R`\((0,0)\) dan/and \((5,5)\)`,R`\((-1,3)\) dan/and \((2,-1)\)`],ans:[0,1,2,5],
+  sol:[R`\[\begin{aligned}(0,0),(3,4)&:\ \sqrt{9+16}=5\ \checkmark\\ (1,1),(4,5)&:\ \Delta x=3,\Delta y=4\Rightarrow 5\ \checkmark\\ (-2,0),(3,0)&:\ \Delta x=5,\Delta y=0\Rightarrow 5\ \checkmark\\ (1,2),(6,7)&:\ \sqrt{25+25}=5\sqrt2\ \times\\ (0,0),(5,5)&:\ \sqrt{50}=5\sqrt2\ \times\\ (-1,3),(2,-1)&:\ \Delta x=3,\Delta y=-4\Rightarrow\sqrt{9+16}=5\ \checkmark\end{aligned}\]`]},
+ {t:'tf',q:[R`Pernyataan: "Jarak antara \(A(0,0)\) dan \(B(6,8)\) adalah \(14\)."`,R`Statement: "The distance between \(A(0,0)\) and \(B(6,8)\) is \(14\)."`],a:false,
+  sol:[[R`<b>Salah.</b> \(14=6+8\) adalah kesalahan menjumlahkan tanpa kuadrat dan akar.`,R`<b>False.</b> \(14=6+8\) is the mistake of adding without squaring and taking the root.`],
+   R`\[AB=\sqrt{6^2+8^2}=\sqrt{36+64}=\sqrt{100}=10\]`]}
+],
+/* ---------- S6 Independent ---------- */
+s6:[
+ {t:'fill',q:[R`Segitiga \(A(1,1)\), \(B(4,1)\), \(C(4,5)\). Hitung panjang sisi dan kelilingnya.`,R`Triangle \(A(1,1)\), \(B(4,1)\), \(C(4,5)\). Find the side lengths and the perimeter.`],
+  fig:{r:[0,5,0,6],u:34,poly:[[1,1],[4,1],[4,5]],ra:[4,1,-1,1],pts:[[1,1,'A','#0f172a',-14,4],[4,1,'B','#0f172a',6,14],[4,5,'C','#0f172a',6,-4]]},
+  fields:[{pre:R`\(AB=\)`,ans:'3'},{pre:R`\(BC=\)`,ans:'4'},{pre:R`\(AC=\)`,ans:'5'},{pre:['Keliling \\(K=\\)','Perimeter \\(K=\\)'],ans:'12'}],
+  sol:[[R`\(AB\) mendatar dan \(BC\) tegak, jadi cukup hitung selisihnya. \(AC\) miring, pakai rumus jarak.`,R`\(AB\) is horizontal and \(BC\) is vertical, so just find the differences. \(AC\) is slanted, so use the distance formula.`],
+   R`\[AB=4-1=3\qquad BC=5-1=4\qquad AC=\sqrt{3^2+4^2}=\sqrt{25}=5\]`,R`\[K=3+4+5=12\text{ satuan / units}\]`]},
+ {t:'mc',q:[R`Segitiga \(D(0,0)\), \(E(4,0)\), \(F(2,5)\) termasuk jenis segitiga ...`,R`Triangle \(D(0,0)\), \(E(4,0)\), \(F(2,5)\) is a ... triangle.`],
+  fig:{r:[-1,5,-1,6],u:30,poly:[[0,0],[4,0],[2,5]],pts:[[0,0,'D','#0f172a',-14,14],[4,0,'E','#0f172a',6,14],[2,5,'F','#0f172a',8,-4]]},
+  opts:[['Sama kaki (bukan siku-siku)','Isosceles (not right-angled)'],['Siku-siku sama kaki','Right isosceles'],['Sama sisi','Equilateral'],['Siku-siku (sisi berbeda)','Right-angled (all sides different)']],ans:0,
+  sol:[R`\[DE=4-0=4\qquad DF=\sqrt{2^2+5^2}=\sqrt{29}\qquad EF=\sqrt{(2-4)^2+5^2}=\sqrt{4+25}=\sqrt{29}\]`,
+   [R`\(DF=EF=\sqrt{29}\) → sama kaki. Cek siku-siku: sisi terpanjang \(\sqrt{29}\), maka bandingkan \(4^2+(\sqrt{29})^2=16+29=45\) dengan \((\sqrt{29})^2=29\). Tidak sama, jadi bukan siku-siku. Juga bukan sama sisi karena \(4\neq\sqrt{29}\).`,R`\(DF=EF=\sqrt{29}\) → isosceles. Right-angle check: the longest side is \(\sqrt{29}\), so compare \(4^2+(\sqrt{29})^2=16+29=45\) with \((\sqrt{29})^2=29\). Not equal, so it is not right-angled. It is not equilateral either because \(4\neq\sqrt{29}\).`]]},
+ {t:'multi',q:[R`Titik \(A(3,y)\) berjarak \(5\) satuan dari \(O(0,0)\). Pilih <b>semua</b> nilai \(y\) yang mungkin.`,R`Point \(A(3,y)\) is \(5\) units from \(O(0,0)\). Select <b>all</b> possible values of \(y\).`],opts:[R`\(4\)`,R`\(-4\)`,R`\(2\)`,R`\(5\)`,R`\(16\)`,R`\(-2\)`],ans:[0,1],
+  sol:[R`\[\begin{aligned}\sqrt{3^2+y^2}&=5\\ 9+y^2&=25\\ y^2&=16\\ y&=\pm4\end{aligned}\]`,[R`Jadi \(y=4\) atau \(y=-4\). Ingat, \((-4)^2=16\) juga! \(16\) adalah nilai \(y^2\), bukan \(y\).`,R`So \(y=4\) or \(y=-4\). Remember, \((-4)^2=16\) too! \(16\) is the value of \(y^2\), not \(y\).`]]},
+ {t:'sort',q:[R`Urutkan titik-titik berikut dari yang paling <b>dekat</b> ke paling <b>jauh</b> dari \(O(0,0)\).`,R`Order these points from <b>closest</b> to <b>farthest</b> from \(O(0,0)\).`],
+  items:[R`\(A(1,1)\)`,R`\(B(3,0)\)`,R`\(C(2,3)\)`,R`\(D(-4,2)\)`,R`\(E(5,-5)\)`],
+  sol:[[R`Bandingkan \(d^2=x^2+y^2\):`,R`Compare \(d^2=x^2+y^2\):`],
+   R`\[\begin{aligned}A&:\ 1+1=2\\ B&:\ 9+0=9\\ C&:\ 4+9=13\\ D&:\ 16+4=20\\ E&:\ 25+25=50\end{aligned}\]`,[R`Urutan: \(A,B,C,D,E\) (jaraknya \(\sqrt2,\ 3,\ \sqrt{13},\ 2\sqrt5,\ 5\sqrt2\)).`,R`Order: \(A,B,C,D,E\) (distances \(\sqrt2,\ 3,\ \sqrt{13},\ 2\sqrt5,\ 5\sqrt2\)).`]]},
+ {t:'pair',q:[R`Pasangkan setiap ruas garis dengan panjangnya.`,R`Match each segment with its length.`],
+  rows:[{lab:R`\((0,0)\) – \((5,12)\)`,ans:0},{lab:R`\((1,2)\) – \((9,8)\)`,ans:1},{lab:R`\((-3,-2)\) – \((5,13)\)`,ans:2},{lab:R`\((2,-1)\) – \((5,3)\)`,ans:3}],
+  chips:[R`\(13\)`,R`\(10\)`,R`\(17\)`,R`\(5\)`,R`\(7\)`],
+  sol:[R`\[\begin{aligned}(0,0)\text{–}(5,12)&:\ \sqrt{25+144}=\sqrt{169}=13\\ (1,2)\text{–}(9,8)&:\ \Delta x=8,\Delta y=6\Rightarrow\sqrt{100}=10\\ (-3,-2)\text{–}(5,13)&:\ \Delta x=8,\Delta y=15\Rightarrow\sqrt{64+225}=\sqrt{289}=17\\ (2,-1)\text{–}(5,3)&:\ \Delta x=3,\Delta y=4\Rightarrow\sqrt{25}=5\end{aligned}\]`]}
+],
+/* ---------- EXIT ---------- */
+exit:[
+ {t:'mc',q:[R`Jarak antara \((-1,2)\) dan \((5,10)\) adalah ...`,R`The distance between \((-1,2)\) and \((5,10)\) is ...`],opts:[R`\(10\)`,R`\(14\)`,R`\(\sqrt{28}\)`,R`\(100\)`],ans:0,
+  sol:[R`\[\Delta x=5-(-1)=6,\quad \Delta y=10-2=8,\quad d=\sqrt{36+64}=\sqrt{100}=10\]`]},
+ {t:'fill',q:[R`Jarak dari \(O(0,0)\) ke \((-8,15)\) adalah ...`,R`The distance from \(O(0,0)\) to \((-8,15)\) is ...`],fields:[{pre:R`\(d=\)`,ans:'17'}],
+  sol:[R`\[d=\sqrt{(-8)^2+15^2}=\sqrt{64+225}=\sqrt{289}=17\]`]},
+ {t:'tf',q:[R`Pernyataan: "\(\sqrt{3^2+4^2}=3+4\)."`,R`Statement: "\(\sqrt{3^2+4^2}=3+4\)."`],a:false,
+  sol:[[R`<b>Salah.</b>`,R`<b>False.</b>`],R`\[\sqrt{3^2+4^2}=\sqrt{25}=5\neq 7=3+4\]`]}
+],
+/* ---------- TASK 1 ---------- */
+t1:[
+ {t:'mc',q:[R`Jarak antara \((1,1)\) dan \((4,5)\) adalah ...`,R`The distance between \((1,1)\) and \((4,5)\) is ...`],opts:[R`\(5\)`,R`\(7\)`,R`\(25\)`,R`\(\sqrt7\)`],ans:0,
+  sol:[R`\[\Delta x=4-1=3,\quad \Delta y=5-1=4\]`,R`\[d=\sqrt{3^2+4^2}=\sqrt{9+16}=\sqrt{25}=5\]`,[R`\(25\) adalah \(d^2\) (lupa diakarkan); \(7=3+4\) lupa dikuadratkan.`,R`\(25\) is \(d^2\) (forgot the root); \(7=3+4\) forgot to square.`]]},
+ {t:'fill',q:[R`Tentukan jarak \(O(0,0)\) ke \(P(6,8)\).`,R`Find the distance from \(O(0,0)\) to \(P(6,8)\).`],fields:[{pre:R`\(OP=\)`,ans:'10'}],
+  sol:[R`\[OP=\sqrt{6^2+8^2}=\sqrt{36+64}=\sqrt{100}=10\]`]},
+ {t:'mc',q:[R`Jarak antara \((2,3)\) dan \((2,10)\) adalah ...`,R`The distance between \((2,3)\) and \((2,10)\) is ...`],opts:[R`\(7\)`,R`\(13\)`,R`\(12\)`,R`\(49\)`],ans:0,
+  sol:[[R`Nilai \(x\) sama (\(x=2\)), sehingga \(\Delta x=0\) dan ruas garisnya tegak.`,R`The \(x\)-values are equal (\(x=2\)), so \(\Delta x=0\) and the segment is vertical.`],R`\[d=\sqrt{0^2+(10-3)^2}=\sqrt{49}=7\]`]},
+ {t:'tf',q:[R`Pernyataan: "Jarak \((-3,0)\) ke \((3,0)\) adalah \(6\)."`,R`Statement: "The distance from \((-3,0)\) to \((3,0)\) is \(6\)."`],a:true,
+  sol:[[R`<b>Benar.</b> Kedua titik berada pada sumbu \(x\) (\(\Delta y=0\)).`,R`<b>True.</b> Both points lie on the \(x\)-axis (\(\Delta y=0\)).`],R`\[d=3-(-3)=3+3=6\]`]},
+ {t:'fill',q:[R`Hitung jarak \(A(3,2)\) dan \(B(8,14)\).`,R`Find the distance between \(A(3,2)\) and \(B(8,14)\).`],fields:[{pre:R`\(\Delta x=\)`,ans:'5'},{pre:R`\(\Delta y=\)`,ans:'12'},{pre:R`\(AB=\)`,ans:'13'}],
+  sol:[R`\[\Delta x=8-3=5,\quad \Delta y=14-2=12\]`,R`\[AB=\sqrt{5^2+12^2}=\sqrt{25+144}=\sqrt{169}=13\]`,[R`Ingat tripel \(5,12,13\).`,R`Remember the triple \(5,12,13\).`]]},
+ {t:'multi',q:[R`Untuk \(A(1,2)\) dan \(B(9,8)\), pilih semua pernyataan yang benar.`,R`For \(A(1,2)\) and \(B(9,8)\), select all the true statements.`],opts:[R`\(\Delta x=8\)`,R`\(\Delta y=6\)`,R`\(AB^2=100\)`,R`\(AB=14\)`,R`\(AB=10\)`,R`\(\Delta y=10\)`],ans:[0,1,2,4],
+  sol:[R`\[\Delta x=9-1=8,\quad \Delta y=8-2=6\]`,R`\[AB^2=8^2+6^2=64+36=100,\quad AB=\sqrt{100}=10\]`,[R`\(AB=14\) salah (\(8+6\)). \(\Delta y=10\) salah karena \(8-2=6\).`,R`\(AB=14\) is wrong (\(8+6\)). \(\Delta y=10\) is wrong because \(8-2=6\).`]]},
+ {t:'sort',q:[R`Urutkan langkah menghitung jarak \((2,1)\) dan \((14,6)\).`,R`Put the steps for finding the distance between \((2,1)\) and \((14,6)\) in order.`],
+  items:[R`\((x_1,y_1)=(2,1),\ (x_2,y_2)=(14,6)\)`,R`\(\Delta x=14-2=12,\ \ \Delta y=6-1=5\)`,R`\(12^2+5^2=144+25=169\)`,R`\(d=\sqrt{169}=13\)`],
+  sol:[[R`Ikuti metode 4 langkah: label → selisih → kuadrat &amp; jumlah → akar.`,R`Follow the 4-step method: label → differences → square &amp; add → root.`],R`\[d=\sqrt{12^2+5^2}=\sqrt{169}=13\]`]},
+ {t:'pair',q:[R`Pasangkan titik \(P\) dengan jaraknya dari \(O(0,0)\).`,R`Match each point \(P\) with its distance from \(O(0,0)\).`],
+  rows:[{lab:R`\(P(3,4)\)`,ans:0},{lab:R`\(P(6,8)\)`,ans:1},{lab:R`\(P(5,12)\)`,ans:2},{lab:R`\(P(8,15)\)`,ans:3}],
+  chips:[R`\(5\)`,R`\(10\)`,R`\(13\)`,R`\(17\)`,R`\(20\)`],
+  sol:[R`\[\begin{aligned}\sqrt{3^2+4^2}&=\sqrt{25}=5\\ \sqrt{6^2+8^2}&=\sqrt{100}=10\\ \sqrt{5^2+12^2}&=\sqrt{169}=13\\ \sqrt{8^2+15^2}&=\sqrt{289}=17\end{aligned}\]`]},
+ {t:'dnd',q:[R`Perhatikan grafik. Seret kartu untuk menghitung jarak \(A\) ke \(B\).`,R`Look at the graph. Drag the cards to calculate the distance from \(A\) to \(B\).`],
+  fig:{r:[0,8,0,10],u:26,segs:[[1,1,7,1,'dash','#f59e0b'],[7,1,7,9,'dash','#7c3aed'],[1,1,7,9,'','#e11d48']],ra:[7,1,-1,1],pts:[[1,1,'A(1, 1)','#2563eb',-8,16],[7,9,'B(7, 9)','#2563eb',-58,-4]]},
+  rows:[{lab:R`\(\Delta x\)`,ans:0},{lab:R`\(\Delta y\)`,ans:1},{lab:R`\(AB\)`,ans:2}],chips:[R`\(6\)`,R`\(8\)`,R`\(10\)`,R`\(14\)`,R`\(2\)`],
+  sol:[R`\[\Delta x=7-1=6,\quad \Delta y=9-1=8,\quad AB=\sqrt{36+64}=\sqrt{100}=10\]`]},
+ {t:'mc',q:[R`Jarak antara \((-2,-1)\) dan \((1,3)\) adalah ...`,R`The distance between \((-2,-1)\) and \((1,3)\) is ...`],opts:[R`\(5\)`,R`\(7\)`,R`\(\sqrt{17}\)`,R`\(25\)`],ans:0,
+  sol:[R`\[\Delta x=1-(-2)=3,\quad \Delta y=3-(-1)=4\]`,R`\[d=\sqrt{9+16}=\sqrt{25}=5\]`]}
+],
+/* ---------- TASK 2 ---------- */
+t2:[
+ {t:'mc',q:[R`Jarak antara \((-3,-4)\) dan \((3,4)\) adalah ...`,R`The distance between \((-3,-4)\) and \((3,4)\) is ...`],opts:[R`\(10\)`,R`\(0\)`,R`\(14\)`,R`\(\sqrt{14}\)`],ans:0,
+  sol:[R`\[\Delta x=3-(-3)=6,\quad \Delta y=4-(-4)=8\]`,R`\[d=\sqrt{36+64}=\sqrt{100}=10\]`,[R`Jawaban \(0\) muncul jika salah menghitung \(3-3\) dan \(4-4\) (lupa tanda negatif).`,R`The answer \(0\) comes from wrongly computing \(3-3\) and \(4-4\) (ignoring the negative signs).`]]},
+ {t:'fill',q:[R`Hitung jarak \(P(-5,2)\) dan \(Q(3,-4)\).`,R`Find the distance between \(P(-5,2)\) and \(Q(3,-4)\).`],fields:[{pre:R`\(\Delta x=\)`,ans:'8'},{pre:R`\(\Delta y=\)`,ans:'-6'},{pre:R`\(PQ=\)`,ans:'10'}],
+  sol:[R`\[\Delta x=3-(-5)=8,\quad \Delta y=-4-2=-6\]`,R`\[PQ=\sqrt{8^2+(-6)^2}=\sqrt{64+36}=\sqrt{100}=10\]`,[R`\(\Delta y\) boleh negatif; setelah dikuadratkan menjadi positif.`,R`\(\Delta y\) may be negative; after squaring it becomes positive.`]]},
+ {t:'mc',q:[R`Jarak \((1,2)\) dan \((3,6)\) dalam bentuk akar paling sederhana adalah ...`,R`The distance between \((1,2)\) and \((3,6)\) in simplest surd form is ...`],opts:[R`\(2\sqrt5\)`,R`\(4\sqrt5\)`,R`\(6\)`,R`\(\sqrt{12}\)`],ans:0,
+  sol:[R`\[\Delta x=3-1=2,\quad \Delta y=6-2=4\]`,R`\[d=\sqrt{4+16}=\sqrt{20}=\sqrt{4\times5}=2\sqrt5\]`]},
+ {t:'fill',q:[R`Jarak \(O(0,0)\) ke \(A(3,3)\). Lengkapi bentuknya.`,R`The distance from \(O(0,0)\) to \(A(3,3)\). Complete the forms.`],fields:[{pre:R`\(OA=\sqrt{\ \square\ }\), \(\square=\)`,ans:'18'},{pre:R`\(OA=\square\sqrt2\), \(\square=\)`,ans:'3'}],
+  sol:[R`\[OA=\sqrt{3^2+3^2}=\sqrt{9+9}=\sqrt{18}\]`,R`\[\sqrt{18}=\sqrt{9\times2}=3\sqrt2\]`]},
+ {t:'tf',q:[R`Pernyataan: "Jarak \((-2,-2)\) ke \((2,2)\) adalah \(4\sqrt2\)."`,R`Statement: "The distance from \((-2,-2)\) to \((2,2)\) is \(4\sqrt2\)."`],a:true,
+  sol:[[R`<b>Benar.</b>`,R`<b>True.</b>`],R`\[\Delta x=4,\ \Delta y=4,\ d=\sqrt{16+16}=\sqrt{32}=\sqrt{16\times2}=4\sqrt2\]`]},
+ {t:'multi',q:[R`Pilih semua yang nilainya sama dengan \(5\sqrt2\).`,R`Select everything that equals \(5\sqrt2\).`],
+  opts:[R`\(\sqrt{50}\)`,['Jarak \\((0,0)\\) ke \\((5,5)\\)','Distance from \\((0,0)\\) to \\((5,5)\\)'],['Jarak \\((-1,2)\\) ke \\((4,-3)\\)','Distance from \\((-1,2)\\) to \\((4,-3)\\)'],R`\(\sqrt{10}\)`,['Jarak \\((0,0)\\) ke \\((5,2)\\)','Distance from \\((0,0)\\) to \\((5,2)\\)'],R`\(7\)`],ans:[0,1,2],
+  sol:[R`\[5\sqrt2=\sqrt{25\times2}=\sqrt{50}\]`,R`\[\begin{aligned}(0,0)\text{–}(5,5)&:\ \sqrt{25+25}=\sqrt{50}\ \checkmark\\ (-1,2)\text{–}(4,-3)&:\ \Delta x=5,\ \Delta y=-5\Rightarrow\sqrt{50}\ \checkmark\\ (0,0)\text{–}(5,2)&:\ \sqrt{25+4}=\sqrt{29}\ \times\end{aligned}\]`,[R`\(\sqrt{10}\) dan \(7=\sqrt{49}\) tidak sama dengan \(\sqrt{50}\).`,R`\(\sqrt{10}\) and \(7=\sqrt{49}\) are not equal to \(\sqrt{50}\).`]]},
+ {t:'pair',q:[R`Pasangkan setiap ruas garis dengan panjangnya (bentuk akar paling sederhana).`,R`Match each segment with its length (simplest surd form).`],
+  rows:[{lab:R`\((0,0)\) – \((2,2)\)`,ans:0},{lab:R`\((0,0)\) – \((1,2)\)`,ans:1},{lab:R`\((-1,-1)\) – \((2,5)\)`,ans:2},{lab:R`\((2,-3)\) – \((-2,1)\)`,ans:3}],
+  chips:[R`\(2\sqrt2\)`,R`\(\sqrt5\)`,R`\(3\sqrt5\)`,R`\(4\sqrt2\)`,R`\(\sqrt{10}\)`],
+  sol:[R`\[\begin{aligned}(0,0)\text{–}(2,2)&:\ \sqrt{4+4}=\sqrt8=2\sqrt2\\ (0,0)\text{–}(1,2)&:\ \sqrt{1+4}=\sqrt5\\ (-1,-1)\text{–}(2,5)&:\ \Delta x=3,\Delta y=6\Rightarrow\sqrt{45}=3\sqrt5\\ (2,-3)\text{–}(-2,1)&:\ \Delta x=-4,\Delta y=4\Rightarrow\sqrt{32}=4\sqrt2\end{aligned}\]`]},
+ {t:'sort',q:[R`Urutkan titik dari yang paling <b>dekat</b> ke paling <b>jauh</b> dari \(P(-1,-1)\).`,R`Order the points from <b>closest</b> to <b>farthest</b> from \(P(-1,-1)\).`],
+  items:[R`\(D(-4,-2)\)`,R`\(A(2,3)\)`,R`\(B(-1,5)\)`,R`\(C(5,-9)\)`],
+  sol:[R`\[\begin{aligned}D&:\ \Delta x=-3,\Delta y=-1\Rightarrow d^2=10\\ A&:\ \Delta x=3,\Delta y=4\Rightarrow d^2=25\\ B&:\ \Delta x=0,\Delta y=6\Rightarrow d^2=36\\ C&:\ \Delta x=6,\Delta y=-8\Rightarrow d^2=100\end{aligned}\]`,[R`Urutan: \(D\ (\sqrt{10}),\ A\ (5),\ B\ (6),\ C\ (10)\).`,R`Order: \(D\ (\sqrt{10}),\ A\ (5),\ B\ (6),\ C\ (10)\).`]]},
+ {t:'dnd',q:[R`Hitung jarak \((-7,-3)\) dan \((1,12)\). Seret kartu ke setiap langkah.`,R`Find the distance between \((-7,-3)\) and \((1,12)\). Drag a card to each step.`],
+  rows:[{lab:R`\(\Delta x\)`,ans:0},{lab:R`\(\Delta y\)`,ans:1},{lab:R`\(d\)`,ans:2}],chips:[R`\(8\)`,R`\(15\)`,R`\(17\)`,R`\(-6\)`,R`\(9\)`,R`\(23\)`],
+  sol:[R`\[\Delta x=1-(-7)=8,\quad \Delta y=12-(-3)=15\]`,R`\[d=\sqrt{64+225}=\sqrt{289}=17\]`,[R`Kartu \(-6\) dan \(9\) muncul jika tanda negatif diabaikan (\(1-7\), \(12-3\)); \(23=8+15\) lupa dikuadratkan.`,R`The cards \(-6\) and \(9\) come from ignoring the negative signs (\(1-7\), \(12-3\)); \(23=8+15\) forgot to square.`]]},
+ {t:'mc',q:[R`Seorang siswa menghitung jarak \((-2,5)\) ke \((4,-3)\) dengan \(\Delta x=4-2=2\). Berapa jarak yang <b>benar</b>?`,R`A student computes the distance from \((-2,5)\) to \((4,-3)\) using \(\Delta x=4-2=2\). What is the <b>correct</b> distance?`],opts:[R`\(10\)`,R`\(\sqrt{68}\)`,R`\(14\)`,R`\(2\)`],ans:0,
+  sol:[[R`Kesalahan siswa: \(4-(-2)\) bukan \(4-2\).`,R`The student's mistake: it is \(4-(-2)\), not \(4-2\).`],R`\[\Delta x=4-(-2)=6,\quad \Delta y=-3-5=-8\]`,R`\[d=\sqrt{36+64}=\sqrt{100}=10\]`,[R`\(\sqrt{68}=\sqrt{2^2+8^2}\) adalah hasil dari kesalahan siswa tersebut.`,R`\(\sqrt{68}=\sqrt{2^2+8^2}\) is the result of the student's mistake.`]]}
+],
+/* ---------- TASK 3 ---------- */
+t3:[
+ {t:'mc',q:[R`Pada peta, 1 satuan = 1 km. Rumah di \((2,3)\) dan sekolah di \((8,11)\). Jarak garis lurusnya adalah ...`,R`On a map, 1 unit = 1 km. A house is at \((2,3)\) and a school at \((8,11)\). The straight-line distance is ...`],opts:[R`\(10\text{ km}\)`,R`\(14\text{ km}\)`,R`\(100\text{ km}\)`,R`\(7\text{ km}\)`],ans:0,
+  sol:[R`\[\Delta x=8-2=6,\quad \Delta y=11-3=8,\quad d=\sqrt{36+64}=\sqrt{100}=10\text{ km}\]`]},
+ {t:'fill',q:[R`Sebuah drone terbang lurus dari \((0,0)\) ke \((9,12)\) (satuan meter). Berapa meter jarak tempuhnya?`,R`A drone flies straight from \((0,0)\) to \((9,12)\) (units in metres). How many metres does it travel?`],fields:[{pre:R`\(d=\)`,post:'m',ans:'15'}],
+  sol:[R`\[d=\sqrt{9^2+12^2}=\sqrt{81+144}=\sqrt{225}=15\text{ m}\]`,[R`\(9,12,15\) adalah \(3\times(3,4,5)\).`,R`\(9,12,15\) is \(3\times(3,4,5)\).`]]},
+ {t:'tf',q:[R`Pernyataan: "Sebuah kapal berlayar 5 km ke timur, lalu 12 km ke utara. Jarak garis lurus kapal dari titik awal adalah 13 km."`,R`Statement: "A ship sails 5 km east, then 12 km north. Its straight-line distance from the start is 13 km."`],a:true,
+  sol:[[R`<b>Benar.</b> Timur dan utara saling tegak lurus, membentuk segitiga siku-siku. Anggap start \((0,0)\), akhir \((5,12)\).`,R`<b>True.</b> East and north are perpendicular, forming a right triangle. Let the start be \((0,0)\) and the end \((5,12)\).`],R`\[d=\sqrt{5^2+12^2}=\sqrt{169}=13\text{ km}\]`]},
+ {t:'multi',q:[R`🎮 Dalam gim, pemain berada di \((1,1)\). Serangan pemain menjangkau musuh yang jaraknya <b>paling jauh 5 satuan</b>. Musuh mana yang terkena? Pilih semua.`,R`🎮 In a game, the player is at \((1,1)\). The player's attack reaches enemies at a distance of <b>at most 5 units</b>. Which enemies are hit? Select all.`],
+  opts:[R`\(E_1(4,5)\)`,R`\(E_2(7,1)\)`,R`\(E_3(-2,-3)\)`,R`\(E_4(1,7)\)`,R`\(E_5(5,4)\)`],ans:[0,2,4],
+  sol:[R`\[\begin{aligned}E_1&:\ \Delta x=3,\Delta y=4\Rightarrow d=5\ \checkmark\\ E_2&:\ \Delta x=6,\Delta y=0\Rightarrow d=6\ \times\\ E_3&:\ \Delta x=-3,\Delta y=-4\Rightarrow d=5\ \checkmark\\ E_4&:\ \Delta x=0,\Delta y=6\Rightarrow d=6\ \times\\ E_5&:\ \Delta x=4,\Delta y=3\Rightarrow d=5\ \checkmark\end{aligned}\]`]},
+ {t:'sort',q:[R`🚕 Hotel berada di \((0,0)\). Urutkan tempat wisata dari yang paling <b>dekat</b> ke paling <b>jauh</b> (jarak garis lurus).`,R`🚕 A hotel is at \((0,0)\). Order the attractions from <b>closest</b> to <b>farthest</b> (straight-line distance).`],
+  items:[['🌿 Kebun \\((1,-1)\\)','🌿 Garden \\((1,-1)\\)'],['🏛️ Museum \\((-3,4)\\)','🏛️ Museum \\((-3,4)\\)'],['🛒 Pasar \\((0,-7)\\)','🛒 Market \\((0,-7)\\)'],['🏖️ Pantai \\((6,8)\\)','🏖️ Beach \\((6,8)\\)'],['✈️ Bandara \\((12,-9)\\)','✈️ Airport \\((12,-9)\\)']],
+  sol:[R`\[\begin{aligned}\text{Kebun}&:\ \sqrt{1+1}=\sqrt2\approx1{,}41\\ \text{Museum}&:\ \sqrt{9+16}=5\\ \text{Pasar}&:\ \sqrt{0+49}=7\\ \text{Pantai}&:\ \sqrt{36+64}=10\\ \text{Bandara}&:\ \sqrt{144+81}=\sqrt{225}=15\end{aligned}\]`]},
+ {t:'pair',q:[R`⚽ Koordinat lapangan dalam meter. Pasangkan setiap gerakan dengan jarak tempuhnya.`,R`⚽ Field coordinates are in metres. Match each movement with the distance travelled.`],
+  rows:[{lab:['Pelari: \\((0,0)\\) ke \\((30,40)\\)','Runner: \\((0,0)\\) to \\((30,40)\\)'],ans:0},{lab:['Bola: \\((10,5)\\) ke \\((34,15)\\)','Ball: \\((10,5)\\) to \\((34,15)\\)'],ans:1},{lab:['Kiper: \\((0,20)\\) ke \\((9,32)\\)','Goalkeeper: \\((0,20)\\) to \\((9,32)\\)'],ans:2},{lab:['Wasit: \\((-5,-5)\\) ke \\((15,16)\\)','Referee: \\((-5,-5)\\) to \\((15,16)\\)'],ans:3}],
+  chips:[R`\(50\text{ m}\)`,R`\(26\text{ m}\)`,R`\(15\text{ m}\)`,R`\(29\text{ m}\)`,R`\(70\text{ m}\)`],
+  sol:[R`\[\begin{aligned}\text{Pelari/Runner}&:\ \sqrt{30^2+40^2}=\sqrt{2500}=50\\ \text{Bola/Ball}&:\ \Delta x=24,\Delta y=10\Rightarrow\sqrt{576+100}=\sqrt{676}=26\\ \text{Kiper/Goalkeeper}&:\ \Delta x=9,\Delta y=12\Rightarrow\sqrt{81+144}=\sqrt{225}=15\\ \text{Wasit/Referee}&:\ \Delta x=20,\Delta y=21\Rightarrow\sqrt{400+441}=\sqrt{841}=29\end{aligned}\]`]},
+ {t:'dnd',q:[R`Ani 👧 di \((1,2)\) ingin ke toko 🏪 di \((5,5)\). Seret kartu ke kotak yang tepat (satuan: blok).`,R`Ani 👧 at \((1,2)\) wants to go to the shop 🏪 at \((5,5)\). Drag the cards into the correct boxes (unit: blocks).`],
+  fig:{r:[0,6,0,6],u:36,map:true,segs:[[1,2,5,2,'bold','#f97316'],[5,2,5,5,'bold','#f97316'],[1,2,5,5,'dash','#2563eb']],icons:[[1,2,'👧','Ani'],[5,5,'🏪','Toko/Shop']]},
+  rows:[{lab:['Jarak menyusuri jalan','Distance along the streets'],ans:0},{lab:['Jarak garis lurus','Straight-line distance'],ans:1},{lab:['Selisih kedua jarak','Difference of the two distances'],ans:2}],
+  chips:[R`\(7\)`,R`\(5\)`,R`\(2\)`,R`\(12\)`,R`\(25\)`,R`\(1\)`],
+  sol:[R`\[\text{mendatar}=5-1=4,\quad \text{tegak}=5-2=3\]`,R`\[\text{jalan/streets}=4+3=7,\qquad \text{lurus/straight}=\sqrt{16+9}=5,\qquad 7-5=2\]`]},
+ {t:'mc',q:[R`📶 Router Wi-Fi di \((3,2)\) menjangkau hingga 10 m (termasuk tepat 10 m). Titik mana yang <b>tidak</b> terjangkau?`,R`📶 A Wi-Fi router at \((3,2)\) reaches up to 10 m (including exactly 10 m). Which point is <b>not</b> covered?`],opts:[R`\((13,3)\)`,R`\((6,6)\)`,R`\((-3,2)\)`,R`\((3,-6)\)`],ans:0,
+  sol:[R`\[\begin{aligned}(13,3)&:\ \Delta x=10,\Delta y=1\Rightarrow\sqrt{101}\approx10{,}05 \gt 10\ \times\\ (6,6)&:\ \Delta x=3,\Delta y=4\Rightarrow5\\ (-3,2)&:\ \Delta x=-6,\Delta y=0\Rightarrow6\\ (3,-6)&:\ \Delta x=0,\Delta y=-8\Rightarrow8\end{aligned}\]`,[R`Hanya \((13,3)\) yang jaraknya lebih dari 10 m.`,R`Only \((13,3)\) is more than 10 m away.`]]},
+ {t:'fill',q:[R`Pada peta, 1 satuan = 5 km. Kota A di \((-2,1)\) dan kota B di \((1,5)\). Tentukan jaraknya.`,R`On a map, 1 unit = 5 km. City A is at \((-2,1)\) and city B is at \((1,5)\). Find the distance.`],fields:[{pre:['Jarak pada peta =','Distance on the map ='],post:['satuan','units'],ans:'5'},{pre:['Jarak sebenarnya =','Actual distance ='],post:'km',ans:'25'}],
+  sol:[R`\[\Delta x=1-(-2)=3,\quad \Delta y=5-1=4,\quad d=\sqrt{9+16}=5\text{ satuan / units}\]`,R`\[\text{jarak sebenarnya / actual distance}=5\times5=25\text{ km}\]`]},
+ {t:'tf',q:[R`Pernyataan: "Burung terbang lurus dari \((-4,-1)\) ke \((4,5)\) menempuh jarak 14 satuan."`,R`Statement: "A bird flying straight from \((-4,-1)\) to \((4,5)\) travels 14 units."`],a:false,
+  sol:[[R`<b>Salah.</b> \(14=8+6\) adalah jarak menyusuri grid, bukan garis lurus.`,R`<b>False.</b> \(14=8+6\) is the grid distance, not the straight line.`],R`\[\Delta x=4-(-4)=8,\quad \Delta y=5-(-1)=6,\quad d=\sqrt{64+36}=10\]`]}
+],
+/* ---------- TASK 4 ---------- */
+t4:[
+ {t:'fill',q:[R`Hitung keliling segitiga \(A(0,0)\), \(B(8,0)\), \(C(0,6)\).`,R`Find the perimeter of triangle \(A(0,0)\), \(B(8,0)\), \(C(0,6)\).`],fields:[{pre:['Keliling =','Perimeter ='],post:['satuan','units'],ans:'24'}],
+  sol:[R`\[AB=8,\quad AC=6,\quad BC=\sqrt{(0-8)^2+(6-0)^2}=\sqrt{64+36}=10\]`,R`\[K=8+6+10=24\]`]},
+ {t:'mc',q:[R`Segitiga \(P(1,1)\), \(Q(5,1)\), \(R(5,4)\) termasuk jenis segitiga ...`,R`Triangle \(P(1,1)\), \(Q(5,1)\), \(R(5,4)\) is a ... triangle.`],
+  opts:[['Siku-siku','Right-angled'],['Sama kaki','Isosceles'],['Sama sisi','Equilateral'],['Tumpul','Obtuse']],ans:0,
+  sol:[R`\[PQ=5-1=4,\quad QR=4-1=3,\quad PR=\sqrt{4^2+3^2}=5\]`,R`\[PQ^2+QR^2=16+9=25=PR^2\]`,[R`Jadi segitiga siku-siku (di \(Q\)). Ketiga sisinya berbeda, sehingga bukan sama kaki atau sama sisi.`,R`So it is a right triangle (at \(Q\)). All three sides are different, so it is neither isosceles nor equilateral.`]]},
+ {t:'multi',q:[R`Segitiga \(K(0,0)\), \(L(3,4)\), \(M(6,0)\). Pilih semua pernyataan yang benar.`,R`Triangle \(K(0,0)\), \(L(3,4)\), \(M(6,0)\). Select all the true statements.`],
+  fig:{r:[-1,7,-1,5],u:30,poly:[[0,0],[3,4],[6,0]],pts:[[0,0,'K','#0f172a',-14,14],[3,4,'L','#0f172a',-4,-10],[6,0,'M','#0f172a',6,14]]},
+  opts:[R`\(KL=LM\)`,['Segitiga sama kaki','It is isosceles'],R`\(KM=6\)`,['Segitiga siku-siku','It is right-angled'],['Keliling \\(=16\\)','Perimeter \\(=16\\)'],['Keliling \\(=15\\)','Perimeter \\(=15\\)']],ans:[0,1,2,4],
+  sol:[R`\[KL=\sqrt{9+16}=5,\quad LM=\sqrt{(6-3)^2+(0-4)^2}=5,\quad KM=6\]`,R`\[K=5+5+6=16\]`,[R`Cek siku-siku: \(5^2+5^2=50\neq36=6^2\), jadi bukan siku-siku.`,R`Right-angle check: \(5^2+5^2=50\neq36=6^2\), so it is not right-angled.`]]},
+ {t:'tf',q:[R`Pernyataan: "Titik \(A(1,1)\), \(B(4,5)\), \(C(7,9)\) segaris karena \(AB+BC=AC\)."`,R`Statement: "Points \(A(1,1)\), \(B(4,5)\), \(C(7,9)\) are collinear because \(AB+BC=AC\)."`],a:true,
+  sol:[[R`<b>Benar.</b> Jika jumlah dua jarak sama dengan jarak ketiga, maka ketiga titik segaris.`,R`<b>True.</b> If the sum of two distances equals the third distance, the three points lie on one line.`],
+   R`\[AB=\sqrt{9+16}=5,\quad BC=\sqrt{9+16}=5,\quad AC=\sqrt{36+64}=10,\quad 5+5=10\]`]},
+ {t:'fill',q:[R`Persegi panjang dengan titik sudut \((1,1)\), \((9,1)\), \((9,7)\), \((1,7)\). Tentukan panjang diagonal dan kelilingnya.`,R`A rectangle has vertices \((1,1)\), \((9,1)\), \((9,7)\), \((1,7)\). Find its diagonal and perimeter.`],
+  fields:[{pre:['Diagonal =','Diagonal ='],ans:'10'},{pre:['Keliling =','Perimeter ='],ans:'28'}],
+  sol:[R`\[\text{panjang/length}=9-1=8,\quad \text{lebar/width}=7-1=6\]`,R`\[\text{diagonal}=\sqrt{(9-1)^2+(7-1)^2}=\sqrt{64+36}=10\]`,R`\[K=2(8+6)=28\]`]},
+ {t:'mc',q:[R`Persegi \(ABCD\) dengan \(A(0,0)\), \(B(3,4)\), \(C(-1,7)\), \(D(-4,3)\). Berapa luasnya?`,R`Square \(ABCD\) has \(A(0,0)\), \(B(3,4)\), \(C(-1,7)\), \(D(-4,3)\). What is its area?`],
+  fig:{r:[-5,4,-1,8],u:26,poly:[[0,0],[3,4],[-1,7],[-4,3]],pts:[[0,0,'A','#0f172a',6,14],[3,4,'B','#0f172a',8,4],[-1,7,'C','#0f172a',6,-6],[-4,3,'D','#0f172a',-16,4]]},
+  opts:[R`\(25\)`,R`\(20\)`,R`\(50\)`,R`\(5\)`],ans:0,
+  sol:[R`\[AB=\sqrt{3^2+4^2}=5,\ \ BC=\sqrt{(-4)^2+3^2}=5,\ \ CD=\sqrt{(-3)^2+(-4)^2}=5,\ \ DA=\sqrt{4^2+(-3)^2}=5\]`,R`\[L=s^2=5^2=25\]`,[R`\(20=4\times5\) adalah keliling, bukan luas. \(50\) adalah kuadrat diagonal \(\left(\sqrt{50}\right)^2\).`,R`\(20=4\times5\) is the perimeter, not the area. \(50\) is the square of the diagonal \(\left(\sqrt{50}\right)^2\).`]]},
+ {t:'sort',q:[R`Segi empat \(A(0,0)\), \(B(6,0)\), \(C(7,4)\), \(D(1,5)\). Urutkan sisinya dari yang paling <b>pendek</b> ke paling <b>panjang</b>.`,R`Quadrilateral \(A(0,0)\), \(B(6,0)\), \(C(7,4)\), \(D(1,5)\). Order its sides from <b>shortest</b> to <b>longest</b>.`],
+  fig:{r:[-1,8,-1,6],u:28,poly:[[0,0],[6,0],[7,4],[1,5]],pts:[[0,0,'A','#0f172a',-14,14],[6,0,'B','#0f172a',6,14],[7,4,'C','#0f172a',8,0],[1,5,'D','#0f172a',-6,-8]]},
+  items:[R`\(BC\)`,R`\(DA\)`,R`\(AB\)`,R`\(CD\)`],
+  sol:[R`\[\begin{aligned}AB&=6=\sqrt{36}\\ BC&=\sqrt{1^2+4^2}=\sqrt{17}\approx4{,}12\\ CD&=\sqrt{(-6)^2+1^2}=\sqrt{37}\approx6{,}08\\ DA&=\sqrt{(-1)^2+(-5)^2}=\sqrt{26}\approx5{,}10\end{aligned}\]`,[R`Bandingkan nilai di dalam akar: \(17 \lt 26 \lt 36 \lt 37\). Urutan: \(BC, DA, AB, CD\).`,R`Compare the numbers under the roots: \(17 \lt 26 \lt 36 \lt 37\). Order: \(BC, DA, AB, CD\).`]]},
+ {t:'pair',q:[R`Pasangkan setiap segitiga dengan jenisnya.`,R`Match each triangle with its type.`],
+  rows:[{lab:R`\((0,0),(4,0),(0,3)\)`,ans:0},{lab:R`\((0,0),(4,0),(2,6)\)`,ans:1},{lab:R`\((0,0),(2,2),(4,0)\)`,ans:2},{lab:R`\((0,0),(5,1),(1,3)\)`,ans:3}],
+  chips:[['Siku-siku (sisi berbeda)','Right-angled (sides different)'],['Sama kaki (bukan siku-siku)','Isosceles (not right)'],['Siku-siku sama kaki','Right isosceles'],['Sembarang (bukan siku-siku)','Scalene (not right)']],
+  sol:[R`\[\begin{aligned}(0,0),(4,0),(0,3)&:\ 4,\ 3,\ 5;\ 9+16=25\ \Rightarrow \text{siku-siku / right}\\ (0,0),(4,0),(2,6)&:\ 4,\ \sqrt{40},\ \sqrt{40};\ 16+40\neq40\Rightarrow \text{sama kaki / isosceles}\\ (0,0),(2,2),(4,0)&:\ \sqrt8,\ \sqrt8,\ 4;\ 8+8=16\Rightarrow \text{siku-siku sama kaki}\\ (0,0),(5,1),(1,3)&:\ \sqrt{26},\ \sqrt{20},\ \sqrt{10};\ 10+20\neq26\Rightarrow \text{sembarang / scalene}\end{aligned}\]`]},
+ {t:'dnd',q:[R`Hitung keliling segitiga \(A(-2,-1)\), \(B(4,-1)\), \(C(4,7)\).`,R`Find the perimeter of triangle \(A(-2,-1)\), \(B(4,-1)\), \(C(4,7)\).`],
+  rows:[{lab:R`\(AB\)`,ans:0},{lab:R`\(BC\)`,ans:1},{lab:R`\(AC\)`,ans:2},{lab:['Keliling','Perimeter'],ans:3}],chips:[R`\(6\)`,R`\(8\)`,R`\(10\)`,R`\(24\)`,R`\(14\)`,R`\(48\)`],
+  sol:[R`\[AB=4-(-2)=6,\quad BC=7-(-1)=8\]`,R`\[AC=\sqrt{6^2+8^2}=\sqrt{100}=10,\quad K=6+8+10=24\]`]},
+ {t:'mc',q:[R`Titik mana yang berjarak <b>sama</b> dari \(A(0,0)\) dan \(B(6,0)\)?`,R`Which point is the <b>same</b> distance from \(A(0,0)\) and \(B(6,0)\)?`],opts:[R`\((3,5)\)`,R`\((2,4)\)`,R`\((4,1)\)`,R`\((6,6)\)`],ans:0,
+  sol:[R`\[\begin{aligned}(3,5)&:\ \sqrt{9+25}=\sqrt{34}\ \text{dan/and}\ \sqrt{(3-6)^2+25}=\sqrt{34}\ \checkmark\\ (2,4)&:\ \sqrt{20}\ \text{vs}\ \sqrt{32}\\ (4,1)&:\ \sqrt{17}\ \text{vs}\ \sqrt5\\ (6,6)&:\ \sqrt{72}\ \text{vs}\ 6\end{aligned}\]`,[R`Semua titik dengan \(x=3\) (tepat di tengah A dan B) berjarak sama ke A dan B.`,R`Every point with \(x=3\) (exactly midway between A and B) is equidistant from A and B.`]]}
+],
+/* ---------- TASK 5 ---------- */
+t5:[
+ {t:'fill',q:[R`Diketahui \(A(1,2)\), \(B(x,6)\), \(AB=5\), dan \(x \gt 1\). Tentukan \(x\).`,R`Given \(A(1,2)\), \(B(x,6)\), \(AB=5\), and \(x \gt 1\). Find \(x\).`],fields:[{pre:R`\(x=\)`,ans:'4'}],
+  sol:[R`\[\begin{aligned}(x-1)^2+(6-2)^2&=25\\ (x-1)^2+16&=25\\ (x-1)^2&=9\\ x-1&=\pm3\end{aligned}\]`,[R`\(x=4\) atau \(x=-2\). Karena \(x \gt 1\), maka \(x=4\).`,R`\(x=4\) or \(x=-2\). Since \(x \gt 1\), \(x=4\).`]]},
+ {t:'multi',q:[R`Diketahui \(P(2,y)\), \(Q(-4,1)\), dan \(PQ=10\). Pilih <b>semua</b> nilai \(y\) yang mungkin.`,R`Given \(P(2,y)\), \(Q(-4,1)\), and \(PQ=10\). Select <b>all</b> possible values of \(y\).`],opts:[R`\(9\)`,R`\(-7\)`,R`\(7\)`,R`\(-9\)`,R`\(11\)`,R`\(1\)`],ans:[0,1],
+  sol:[R`\[\begin{aligned}(2-(-4))^2+(y-1)^2&=100\\ 36+(y-1)^2&=100\\ (y-1)^2&=64\\ y-1&=\pm8\end{aligned}\]`,[R`\(y=9\) atau \(y=-7\).`,R`\(y=9\) or \(y=-7\).`]]},
+ {t:'mc',q:[R`Lingkaran berpusat di \(O(0,0)\) dengan jari-jari 13. Titik mana yang terletak <b>pada</b> lingkaran?`,R`A circle has centre \(O(0,0)\) and radius 13. Which point lies <b>on</b> the circle?`],opts:[R`\((5,12)\)`,R`\((6,7)\)`,R`\((10,3)\)`,R`\((8,8)\)`],ans:0,
+  sol:[[R`Titik pada lingkaran memiliki jarak tepat 13 dari pusat, artinya \(x^2+y^2=169\).`,R`A point on the circle is exactly 13 from the centre, meaning \(x^2+y^2=169\).`],R`\[\begin{aligned}(5,12)&:\ 25+144=169\ \checkmark\\ (6,7)&:\ 36+49=85\\ (10,3)&:\ 100+9=109\\ (8,8)&:\ 64+64=128\end{aligned}\]`]},
+ {t:'tf',q:[R`Pernyataan: "Jika jarak \(A\) ke \(B\) adalah \(0\), maka \(A\) dan \(B\) adalah titik yang sama."`,R`Statement: "If the distance from \(A\) to \(B\) is \(0\), then \(A\) and \(B\) are the same point."`],a:true,
+  sol:[[R`<b>Benar.</b> \(d=0\) berarti \((\Delta x)^2+(\Delta y)^2=0\). Karena kuadrat tidak pernah negatif, keduanya harus \(0\): \(\Delta x=0\) dan \(\Delta y=0\). Jadi koordinatnya sama.`,R`<b>True.</b> \(d=0\) means \((\Delta x)^2+(\Delta y)^2=0\). Since squares are never negative, both must be \(0\): \(\Delta x=0\) and \(\Delta y=0\). So the coordinates are identical.`]]},
+ {t:'sort',q:[R`Urutkan langkah mencari \(k\) jika jarak \((k,3)\) ke \((5,-1)\) adalah 5.`,R`Order the steps for finding \(k\) if the distance from \((k,3)\) to \((5,-1)\) is 5.`],
+  items:[R`\((5-k)^2+(-1-3)^2=25\)`,R`\((5-k)^2+16=25\)`,R`\((5-k)^2=9\)`,R`\(5-k=\pm3\)`,R`\(k=2\ \text{atau/or}\ k=8\)`],
+  sol:[[R`Substitusi ke rumus jarak (kuadratkan kedua ruas) → hitung \((-4)^2=16\) → pindahkan 16 → tarik akar (\(\pm\)) → selesaikan.`,R`Substitute into the distance formula (square both sides) → compute \((-4)^2=16\) → move 16 → take the root (\(\pm\)) → solve.`],R`\[5-k=3\Rightarrow k=2\qquad 5-k=-3\Rightarrow k=8\]`]},
+ {t:'pair',q:[R`Pusat \(C(2,1)\). Pasangkan setiap titik dengan jaraknya dari \(C\).`,R`Centre \(C(2,1)\). Match each point with its distance from \(C\).`],
+  rows:[{lab:R`\((5,5)\)`,ans:0},{lab:R`\((8,9)\)`,ans:1},{lab:R`\((-3,13)\)`,ans:2},{lab:R`\((2,-6)\)`,ans:3}],chips:[R`\(5\)`,R`\(10\)`,R`\(13\)`,R`\(7\)`,R`\(12\)`],
+  sol:[R`\[\begin{aligned}(5,5)&:\ \Delta x=3,\Delta y=4\Rightarrow5\\ (8,9)&:\ \Delta x=6,\Delta y=8\Rightarrow10\\ (-3,13)&:\ \Delta x=-5,\Delta y=12\Rightarrow13\\ (2,-6)&:\ \Delta x=0,\Delta y=-7\Rightarrow7\end{aligned}\]`]},
+ {t:'mc',q:[R`Berapa jarak antara \((a,b)\) dan \((a+3,\,b+4)\) untuk sembarang bilangan \(a\) dan \(b\)?`,R`What is the distance between \((a,b)\) and \((a+3,\,b+4)\) for any numbers \(a\) and \(b\)?`],opts:[R`\(5\)`,R`\(7\)`,R`\(a+b+5\)`,['Bergantung pada nilai \\(a\\) dan \\(b\\)','It depends on \\(a\\) and \\(b\\)']],ans:0,
+  sol:[R`\[\Delta x=(a+3)-a=3,\qquad \Delta y=(b+4)-b=4\]`,R`\[d=\sqrt{3^2+4^2}=5\]`,[R`Jaraknya selalu 5, tidak bergantung pada \(a\) dan \(b\), karena hanya <b>selisih</b> yang menentukan jarak.`,R`The distance is always 5, independent of \(a\) and \(b\), because only the <b>differences</b> determine the distance.`]]},
+ {t:'fill',q:[R`Segitiga sama sisi \(A(0,0)\), \(B(6,0)\), \(C(3,y)\) dengan \(y \gt 0\). Lengkapi.`,R`Equilateral triangle \(A(0,0)\), \(B(6,0)\), \(C(3,y)\) with \(y \gt 0\). Complete.`],
+  fields:[{pre:R`\(y^2=\)`,ans:'27'},{pre:R`\(y=\square\sqrt3\), \(\square=\)`,ans:'3'}],
+  sol:[[R`Sama sisi berarti \(AC=AB=6\).`,R`Equilateral means \(AC=AB=6\).`],R`\[\sqrt{3^2+y^2}=6\Rightarrow 9+y^2=36\Rightarrow y^2=27\]`,R`\[y=\sqrt{27}=\sqrt{9\times3}=3\sqrt3\]`]},
+ {t:'dnd',q:[R`Belah ketupat \(A(0,0)\), \(B(4,3)\), \(C(8,0)\), \(D(4,-3)\). Seret kartu ke kotak yang tepat.`,R`Rhombus \(A(0,0)\), \(B(4,3)\), \(C(8,0)\), \(D(4,-3)\). Drag the cards into the correct boxes.`],
+  fig:{r:[-1,9,-4,4],u:26,poly:[[0,0],[4,3],[8,0],[4,-3]],segs:[[0,0,8,0,'dash','#f59e0b'],[4,3,4,-3,'dash','#7c3aed']],pts:[[0,0,'A','#0f172a',-14,4],[4,3,'B','#0f172a',6,-6],[8,0,'C','#0f172a',8,4],[4,-3,'D','#0f172a',6,14]]},
+  rows:[{lab:['Sisi \\(AB\\)','Side \\(AB\\)'],ans:0},{lab:['Keliling','Perimeter'],ans:1},{lab:['Diagonal \\(AC\\)','Diagonal \\(AC\\)'],ans:2},{lab:['Diagonal \\(BD\\)','Diagonal \\(BD\\)'],ans:3}],
+  chips:[R`\(5\)`,R`\(20\)`,R`\(8\)`,R`\(6\)`,R`\(10\)`,R`\(25\)`],
+  sol:[R`\[AB=\sqrt{4^2+3^2}=5\ \ (\text{semua sisi / all sides}=5)\]`,R`\[K=4\times5=20,\quad AC=8-0=8,\quad BD=3-(-3)=6\]`]},
+ {t:'mc',q:[R`Titik mana yang paling <b>jauh</b> dari \((1,-2)\)?`,R`Which point is the <b>farthest</b> from \((1,-2)\)?`],opts:[R`\((1,9)\)`,R`\((7,6)\)`,R`\((-8,-2)\)`,R`\((-5,4)\)`],ans:0,
+  sol:[R`\[\begin{aligned}(1,9)&:\ \Delta x=0,\Delta y=11\Rightarrow 11\\ (7,6)&:\ \Delta x=6,\Delta y=8\Rightarrow 10\\ (-8,-2)&:\ \Delta x=-9,\Delta y=0\Rightarrow 9\\ (-5,4)&:\ \Delta x=-6,\Delta y=6\Rightarrow\sqrt{72}\approx8{,}49\end{aligned}\]`]}
+]
+};
+
+/* ================= INIT ================= */
+const ORDER=['s1','s2','s3','s4','s5','s6','s7','t1','t2','t3','t4','t5'];
+let cur='s1';
+function go(id){
+  cur=id;
+  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('show',s.id===id));
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+  const i=ORDER.indexOf(id);
+  document.getElementById('prevB').disabled=i===0;
+  document.getElementById('nextB').disabled=i===ORDER.length-1;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.addEventListener('load',()=>{
+  document.querySelectorAll('[data-fig]').forEach(el=>el.innerHTML=fig(FIGS[el.dataset.fig]));
+  document.querySelectorAll('.qlist').forEach(box=>{
+    const g=box.dataset.group;
+    (DATA[g]||[]).forEach((q,i)=>box.appendChild(buildCard(q,i+1,g)));
+    updateScore(g);
+  });
+  math(document.body);
+  document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.getElementById('prevB').onclick=()=>go(ORDER[Math.max(0,ORDER.indexOf(cur)-1)]);
+  document.getElementById('nextB').onclick=()=>go(ORDER[Math.min(ORDER.length-1,ORDER.indexOf(cur)+1)]);
+  const m=document.getElementById('rulesModal');
+  document.getElementById('openRules').onclick=()=>m.classList.add('open');
+  document.getElementById('closeRules').onclick=()=>m.classList.remove('open');
+  m.onclick=e=>{if(e.target===m) m.classList.remove('open');};
+  go('s1');
+});
+</script>
+</body>
+</html>
