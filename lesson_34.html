@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penerapan Teorema Pythagoras | Math Tutoring by Deni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--pri:#4f46e5;--pri2:#6366f1;--ink:#0f172a;--mut:#64748b;--bg:#f4f6fb;--card:#fff;--line:#e2e8f0;
+--c1:#f59e0b;--c2:#0ea5e9;--c3:#8b5cf6;--c4:#ef4444;--c5:#10b981;--c6:#ec4899;--c7:#14b8a6;--ok:#16a34a;--no:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+.en{display:block;font-style:italic;font-size:.86em;color:var(--mut);font-weight:400;line-height:1.45}
+h2 .en,h3 .en,h4 .en{font-size:.62em;margin-top:2px}
+header{position:sticky;top:0;z-index:50;background:linear-gradient(120deg,#312e81,#4f46e5 55%,#0ea5e9);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 24px;box-shadow:0 4px 18px rgba(49,46,129,.25)}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.16);display:grid;place-items:center;flex-shrink:0}
+.brand-name{font-weight:800;font-size:1.15rem;letter-spacing:.2px}
+.topic{font-size:.92rem;opacity:.95}
+.topic.en2{font-style:italic;font-size:.82rem;opacity:.8}
+.rules-btn{background:#fff;color:#312e81;border:0;border-radius:12px;padding:10px 16px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.15);display:flex;align-items:center;gap:8px;font-size:.95rem}
+.rules-btn:hover{transform:translateY(-1px)}
+.layout{display:grid;grid-template-columns:1fr 3fr;gap:22px;padding:22px;max-width:1500px;margin:0 auto}
+nav{position:sticky;top:96px;align-self:start;background:var(--card);border-radius:18px;padding:14px;box-shadow:0 2px 12px rgba(15,23,42,.06);max-height:calc(100vh - 120px);overflow:auto}
+nav .navttl{font-weight:800;font-size:.8rem;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin:6px 8px 10px}
+nav button{display:flex;width:100%;text-align:left;gap:10px;align-items:flex-start;border:0;background:transparent;padding:9px 10px;border-radius:12px;font-family:inherit;font-size:.92rem;color:var(--ink);cursor:pointer;margin-bottom:3px}
+nav button:hover{background:#eef2ff}
+nav button.active{background:linear-gradient(90deg,#4f46e5,#6366f1);color:#fff}
+nav button.active .en,nav button.active .nt{color:#e0e7ff}
+nav .ni{font-size:1.15rem;line-height:1.3}
+nav .nt{display:block;font-size:.74rem;color:var(--mut);font-weight:600}
+nav .nlbl{font-weight:700;line-height:1.3}
+nav .nlbl .en{font-size:.8em}
+nav .sep{height:1px;background:var(--line);margin:10px 6px}
+main{min-width:0}
+.page{display:none;animation:fade .35s ease}
+.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.phead{display:flex;gap:16px;align-items:center;padding:20px 24px;border-radius:20px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+.phead::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.12)}
+.phead h2{margin:0;font-size:1.55rem}
+.phead h2 .en{color:rgba(255,255,255,.85)}
+.ptime{display:inline-block;background:rgba(255,255,255,.22);padding:2px 10px;border-radius:99px;font-size:.8rem;font-weight:700;margin-bottom:4px}
+.picon{font-size:2.3rem;width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.18);display:grid;place-items:center;flex-shrink:0}
+.g1{background:linear-gradient(120deg,#f59e0b,#f97316)}.g2{background:linear-gradient(120deg,#0ea5e9,#2563eb)}.g3{background:linear-gradient(120deg,#8b5cf6,#6d28d9)}
+.g4{background:linear-gradient(120deg,#ef4444,#db2777)}.g5{background:linear-gradient(120deg,#10b981,#059669)}.g6{background:linear-gradient(120deg,#14b8a6,#0891b2)}
+.g7{background:linear-gradient(120deg,#ec4899,#a855f7)}.gt{background:linear-gradient(120deg,#334155,#4f46e5)}
+.card{background:var(--card);border-radius:18px;padding:20px 22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(15,23,42,.05);border-left:6px solid var(--pri2)}
+.card h3{margin:0 0 10px;font-size:1.2rem;display:flex;gap:10px;align-items:flex-start}
+.card h3 .hi{font-size:1.3rem}
+.card h4{margin:14px 0 6px;font-size:1.02rem}
+.card p{margin:6px 0 10px}
+.bl1{border-left-color:var(--c1)}.bl2{border-left-color:var(--c2)}.bl3{border-left-color:var(--c3)}.bl4{border-left-color:var(--c4)}.bl5{border-left-color:var(--c5)}.bl6{border-left-color:var(--c6)}.bl7{border-left-color:var(--c7)}
+.formula{background:linear-gradient(120deg,#eef2ff,#e0f2fe);border:2px dashed #818cf8;border-radius:14px;padding:12px 16px;margin:10px 0;text-align:center}
+.formula .ft{font-weight:700;font-size:.9rem;color:#3730a3}
+.ex{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px 16px;margin:12px 0}
+.ex .exh{font-weight:800;color:#b45309;margin-bottom:6px}
+.ex .exh .en{color:#b45309;opacity:.8}
+.steps{margin:6px 0 4px;padding-left:22px}
+.steps li{margin-bottom:8px}
+.tip{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:14px;padding:12px 16px;margin:12px 0}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:14px;padding:12px 16px;margin:12px 0}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:center}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mini{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.mini .mi{font-size:2rem}
+.mini b{display:block}
+.fig{display:flex;justify-content:center;margin:8px 0}
+.svgfig{width:100%;max-width:340px;height:auto}
+table.tbl{border-collapse:collapse;width:100%;margin:8px 0;font-size:.95rem}
+.tbl th,.tbl td{border:1px solid var(--line);padding:7px 9px;text-align:center}
+.tbl th{background:#eef2ff}
+.sqgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;margin:8px 0}
+.sqgrid div{background:#f1f5f9;border-radius:10px;padding:5px;text-align:center;font-size:.92rem}
+.mline{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.secttl{font-weight:800;font-size:1.15rem;margin:24px 0 10px;display:flex;align-items:center;gap:10px}
+.secttl .badge{background:var(--pri);color:#fff;border-radius:10px;padding:3px 10px;font-size:.85rem}
+/* questions */
+.qcard{background:#fff;border-radius:18px;padding:18px 20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(15,23,42,.05);border:2px solid transparent;transition:border .2s}
+.qcard.ok{border-color:#86efac}.qcard.no{border-color:#fca5a5}
+.qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.qnum{background:var(--pri);color:#fff;font-weight:800;border-radius:10px;padding:3px 11px;font-size:.88rem}
+.qtype{background:#f1f5f9;color:#334155;border-radius:10px;padding:3px 10px;font-size:.78rem;font-weight:700}
+.qtype .en{display:inline;font-size:.95em}
+.qtext{font-weight:600;margin:4px 0 8px}
+.qhint{font-size:.84rem;color:#0369a1;background:#f0f9ff;border-radius:10px;padding:6px 10px;margin-bottom:10px}
+.qhint .en{color:#0369a1;opacity:.85}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;transition:.15s;background:#fff}
+.opt:hover{border-color:#a5b4fc;background:#f8faff}
+.opt input{margin-top:5px;accent-color:var(--pri);transform:scale(1.15)}
+.opt.good{border-color:var(--ok);background:#f0fdf4}.opt.bad{border-color:var(--no);background:#fef2f2}
+.filltpl{font-size:1.05rem;line-height:2.4}
+input.blank{width:110px;padding:6px 8px;border:2px solid #a5b4fc;border-radius:10px;font:inherit;text-align:center;margin:0 4px}
+input.blank.good{border-color:var(--ok);background:#f0fdf4}input.blank.bad{border-color:var(--no);background:#fef2f2}
+.sortlist{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+.sitem{display:flex;align-items:center;gap:10px;background:#f8fafc;border:2px solid var(--line);border-radius:12px;padding:8px 10px;cursor:grab}
+.sitem .stx{flex:1}
+.sitem .grip{color:#94a3b8;font-size:1.2rem}
+.sitem.good{border-color:var(--ok);background:#f0fdf4}.sitem.bad{border-color:var(--no);background:#fef2f2}
+.sbtns button{border:0;background:#e0e7ff;color:#3730a3;border-radius:8px;width:30px;height:28px;cursor:pointer;margin-left:3px;font-size:.8rem}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pcol{display:grid;gap:8px;align-content:start}
+.pbtn{position:relative;text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px 9px 40px;cursor:pointer;font:inherit;min-height:46px}
+.pbtn .pb{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:#e2e8f0;color:#334155;font-size:.78rem;font-weight:800;display:grid;place-items:center}
+.pbtn.sel{outline:3px solid #fbbf24}
+.pbtn.good{box-shadow:0 0 0 3px #86efac}.pbtn.bad{box-shadow:0 0 0 3px #fca5a5}
+.pc0{border-color:#6366f1;background:#eef2ff}.pc0 .pb{background:#6366f1;color:#fff}
+.pc1{border-color:#f59e0b;background:#fffbeb}.pc1 .pb{background:#f59e0b;color:#fff}
+.pc2{border-color:#10b981;background:#ecfdf5}.pc2 .pb{background:#10b981;color:#fff}
+.pc3{border-color:#ec4899;background:#fdf2f8}.pc3 .pb{background:#ec4899;color:#fff}
+.pc4{border-color:#0ea5e9;background:#f0f9ff}.pc4 .pb{background:#0ea5e9;color:#fff}
+.pc5{border-color:#8b5cf6;background:#f5f3ff}.pc5 .pb{background:#8b5cf6;color:#fff}
+.dndtpl{font-size:1.04rem;line-height:2.6}
+.slot{display:inline-flex;min-width:78px;min-height:40px;vertical-align:middle;border:2px dashed #818cf8;border-radius:10px;background:#eef2ff;margin:2px 4px;align-items:center;justify-content:center;padding:2px}
+.slot.over,.zdrop.over,.bank.over{background:#e0e7ff;border-color:#4f46e5}
+.slot.good{border-color:var(--ok);border-style:solid;background:#f0fdf4}.slot.bad{border-color:var(--no);border-style:solid;background:#fef2f2}
+.bank{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:10px;margin-top:12px;border:2px dashed #cbd5e1;border-radius:14px;background:#f8fafc}
+.bank::before{content:"Bank kartu / Card bank";width:100%;font-size:.75rem;color:var(--mut);font-weight:700}
+.chip{display:inline-block;background:#fff;border:2px solid #6366f1;border-radius:10px;padding:5px 11px;cursor:grab;user-select:none;font-weight:600;line-height:1.4}
+.chip.picked{outline:3px solid #fbbf24;transform:scale(1.04)}
+.chip.dragging{opacity:.5}
+.chip.good{border-color:var(--ok);background:#f0fdf4}.chip.bad{border-color:var(--no);background:#fef2f2}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.zone{border:2px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.ztitle{background:#eef2ff;padding:7px 10px;font-weight:800;font-size:.92rem;text-align:center}
+.zdrop{min-height:90px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;border:2px dashed transparent}
+.qactions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer;background:var(--pri);color:#fff;line-height:1.25}
+.btn .en{color:#e0e7ff;font-size:.75em}
+.btn.ghost{background:#eef2ff;color:#3730a3}.btn.ghost .en{color:#6366f1}
+.btn:hover{filter:brightness(1.07)}
+.fb{margin-top:10px;font-weight:700;border-radius:12px;padding:0}
+.fb.good,.fb.bad,.fb.warn{padding:8px 12px}
+.fb.good{background:#f0fdf4;color:#166534}.fb.bad{background:#fef2f2;color:#991b1b}.fb.warn{background:#fffbeb;color:#92400e}
+details.sol{margin-top:12px;border:1px solid #c7d2fe;border-radius:14px;background:#f8faff;overflow:hidden}
+details.sol summary{cursor:pointer;padding:10px 14px;font-weight:800;color:#3730a3;list-style:none}
+details.sol summary::-webkit-details-marker{display:none}
+details.sol summary::before{content:"▸ ";}
+details.sol[open] summary::before{content:"▾ ";}
+details.sol summary .en{display:inline;color:#6366f1}
+.solbody{padding:4px 16px 12px;border-top:1px dashed #c7d2fe}
+.solbody p{margin:8px 0}
+.scorebar{display:flex;align-items:center;gap:14px;justify-content:space-between;background:#fff;border-radius:16px;padding:12px 18px;margin-bottom:16px;box-shadow:0 2px 10px rgba(15,23,42,.05);flex-wrap:wrap}
+.scorebar .sc{font-size:1.4rem;font-weight:800;color:var(--pri)}
+.progress{flex:1;min-width:150px;height:12px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#10b981,#0ea5e9);transition:width .4s}
+textarea.refl{width:100%;min-height:70px;border:2px solid var(--line);border-radius:12px;padding:10px;font:inherit;margin-top:6px}
+.pager{display:flex;justify-content:space-between;gap:10px;margin:22px 0 10px}
+.keylist li{margin-bottom:10px}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:22px;max-width:520px;width:100%;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.3);animation:fade .25s}
+.modal h3{margin:0 0 14px;display:flex;gap:10px;align-items:center}
+.rule{display:flex;gap:14px;align-items:flex-start;background:#f8fafc;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.rule .ri{font-size:1.6rem}
+/* svg */
+.shape{fill:#e0e7ff;stroke:#4f46e5;stroke-width:3;stroke-linejoin:round}
+.ra{fill:none;stroke:#0f172a;stroke-width:2}
+.lb{font:700 14px 'Plus Jakarta Sans',sans-serif;fill:#0f172a}
+.hyp{fill:#dc2626}.ang{font:700 13px 'Plus Jakarta Sans',sans-serif;fill:#7c3aed}
+.sm{font-size:11px;font-weight:600}.lt{fill:#fff}
+.tick{font:500 10px 'Plus Jakarta Sans',sans-serif;fill:#64748b}
+.wall{fill:#cbd5e1;stroke:#64748b}
+.ground{stroke:#16a34a;stroke-width:4}
+.rail{stroke:#92400e;stroke-width:11;stroke-linecap:round}
+.rung{stroke:#fde68a;stroke-width:6;stroke-dasharray:3 11}
+.dim{stroke:#0ea5e9;stroke-width:2.2;stroke-dasharray:6 4}
+.tvbody{fill:#334155}.screen{fill:#1e3a8a}
+.diag{stroke:#f43f5e;stroke-width:3;stroke-dasharray:8 5}
+.person{fill:#f59e0b}.personl{stroke:#334155;stroke-width:3;stroke-linecap:round}
+.string{stroke:#7c3aed;stroke-width:2.2}
+.kitep{fill:#f43f5e;stroke:#9f1239;stroke-width:1.5}.tail{fill:none;stroke:#f59e0b;stroke-width:2}
+.path{stroke:#2563eb;stroke-width:3}.pt{fill:#2563eb}
+.boat{fill:#b45309}.mast{stroke:#334155;stroke-width:2}.sail{fill:#f1f5f9;stroke:#334155}
+.compass circle{fill:#fff;stroke:#94a3b8;stroke-width:2}.compass path{fill:#dc2626}
+.gl{stroke:#e2e8f0;stroke-width:1}.ax{stroke:#475569;stroke-width:1.6}
+.seg{stroke:#dc2626;stroke-width:3}
+.edge{stroke:#334155;stroke-width:2;fill:none}.hid{stroke:#94a3b8;stroke-width:1.6;stroke-dasharray:5 4}
+.sdiag{stroke:#dc2626;stroke-width:3}.bdiag{stroke:#0ea5e9;stroke-width:2.6;stroke-dasharray:6 4}
+.boxf{fill:#e0f2fe;opacity:.7}
+.fieldr{fill:#bbf7d0;stroke:#15803d;stroke-width:3}
+.pole{stroke:#475569;stroke-width:6;stroke-linecap:round}.flag{fill:#ef4444}
+.rope{stroke:#7c3aed;stroke-width:2.4}
+.rh{fill:#fce7f3;stroke:#db2777;stroke-width:3}
+@media (max-width:900px){
+ .layout{grid-template-columns:1fr;padding:12px}
+ nav{position:relative;top:0;max-height:none}
+ .grid2,.grid3{grid-template-columns:1fr}
+ header{flex-direction:column;align-items:flex-start;padding:12px 16px;position:relative}
+ .pairs{grid-template-columns:1fr 1fr;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="brand">
+  <div class="logo">
+   <svg width="34" height="34" viewBox="0 0 40 40"><polygon points="6,34 34,34 6,8" fill="#fde68a" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/><path d="M6,28 h6 v6" fill="none" stroke="#312e81" stroke-width="2"/></svg>
+  </div>
+  <div>
+   <div class="brand-name">Math Tutoring by Deni</div>
+   <div class="topic">Topik: Teorema Pythagoras – Penerapan Teorema Pythagoras</div>
+   <div class="topic en2">Topic: The Pythagorean Theorem – Applications of the Pythagorean Theorem</div>
+  </div>
+ </div>
+ <button class="rules-btn" id="openRules">📋 <span>Class rules</span></button>
+</header>
+
+<div class="modal-bg" id="rulesModal">
+ <div class="modal">
+  <h3>📋 <span>Aturan Kelas<span class="en">Class Rules</span></span></h3>
+  <div class="rule"><div class="ri">🗣️</div><div><b>Berbicara secara bergantian.</b><span class="en">Take turns when speaking.</span></div></div>
+  <div class="rule"><div class="ri">🙋</div><div><b>Meminta izin jika ingin meninggalkan kelas.</b><span class="en">Ask for permission if you want to leave the class.</span></div></div>
+  <div class="rule"><div class="ri">🎥</div><div><b>Menyalakan microphone dan camera jika diperlukan.</b><span class="en">Turn on your microphone and camera when needed.</span></div></div>
+  <div style="text-align:right;margin-top:14px"><button class="btn" id="closeRules">Tutup<span class="en">Close</span></button></div>
+ </div>
+</div>
+
+<div class="layout">
+<nav id="nav">
+ <div class="navttl">Alur Pelajaran · Lesson Flow</div>
+ <button data-p="p1"><span class="ni">🔁</span><span class="nlbl">Pemanasan: Ulasan Spiral<span class="en">Spiral Review Warm-up</span><span class="nt">00:00 – 00:10</span></span></button>
+ <button data-p="p2"><span class="ni">🌏</span><span class="nlbl">Pengantar &amp; Kaitan Dunia Nyata<span class="en">Introduction &amp; Real-World Connection</span><span class="nt">00:10 – 00:15</span></span></button>
+ <button data-p="p3"><span class="ni">📚</span><span class="nlbl">Mengulang Pengetahuan Prasyarat<span class="en">Review of Prior Knowledge</span><span class="nt">00:15 – 00:20</span></span></button>
+ <button data-p="p4"><span class="ni">🧩</span><span class="nlbl">Pengenalan Masalah<span class="en">Problem Introduction</span><span class="nt">00:20 – 00:25</span></span></button>
+ <button data-p="p5"><span class="ni">🤝</span><span class="nlbl">Latihan Terbimbing<span class="en">Guided Practice</span><span class="nt">00:25 – 00:40</span></span></button>
+ <button data-p="p6"><span class="ni">✍️</span><span class="nlbl">Latihan Mandiri<span class="en">Independent Practice</span><span class="nt">00:40 – 00:55</span></span></button>
+ <button data-p="p7"><span class="ni">🎯</span><span class="nlbl">Konsolidasi &amp; Refleksi<span class="en">Consolidation &amp; Reflection</span><span class="nt">00:55 – 01:00</span></span></button>
+ <div class="sep"></div>
+ <button data-p="t1"><span class="ni">📝</span><span class="nlbl">Tugas 1<span class="en">Task 1</span><span class="nt">Sisi miring &amp; sisi siku-siku · Hypotenuse &amp; legs</span></span></button>
+ <button data-p="t2"><span class="ni">📐</span><span class="nlbl">Tugas 2<span class="en">Task 2</span><span class="nt">Jenis segitiga &amp; segitiga istimewa · Triangle types &amp; special triangles</span></span></button>
+ <button data-p="t3"><span class="ni">🪜</span><span class="nlbl">Tugas 3<span class="en">Task 3</span><span class="nt">Soal cerita sehari-hari · Everyday word problems</span></span></button>
+ <button data-p="t4"><span class="ni">🗺️</span><span class="nlbl">Tugas 4<span class="en">Task 4</span><span class="nt">Koordinat &amp; bangun datar · Coordinates &amp; plane shapes</span></span></button>
+ <button data-p="t5"><span class="ni">🚀</span><span class="nlbl">Tugas 5<span class="en">Task 5</span><span class="nt">Navigasi, bangun ruang &amp; HOTS · Navigation, solids &amp; HOTS</span></span></button>
+</nav>
+
+<main id="main">
+
+<!-- ================= P1 ================= -->
+<section class="page" id="p1">
+ <div class="phead g1"><div class="picon">🔁</div><div><span class="ptime">⏱ 00:00 – 00:10</span><h2>Pemanasan: Ulasan Spiral<span class="en">Spiral Review Warm-up</span></h2></div></div>
+
+ <div class="card bl1">
+  <p>Sebelum masuk ke penerapan Teorema Pythagoras, kita harus lancar menghitung <b>kuadrat</b> dan <b>akar kuadrat</b>. Keterampilan ini akan dipakai di <b>setiap</b> soal hari ini.<span class="en">Before moving on to applications of the Pythagorean Theorem, we must be fluent with <b>squares</b> and <b>square roots</b>. These skills will be used in <b>every</b> problem today.</span></p>
+  <p>📌 Catatan: di halaman ini tanda koma dipakai sebagai tanda desimal, misalnya $1{,}5 = 1.5$.<span class="en">📌 Note: on this page a comma is used as the decimal mark, for example $1{,}5 = 1.5$.</span></p>
+ </div>
+
+ <div class="card bl1">
+  <h3><span class="hi">🔢</span><span>A. Kuadrat Suatu Bilangan<span class="en">A. Squaring a Number</span></span></h3>
+  <p>Kuadrat suatu bilangan adalah hasil kali bilangan itu dengan dirinya sendiri.<span class="en">The square of a number is the product of that number with itself.</span></p>
+  <div class="formula"><div class="ft">Rumus · Formula</div>$$a^2 = a \times a$$</div>
+  <div class="ex"><div class="exh">Contoh 1<span class="en">Example 1</span></div>
+   <div class="mline">$$13^2 = 13 \times 13 = 169 \qquad (1{,}5)^2 = 1{,}5 \times 1{,}5 = 2{,}25 \qquad (2{,}4)^2 = 5{,}76$$</div>
+   <p>⚠️ Jangan tertukar: $13^2 \ne 13 \times 2$. Kuadrat bukan dikali 2!<span class="en">⚠️ Don't mix them up: $13^2 \ne 13 \times 2$. Squaring is not multiplying by 2!</span></p>
+  </div>
+  <h4>📋 Tabel Kuadrat 1 – 30 (simpan untuk seluruh pelajaran)<span class="en">📋 Table of Squares 1 – 30 (keep it for the whole lesson)</span></h4>
+  <div class="sqgrid" id="sqgrid"></div>
+ </div>
+
+ <div class="card bl1">
+  <h3><span class="hi">√</span><span>B. Akar Kuadrat<span class="en">B. Square Roots</span></span></h3>
+  <p>Akar kuadrat adalah kebalikan dari kuadrat. Kita mencari bilangan <b>positif</b> yang jika dikuadratkan menghasilkan bilangan di dalam akar.<span class="en">The square root is the inverse of squaring. We look for the <b>positive</b> number that, when squared, gives the number inside the root.</span></p>
+  <div class="formula"><div class="ft">Rumus · Formula</div>$$\sqrt{b} = a \iff a^2 = b, \quad a \ge 0$$</div>
+  <div class="ex"><div class="exh">Contoh 2: Tentukan $\sqrt{225}$<span class="en">Example 2: Find $\sqrt{225}$</span></div>
+   <ol class="steps">
+    <li>Cari bilangan yang kuadratnya $225$. Angka terakhir $5$, jadi akarnya berakhiran $5$.<span class="en">Look for the number whose square is $225$. The last digit is $5$, so the root ends in $5$.</span></li>
+    <li>Coba $15$: $15^2 = 15 \times 15 = 225$ ✔️<span class="en">Try $15$: $15^2 = 15 \times 15 = 225$ ✔️</span></li>
+    <li>Jadi, $\sqrt{225} = 15$.<span class="en">So, $\sqrt{225} = 15$.</span></li>
+   </ol>
+  </div>
+  <p>Dalam soal panjang sisi, persamaan $x^2 = 144$ memberi $x = 12$ (kita ambil yang positif karena panjang tidak mungkin negatif).<span class="en">In side-length problems, the equation $x^2 = 144$ gives $x = 12$ (we take the positive value because a length cannot be negative).</span></p>
+ </div>
+
+ <div class="card bl1">
+  <h3><span class="hi">✂️</span><span>C. Menyederhanakan Bentuk Akar<span class="en">C. Simplifying Square Roots</span></span></h3>
+  <div class="formula"><div class="ft">Sifat · Property</div>$$\sqrt{a \times b} = \sqrt{a} \times \sqrt{b}$$</div>
+  <div class="ex"><div class="exh">Contoh 3: Sederhanakan $\sqrt{75}$<span class="en">Example 3: Simplify $\sqrt{75}$</span></div>
+   <ol class="steps">
+    <li>Faktorkan $75$ menjadi (kuadrat sempurna terbesar) × (sisa): $75 = 25 \times 3$.<span class="en">Factor $75$ into (largest perfect square) × (remainder): $75 = 25 \times 3$.</span></li>
+    <li>Pisahkan akarnya: $\sqrt{75} = \sqrt{25} \times \sqrt{3}$.<span class="en">Split the root: $\sqrt{75} = \sqrt{25} \times \sqrt{3}$.</span></li>
+    <li>Hitung $\sqrt{25} = 5$, jadi $\sqrt{75} = 5\sqrt{3}$.<span class="en">Compute $\sqrt{25} = 5$, so $\sqrt{75} = 5\sqrt{3}$.</span></li>
+   </ol>
+   <div class="mline">$$\sqrt{72} = \sqrt{36 \times 2} = 6\sqrt{2} \qquad \sqrt{50} = \sqrt{25 \times 2} = 5\sqrt{2} \qquad \sqrt{48} = \sqrt{16\times 3} = 4\sqrt{3}$$</div>
+  </div>
+ </div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🚫</span><span>D. Kesalahan yang Sering Terjadi<span class="en">D. A Common Mistake</span></span></h3>
+  <p>Akar dari penjumlahan <b>tidak sama</b> dengan penjumlahan akar.<span class="en">The root of a sum is <b>not equal</b> to the sum of the roots.</span></p>
+  <div class="mline">$$\sqrt{9 + 16} = \sqrt{25} = 5 \qquad \text{tetapi (but)} \qquad \sqrt{9} + \sqrt{16} = 3 + 4 = 7$$</div>
+  <p>Jadi $\sqrt{9+16} \ne \sqrt{9} + \sqrt{16}$. Selalu <b>jumlahkan dulu</b>, baru tarik akar.<span class="en">So $\sqrt{9+16} \ne \sqrt{9} + \sqrt{16}$. Always <b>add first</b>, then take the root.</span></p>
+ </div>
+
+ <div class="card bl1">
+  <h3><span class="hi">⚖️</span><span>E. Membandingkan Bentuk Akar<span class="en">E. Comparing Square Roots</span></span></h3>
+  <p>Ubah semua bilangan ke bentuk $\sqrt{\ \ }$, lalu bandingkan bilangan di dalam akar.<span class="en">Rewrite every number in the form $\sqrt{\ \ }$, then compare the numbers inside the roots.</span></p>
+  <div class="formula">$$a\sqrt{b} = \sqrt{a^2 \times b} \qquad\qquad a = \sqrt{a^2}$$</div>
+  <div class="ex"><div class="exh">Contoh 4: Urutkan $5\sqrt{3}$, $\sqrt{70}$, dan $8$ dari yang terkecil.<span class="en">Example 4: Order $5\sqrt{3}$, $\sqrt{70}$ and $8$ from smallest.</span></div>
+   <ol class="steps">
+    <li>$5\sqrt{3} = \sqrt{25 \times 3} = \sqrt{75}$</li>
+    <li>$8 = \sqrt{64}$</li>
+    <li>Bandingkan: $64 \lt 70 \lt 75$, maka urutannya $8,\ \sqrt{70},\ 5\sqrt{3}$.<span class="en">Compare: $64 \lt 70 \lt 75$, so the order is $8,\ \sqrt{70},\ 5\sqrt{3}$.</span></li>
+   </ol>
+  </div>
+ </div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Pemanasan<span class="en">Warm-up Exercises</span></span></div>
+ <div data-set="s1"></div>
+</section>
+
+<!-- ================= P2 ================= -->
+<section class="page" id="p2">
+ <div class="phead g2"><div class="picon">🌏</div><div><span class="ptime">⏱ 00:10 – 00:15</span><h2>Pengantar &amp; Kaitan Dunia Nyata<span class="en">Introduction &amp; Real-World Connection</span></h2></div></div>
+
+ <div class="card bl2">
+  <div class="grid2">
+   <div>
+    <h3><span class="hi">🏛️</span><span>Siapa Pythagoras?<span class="en">Who was Pythagoras?</span></span></h3>
+    <p>Pythagoras adalah matematikawan Yunani kuno (sekitar 570–495 SM). Teorema yang memakai namanya menghubungkan ketiga sisi <b>segitiga siku-siku</b>. Bangsa Babilonia, Mesir, India, dan Tiongkok juga sudah memakai hubungan ini untuk membangun dan mengukur tanah.<span class="en">Pythagoras was an ancient Greek mathematician (about 570–495 BC). The theorem named after him links the three sides of a <b>right triangle</b>. The Babylonians, Egyptians, Indians and Chinese also used this relationship for building and measuring land.</span></p>
+    <div class="formula">$$c^2 = a^2 + b^2$$<div class="ft">$c$ = sisi miring (hypotenuse), $a, b$ = sisi siku-siku (legs)</div></div>
+   </div>
+   <div class="fig" data-fig="tri" data-args="a|b|c"></div>
+  </div>
+ </div>
+
+ <div class="card bl2">
+  <h3><span class="hi">🔎</span><span>Di Mana Kita Menemukannya?<span class="en">Where Do We Find It?</span></span></h3>
+  <p>Setiap kali ada <b>sudut siku-siku ($90^\circ$)</b>, Teorema Pythagoras bisa dipakai.<span class="en">Whenever there is a <b>right angle ($90^\circ$)</b>, the Pythagorean Theorem can be used.</span></p>
+  <div class="grid3">
+   <div class="mini"><div class="mi">🪜</div><b>Tangga &amp; dinding</b><span class="en">Ladder &amp; wall</span><small>Dinding tegak lurus lantai.<span class="en">The wall is perpendicular to the floor.</span></small></div>
+   <div class="mini"><div class="mi">📺</div><b>Ukuran layar TV/HP</b><span class="en">TV/phone screen size</span><small>Ukuran layar = panjang diagonal.<span class="en">Screen size = diagonal length.</span></small></div>
+   <div class="mini"><div class="mi">🪁</div><b>Layang-layang</b><span class="en">Flying a kite</span><small>Benang = sisi miring.<span class="en">The string = hypotenuse.</span></small></div>
+   <div class="mini"><div class="mi">🚢</div><b>Navigasi kapal</b><span class="en">Ship navigation</span><small>Arah utara ⟂ arah timur.<span class="en">North direction ⟂ east direction.</span></small></div>
+   <div class="mini"><div class="mi">🏗️</div><b>Tukang bangunan</b><span class="en">Builders</span><small>Aturan 3-4-5 untuk sudut siku-siku.<span class="en">The 3-4-5 rule for right angles.</span></small></div>
+   <div class="mini"><div class="mi">⚽</div><b>Jalan pintas lapangan</b><span class="en">Shortcut across a field</span><small>Diagonal lebih pendek dari keliling.<span class="en">The diagonal is shorter than going around.</span></small></div>
+  </div>
+ </div>
+
+ <div class="card bl2">
+  <h3><span class="hi">📱</span><span>Contoh 1: Diagonal Layar Ponsel<span class="en">Example 1: Phone Screen Diagonal</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Layar ponsel berukuran lebar $6$ cm dan tinggi $8$ cm. Berapa panjang diagonalnya?<span class="en">A phone screen is $6$ cm wide and $8$ cm tall. How long is its diagonal?</span></p>
+    <ol class="steps">
+     <li>Lebar dan tinggi saling tegak lurus → sisi siku-siku. Diagonal $d$ → sisi miring.<span class="en">Width and height are perpendicular → legs. Diagonal $d$ → hypotenuse.</span></li>
+     <li>$d^2 = 6^2 + 8^2 = 36 + 64 = 100$</li>
+     <li>$d = \sqrt{100} = 10$ cm.</li>
+    </ol>
+   </div>
+   <div class="fig" data-fig="tv" data-args="6 cm|8 cm|d = ?"></div>
+  </div>
+ </div>
+
+ <div class="card bl2">
+  <h3><span class="hi">🏗️</span><span>Contoh 2: Aturan 3-4-5 Tukang Bangunan<span class="en">Example 2: The Builders' 3-4-5 Rule</span></span></h3>
+  <p>Tukang menandai $3$ m pada satu sisi dan $4$ m pada sisi lainnya. Jika jarak kedua tanda tepat $5$ m, sudutnya pasti siku-siku, sebab:<span class="en">A builder marks $3$ m on one side and $4$ m on the other. If the distance between the marks is exactly $5$ m, the corner must be a right angle, because:</span></p>
+  <div class="mline">$$3^2 + 4^2 = 9 + 16 = 25 = 5^2$$</div>
+  <p>Kelipatannya juga berlaku, misalnya $6$ m, $8$ m, $10$ m.<span class="en">Multiples also work, for example $6$ m, $8$ m, $10$ m.</span></p>
+ </div>
+
+ <div class="card bl2">
+  <h3><span class="hi">⚽</span><span>Contoh 3: Jalan Pintas Lapangan<span class="en">Example 3: Shortcut Across a Field</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Lapangan berbentuk persegi panjang $40$ m × $30$ m. Berapa meter yang dihemat jika berjalan lewat diagonal dibandingkan menyusuri dua sisinya?<span class="en">A rectangular field measures $40$ m × $30$ m. How many metres are saved by walking along the diagonal instead of along two sides?</span></p>
+    <ol class="steps">
+     <li>Menyusuri tepi: $40 + 30 = 70$ m.<span class="en">Walking along the edges: $40 + 30 = 70$ m.</span></li>
+     <li>Diagonal: $d = \sqrt{40^2 + 30^2} = \sqrt{1600 + 900} = \sqrt{2500} = 50$ m.<span class="en">Diagonal: $d = \sqrt{40^2 + 30^2} = \sqrt{1600 + 900} = \sqrt{2500} = 50$ m.</span></li>
+     <li>Hemat: $70 - 50 = 20$ m.<span class="en">Saved: $70 - 50 = 20$ m.</span></li>
+    </ol>
+   </div>
+   <div class="fig" data-fig="field" data-args="40 m|30 m"></div>
+  </div>
+ </div>
+
+ <div class="tip">💡 <b>Kunci:</b> Cari sudut siku-siku dulu. Sisi yang <b>berhadapan</b> dengan sudut siku-siku adalah <b>sisi miring</b> (sisi terpanjang).<span class="en">💡 <b>Key:</b> Find the right angle first. The side <b>opposite</b> the right angle is the <b>hypotenuse</b> (the longest side).</span></div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Pengantar<span class="en">Introduction Exercises</span></span></div>
+ <div data-set="s2"></div>
+</section>
+
+<!-- ================= P3 ================= -->
+<section class="page" id="p3">
+ <div class="phead g3"><div class="picon">📚</div><div><span class="ptime">⏱ 00:15 – 00:20</span><h2>Mengulang Pengetahuan Prasyarat<span class="en">Review of Prior Knowledge</span></h2></div></div>
+
+ <div class="card bl3">
+  <h3><span class="hi">📐</span><span>1. Bunyi Teorema Pythagoras<span class="en">1. Statement of the Pythagorean Theorem</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Pada segitiga siku-siku, kuadrat sisi miring sama dengan jumlah kuadrat kedua sisi siku-sikunya.<span class="en">In a right triangle, the square of the hypotenuse equals the sum of the squares of the two legs.</span></p>
+    <div class="formula"><div class="ft">Tiga bentuk rumus · Three forms of the formula</div>
+     $$c^2 = a^2 + b^2 \qquad a^2 = c^2 - b^2 \qquad b^2 = c^2 - a^2$$
+    </div>
+    <p>➕ Mencari sisi miring → <b>jumlahkan</b> kuadrat. ➖ Mencari sisi siku-siku → <b>kurangkan</b> kuadrat.<span class="en">➕ Finding the hypotenuse → <b>add</b> the squares. ➖ Finding a leg → <b>subtract</b> the squares.</span></p>
+   </div>
+   <div class="fig" data-fig="tri" data-args="a|b|c (sisi miring)"></div>
+  </div>
+ </div>
+
+ <div class="card bl3">
+  <h3><span class="hi">🧮</span><span>2. Mencari Sisi yang Belum Diketahui<span class="en">2. Finding an Unknown Side</span></span></h3>
+  <div class="ex"><div class="exh">Contoh 1: sisi siku-siku $8$ cm dan $15$ cm. Tentukan sisi miring $c$.<span class="en">Example 1: legs $8$ cm and $15$ cm. Find the hypotenuse $c$.</span></div>
+   <div class="mline">$$c^2 = 8^2 + 15^2 = 64 + 225 = 289 \;\Rightarrow\; c = \sqrt{289} = 17 \text{ cm}$$</div>
+  </div>
+  <div class="ex"><div class="exh">Contoh 2: sisi miring $25$ cm, satu sisi siku-siku $7$ cm. Tentukan sisi lainnya $b$.<span class="en">Example 2: hypotenuse $25$ cm, one leg $7$ cm. Find the other leg $b$.</span></div>
+   <div class="mline">$$b^2 = 25^2 - 7^2 = 625 - 49 = 576 \;\Rightarrow\; b = \sqrt{576} = 24 \text{ cm}$$</div>
+  </div>
+ </div>
+
+ <div class="card bl3">
+  <h3><span class="hi">🔢</span><span>3. Tripel Pythagoras<span class="en">3. Pythagorean Triples</span></span></h3>
+  <p>Tiga bilangan bulat positif $(a, b, c)$ disebut tripel Pythagoras jika $a^2 + b^2 = c^2$. Kelipatannya juga tripel.<span class="en">Three positive whole numbers $(a, b, c)$ are a Pythagorean triple if $a^2 + b^2 = c^2$. Their multiples are also triples.</span></p>
+  <table class="tbl"><tr><th>Tripel dasar<span class="en">Basic triple</span></th><th>×2</th><th>×3</th><th>Cek · Check</th></tr>
+   <tr><td>$3, 4, 5$</td><td>$6, 8, 10$</td><td>$9, 12, 15$</td><td>$9 + 16 = 25$</td></tr>
+   <tr><td>$5, 12, 13$</td><td>$10, 24, 26$</td><td>$15, 36, 39$</td><td>$25 + 144 = 169$</td></tr>
+   <tr><td>$8, 15, 17$</td><td>$16, 30, 34$</td><td>$24, 45, 51$</td><td>$64 + 225 = 289$</td></tr>
+   <tr><td>$7, 24, 25$</td><td>$14, 48, 50$</td><td>$21, 72, 75$</td><td>$49 + 576 = 625$</td></tr>
+   <tr><td>$20, 21, 29$</td><td>$40, 42, 58$</td><td>$60, 63, 87$</td><td>$400 + 441 = 841$</td></tr>
+  </table>
+ </div>
+
+ <div class="card bl3">
+  <h3><span class="hi">🔺</span><span>4. Menentukan Jenis Segitiga (Kebalikan Teorema Pythagoras)<span class="en">4. Determining the Type of Triangle (Converse of the Theorem)</span></span></h3>
+  <p>Misalkan $c$ adalah sisi <b>terpanjang</b>. Bandingkan $c^2$ dengan $a^2 + b^2$:<span class="en">Let $c$ be the <b>longest</b> side. Compare $c^2$ with $a^2 + b^2$:</span></p>
+  <table class="tbl">
+   <tr><th>Kondisi · Condition</th><th>Jenis segitiga · Type of triangle</th></tr>
+   <tr><td>$c^2 = a^2 + b^2$</td><td>Siku-siku <span class="en">Right</span></td></tr>
+   <tr><td>$c^2 \lt a^2 + b^2$</td><td>Lancip <span class="en">Acute</span></td></tr>
+   <tr><td>$c^2 \gt a^2 + b^2$</td><td>Tumpul <span class="en">Obtuse</span></td></tr>
+  </table>
+  <div class="ex"><div class="exh">Contoh 3<span class="en">Example 3</span></div>
+   <ol class="steps">
+    <li>Sisi $6, 7, 9$: $9^2 = 81$ dan $6^2 + 7^2 = 36 + 49 = 85$. Karena $81 \lt 85$ → <b>lancip</b>.<span class="en">Sides $6, 7, 9$: $9^2 = 81$ and $6^2 + 7^2 = 85$. Since $81 \lt 85$ → <b>acute</b>.</span></li>
+    <li>Sisi $5, 6, 8$: $8^2 = 64$ dan $5^2 + 6^2 = 25 + 36 = 61$. Karena $64 \gt 61$ → <b>tumpul</b>.<span class="en">Sides $5, 6, 8$: $8^2 = 64$ and $5^2 + 6^2 = 61$. Since $64 \gt 61$ → <b>obtuse</b>.</span></li>
+    <li>Sisi $8, 15, 17$: $17^2 = 289$ dan $64 + 225 = 289$ → <b>siku-siku</b>.<span class="en">Sides $8, 15, 17$: $17^2 = 289$ and $64 + 225 = 289$ → <b>right</b>.</span></li>
+   </ol>
+  </div>
+ </div>
+
+ <div class="card bl3">
+  <h3><span class="hi">⭐</span><span>5. Segitiga Siku-siku Istimewa<span class="en">5. Special Right Triangles</span></span></h3>
+  <div class="grid2">
+   <div>
+    <h4>Segitiga $45^\circ$-$45^\circ$-$90^\circ$<span class="en">The $45^\circ$-$45^\circ$-$90^\circ$ triangle</span></h4>
+    <div class="formula">$$\text{sisi siku} : \text{sisi siku} : \text{sisi miring} = 1 : 1 : \sqrt{2}$$</div>
+    <p>Contoh: sisi siku-siku $5$ cm → sisi miring $5\sqrt{2}$ cm (karena $\sqrt{5^2+5^2} = \sqrt{50} = 5\sqrt2$).<span class="en">Example: legs $5$ cm → hypotenuse $5\sqrt{2}$ cm (because $\sqrt{5^2+5^2} = \sqrt{50} = 5\sqrt2$).</span></p>
+   </div>
+   <div class="fig" data-fig="tri45" data-args="5|5|5√2"></div>
+  </div>
+  <div class="grid2">
+   <div>
+    <h4>Segitiga $30^\circ$-$60^\circ$-$90^\circ$<span class="en">The $30^\circ$-$60^\circ$-$90^\circ$ triangle</span></h4>
+    <div class="formula">$$\text{depan } 30^\circ : \text{depan } 60^\circ : \text{sisi miring} = 1 : \sqrt{3} : 2$$</div>
+    <p>Contoh: sisi miring $10$ cm → sisi di depan $30^\circ$ $= 5$ cm, sisi di depan $60^\circ$ $= 5\sqrt{3}$ cm.<span class="en">Example: hypotenuse $10$ cm → side opposite $30^\circ$ $= 5$ cm, side opposite $60^\circ$ $= 5\sqrt{3}$ cm.</span></p>
+   </div>
+   <div class="fig" data-fig="tri" data-args="5√3|5|10|60°|30°"></div>
+  </div>
+ </div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Prasyarat<span class="en">Prior Knowledge Exercises</span></span></div>
+ <div data-set="s3"></div>
+</section>
+
+<!-- ================= P4 ================= -->
+<section class="page" id="p4">
+ <div class="phead g4"><div class="picon">🧩</div><div><span class="ptime">⏱ 00:20 – 00:25</span><h2>Pengenalan Masalah<span class="en">Problem Introduction</span></h2></div></div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🪜</span><span>Masalah Utama: Tangga Petugas PLN<span class="en">Main Problem: The Electrician's Ladder</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Seorang petugas menyandarkan tangga sepanjang $5$ m pada dinding tegak. Kaki tangga berjarak $1{,}4$ m dari dinding. Setinggi apa ujung atas tangga menyentuh dinding?<span class="en">A worker leans a $5$ m ladder against a vertical wall. The foot of the ladder is $1{,}4$ m from the wall. How high up the wall does the top of the ladder reach?</span></p>
+   </div>
+   <div class="fig" data-fig="ladder" data-args="5 m|1,4 m|t = ?"></div>
+  </div>
+ </div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🗺️</span><span>Strategi 5 Langkah Menyelesaikan Soal Cerita<span class="en">5-Step Strategy for Word Problems</span></span></h3>
+  <ol class="steps">
+   <li><b>Pahami masalah:</b> tulis yang diketahui dan ditanya.<span class="en"><b>Understand the problem:</b> write what is known and what is asked.</span><br>Diketahui: tangga $= 5$ m, jarak kaki $= 1{,}4$ m. Ditanya: tinggi $t$.<span class="en">Known: ladder $= 5$ m, distance of foot $= 1{,}4$ m. Asked: height $t$.</span></li>
+   <li><b>Gambar sketsa</b> segitiga siku-siku dan tandai sudut siku-siku (antara dinding dan lantai).<span class="en"><b>Draw a sketch</b> of the right triangle and mark the right angle (between the wall and the floor).</span></li>
+   <li><b>Tentukan sisi miring</b> lalu tulis persamaan. Tangga berhadapan dengan sudut siku-siku → sisi miring. Yang dicari sisi siku-siku → <b>kurangkan</b>.<span class="en"><b>Identify the hypotenuse</b>, then write the equation. The ladder is opposite the right angle → hypotenuse. We want a leg → <b>subtract</b>.</span>
+    <div class="mline">$$t^2 = 5^2 - (1{,}4)^2$$</div></li>
+   <li><b>Substitusi dan hitung.</b><span class="en"><b>Substitute and calculate.</b></span>
+    <div class="mline">$$t^2 = 25 - 1{,}96 = 23{,}04 \;\Rightarrow\; t = \sqrt{23{,}04} = 4{,}8$$</div></li>
+   <li><b>Periksa &amp; simpulkan</b> dengan satuan: $4{,}8 \lt 5$ (sisi siku-siku harus lebih pendek dari sisi miring) ✔️. Jadi tangga mencapai ketinggian $4{,}8$ m.<span class="en"><b>Check &amp; conclude</b> with units: $4{,}8 \lt 5$ (a leg must be shorter than the hypotenuse) ✔️. So the ladder reaches a height of $4{,}8$ m.</span></li>
+  </ol>
+ </div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🔑</span><span>Kata Kunci yang Menandakan Sudut Siku-siku<span class="en">Keywords That Signal a Right Angle</span></span></h3>
+  <table class="tbl">
+   <tr><th>Kata kunci · Keyword</th><th>Artinya · Meaning</th></tr>
+   <tr><td>tegak, vertikal, tegak lurus<span class="en">upright, vertical, perpendicular</span></td><td>membentuk $90^\circ$ dengan tanah/lantai<span class="en">forms $90^\circ$ with the ground/floor</span></td></tr>
+   <tr><td>utara lalu timur/barat<span class="en">north then east/west</span></td><td>arah mata angin yang berdekatan saling tegak lurus<span class="en">neighbouring compass directions are perpendicular</span></td></tr>
+   <tr><td>diagonal persegi/persegi panjang<span class="en">diagonal of a square/rectangle</span></td><td>sudut persegi panjang $= 90^\circ$<span class="en">the corners of a rectangle $= 90^\circ$</span></td></tr>
+   <tr><td>tinggi, jarak horizontal<span class="en">height, horizontal distance</span></td><td>tinggi selalu ⟂ alas<span class="en">height is always ⟂ the base</span></td></tr>
+  </table>
+ </div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🚢</span><span>Contoh Kedua: Kapal Nelayan<span class="en">Second Example: A Fishing Boat</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Kapal berlayar $6$ km ke utara, lalu $8$ km ke timur. Berapa jarak kapal dari pelabuhan?<span class="en">A boat sails $6$ km north, then $8$ km east. How far is the boat from the harbour?</span></p>
+    <ol class="steps">
+     <li>Utara ⟂ timur, jadi $6$ dan $8$ adalah sisi siku-siku; jarak $d$ adalah sisi miring → <b>jumlahkan</b>.<span class="en">North ⟂ east, so $6$ and $8$ are legs; distance $d$ is the hypotenuse → <b>add</b>.</span></li>
+     <li>$d^2 = 6^2 + 8^2 = 36 + 64 = 100$</li>
+     <li>$d = \sqrt{100} = 10$ km.</li>
+    </ol>
+   </div>
+   <div class="fig" data-fig="ship" data-args="6 km|8 km|d = ?"></div>
+  </div>
+ </div>
+
+ <div class="card bl4">
+  <h3><span class="hi">🚩</span><span>Contoh Ketiga: Tali Tiang Bendera<span class="en">Third Example: Flagpole Rope</span></span></h3>
+  <div class="grid2">
+   <div>
+    <p>Tiang bendera setinggi $12$ m ditahan tali sepanjang $13$ m dari puncak ke tanah. Berapa jarak ujung tali di tanah ke kaki tiang?<span class="en">A $12$ m flagpole is held by a $13$ m rope from its top to the ground. How far is the rope's end on the ground from the foot of the pole?</span></p>
+    <div class="mline">$$x^2 = 13^2 - 12^2 = 169 - 144 = 25 \;\Rightarrow\; x = 5 \text{ m}$$</div>
+   </div>
+   <div class="fig" data-fig="pole" data-args="12 m|x = ?|13 m"></div>
+  </div>
+ </div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Pengenalan Masalah<span class="en">Problem Introduction Exercises</span></span></div>
+ <div data-set="s4"></div>
+</section>
+
+<!-- ================= P5 ================= -->
+<section class="page" id="p5">
+ <div class="phead g5"><div class="picon">🤝</div><div><span class="ptime">⏱ 00:25 – 00:40</span><h2>Latihan Terbimbing<span class="en">Guided Practice</span></h2></div></div>
+ <div class="card bl5"><p>Kita kerjakan bersama enam jenis penerapan. Perhatikan pola langkahnya, karena latihan di bawah memakai langkah yang sama persis.<span class="en">Let's work through six types of applications together. Notice the pattern of steps, because the exercises below use exactly the same steps.</span></p></div>
+
+ <div class="card bl5">
+  <h3><span class="hi">▭</span><span>Contoh 1: Diagonal Persegi Panjang / Layar<span class="en">Example 1: Diagonal of a Rectangle / Screen</span></span></h3>
+  <div class="grid2"><div>
+   <p>Persegi panjang $24$ cm × $7$ cm. Tentukan diagonalnya.<span class="en">A rectangle is $24$ cm × $7$ cm. Find its diagonal.</span></p>
+   <ol class="steps">
+    <li>Panjang dan lebar = sisi siku-siku, diagonal = sisi miring.<span class="en">Length and width = legs, diagonal = hypotenuse.</span></li>
+    <li>$d^2 = 24^2 + 7^2 = 576 + 49 = 625$</li>
+    <li>$d = \sqrt{625} = 25$ cm.</li>
+   </ol></div>
+   <div class="fig" data-fig="tv" data-args="24 cm|7 cm|d"></div></div>
+ </div>
+
+ <div class="card bl5">
+  <h3><span class="hi">📍</span><span>Contoh 2: Jarak Dua Titik pada Bidang Koordinat<span class="en">Example 2: Distance Between Two Points on the Coordinate Plane</span></span></h3>
+  <div class="grid2"><div>
+   <p>Tentukan jarak $A(1, 2)$ dan $B(7, 10)$.<span class="en">Find the distance between $A(1, 2)$ and $B(7, 10)$.</span></p>
+   <div class="formula">$$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$</div>
+   <ol class="steps">
+    <li>Selisih mendatar: $\Delta x = 7 - 1 = 6$.<span class="en">Horizontal difference: $\Delta x = 7 - 1 = 6$.</span></li>
+    <li>Selisih tegak: $\Delta y = 10 - 2 = 8$.<span class="en">Vertical difference: $\Delta y = 10 - 2 = 8$.</span></li>
+    <li>$d = \sqrt{6^2 + 8^2} = \sqrt{36 + 64} = \sqrt{100} = 10$ satuan.<span class="en">$d = \sqrt{6^2 + 8^2} = \sqrt{100} = 10$ units.</span></li>
+   </ol></div>
+   <div class="fig" data-fig="grid" data-args="1|2|7|10|A|B|1"></div></div>
+ </div>
+
+ <div class="card bl5">
+  <h3><span class="hi">🔺</span><span>Contoh 3: Tinggi Segitiga Sama Kaki<span class="en">Example 3: Height of an Isosceles Triangle</span></span></h3>
+  <div class="grid2"><div>
+   <p>Segitiga sama kaki dengan kaki $13$ cm dan alas $10$ cm. Tentukan tinggi dan luasnya.<span class="en">An isosceles triangle has equal sides $13$ cm and base $10$ cm. Find its height and area.</span></p>
+   <ol class="steps">
+    <li>Garis tinggi membagi alas menjadi dua: $10 \div 2 = 5$ cm.<span class="en">The height splits the base in half: $10 \div 2 = 5$ cm.</span></li>
+    <li>Segitiga kecil: sisi miring $13$, sisi siku-siku $5$ dan $t$.<span class="en">Small triangle: hypotenuse $13$, legs $5$ and $t$.</span></li>
+    <li>$t = \sqrt{13^2 - 5^2} = \sqrt{169 - 25} = \sqrt{144} = 12$ cm.</li>
+    <li>Luas $= \frac{1}{2} \times 10 \times 12 = 60$ cm².<span class="en">Area $= \frac{1}{2} \times 10 \times 12 = 60$ cm².</span></li>
+   </ol></div>
+   <div class="fig" data-fig="iso" data-args="10 cm|13 cm|t"></div></div>
+ </div>
+
+ <div class="card bl5">
+  <h3><span class="hi">🪁</span><span>Contoh 4: Ketinggian Layang-layang<span class="en">Example 4: Height of a Kite</span></span></h3>
+  <div class="grid2"><div>
+   <p>Benang layang-layang $50$ m. Jarak mendatar dari tangan ke titik tepat di bawah layang-layang $30$ m. Berapa tinggi layang-layang di atas tangan?<span class="en">A kite string is $50$ m long. The horizontal distance from the hand to the point directly below the kite is $30$ m. How high is the kite above the hand?</span></p>
+   <div class="mline">$$h = \sqrt{50^2 - 30^2} = \sqrt{2500 - 900} = \sqrt{1600} = 40 \text{ m}$$</div></div>
+   <div class="fig" data-fig="kite" data-args="50 m|30 m|h"></div></div>
+ </div>
+
+ <div class="card bl5">
+  <h3><span class="hi">📦</span><span>Contoh 5: Diagonal Ruang Balok<span class="en">Example 5: Space Diagonal of a Cuboid</span></span></h3>
+  <div class="grid2"><div>
+   <p>Balok berukuran $p = 12$ cm, $l = 4$ cm, $t = 3$ cm. Tentukan diagonal ruangnya.<span class="en">A cuboid has $p = 12$ cm, $l = 4$ cm, $t = 3$ cm. Find its space diagonal.</span></p>
+   <ol class="steps">
+    <li>Diagonal alas (pakai Pythagoras pertama): $d_b^2 = 12^2 + 4^2 = 144 + 16 = 160$.<span class="en">Base diagonal (first Pythagoras): $d_b^2 = 12^2 + 4^2 = 160$.</span></li>
+    <li>Diagonal ruang (Pythagoras kedua, $d_b \perp t$): $d_r^2 = d_b^2 + t^2 = 160 + 9 = 169$.<span class="en">Space diagonal (second Pythagoras, $d_b \perp t$): $d_r^2 = 160 + 9 = 169$.</span></li>
+    <li>$d_r = \sqrt{169} = 13$ cm.</li>
+   </ol>
+   <div class="formula"><div class="ft">Rumus singkat · Shortcut</div>$$d_r = \sqrt{p^2 + l^2 + t^2}$$</div></div>
+   <div class="fig" data-fig="box" data-args="12 cm|4 cm|3 cm"></div></div>
+ </div>
+
+ <div class="card bl5">
+  <h3><span class="hi">⭐</span><span>Contoh 6: Tangga dengan Sudut $60^\circ$<span class="en">Example 6: A Ladder at a $60^\circ$ Angle</span></span></h3>
+  <p>Tangga $8$ m membentuk sudut $60^\circ$ dengan tanah. Ini segitiga $30^\circ$-$60^\circ$-$90^\circ$ (sudut di puncak $= 30^\circ$).<span class="en">An $8$ m ladder makes a $60^\circ$ angle with the ground. This is a $30^\circ$-$60^\circ$-$90^\circ$ triangle (the angle at the top $= 30^\circ$).</span></p>
+  <ol class="steps">
+   <li>Jarak kaki tangga (di depan $30^\circ$) $= \frac{1}{2} \times 8 = 4$ m.<span class="en">Distance of the foot (opposite $30^\circ$) $= \frac{1}{2} \times 8 = 4$ m.</span></li>
+   <li>Tinggi (di depan $60^\circ$) $= 4\sqrt{3} \approx 6{,}93$ m.<span class="en">Height (opposite $60^\circ$) $= 4\sqrt{3} \approx 6{,}93$ m.</span></li>
+   <li>Cek: $4^2 + (4\sqrt3)^2 = 16 + 48 = 64 = 8^2$ ✔️<span class="en">Check: $4^2 + (4\sqrt3)^2 = 16 + 48 = 64 = 8^2$ ✔️</span></li>
+  </ol>
+ </div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Terbimbing<span class="en">Guided Practice Exercises</span></span></div>
+ <div data-set="s5"></div>
+</section>
+
+<!-- ================= P6 ================= -->
+<section class="page" id="p6">
+ <div class="phead g6"><div class="picon">✍️</div><div><span class="ptime">⏱ 00:40 – 00:55</span><h2>Latihan Mandiri<span class="en">Independent Practice</span></h2></div></div>
+ <div class="card bl7"><p>Sekarang giliranmu! Soal di sini sering butuh <b>lebih dari satu langkah</b>. Pelajari empat contoh berikut lebih dulu.<span class="en">Now it's your turn! Problems here often need <b>more than one step</b>. Study the four examples below first.</span></p></div>
+
+ <div class="card bl7">
+  <h3><span class="hi">⚽</span><span>Contoh A: Berapa yang Dihemat?<span class="en">Example A: How Much Is Saved?</span></span></h3>
+  <p>Lapangan $80$ m × $60$ m. Diagonal $= \sqrt{80^2 + 60^2} = \sqrt{6400 + 3600} = \sqrt{10000} = 100$ m. Lewat tepi $= 80 + 60 = 140$ m. Hemat $= 140 - 100 = 40$ m.<span class="en">Field $80$ m × $60$ m. Diagonal $= \sqrt{10000} = 100$ m. Along the edges $= 140$ m. Saved $= 140 - 100 = 40$ m.</span></p>
+ </div>
+
+ <div class="card bl7">
+  <h3><span class="hi">♿</span><span>Contoh B: Panjang Ramp (Bidang Miring)<span class="en">Example B: Length of a Ramp</span></span></h3>
+  <div class="grid2"><div>
+   <p>Ramp setinggi $1$ m dengan jarak mendatar $2{,}4$ m.<span class="en">A ramp is $1$ m high with a horizontal distance of $2{,}4$ m.</span></p>
+   <div class="mline">$$L = \sqrt{1^2 + (2{,}4)^2} = \sqrt{1 + 5{,}76} = \sqrt{6{,}76} = 2{,}6 \text{ m}$$</div>
+   <p>Tips: $\sqrt{6{,}76} = 2{,}6$ karena $26^2 = 676$.<span class="en">Tip: $\sqrt{6{,}76} = 2{,}6$ because $26^2 = 676$.</span></p></div>
+   <div class="fig" data-fig="ramp" data-args="1 m|2,4 m|L"></div></div>
+ </div>
+
+ <div class="card bl7">
+  <h3><span class="hi">🔷</span><span>Contoh C: Belah Ketupat<span class="en">Example C: Rhombus</span></span></h3>
+  <div class="grid2"><div>
+   <p>Diagonal belah ketupat $16$ cm dan $30$ cm. Diagonal-diagonalnya saling tegak lurus dan saling membagi dua.<span class="en">The diagonals of a rhombus are $16$ cm and $30$ cm. The diagonals are perpendicular and bisect each other.</span></p>
+   <ol class="steps">
+    <li>Setengah diagonal: $8$ cm dan $15$ cm.<span class="en">Half diagonals: $8$ cm and $15$ cm.</span></li>
+    <li>Sisi $s = \sqrt{8^2 + 15^2} = \sqrt{289} = 17$ cm.<span class="en">Side $s = \sqrt{8^2 + 15^2} = \sqrt{289} = 17$ cm.</span></li>
+    <li>Keliling $= 4 \times 17 = 68$ cm.<span class="en">Perimeter $= 4 \times 17 = 68$ cm.</span></li>
+   </ol></div>
+   <div class="fig" data-fig="rhombus" data-args="15|8|s"></div></div>
+ </div>
+
+ <div class="card bl7">
+  <h3><span class="hi">🪁</span><span>Contoh D: Tinggi dari Tanah (Ditambah Tinggi Tangan)<span class="en">Example D: Height Above the Ground (Adding the Hand Height)</span></span></h3>
+  <p>Benang $50$ m, jarak mendatar $30$ m, tangan berada $1{,}5$ m di atas tanah. Tinggi di atas tangan $= \sqrt{50^2 - 30^2} = 40$ m. Tinggi dari tanah $= 40 + 1{,}5 = 41{,}5$ m.<span class="en">String $50$ m, horizontal distance $30$ m, the hand is $1{,}5$ m above the ground. Height above the hand $= 40$ m. Height above the ground $= 40 + 1{,}5 = 41{,}5$ m.</span></p>
+ </div>
+
+ <div class="card bl7">
+  <h3><span class="hi">⚖️</span><span>Contoh E: Membandingkan Panjang Tanpa Kalkulator<span class="en">Example E: Comparing Lengths Without a Calculator</span></span></h3>
+  <p>Mana yang lebih panjang: diagonal persegi bersisi $6$ atau sisi miring segitiga dengan sisi siku-siku $5$ dan $7$? Bandingkan <b>kuadratnya</b>: $6^2 + 6^2 = 72$ dan $5^2 + 7^2 = 74$. Karena $72 \lt 74$, sisi miring segitiga lebih panjang.<span class="en">Which is longer: the diagonal of a square with side $6$, or the hypotenuse of a triangle with legs $5$ and $7$? Compare their <b>squares</b>: $72$ and $74$. Since $72 \lt 74$, the triangle's hypotenuse is longer.</span></p>
+ </div>
+
+ <div class="secttl"><span class="badge">✏️ 5</span><span>Latihan Mandiri<span class="en">Independent Practice Exercises</span></span></div>
+ <div data-set="s6"></div>
+</section>
+
+<!-- ================= P7 ================= -->
+<section class="page" id="p7">
+ <div class="phead g7"><div class="picon">🎯</div><div><span class="ptime">⏱ 00:55 – 01:00</span><h2>Konsolidasi &amp; Refleksi<span class="en">Consolidation &amp; Reflection</span></h2></div></div>
+
+ <div class="card bl6">
+  <h3><span class="hi">⭐</span><span>Poin Penting<span class="en">Key Points</span></span></h3>
+  <ol class="keylist">
+   <li>Teorema Pythagoras hanya berlaku untuk <b>segitiga siku-siku</b>: $c^2 = a^2 + b^2$, dengan $c$ sisi miring.<span class="en">The Pythagorean Theorem only works for <b>right triangles</b>: $c^2 = a^2 + b^2$, where $c$ is the hypotenuse.</span></li>
+   <li>Mencari sisi miring → jumlahkan kuadrat; mencari sisi siku-siku → kurangkan kuadrat.<span class="en">Finding the hypotenuse → add the squares; finding a leg → subtract the squares.</span></li>
+   <li>Dalam soal cerita: cari sudut siku-siku, gambar sketsa, tentukan sisi miring, hitung, lalu tulis satuan.<span class="en">In word problems: find the right angle, sketch, identify the hypotenuse, calculate, then write the units.</span></li>
+   <li>Jenis segitiga: $c^2 = a^2+b^2$ siku-siku, $c^2 \lt a^2+b^2$ lancip, $c^2 \gt a^2+b^2$ tumpul.<span class="en">Triangle type: $c^2 = a^2+b^2$ right, $c^2 \lt a^2+b^2$ acute, $c^2 \gt a^2+b^2$ obtuse.</span></li>
+   <li>Segitiga istimewa: $45^\circ$-$45^\circ$-$90^\circ$ → $1 : 1 : \sqrt2$; $30^\circ$-$60^\circ$-$90^\circ$ → $1 : \sqrt3 : 2$.<span class="en">Special triangles: $45^\circ$-$45^\circ$-$90^\circ$ → $1 : 1 : \sqrt2$; $30^\circ$-$60^\circ$-$90^\circ$ → $1 : \sqrt3 : 2$.</span></li>
+   <li>Jarak dua titik: $d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$; diagonal ruang balok: $d = \sqrt{p^2 + l^2 + t^2}$.<span class="en">Distance between two points: $d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$; space diagonal of a cuboid: $d = \sqrt{p^2 + l^2 + t^2}$.</span></li>
+  </ol>
+ </div>
+
+ <div class="card bl6">
+  <h3><span class="hi">💭</span><span>Pertanyaan Refleksi<span class="en">Reflection Questions</span></span></h3>
+  <p>1. Bagaimana caramu menentukan sisi miring dalam soal cerita?<span class="en">1. How do you identify the hypotenuse in a word problem?</span></p>
+  <textarea class="refl" placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+  <p>2. Kapan kamu menjumlahkan kuadrat dan kapan mengurangkannya?<span class="en">2. When do you add the squares and when do you subtract them?</span></p>
+  <textarea class="refl" placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+  <p>3. Sebutkan satu situasi di sekitarmu yang bisa diselesaikan dengan Teorema Pythagoras.<span class="en">3. Name one situation around you that can be solved with the Pythagorean Theorem.</span></p>
+  <textarea class="refl" placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+  <p>4. Bagian mana yang masih membingungkan? Apa yang akan kamu lakukan untuk memahaminya?<span class="en">4. Which part is still confusing? What will you do to understand it?</span></p>
+  <textarea class="refl" placeholder="Tulis jawabanmu... / Write your answer..."></textarea>
+ </div>
+
+ <div class="secttl"><span class="badge">🎟️</span><span>Exit Ticket (3 soal)<span class="en">Exit Ticket (3 questions)</span></span></div>
+ <div class="scorebar"><div>Skor Exit Ticket<span class="en">Exit Ticket Score</span></div><div class="progress"><div id="bar-exit"></div></div><div class="sc"><span id="score-exit">0</span> / 3</div></div>
+ <div data-set="exit"></div>
+
+ <div class="card bl6">
+  <h3><span class="hi">📌</span><span>Latihan Lanjutan (Pekerjaan Rumah)<span class="en">Follow-Up Practice (Homework)</span></span></h3>
+  <p>Kerjakan di buku, lalu cocokkan dengan pembahasan.<span class="en">Work these out in your notebook, then compare with the solutions.</span></p>
+  <div id="followup"></div>
+ </div>
+</section>
+
+<!-- ================= TASKS ================= -->
+<section class="page" id="t1">
+ <div class="phead gt"><div class="picon">📝</div><div><h2>Tugas 1: Sisi Miring &amp; Sisi Siku-siku<span class="en">Task 1: Hypotenuse &amp; Legs</span></h2></div></div>
+ <div class="scorebar"><div>Skor<span class="en">Score</span></div><div class="progress"><div id="bar-t1"></div></div><div class="sc"><span id="score-t1">0</span> / 10</div></div>
+ <div data-set="t1"></div>
+</section>
+<section class="page" id="t2">
+ <div class="phead gt"><div class="picon">📐</div><div><h2>Tugas 2: Jenis Segitiga &amp; Segitiga Istimewa<span class="en">Task 2: Triangle Types &amp; Special Triangles</span></h2></div></div>
+ <div class="scorebar"><div>Skor<span class="en">Score</span></div><div class="progress"><div id="bar-t2"></div></div><div class="sc"><span id="score-t2">0</span> / 10</div></div>
+ <div data-set="t2"></div>
+</section>
+<section class="page" id="t3">
+ <div class="phead gt"><div class="picon">🪜</div><div><h2>Tugas 3: Soal Cerita Sehari-hari<span class="en">Task 3: Everyday Word Problems</span></h2></div></div>
+ <div class="scorebar"><div>Skor<span class="en">Score</span></div><div class="progress"><div id="bar-t3"></div></div><div class="sc"><span id="score-t3">0</span> / 10</div></div>
+ <div data-set="t3"></div>
+</section>
+<section class="page" id="t4">
+ <div class="phead gt"><div class="picon">🗺️</div><div><h2>Tugas 4: Koordinat &amp; Bangun Datar<span class="en">Task 4: Coordinates &amp; Plane Shapes</span></h2></div></div>
+ <div class="scorebar"><div>Skor<span class="en">Score</span></div><div class="progress"><div id="bar-t4"></div></div><div class="sc"><span id="score-t4">0</span> / 10</div></div>
+ <div data-set="t4"></div>
+</section>
+<section class="page" id="t5">
+ <div class="phead gt"><div class="picon">🚀</div><div><h2>Tugas 5: Navigasi, Bangun Ruang &amp; HOTS<span class="en">Task 5: Navigation, Solids &amp; HOTS</span></h2></div></div>
+ <div class="scorebar"><div>Skor<span class="en">Score</span></div><div class="progress"><div id="bar-t5"></div></div><div class="sc"><span id="score-t5">0</span> / 10</div></div>
+ <div data-set="t5"></div>
+</section>
+
+</main>
+</div>
+
+<script>
+const R = String.raw;
+
+/* ---------- helpers ---------- */
+function B(s){ s=String(s); const i=s.indexOf('||'); if(i<0) return s;
+  return `<span class="id">${s.slice(0,i).trim()}</span><span class="en">${s.slice(i+2).trim()}</span>`; }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function shuffleIdx(n, avoidId){ let o,t=0; do{ o=shuffle([...Array(n).keys()]); t++; } while(avoidId && n>1 && o.every((v,i)=>v===i) && t<30); return o; }
+function renderMath(el){ if(window.renderMathInElement){ renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); } }
+
+/* ---------- SVG figures ---------- */
+function svg(w,h,inner){ return `<svg class="svgfig" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`; }
+function T(x,y,s,cls='lb',anchor='middle'){ return `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${s}</text>`; }
+const FIG = {
+ tri:(b='',h='',c='',a1='',a2='')=>svg(300,200,
+  `<polygon points="50,160 250,160 50,40" class="shape"/><path d="M50,144 h16 v16" class="ra"/>
+   ${T(150,184,b)}${T(42,104,h,'lb','end')}${T(162,90,c,'lb hyp','start')}
+   ${a1?T(56,72,a1,'ang','start'):''}${a2?T(200,152,a2,'ang','end'):''}`),
+ tri45:(a='',b='',c='')=>svg(300,210,
+  `<polygon points="60,180 230,180 60,10" class="shape"/><path d="M60,164 h16 v16" class="ra"/>
+   ${T(145,200,a)}${T(52,100,b,'lb','end')}${T(156,90,c,'lb hyp','start')}
+   ${T(66,48,'45°','ang','start')}${T(196,172,'45°','ang','end')}`),
+ ladder:(L,b,h)=>svg(380,210,
+  `<g transform="translate(80,0)"><rect x="30" y="15" width="28" height="160" class="wall"/><line x1="15" y1="175" x2="290" y2="175" class="ground"/>
+   <line x1="58" y1="175" x2="58" y2="40" class="dim"/>
+   <line x1="62" y1="40" x2="220" y2="172" class="rail"/><line x1="62" y1="40" x2="220" y2="172" class="rung"/>
+   <path d="M58,159 h16 v16" class="ra"/>
+   ${T(150,95,L,'lb hyp','start')}${T(139,197,b)}${T(24,100,h,'lb','end')}</g>`),
+ tv:(w,h,d)=>svg(330,215,
+  `<rect x="40" y="26" width="220" height="140" rx="8" class="tvbody"/><rect x="50" y="36" width="200" height="120" class="screen"/>
+   <line x1="50" y1="156" x2="250" y2="36" class="diag"/>
+   <rect x="135" y="166" width="30" height="16" class="tvbody"/><rect x="105" y="182" width="90" height="8" rx="3" class="tvbody"/>
+   ${T(150,18,w)}${T(266,100,h,'lb','start')}${T(130,92,d,'lb lt')}`),
+ kite:(s,x,h,extra='')=>svg(320,200,
+  `<line x1="10" y1="185" x2="310" y2="185" class="ground"/>
+   <circle cx="40" cy="128" r="8" class="person"/><line x1="40" y1="136" x2="40" y2="162" class="personl"/>
+   <line x1="40" y1="162" x2="30" y2="184" class="personl"/><line x1="40" y1="162" x2="50" y2="184" class="personl"/><line x1="40" y1="144" x2="52" y2="150" class="personl"/>
+   <line x1="52" y1="150" x2="250" y2="40" class="string"/>
+   <line x1="52" y1="150" x2="250" y2="150" class="dim"/><line x1="250" y1="64" x2="250" y2="150" class="dim"/>
+   <path d="M234,150 v-16 h16" class="ra"/>
+   <polygon points="250,20 266,40 250,64 234,40" class="kitep"/><path d="M250,64 q-10,15 5,25 q12,10 -2,22" class="tail"/>
+   ${T(130,88,s,'lb hyp','end')}${T(150,170,x)}${T(258,110,h,'lb','start')}${extra?T(58,180,extra,'lb sm','start'):''}`),
+ ship:(n,e,d)=>svg(320,225,
+  `<g class="compass"><circle cx="280" cy="182" r="20"/><path d="M280,166 l6,16 l-6,-4 l-6,4z"/></g>${T(280,156,'U / N','lb sm')}
+   <line x1="50" y1="190" x2="50" y2="50" class="path"/><line x1="50" y1="50" x2="230" y2="50" class="path"/>
+   <line x1="50" y1="190" x2="230" y2="50" class="diag"/><path d="M50,66 h16 v-16" class="ra"/>
+   <circle cx="50" cy="190" r="6" class="pt"/>${T(60,214,'Pelabuhan / Port','lb sm','start')}
+   <polygon points="220,42 246,42 240,52 226,52" class="boat"/><line x1="233" y1="42" x2="233" y2="24" class="mast"/><polygon points="233,24 245,38 233,38" class="sail"/>
+   ${T(42,125,n,'lb','end')}${T(140,40,e)}${T(150,138,d,'lb hyp','start')}`),
+ grid:(x1,y1,x2,y2,n1='A',n2='B',legs='1')=>{ x1=+x1;y1=+y1;x2=+x2;y2=+y2;
+  const xmin=Math.min(0,x1,x2)-1,xmax=Math.max(0,x1,x2)+1,ymin=Math.min(0,y1,y2)-1,ymax=Math.max(0,y1,y2)+1;
+  const s=Math.min(280/(xmax-xmin),240/(ymax-ymin)), ox=22, oy=14;
+  const X=x=>+(ox+(x-xmin)*s).toFixed(1), Y=y=>+(oy+(ymax-y)*s).toFixed(1);
+  let g='';
+  for(let x=xmin;x<=xmax;x++){ g+=`<line x1="${X(x)}" y1="${Y(ymin)}" x2="${X(x)}" y2="${Y(ymax)}" class="gl"/>`; }
+  for(let y=ymin;y<=ymax;y++){ g+=`<line x1="${X(xmin)}" y1="${Y(y)}" x2="${X(xmax)}" y2="${Y(y)}" class="gl"/>`; }
+  g+=`<line x1="${X(xmin)}" y1="${Y(0)}" x2="${X(xmax)}" y2="${Y(0)}" class="ax"/><line x1="${X(0)}" y1="${Y(ymin)}" x2="${X(0)}" y2="${Y(ymax)}" class="ax"/>`;
+  for(let x=xmin;x<=xmax;x++){ if(x!==0) g+=T(X(x),Y(0)+12,x,'tick'); }
+  for(let y=ymin;y<=ymax;y++){ if(y!==0) g+=T(X(0)-4,Y(y)+4,y,'tick','end'); }
+  g+=T(X(0)-4,Y(0)+12,'0','tick','end')+T(X(xmax)-4,Y(0)-6,'x','tick','end')+T(X(0)+6,Y(ymax)+10,'y','tick','start');
+  if(legs==='1') g+=`<polyline points="${X(x1)},${Y(y1)} ${X(x2)},${Y(y1)} ${X(x2)},${Y(y2)}" class="dim" fill="none"/>`;
+  g+=`<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" class="seg"/><circle cx="${X(x1)}" cy="${Y(y1)}" r="5" class="pt"/><circle cx="${X(x2)}" cy="${Y(y2)}" r="5" class="pt"/>`;
+  g+=T(X(x1)+6,Y(y1)-8,`${n1}(${x1}, ${y1})`,'lb sm','start')+T(X(x2)-6,Y(y2)-8,`${n2}(${x2}, ${y2})`,'lb sm','end');
+  return svg(Math.round(ox*2+(xmax-xmin)*s),Math.round(oy*2+(ymax-ymin)*s),g); },
+ box:(p,l,t,d='d')=>svg(320,225,
+  `<polygon points="40,195 200,195 200,95 40,95" class="boxf"/>
+   <line x1="40" y1="195" x2="110" y2="145" class="hid"/><line x1="110" y1="145" x2="270" y2="145" class="hid"/><line x1="110" y1="145" x2="110" y2="45" class="hid"/>
+   <line x1="40" y1="195" x2="270" y2="145" class="bdiag"/><line x1="40" y1="195" x2="270" y2="45" class="sdiag"/>
+   <polygon points="40,195 200,195 200,95 40,95" class="edge"/>
+   <polyline points="200,195 270,145 270,45 110,45 40,95" class="edge"/><line x1="200" y1="95" x2="270" y2="45" class="edge"/>
+   ${T(120,215,p)}${T(246,182,l,'lb','start')}${T(32,148,t,'lb','end')}${T(232,80,d,'lb hyp','start')}`),
+ ramp:(h,b,L)=>svg(350,180,
+  `<line x1="10" y1="150" x2="310" y2="150" class="ground"/><polygon points="30,150 280,150 280,80" class="shape"/>
+   <path d="M264,150 v-16 h16" class="ra"/>${T(155,172,b)}${T(290,120,h,'lb','start')}${T(140,104,L,'lb hyp','end')}
+   ${T(110,140,'♿','lb')}`),
+ field:(w,h)=>svg(320,200,
+  `<rect x="40" y="30" width="220" height="140" class="fieldr"/>
+   <line x1="40" y1="170" x2="260" y2="30" class="diag"/>
+   <polyline points="44,166 256,166 256,34" fill="none" class="path"/>
+   <circle cx="40" cy="170" r="6" class="pt"/><circle cx="260" cy="30" r="6" fill="#dc2626"/>
+   ${T(150,190,w)}${T(270,104,h,'lb','start')}${T(132,92,'d','lb hyp','end')}`),
+ pole:(h,x,r)=>svg(300,200,
+  `<line x1="10" y1="175" x2="290" y2="175" class="ground"/><line x1="70" y1="175" x2="70" y2="20" class="pole"/>
+   <polygon points="73,22 118,36 73,50" class="flag"/><line x1="70" y1="22" x2="240" y2="175" class="rope"/>
+   <path d="M70,159 h16 v16" class="ra"/>
+   ${T(60,110,h,'lb','end')}${T(155,195,x)}${T(166,92,r,'lb hyp','start')}`),
+ rhombus:(a,b,s)=>svg(300,230,
+  `<polygon points="150,15 270,115 150,215 30,115" class="rh"/>
+   <line x1="150" y1="15" x2="150" y2="215" class="dim"/><line x1="30" y1="115" x2="270" y2="115" class="dim"/>
+   <polygon points="150,115 270,115 150,15" fill="#fbcfe8" opacity=".75"/>
+   <path d="M150,101 h14 v14" class="ra"/>
+   ${T(210,132,a)}${T(142,70,b,'lb','end')}${T(216,58,s,'lb hyp','start')}`),
+ iso:(b,s,t)=>svg(300,200,
+  `<polygon points="40,170 260,170 150,30" class="shape"/><line x1="150" y1="30" x2="150" y2="170" class="dim"/>
+   <path d="M150,154 h16 v16" class="ra"/>
+   ${T(150,192,b)}${T(84,94,s,'lb','end')}${T(216,94,s,'lb','start')}${T(158,120,t,'lb hyp','start')}`)
+};
+
+/* ---------- question data ---------- */
+const SETS = {
+/* ===== P1 Warm-up ===== */
+s1:[
+{type:'mcq', q:R`Berapakah nilai $13^2$? || What is the value of $13^2$?`, opts:['$169$','$26$','$139$','$196$'], ans:0,
+ sol:[R`Kuadrat berarti mengalikan bilangan dengan dirinya sendiri (lihat bagian A). || Squaring means multiplying a number by itself (see part A).`,
+ R`$$13^2 = 13 \times 13 = 169$$`,
+ R`Pilihan lain salah: $26 = 13 \times 2$ (bukan kuadrat), $196 = 14^2$, dan $139$ bukan bilangan kuadrat. || The other options are wrong: $26 = 13 \times 2$ (not a square), $196 = 14^2$, and $139$ is not a square number.`,
+ R`Jawaban: $169$. || Answer: $169$.`]},
+{type:'fill', q:R`Tentukan nilai $\sqrt{225}$. || Find the value of $\sqrt{225}$.`, tpl:R`$\sqrt{225} =$ [[0]]`, ans:[15],
+ sol:[R`Langkah 1: cari bilangan yang kuadratnya $225$. Angka satuannya $5$, jadi akarnya berakhiran $5$. || Step 1: find the number whose square is $225$. The units digit is $5$, so the root ends in $5$.`,
+ R`Langkah 2: coba $15$. || Step 2: try $15$.`, R`$$15^2 = 15 \times 15 = 225 \;\color{#16a34a}{\checkmark}$$`,
+ R`Jadi $\sqrt{225} = 15$. || So $\sqrt{225} = 15$.`]},
+{type:'dnd', q:R`Sederhanakan $\sqrt{75}$. Seret kartu ke kotak yang tepat. || Simplify $\sqrt{75}$. Drag the cards into the correct boxes.`,
+ tpl:R`$75 =$ [[0]] $\times\, 3$ &nbsp;⟹&nbsp; $\sqrt{75} =$ [[1]] $\times \sqrt{3} =$ [[2]]`,
+ slots:['$25$',R`$\sqrt{25}$`,R`$5\sqrt{3}$`], extra:['$15$',R`$3\sqrt{5}$`,R`$25\sqrt{3}$`],
+ sol:[R`Langkah 1: tulis $75$ sebagai (kuadrat sempurna terbesar) × (sisa): $75 = 25 \times 3$. || Step 1: write $75$ as (largest perfect square) × (remainder): $75 = 25 \times 3$.`,
+ R`Langkah 2: pisahkan akarnya. || Step 2: split the root.`, R`$$\sqrt{75} = \sqrt{25} \times \sqrt{3}$$`,
+ R`Langkah 3: $\sqrt{25} = 5$, sehingga hasilnya $5\sqrt{3}$. || Step 3: $\sqrt{25} = 5$, so the result is $5\sqrt{3}$.`,
+ R`Catatan: $15 \times 3 = 45$, bukan $75$; dan $3\sqrt5 = \sqrt{45}$. || Note: $15 \times 3 = 45$, not $75$; and $3\sqrt5 = \sqrt{45}$.`]},
+{type:'tf', q:R`Benar atau salah? $\sqrt{9 + 16} = \sqrt{9} + \sqrt{16} = 7$ || True or false? $\sqrt{9 + 16} = \sqrt{9} + \sqrt{16} = 7$`, ans:false,
+ sol:[R`Jumlahkan dulu bilangan di dalam akar, baru tarik akarnya (lihat bagian D). || Add the numbers inside the root first, then take the root (see part D).`,
+ R`$$\sqrt{9 + 16} = \sqrt{25} = 5$$`,
+ R`Sedangkan $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$. Karena $5 \ne 7$, pernyataan itu <b>Salah</b>. || Whereas $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$. Since $5 \ne 7$, the statement is <b>False</b>.`]},
+{type:'sort', q:R`Urutkan dari yang <b>terkecil</b> ke yang <b>terbesar</b>. || Order from the <b>smallest</b> to the <b>largest</b>.`,
+ items:[R`$\sqrt{30}$`,R`$2\sqrt{10}$`,'$7$',R`$\sqrt{50}$`,R`$5\sqrt{3}$`],
+ sol:[R`Ubah semua ke bentuk $\sqrt{\ \ }$ memakai $a\sqrt{b} = \sqrt{a^2 b}$ dan $a = \sqrt{a^2}$ (lihat bagian E). || Rewrite everything as $\sqrt{\ \ }$ using $a\sqrt{b} = \sqrt{a^2 b}$ and $a = \sqrt{a^2}$ (see part E).`,
+ R`$$2\sqrt{10} = \sqrt{4 \times 10} = \sqrt{40}, \quad 7 = \sqrt{49}, \quad 5\sqrt{3} = \sqrt{25 \times 3} = \sqrt{75}$$`,
+ R`Bandingkan isi akar: $30 \lt 40 \lt 49 \lt 50 \lt 75$. || Compare the numbers inside: $30 \lt 40 \lt 49 \lt 50 \lt 75$.`,
+ R`Urutan: $\sqrt{30},\ 2\sqrt{10},\ 7,\ \sqrt{50},\ 5\sqrt{3}$. || Order: $\sqrt{30},\ 2\sqrt{10},\ 7,\ \sqrt{50},\ 5\sqrt{3}$.`]}
+],
+/* ===== P2 Intro ===== */
+s2:[
+{type:'multi', q:R`Situasi mana saja yang dapat dimodelkan dengan segitiga siku-siku? || Which situations can be modelled with a right triangle?`,
+ opts:['Tangga bersandar pada dinding yang tegak lurus lantai || A ladder leaning against a wall that is perpendicular to the floor',
+  'Kapal berlayar 5 km ke utara lalu 12 km ke timur || A ship sails 5 km north and then 12 km east',
+  'Diagonal layar TV yang berbentuk persegi panjang || The diagonal of a rectangular TV screen',
+  'Dua mobil melaju searah pada jalan lurus yang sama || Two cars driving in the same direction on the same straight road',
+  R`Dua jarum jam yang membentuk sudut $120^\circ$ || Two clock hands forming a $120^\circ$ angle`], ans:[0,1,2],
+ sol:[R`Kuncinya: harus ada sudut $90^\circ$. || The key: there must be a $90^\circ$ angle.`,
+ R`✔ Tangga: dinding ⟂ lantai. ✔ Kapal: utara ⟂ timur. ✔ Layar TV: sudut persegi panjang $90^\circ$. || ✔ Ladder: wall ⟂ floor. ✔ Ship: north ⟂ east. ✔ TV screen: rectangle corners are $90^\circ$.`,
+ R`✘ Dua mobil pada jalan yang sama membentuk garis lurus, tidak ada segitiga. ✘ Sudut $120^\circ$ bukan sudut siku-siku. || ✘ Two cars on the same road form a straight line, no triangle. ✘ A $120^\circ$ angle is not a right angle.`]},
+{type:'mcq', q:R`Pada gambar, tangga bersandar pada dinding. Bagian mana yang menjadi <b>sisi miring</b> segitiga siku-siku? || In the picture, a ladder leans against a wall. Which part is the <b>hypotenuse</b> of the right triangle?`,
+ fig:()=>FIG.ladder('tangga / ladder','lantai / floor','dinding / wall'),
+ opts:['Tangga || The ladder','Dinding || The wall','Lantai || The floor','Tinggi badan petugas || The worker\'s height'], ans:0,
+ sol:[R`Sudut siku-siku berada di antara dinding dan lantai. || The right angle is between the wall and the floor.`,
+ R`Sisi miring adalah sisi yang <b>berhadapan</b> dengan sudut siku-siku, yaitu <b>tangga</b>. Dinding dan lantai adalah sisi siku-siku. || The hypotenuse is the side <b>opposite</b> the right angle, which is the <b>ladder</b>. The wall and floor are the legs.`]},
+{type:'fill', q:R`Layar ponsel berukuran lebar $9$ cm dan panjang $12$ cm. Berapa panjang diagonalnya? || A phone screen is $9$ cm wide and $12$ cm long. How long is its diagonal?`,
+ fig:()=>FIG.tv('12 cm','9 cm','d = ?'), tpl:R`$d =$ [[0]] cm`, ans:[15],
+ sol:[R`Seperti Contoh 1: lebar dan panjang adalah sisi siku-siku, diagonal adalah sisi miring. || As in Example 1: width and length are legs, the diagonal is the hypotenuse.`,
+ R`$$d^2 = 9^2 + 12^2 = 81 + 144 = 225$$`, R`$$d = \sqrt{225} = 15 \text{ cm}$$`]},
+{type:'tf', q:R`Seorang tukang mengukur $6$ m pada satu sisi dan $8$ m pada sisi lain dari sudut pondasi. Jarak kedua titik ukur adalah $10$ m. Benar atau salah: sudut pondasi tersebut siku-siku. || A builder measures $6$ m on one side and $8$ m on the other side of a foundation corner. The distance between the two marks is $10$ m. True or false: the corner is a right angle.`, ans:true,
+ sol:[R`Gunakan aturan 3-4-5 (Contoh 2). $6, 8, 10$ adalah kelipatan $2$ dari $3, 4, 5$. || Use the 3-4-5 rule (Example 2). $6, 8, 10$ is the multiple by $2$ of $3, 4, 5$.`,
+ R`$$6^2 + 8^2 = 36 + 64 = 100 = 10^2$$`, R`Karena berlaku $c^2 = a^2 + b^2$, sudutnya siku-siku → <b>Benar</b>. || Since $c^2 = a^2 + b^2$ holds, the corner is a right angle → <b>True</b>.`]},
+{type:'pair', q:R`Jodohkan setiap situasi dengan bagian yang menjadi <b>sisi miring</b>. || Match each situation with the part that is the <b>hypotenuse</b>.`,
+ pairs:[['🪜 Tangga bersandar di dinding || 🪜 Ladder against a wall','Panjang tangga || Length of the ladder'],
+  ['📺 Layar TV || 📺 TV screen','Diagonal layar || Diagonal of the screen'],
+  ['🪁 Layang-layang terbang || 🪁 A flying kite','Panjang benang || Length of the string'],
+  ['🚢 Kapal ke utara lalu ke timur || 🚢 Ship sails north then east','Jarak lurus dari titik awal || Straight-line distance from the start']],
+ sol:[R`Pada setiap situasi, cari sudut siku-siku, lalu pilih sisi di depannya. || In each situation, find the right angle, then pick the side opposite it.`,
+ R`Tangga → sudut siku-siku di antara dinding dan lantai → sisi miring = tangga. || Ladder → right angle between wall and floor → hypotenuse = ladder.`,
+ R`TV → sudut siku-siku di pojok layar → sisi miring = diagonal. || TV → right angle at the screen corner → hypotenuse = diagonal.`,
+ R`Layang-layang → sudut siku-siku di bawah layang-layang (antara garis tegak dan mendatar) → sisi miring = benang. || Kite → right angle below the kite (between vertical and horizontal) → hypotenuse = string.`,
+ R`Kapal → sudut siku-siku di belokan (utara ⟂ timur) → sisi miring = jarak lurus ke titik awal. || Ship → right angle at the turn (north ⟂ east) → hypotenuse = straight distance to the start.`]}
+],
+/* ===== P3 Review ===== */
+s3:[
+{type:'mcq', q:R`Tentukan panjang sisi miring $c$ pada gambar. || Find the length of the hypotenuse $c$ in the picture.`,
+ fig:()=>FIG.tri('12 cm','9 cm','c = ?'), opts:['$15$ cm','$21$ cm','$13$ cm','$17$ cm'], ans:0,
+ sol:[R`Yang dicari sisi miring → jumlahkan kuadrat (seperti Contoh 1). || We want the hypotenuse → add the squares (as in Example 1).`,
+ R`$$c^2 = 9^2 + 12^2 = 81 + 144 = 225$$`, R`$$c = \sqrt{225} = 15 \text{ cm}$$`,
+ R`$21$ salah karena $9 + 12$ dijumlahkan tanpa dikuadratkan. || $21$ is wrong because $9 + 12$ was added without squaring.`]},
+{type:'fill', q:R`Segitiga siku-siku memiliki sisi miring $26$ cm dan satu sisi siku-siku $10$ cm. Tentukan sisi siku-siku lainnya. || A right triangle has hypotenuse $26$ cm and one leg $10$ cm. Find the other leg.`,
+ fig:()=>FIG.tri('10 cm','b = ?','26 cm'), tpl:R`$b =$ [[0]] cm`, ans:[24],
+ sol:[R`Yang dicari sisi siku-siku → kurangkan kuadrat (seperti Contoh 2). || We want a leg → subtract the squares (as in Example 2).`,
+ R`$$b^2 = 26^2 - 10^2 = 676 - 100 = 576$$`, R`$$b = \sqrt{576} = 24 \text{ cm}$$`]},
+{type:'cat', q:R`Kelompokkan setiap segitiga (panjang sisi) berdasarkan jenisnya. || Group each triangle (side lengths) by its type.`,
+ cats:['Lancip || Acute','Siku-siku || Right','Tumpul || Obtuse'],
+ items:[['(6, 8, 10)',1],['(5, 12, 13)',1],['(4, 5, 6)',0],['(6, 7, 8)',0],['(2, 3, 4)',2],['(7, 8, 12)',2]],
+ sol:[R`Bandingkan kuadrat sisi terpanjang $c^2$ dengan $a^2 + b^2$ (lihat bagian 4). || Compare the square of the longest side $c^2$ with $a^2 + b^2$ (see part 4).`,
+ R`$$(6,8,10): 100 = 36 + 64 \Rightarrow \text{siku-siku} \qquad (5,12,13): 169 = 25 + 144 \Rightarrow \text{siku-siku}$$`,
+ R`$$(4,5,6): 36 \lt 16 + 25 = 41 \Rightarrow \text{lancip} \qquad (6,7,8): 64 \lt 36 + 49 = 85 \Rightarrow \text{lancip}$$`,
+ R`$$(2,3,4): 16 \gt 4 + 9 = 13 \Rightarrow \text{tumpul} \qquad (7,8,12): 144 \gt 49 + 64 = 113 \Rightarrow \text{tumpul}$$`,
+ R`(siku-siku = right, lancip = acute, tumpul = obtuse) || (right, acute, obtuse)`]},
+{type:'multi', q:R`Manakah yang merupakan tripel Pythagoras? || Which of these are Pythagorean triples?`,
+ opts:['$(8, 15, 17)$','$(9, 40, 41)$','$(12, 16, 20)$','$(4, 6, 8)$','$(10, 24, 25)$'], ans:[0,1,2],
+ sol:[R`Cek apakah $a^2 + b^2 = c^2$. || Check whether $a^2 + b^2 = c^2$.`,
+ R`$$64 + 225 = 289 = 17^2 \;\color{#16a34a}{\checkmark} \qquad 81 + 1600 = 1681 = 41^2 \;\color{#16a34a}{\checkmark} \qquad 144 + 256 = 400 = 20^2 \;\color{#16a34a}{\checkmark}$$`,
+ R`$$16 + 36 = 52 \ne 64 \;\color{#dc2626}{\times} \qquad 100 + 576 = 676 \ne 625 \;\color{#dc2626}{\times}$$`,
+ R`Catatan: $(10, 24, 26)$ adalah tripel, tetapi $(10, 24, 25)$ bukan. || Note: $(10, 24, 26)$ is a triple, but $(10, 24, 25)$ is not.`]},
+{type:'tf', q:R`Pada segitiga $30^\circ$-$60^\circ$-$90^\circ$ dengan sisi miring $12$ cm, sisi di depan sudut $60^\circ$ panjangnya $6$ cm. || In a $30^\circ$-$60^\circ$-$90^\circ$ triangle with hypotenuse $12$ cm, the side opposite the $60^\circ$ angle is $6$ cm long.`,
+ fig:()=>FIG.tri('?','','12 cm','60°','30°'), ans:false,
+ sol:[R`Perbandingan: depan $30^\circ$ : depan $60^\circ$ : sisi miring $= 1 : \sqrt3 : 2$. || Ratio: opposite $30^\circ$ : opposite $60^\circ$ : hypotenuse $= 1 : \sqrt3 : 2$.`,
+ R`Sisi miring $12 = 2 \times 6$, jadi faktor pengalinya $6$. || Hypotenuse $12 = 2 \times 6$, so the multiplier is $6$.`,
+ R`$$\text{depan } 30^\circ = 6 \text{ cm}, \qquad \text{depan } 60^\circ = 6\sqrt{3} \text{ cm}$$`,
+ R`$6$ cm adalah sisi di depan $30^\circ$, bukan $60^\circ$ → <b>Salah</b>. || $6$ cm is the side opposite $30^\circ$, not $60^\circ$ → <b>False</b>.`]}
+],
+/* ===== P4 Problem intro ===== */
+s4:[
+{type:'sort', q:R`Urutkan langkah-langkah menyelesaikan soal cerita Pythagoras. || Put the steps for solving a Pythagoras word problem in order.`,
+ items:['Pahami masalah: tentukan yang diketahui dan ditanya || Understand the problem: identify what is known and asked',
+  'Gambar sketsa segitiga siku-siku dan tandai sudut siku-sikunya || Sketch the right triangle and mark the right angle',
+  'Tentukan sisi miring, lalu tulis persamaan Pythagoras || Identify the hypotenuse, then write the Pythagorean equation',
+  'Substitusi nilai dan hitung || Substitute the values and calculate',
+  'Periksa jawaban dan tulis kesimpulan dengan satuan || Check the answer and write the conclusion with units'],
+ sol:[R`Ini adalah strategi 5 langkah pada bagian Pengenalan Masalah: Pahami → Gambar → Tentukan sisi miring & persamaan → Hitung → Periksa & simpulkan. || This is the 5-step strategy in Problem Introduction: Understand → Sketch → Identify hypotenuse & equation → Calculate → Check & conclude.`]},
+{type:'mcq', q:R`Tangga $13$ m bersandar di dinding, kakinya $5$ m dari dinding. Persamaan mana yang tepat untuk mencari tinggi $t$? || A $13$ m ladder leans on a wall, its foot $5$ m from the wall. Which equation correctly finds the height $t$?`,
+ fig:()=>FIG.ladder('13 m','5 m','t'),
+ opts:[R`$t^2 = 13^2 - 5^2$`,R`$t^2 = 13^2 + 5^2$`,R`$t = 13 - 5$`,R`$t^2 = 5^2 - 13^2$`], ans:0,
+ sol:[R`Tangga ($13$ m) adalah sisi miring; tinggi $t$ adalah sisi siku-siku → <b>kurangkan</b>: sisi miring² − sisi siku-siku². || The ladder ($13$ m) is the hypotenuse; height $t$ is a leg → <b>subtract</b>: hypotenuse² − leg².`,
+ R`$$t^2 = 13^2 - 5^2 = 169 - 25 = 144 \;\Rightarrow\; t = 12 \text{ m}$$`,
+ R`$5^2 - 13^2$ bernilai negatif, jadi tidak mungkin. || $5^2 - 13^2$ is negative, so it is impossible.`]},
+{type:'dnd', q:R`Kapal berlayar $6$ km ke utara lalu $8$ km ke timur. Lengkapi perhitungan jarak $d$ dari pelabuhan. || A boat sails $6$ km north then $8$ km east. Complete the calculation of the distance $d$ from the harbour.`,
+ fig:()=>FIG.ship('6 km','8 km','d'),
+ tpl:R`$d^2 = 6^2 + 8^2 = 36 +$ [[0]] $=$ [[1]] &nbsp;⟹&nbsp; $d = $ [[2]] km`,
+ slots:['$64$','$100$','$10$'], extra:['$16$','$14$','$48$'],
+ sol:[R`Utara ⟂ timur, jadi jarak $d$ adalah sisi miring → jumlahkan (seperti Contoh Kedua). || North ⟂ east, so distance $d$ is the hypotenuse → add (as in the Second Example).`,
+ R`$$8^2 = 64, \qquad 36 + 64 = 100, \qquad d = \sqrt{100} = 10 \text{ km}$$`,
+ R`$14$ salah karena $6 + 8$ tidak dikuadratkan. || $14$ is wrong because $6 + 8$ was not squared.`]},
+{type:'tf', q:R`Dalam soal tangga, ketinggian dinding yang dicapai tangga bisa lebih panjang daripada panjang tangganya. || In a ladder problem, the height reached on the wall can be longer than the ladder itself.`, ans:false,
+ sol:[R`Tinggi yang dicapai adalah sisi siku-siku, sedangkan tangga adalah sisi miring. || The height reached is a leg, while the ladder is the hypotenuse.`,
+ R`Sisi miring selalu sisi <b>terpanjang</b>, jadi tinggi selalu lebih pendek dari tangga (langkah 5: periksa). Pernyataan <b>Salah</b>. || The hypotenuse is always the <b>longest</b> side, so the height is always shorter than the ladder (step 5: check). The statement is <b>False</b>.`]},
+{type:'fill', q:R`Tiang bendera $12$ m diikat tali $13$ m dari puncaknya ke tanah. Berapa jarak ujung tali ke kaki tiang? || A $12$ m flagpole is tied with a $13$ m rope from its top to the ground. How far is the end of the rope from the foot of the pole?`,
+ fig:()=>FIG.pole('12 m','x = ?','13 m'), tpl:R`$x =$ [[0]] m`, ans:[5],
+ sol:[R`Tali = sisi miring ($13$), tiang = sisi siku-siku ($12$), $x$ = sisi siku-siku → kurangkan (seperti Contoh Ketiga). || Rope = hypotenuse ($13$), pole = leg ($12$), $x$ = leg → subtract (as in the Third Example).`,
+ R`$$x^2 = 13^2 - 12^2 = 169 - 144 = 25 \;\Rightarrow\; x = \sqrt{25} = 5 \text{ m}$$`]}
+],
+/* ===== P5 Guided ===== */
+s5:[
+{type:'mcq', q:R`Layar TV berukuran $48$ cm × $36$ cm. Berapa panjang diagonalnya? || A TV screen measures $48$ cm × $36$ cm. How long is its diagonal?`,
+ fig:()=>FIG.tv('48 cm','36 cm','d = ?'), opts:['$60$ cm','$84$ cm','$50$ cm','$70$ cm'], ans:0,
+ sol:[R`Seperti Contoh 1: diagonal = sisi miring. || As in Example 1: diagonal = hypotenuse.`,
+ R`$$d^2 = 48^2 + 36^2 = 2304 + 1296 = 3600$$`, R`$$d = \sqrt{3600} = 60 \text{ cm}$$`,
+ R`Cara cepat: $36 : 48 = 3 : 4$ (dikali $12$), jadi diagonal $= 5 \times 12 = 60$. || Quick way: $36 : 48 = 3 : 4$ (times $12$), so the diagonal $= 5 \times 12 = 60$.`]},
+{type:'fill', q:R`Tentukan jarak titik $P(-2, 1)$ dan $Q(4, 9)$. || Find the distance between $P(-2, 1)$ and $Q(4, 9)$.`,
+ fig:()=>FIG.grid(-2,1,4,9,'P','Q','1'), tpl:R`$PQ =$ [[0]] satuan (units)`, ans:[10],
+ sol:[R`Seperti Contoh 2, hitung selisih koordinat. || As in Example 2, compute the coordinate differences.`,
+ R`$$\Delta x = 4 - (-2) = 6, \qquad \Delta y = 9 - 1 = 8$$`,
+ R`$$PQ = \sqrt{6^2 + 8^2} = \sqrt{36 + 64} = \sqrt{100} = 10$$`,
+ R`Hati-hati: $4 - (-2) = 4 + 2 = 6$, bukan $2$. || Careful: $4 - (-2) = 4 + 2 = 6$, not $2$.`]},
+{type:'dnd', q:R`Segitiga sama kaki memiliki kaki $17$ cm dan alas $16$ cm. Lengkapi perhitungan tinggi $t$. || An isosceles triangle has equal sides $17$ cm and base $16$ cm. Complete the calculation of the height $t$.`,
+ fig:()=>FIG.iso('16 cm','17 cm','t'),
+ tpl:R`Setengah alas (half of the base) $=$ [[0]] cm; &nbsp; $t^2 = 17^2 - (\text{setengah alas})^2 = 289 -$ [[1]] $=$ [[2]]; &nbsp; $t =$ [[3]] cm`,
+ slots:['$8$','$64$','$225$','$15$'], extra:['$16$','$256$','$33$'],
+ sol:[R`Seperti Contoh 3: garis tinggi membagi alas menjadi dua, $16 \div 2 = 8$ cm (bukan $16$!). || As in Example 3: the height halves the base, $16 \div 2 = 8$ cm (not $16$!).`,
+ R`$$t = \sqrt{17^2 - 8^2} = \sqrt{289 - 64} = \sqrt{225} = 15 \text{ cm}$$`,
+ R`Jika salah memakai $16$: $289 - 256 = 33$, hasilnya tidak tepat. || If you wrongly use $16$: $289 - 256 = 33$, which is incorrect.`]},
+{type:'pair', q:R`Jodohkan setiap soal dengan jawabannya. || Match each problem with its answer.`,
+ pairs:[[R`Diagonal persegi panjang $9 \times 12$ || Diagonal of a $9 \times 12$ rectangle`,'$15$'],
+  [R`Diagonal persegi bersisi $7$ || Diagonal of a square with side $7$`,R`$7\sqrt{2}$`],
+  [R`Tinggi segitiga sama sisi bersisi $10$ || Height of an equilateral triangle with side $10$`,R`$5\sqrt{3}$`],
+  [R`Jarak $(0, 0)$ ke $(5, 12)$ || Distance from $(0, 0)$ to $(5, 12)$`,'$13$']],
+ sol:[R`$$\sqrt{9^2 + 12^2} = \sqrt{225} = 15$$`,
+ R`$$\sqrt{7^2 + 7^2} = \sqrt{98} = \sqrt{49 \times 2} = 7\sqrt{2}$$`,
+ R`Segitiga sama sisi: tinggi membagi alas $10$ menjadi $5$ (seperti Contoh 3). || Equilateral triangle: the height splits the base $10$ into $5$ (as in Example 3).`,
+ R`$$t = \sqrt{10^2 - 5^2} = \sqrt{75} = \sqrt{25 \times 3} = 5\sqrt{3}$$`,
+ R`$$\sqrt{5^2 + 12^2} = \sqrt{169} = 13$$`]},
+{type:'multi', q:R`Balok berukuran $8$ cm × $6$ cm × $24$ cm. Pilih <b>semua</b> pernyataan yang benar. || A cuboid measures $8$ cm × $6$ cm × $24$ cm. Select <b>all</b> true statements.`,
+ fig:()=>FIG.box('8 cm','6 cm','24 cm','d'),
+ opts:['Diagonal alas $= 10$ cm || The base diagonal $= 10$ cm', R`$d^2 = 8^2 + 6^2 + 24^2$`, 'Diagonal ruang $= 26$ cm || The space diagonal $= 26$ cm', 'Diagonal ruang $= 38$ cm || The space diagonal $= 38$ cm', 'Diagonal ruang lebih pendek dari $24$ cm || The space diagonal is shorter than $24$ cm'], ans:[0,1,2],
+ sol:[R`Seperti Contoh 5, pakai Pythagoras dua kali. || As in Example 5, use Pythagoras twice.`,
+ R`$$d_b = \sqrt{8^2 + 6^2} = \sqrt{100} = 10 \text{ cm} \;\color{#16a34a}{\checkmark}$$`,
+ R`$$d_r = \sqrt{d_b^2 + 24^2} = \sqrt{8^2 + 6^2 + 24^2} = \sqrt{64 + 36 + 576} = \sqrt{676} = 26 \text{ cm} \;\color{#16a34a}{\checkmark}$$`,
+ R`$38 = 8 + 6 + 24$ (hanya dijumlahkan) ✘. Diagonal ruang adalah sisi miring, jadi pasti lebih panjang dari $24$ ✘. || $38 = 8 + 6 + 24$ (just added) ✘. The space diagonal is a hypotenuse, so it must be longer than $24$ ✘.`]}
+],
+/* ===== P6 Independent ===== */
+s6:[
+{type:'fill', q:R`Lapangan berukuran $120$ m × $50$ m. Berapa meter yang dihemat jika berjalan lewat diagonal dibanding menyusuri dua sisinya? || A field measures $120$ m × $50$ m. How many metres are saved by walking along the diagonal instead of along two sides?`,
+ fig:()=>FIG.field('120 m','50 m'), tpl:R`Hemat (saved) $=$ [[0]] m`, ans:[40],
+ sol:[R`Langkah 1 (seperti Contoh A): jalan menyusuri tepi $= 120 + 50 = 170$ m. || Step 1 (as in Example A): along the edges $= 120 + 50 = 170$ m.`,
+ R`$$d = \sqrt{120^2 + 50^2} = \sqrt{14400 + 2500} = \sqrt{16900} = 130 \text{ m}$$`,
+ R`Langkah 3: hemat $= 170 - 130 = 40$ m. || Step 3: saved $= 170 - 130 = 40$ m.`]},
+{type:'mcq', q:R`Belah ketupat memiliki diagonal $10$ cm dan $24$ cm. Berapa kelilingnya? || A rhombus has diagonals $10$ cm and $24$ cm. What is its perimeter?`,
+ fig:()=>FIG.rhombus('12','5','s'), opts:['$52$ cm','$26$ cm','$68$ cm','$34$ cm'], ans:0,
+ sol:[R`Seperti Contoh C: setengah diagonal $= 5$ cm dan $12$ cm. || As in Example C: half diagonals $= 5$ cm and $12$ cm.`,
+ R`$$s = \sqrt{5^2 + 12^2} = \sqrt{25 + 144} = \sqrt{169} = 13 \text{ cm}$$`,
+ R`$$K = 4 \times 13 = 52 \text{ cm}$$`,
+ R`$26$ cm adalah keliling jika lupa dikali $4$ ($2 \times 13$); $34$ adalah $10 + 24$. || $26$ cm is what you get forgetting to multiply by $4$ ($2 \times 13$); $34$ is $10 + 24$.`]},
+{type:'tf', q:R`Ramp memiliki tinggi $0{,}7$ m dan jarak mendatar $2{,}4$ m. Panjang ramp tersebut $2{,}5$ m. || A ramp is $0{,}7$ m high with a horizontal distance of $2{,}4$ m. The ramp is $2{,}5$ m long.`,
+ fig:()=>FIG.ramp('0,7 m','2,4 m','L = ?'), ans:true,
+ sol:[R`Seperti Contoh B: panjang ramp = sisi miring. || As in Example B: the ramp length = hypotenuse.`,
+ R`$$L^2 = (0{,}7)^2 + (2{,}4)^2 = 0{,}49 + 5{,}76 = 6{,}25$$`,
+ R`$$L = \sqrt{6{,}25} = 2{,}5 \text{ m} \quad (\text{karena } 25^2 = 625)$$`, R`Pernyataan <b>Benar</b>. || The statement is <b>True</b>.`]},
+{type:'sort', q:R`Urutkan dari yang <b>terpendek</b> ke yang <b>terpanjang</b>. || Order from the <b>shortest</b> to the <b>longest</b>.`,
+ items:['Diagonal persegi bersisi $6$ || Diagonal of a square with side $6$',
+  'Diagonal persegi panjang $8 \\times 3$ || Diagonal of an $8 \\times 3$ rectangle',
+  'Sisi miring segitiga dengan sisi siku-siku $5$ dan $7$ || Hypotenuse of a triangle with legs $5$ and $7$',
+  'Tinggi segitiga sama sisi bersisi $10$ || Height of an equilateral triangle with side $10$',
+  'Jarak $(0, 0)$ ke $(9, 1)$ || Distance from $(0, 0)$ to $(9, 1)$'],
+ sol:[R`Seperti Contoh E, bandingkan <b>kuadrat</b> panjangnya. || As in Example E, compare the <b>squares</b> of the lengths.`,
+ R`$$6^2 + 6^2 = 72, \quad 8^2 + 3^2 = 73, \quad 5^2 + 7^2 = 74$$`,
+ R`$$\text{tinggi}^2 = 10^2 - 5^2 = 75, \qquad 9^2 + 1^2 = 82$$`,
+ R`Karena $72 \lt 73 \lt 74 \lt 75 \lt 82$, urutannya: persegi, persegi panjang, segitiga $5$-$7$, tinggi segitiga sama sisi, jarak ke $(9,1)$. || Since $72 \lt 73 \lt 74 \lt 75 \lt 82$, the order is: square, rectangle, $5$-$7$ triangle, equilateral height, distance to $(9,1)$.`]},
+{type:'dnd', q:R`Benang layang-layang $25$ m, jarak mendatar $15$ m, dan tangan berada $1{,}5$ m di atas tanah. Lengkapi perhitungan tinggi layang-layang dari tanah. || The kite string is $25$ m, the horizontal distance is $15$ m, and the hand is $1{,}5$ m above the ground. Complete the calculation of the kite's height above the ground.`,
+ fig:()=>FIG.kite('25 m','15 m','h','tangan / hand 1,5 m'),
+ tpl:R`$h^2 = 25^2 - 15^2 = 625 - 225 =$ [[0]] &nbsp;⟹&nbsp; $h =$ [[1]] m &nbsp;⟹&nbsp; tinggi dari tanah (height above ground) $= h + 1{,}5 =$ [[2]] m`,
+ slots:['$400$','$20$',R`$21{,}5$`], extra:['$850$',R`$18{,}5$`,'$29$'],
+ sol:[R`Seperti Contoh D. Langkah 1: benang = sisi miring, jadi kurangkan. || As in Example D. Step 1: string = hypotenuse, so subtract.`,
+ R`$$h^2 = 625 - 225 = 400 \;\Rightarrow\; h = \sqrt{400} = 20 \text{ m}$$`,
+ R`Langkah 2: $h$ diukur dari tangan, jadi tambahkan tinggi tangan: $20 + 1{,}5 = 21{,}5$ m. || Step 2: $h$ is measured from the hand, so add the hand height: $20 + 1{,}5 = 21{,}5$ m.`,
+ R`$850 = 625 + 225$ (salah, harus dikurang); $18{,}5 = 20 - 1{,}5$ (salah, harus ditambah). || $850 = 625 + 225$ (wrong, must subtract); $18{,}5 = 20 - 1{,}5$ (wrong, must add).`]}
+],
+/* ===== Exit ticket ===== */
+exit:[
+{type:'mcq', q:R`Sisi siku-siku sebuah segitiga $20$ cm dan $21$ cm. Panjang sisi miringnya adalah ... || The legs of a triangle are $20$ cm and $21$ cm. The hypotenuse is ...`, opts:['$29$ cm','$41$ cm','$31$ cm','$27$ cm'], ans:0,
+ sol:[R`$$c = \sqrt{20^2 + 21^2} = \sqrt{400 + 441} = \sqrt{841} = 29 \text{ cm}$$`]},
+{type:'fill', q:R`Tangga $10$ m bersandar di dinding dengan kaki tangga $6$ m dari dinding. Berapa tinggi yang dicapai tangga? || A $10$ m ladder leans on a wall with its foot $6$ m from the wall. How high does it reach?`, fig:()=>FIG.ladder('10 m','6 m','t = ?'), tpl:R`$t =$ [[0]] m`, ans:[8],
+ sol:[R`Tangga = sisi miring → kurangkan. || Ladder = hypotenuse → subtract.`, R`$$t = \sqrt{10^2 - 6^2} = \sqrt{100 - 36} = \sqrt{64} = 8 \text{ m}$$`]},
+{type:'tf', q:R`Segitiga dengan sisi $7$, $8$, dan $10$ adalah segitiga tumpul. || A triangle with sides $7$, $8$ and $10$ is an obtuse triangle.`, ans:false,
+ sol:[R`$$10^2 = 100, \qquad 7^2 + 8^2 = 49 + 64 = 113$$`, R`Karena $100 \lt 113$, segitiga itu <b>lancip</b>, bukan tumpul → <b>Salah</b>. || Since $100 \lt 113$, the triangle is <b>acute</b>, not obtuse → <b>False</b>.`]}
+],
+/* ===== TASK 1 ===== */
+t1:[
+{type:'mcq', q:R`Sisi siku-siku segitiga $12$ cm dan $16$ cm. Panjang sisi miringnya adalah ... || The legs of a right triangle are $12$ cm and $16$ cm. Its hypotenuse is ...`,
+ fig:()=>FIG.tri('16 cm','12 cm','c = ?'), opts:['$20$ cm','$28$ cm','$24$ cm','$400$ cm'], ans:0,
+ sol:[R`Cari sisi miring → jumlahkan kuadrat. || Find the hypotenuse → add the squares.`, R`$$c^2 = 12^2 + 16^2 = 144 + 256 = 400$$`, R`$$c = \sqrt{400} = 20 \text{ cm}$$`,
+ R`$400$ adalah $c^2$, belum diakarkan; $28 = 12 + 16$. || $400$ is $c^2$, not yet square-rooted; $28 = 12 + 16$.`]},
+{type:'fill', q:R`Segitiga siku-siku dengan sisi siku-siku $15$ cm dan $20$ cm. Tentukan sisi miringnya. || A right triangle has legs $15$ cm and $20$ cm. Find its hypotenuse.`, tpl:R`$c =$ [[0]] cm`, ans:[25],
+ sol:[R`$$c^2 = 15^2 + 20^2 = 225 + 400 = 625$$`, R`$$c = \sqrt{625} = 25 \text{ cm}$$`, R`(Ini kelipatan $5$ dari tripel $3, 4, 5$.) || (This is $5$ times the triple $3, 4, 5$.)`]},
+{type:'fill', q:R`Sisi miring segitiga siku-siku $41$ cm dan satu sisi siku-sikunya $9$ cm. Tentukan sisi siku-siku yang lain. || The hypotenuse of a right triangle is $41$ cm and one leg is $9$ cm. Find the other leg.`,
+ fig:()=>FIG.tri('9 cm','b = ?','41 cm'), tpl:R`$b =$ [[0]] cm`, ans:[40],
+ sol:[R`Cari sisi siku-siku → kurangkan kuadrat. || Find a leg → subtract the squares.`, R`$$b^2 = 41^2 - 9^2 = 1681 - 81 = 1600$$`, R`$$b = \sqrt{1600} = 40 \text{ cm}$$`]},
+{type:'tf', q:R`Sisi miring selalu berhadapan dengan sudut siku-siku dan merupakan sisi terpanjang. || The hypotenuse is always opposite the right angle and is the longest side.`, ans:true,
+ sol:[R`Pada segitiga siku-siku, sudut terbesar adalah $90^\circ$. Sisi di depan sudut terbesar adalah sisi terpanjang, yaitu sisi miring → <b>Benar</b>. || In a right triangle, the largest angle is $90^\circ$. The side opposite the largest angle is the longest side, the hypotenuse → <b>True</b>.`]},
+{type:'multi', q:R`Pilih semua tripel Pythagoras. || Select all Pythagorean triples.`, opts:['$(9, 12, 15)$','$(11, 60, 61)$','$(10, 15, 20)$','$(14, 48, 50)$','$(5, 10, 12)$'], ans:[0,1,3],
+ sol:[R`Cek $a^2 + b^2 = c^2$: || Check $a^2 + b^2 = c^2$:`,
+ R`$$81 + 144 = 225 = 15^2 \;\color{#16a34a}{\checkmark} \qquad 121 + 3600 = 3721 = 61^2 \;\color{#16a34a}{\checkmark} \qquad 196 + 2304 = 2500 = 50^2 \;\color{#16a34a}{\checkmark}$$`,
+ R`$$100 + 225 = 325 \ne 400 \;\color{#dc2626}{\times} \qquad 25 + 100 = 125 \ne 144 \;\color{#dc2626}{\times}$$`]},
+{type:'sort', q:R`Urutkan segitiga siku-siku berikut berdasarkan panjang sisi miringnya, dari yang terpendek. || Order these right triangles by the length of their hypotenuse, from shortest.`,
+ items:['Sisi siku-siku $3$ dan $4$ || Legs $3$ and $4$','Sisi siku-siku $6$ dan $8$ || Legs $6$ and $8$','Sisi siku-siku $5$ dan $12$ || Legs $5$ and $12$','Sisi siku-siku $8$ dan $15$ || Legs $8$ and $15$','Sisi siku-siku $7$ dan $24$ || Legs $7$ and $24$'],
+ sol:[R`Hitung tiap sisi miring: || Compute each hypotenuse:`,
+ R`$$\sqrt{9+16} = 5, \quad \sqrt{36+64} = 10, \quad \sqrt{25+144} = 13, \quad \sqrt{64+225} = 17, \quad \sqrt{49+576} = 25$$`,
+ R`Urutan: $5 \lt 10 \lt 13 \lt 17 \lt 25$. || Order: $5 \lt 10 \lt 13 \lt 17 \lt 25$.`]},
+{type:'pair', q:R`Jodohkan pasangan sisi siku-siku dengan sisi miringnya. || Match each pair of legs with its hypotenuse.`,
+ pairs:[['$9$ dan (and) $40$','$41$'],['$12$ dan (and) $35$','$37$'],['$20$ dan (and) $21$','$29$'],['$28$ dan (and) $45$','$53$']],
+ sol:[R`$$\sqrt{81 + 1600} = \sqrt{1681} = 41 \qquad \sqrt{144 + 1225} = \sqrt{1369} = 37$$`,
+ R`$$\sqrt{400 + 441} = \sqrt{841} = 29 \qquad \sqrt{784 + 2025} = \sqrt{2809} = 53$$`]},
+{type:'dnd', q:R`Sisi miring $34$ cm dan satu sisi siku-siku $16$ cm. Lengkapi perhitungan sisi $b$. || The hypotenuse is $34$ cm and one leg is $16$ cm. Complete the calculation of side $b$.`,
+ tpl:R`$b^2 = 34^2 - 16^2 =$ [[0]] $-$ [[1]] $=$ [[2]] &nbsp;⟹&nbsp; $b =$ [[3]] cm`,
+ slots:['$1156$','$256$','$900$','$30$'], extra:['$1412$','$18$','$50$'],
+ sol:[R`$$34^2 = 34 \times 34 = 1156, \qquad 16^2 = 256$$`, R`$$b^2 = 1156 - 256 = 900 \;\Rightarrow\; b = \sqrt{900} = 30 \text{ cm}$$`,
+ R`$1412 = 1156 + 256$ (salah operasi), $18 = 34 - 16$. || $1412 = 1156 + 256$ (wrong operation), $18 = 34 - 16$.`]},
+{type:'mcq', q:R`Tentukan nilai $x$ pada gambar. || Find the value of $x$ in the picture.`, fig:()=>FIG.tri('24 cm','x','26 cm'), opts:['$10$ cm','$12$ cm','$2$ cm','$50$ cm'], ans:0,
+ sol:[R`$26$ cm adalah sisi miring, $x$ sisi siku-siku → kurangkan. || $26$ cm is the hypotenuse, $x$ is a leg → subtract.`, R`$$x^2 = 26^2 - 24^2 = 676 - 576 = 100 \;\Rightarrow\; x = 10 \text{ cm}$$`]},
+{type:'fill', q:R`Tripel $(5, 12, 13)$ dikalikan suatu bilangan $k$ sehingga sisi miringnya menjadi $39$. Berapa panjang sisi siku-siku <b>terpendek</b>? || The triple $(5, 12, 13)$ is multiplied by a number $k$ so that the hypotenuse becomes $39$. What is the <b>shortest</b> leg?`, tpl:R`Sisi terpendek (shortest leg) $=$ [[0]]`, ans:[15],
+ sol:[R`$$k = 39 \div 13 = 3$$`, R`$$5 \times 3 = 15, \quad 12 \times 3 = 36, \quad 13 \times 3 = 39$$`, R`Cek: $15^2 + 36^2 = 225 + 1296 = 1521 = 39^2$ ✔. Jawaban: $15$. || Check: $15^2 + 36^2 = 1521 = 39^2$ ✔. Answer: $15$.`]}
+],
+/* ===== TASK 2 ===== */
+t2:[
+{type:'mcq', q:R`Segitiga dengan sisi $8$ cm, $15$ cm, dan $17$ cm termasuk segitiga ... || A triangle with sides $8$ cm, $15$ cm and $17$ cm is a/an ... triangle.`, opts:['siku-siku || right','lancip || acute','tumpul || obtuse','sama sisi || equilateral'], ans:0,
+ sol:[R`$$17^2 = 289, \qquad 8^2 + 15^2 = 64 + 225 = 289$$`, R`Karena $c^2 = a^2 + b^2$, segitiga itu <b>siku-siku</b>. || Since $c^2 = a^2 + b^2$, the triangle is <b>right</b>.`]},
+{type:'mcq', q:R`Pada segitiga $30^\circ$-$60^\circ$-$90^\circ$, sisi di depan sudut $30^\circ$ adalah $7$ cm. Panjang sisi miringnya ... || In a $30^\circ$-$60^\circ$-$90^\circ$ triangle, the side opposite $30^\circ$ is $7$ cm. The hypotenuse is ...`,
+ opts:['$14$ cm',R`$7\sqrt{3}$ cm`,R`$7\sqrt{2}$ cm`,'$21$ cm'], ans:0,
+ sol:[R`Perbandingan $1 : \sqrt3 : 2$, dengan faktor $7$. || Ratio $1 : \sqrt3 : 2$, with factor $7$.`, R`$$\text{sisi miring} = 2 \times 7 = 14 \text{ cm}$$`, R`$7\sqrt3$ cm adalah sisi di depan $60^\circ$. || $7\sqrt3$ cm is the side opposite $60^\circ$.`]},
+{type:'tf', q:R`Segitiga dengan sisi $9$, $10$, dan $12$ adalah segitiga lancip. || A triangle with sides $9$, $10$ and $12$ is an acute triangle.`, ans:true,
+ sol:[R`$$12^2 = 144, \qquad 9^2 + 10^2 = 81 + 100 = 181$$`, R`Karena $144 \lt 181$, segitiganya <b>lancip</b> → <b>Benar</b>. || Since $144 \lt 181$, it is <b>acute</b> → <b>True</b>.`]},
+{type:'cat', q:R`Kelompokkan segitiga (panjang sisi) berikut sesuai jenisnya. || Group these triangles (side lengths) by type.`,
+ cats:['Lancip || Acute','Siku-siku || Right','Tumpul || Obtuse'],
+ items:[['(10, 24, 26)',1],['(16, 30, 34)',1],['(4, 4, 5)',0],['(12, 13, 14)',0],['(3, 5, 7)',2],['(6, 9, 12)',2]],
+ sol:[R`$$676 = 100 + 576 \Rightarrow \text{siku-siku} \qquad 1156 = 256 + 900 \Rightarrow \text{siku-siku}$$`,
+ R`$$25 \lt 16 + 16 = 32 \Rightarrow \text{lancip} \qquad 196 \lt 144 + 169 = 313 \Rightarrow \text{lancip}$$`,
+ R`$$49 \gt 9 + 25 = 34 \Rightarrow \text{tumpul} \qquad 144 \gt 36 + 81 = 117 \Rightarrow \text{tumpul}$$`]},
+{type:'fill', q:R`Diagonal sebuah persegi adalah $6\sqrt{2}$ cm. Berapa luas persegi itu? || The diagonal of a square is $6\sqrt{2}$ cm. What is the area of the square?`, tpl:R`Luas (area) $=$ [[0]] cm²`, ans:[36],
+ sol:[R`Diagonal membagi persegi menjadi dua segitiga $45^\circ$-$45^\circ$-$90^\circ$ dengan perbandingan $1 : 1 : \sqrt2$. || The diagonal splits the square into two $45^\circ$-$45^\circ$-$90^\circ$ triangles with ratio $1 : 1 : \sqrt2$.`,
+ R`$$\text{sisi miring} = 6\sqrt{2} \;\Rightarrow\; \text{sisi persegi} = 6 \text{ cm}$$`, R`$$L = 6 \times 6 = 36 \text{ cm}^2$$`]},
+{type:'fill', q:R`Sisi sebuah segitiga $9$ cm, $12$ cm, dan $x$ cm ($x$ sisi terpanjang). Agar segitiga siku-siku, berapa nilai $x$? || A triangle has sides $9$ cm, $12$ cm and $x$ cm ($x$ is the longest). For a right triangle, what is $x$?`, tpl:R`$x =$ [[0]]`, ans:[15],
+ sol:[R`$$x^2 = 9^2 + 12^2 = 81 + 144 = 225 \;\Rightarrow\; x = 15$$`]},
+{type:'dnd', q:R`Segitiga $30^\circ$-$60^\circ$-$90^\circ$ memiliki sisi miring $18$ cm. Seret kartu yang tepat. || A $30^\circ$-$60^\circ$-$90^\circ$ triangle has hypotenuse $18$ cm. Drag the correct cards.`,
+ tpl:R`Sisi depan $30^\circ$ (opposite $30^\circ$) $=$ [[0]] cm, &nbsp; sisi depan $60^\circ$ (opposite $60^\circ$) $=$ [[1]] cm`,
+ slots:['$9$',R`$9\sqrt{3}$`], extra:[R`$9\sqrt{2}$`,R`$18\sqrt{3}$`,'$6$'],
+ sol:[R`Perbandingan $1 : \sqrt3 : 2$. Sisi miring $18 = 2 \times 9$, faktornya $9$. || Ratio $1 : \sqrt3 : 2$. Hypotenuse $18 = 2 \times 9$, factor $9$.`, R`$$\text{depan } 30^\circ = 9, \qquad \text{depan } 60^\circ = 9\sqrt{3}$$`,
+ R`Cek: $9^2 + (9\sqrt3)^2 = 81 + 243 = 324 = 18^2$ ✔ || Check: $81 + 243 = 324 = 18^2$ ✔`]},
+{type:'multi', q:R`Segitiga memiliki sisi $6$, $6$, dan $6\sqrt{2}$. Pilih semua pernyataan yang benar. || A triangle has sides $6$, $6$ and $6\sqrt{2}$. Select all true statements.`,
+ opts:['Segitiga itu siku-siku || It is a right triangle','Segitiga itu sama kaki || It is isosceles',R`Sudut-sudutnya $45^\circ$, $45^\circ$, $90^\circ$ || Its angles are $45^\circ$, $45^\circ$, $90^\circ$`,'Segitiga itu tumpul || It is obtuse','Sisi miringnya $12$ || Its hypotenuse is $12$'], ans:[0,1,2],
+ sol:[R`$$(6\sqrt{2})^2 = 36 \times 2 = 72, \qquad 6^2 + 6^2 = 72$$`, R`Sama → siku-siku ✔. Dua sisi sama → sama kaki ✔. Jadi segitiga $45^\circ$-$45^\circ$-$90^\circ$ ✔. || Equal → right ✔. Two equal sides → isosceles ✔. So it is a $45^\circ$-$45^\circ$-$90^\circ$ triangle ✔.`,
+ R`Bukan tumpul ✘, dan sisi miringnya $6\sqrt2 \approx 8{,}49$, bukan $12$ ✘. || Not obtuse ✘, and the hypotenuse is $6\sqrt2 \approx 8{,}49$, not $12$ ✘.`]},
+{type:'sort', q:R`Urutkan dari yang terkecil ke yang terbesar. || Order from smallest to largest.`, items:['$5$',R`$5\sqrt{2}$`,R`$\sqrt{60}$`,R`$5\sqrt{3}$`,'$10$'],
+ sol:[R`Ubah ke bentuk akar: || Rewrite as roots:`, R`$$5 = \sqrt{25}, \quad 5\sqrt2 = \sqrt{50}, \quad \sqrt{60}, \quad 5\sqrt3 = \sqrt{75}, \quad 10 = \sqrt{100}$$`, R`Karena $25 \lt 50 \lt 60 \lt 75 \lt 100$, urutan sudah ditemukan. || Since $25 \lt 50 \lt 60 \lt 75 \lt 100$, the order is found.`]},
+{type:'pair', q:R`Jodohkan kondisi/segitiga dengan keterangannya. || Match each condition/triangle with its description.`,
+ pairs:[[R`$c^2 = a^2 + b^2$`,'Siku-siku || Right'],[R`$c^2 \lt a^2 + b^2$`,'Lancip || Acute'],[R`$c^2 \gt a^2 + b^2$`,'Tumpul || Obtuse'],
+  [R`Segitiga $45^\circ$-$45^\circ$-$90^\circ$ || $45^\circ$-$45^\circ$-$90^\circ$ triangle`,R`$1 : 1 : \sqrt{2}$`],[R`Segitiga $30^\circ$-$60^\circ$-$90^\circ$ || $30^\circ$-$60^\circ$-$90^\circ$ triangle`,R`$1 : \sqrt{3} : 2$`]],
+ sol:[R`Lihat tabel jenis segitiga dan bagian segitiga istimewa pada Mengulang Pengetahuan Prasyarat. || See the triangle-type table and the special triangles in Review of Prior Knowledge.`,
+ R`$c^2$ sama → siku-siku; lebih kecil → lancip; lebih besar → tumpul. || $c^2$ equal → right; smaller → acute; larger → obtuse.`]}
+],
+/* ===== TASK 3 ===== */
+t3:[
+{type:'mcq', q:R`Tangga $2{,}5$ m bersandar di dinding dengan kaki tangga $0{,}7$ m dari dinding. Berapa tinggi ujung tangga? || A $2{,}5$ m ladder leans on a wall with its foot $0{,}7$ m from the wall. How high is the top?`,
+ fig:()=>FIG.ladder('2,5 m','0,7 m','t = ?'), opts:[R`$2{,}4$ m`,R`$2{,}6$ m`,R`$1{,}8$ m`,R`$3{,}2$ m`], ans:0,
+ sol:[R`$$t^2 = (2{,}5)^2 - (0{,}7)^2 = 6{,}25 - 0{,}49 = 5{,}76$$`, R`$$t = \sqrt{5{,}76} = 2{,}4 \text{ m} \quad (24^2 = 576)$$`, R`$2{,}6$ m salah karena memakai penjumlahan, dan lebih panjang dari tangga. || $2{,}6$ m is wrong because it uses addition, and it is longer than the ladder.`]},
+{type:'fill', q:R`Layar TV berukuran $80$ cm × $60$ cm. Berapa panjang diagonalnya? || A TV screen measures $80$ cm × $60$ cm. How long is its diagonal?`, fig:()=>FIG.tv('80 cm','60 cm','d = ?'), tpl:R`$d =$ [[0]] cm`, ans:[100],
+ sol:[R`$$d = \sqrt{80^2 + 60^2} = \sqrt{6400 + 3600} = \sqrt{10000} = 100 \text{ cm}$$`]},
+{type:'fill', q:R`Benang layang-layang $130$ m. Jarak mendatar dari tangan ke titik di bawah layang-layang $50$ m. Berapa tinggi layang-layang di atas tangan? || A kite string is $130$ m. The horizontal distance from the hand to the point below the kite is $50$ m. How high is the kite above the hand?`,
+ fig:()=>FIG.kite('130 m','50 m','h = ?'), tpl:R`$h =$ [[0]] m`, ans:[120],
+ sol:[R`Benang = sisi miring → kurangkan. || String = hypotenuse → subtract.`, R`$$h = \sqrt{130^2 - 50^2} = \sqrt{16900 - 2500} = \sqrt{14400} = 120 \text{ m}$$`]},
+{type:'tf', q:R`Ramp dengan tinggi $0{,}9$ m dan jarak mendatar $4$ m memiliki panjang $4{,}1$ m. || A ramp with height $0{,}9$ m and horizontal distance $4$ m is $4{,}1$ m long.`, fig:()=>FIG.ramp('0,9 m','4 m','L'), ans:true,
+ sol:[R`$$L^2 = (0{,}9)^2 + 4^2 = 0{,}81 + 16 = 16{,}81$$`, R`$$L = \sqrt{16{,}81} = 4{,}1 \text{ m} \quad (41^2 = 1681)$$`, R`Pernyataan <b>Benar</b>. || The statement is <b>True</b>.`]},
+{type:'multi', q:R`Tiang bendera tingginya $8$ m. Seutas tali diikat dari puncak tiang ke titik di tanah yang berjarak $6$ m dari kaki tiang. Pilih semua pernyataan yang benar. || A flagpole is $8$ m tall. A rope is tied from the top to a point on the ground $6$ m from the foot of the pole. Select all true statements.`,
+ fig:()=>FIG.pole('8 m','6 m','tali / rope'),
+ opts:['Panjang tali $10$ m || The rope is $10$ m long','Jika dipasang dua tali seperti itu, total tali $20$ m || With two such ropes, the total length is $20$ m','Tiang, tanah, dan tali membentuk segitiga siku-siku || The pole, ground and rope form a right triangle','Panjang tali $14$ m || The rope is $14$ m long','Tali adalah sisi terpendek || The rope is the shortest side'], ans:[0,1,2],
+ sol:[R`Tiang ⟂ tanah, jadi terbentuk segitiga siku-siku ✔, dengan tali sebagai sisi miring (terpanjang, bukan terpendek ✘). || Pole ⟂ ground, so a right triangle forms ✔, with the rope as the hypotenuse (longest, not shortest ✘).`,
+ R`$$\text{tali} = \sqrt{8^2 + 6^2} = \sqrt{100} = 10 \text{ m} \;\color{#16a34a}{\checkmark}, \qquad 2 \times 10 = 20 \text{ m} \;\color{#16a34a}{\checkmark}$$`, R`$14 = 8 + 6$ ✘ || $14 = 8 + 6$ ✘`]},
+{type:'sort', q:R`Urutkan layar berikut dari diagonal <b>terpendek</b> ke <b>terpanjang</b>. || Order these screens from the <b>shortest</b> to the <b>longest</b> diagonal.`,
+ items:['$30 \\times 40$','$36 \\times 48$','$24 \\times 70$','$45 \\times 60$','$20 \\times 99$'],
+ sol:[R`$$\sqrt{900 + 1600} = 50, \qquad \sqrt{1296 + 2304} = 60, \qquad \sqrt{576 + 4900} = \sqrt{5476} = 74$$`,
+ R`$$\sqrt{2025 + 3600} = \sqrt{5625} = 75, \qquad \sqrt{400 + 9801} = \sqrt{10201} = 101$$`, R`Urutan: $50, 60, 74, 75, 101$. || Order: $50, 60, 74, 75, 101$.`]},
+{type:'pair', q:R`Jodohkan setiap situasi dengan jawabannya. || Match each situation with its answer.`,
+ pairs:[['Tangga $17$ m, kaki $8$ m dari dinding → tinggi || Ladder $17$ m, foot $8$ m from the wall → height','$15$ m'],
+  ['Layar $12 \\times 16$ cm → diagonal || Screen $12 \\times 16$ cm → diagonal','$20$ cm'],
+  ['Benang $41$ m, jarak mendatar $9$ m → tinggi || String $41$ m, horizontal $9$ m → height','$40$ m'],
+  ['Lapangan $20 \\times 21$ m → diagonal || Field $20 \\times 21$ m → diagonal','$29$ m']],
+ sol:[R`$$\sqrt{17^2 - 8^2} = \sqrt{225} = 15 \qquad \sqrt{12^2 + 16^2} = \sqrt{400} = 20$$`, R`$$\sqrt{41^2 - 9^2} = \sqrt{1600} = 40 \qquad \sqrt{20^2 + 21^2} = \sqrt{841} = 29$$`]},
+{type:'dnd', q:R`TV $20$ inci memiliki perbandingan lebar : tinggi $= 4 : 3$. Lengkapi perhitungan ukuran layarnya. || A $20$-inch TV has a width : height ratio of $4 : 3$. Complete the calculation of its screen size.`,
+ tpl:R`lebar : tinggi : diagonal (width : height : diagonal) $= 4 : 3 :$ [[0]]; &nbsp; faktor (factor) $k = 20 \div 5 =$ [[1]]; &nbsp; lebar (width) $=$ [[2]] inci, tinggi (height) $=$ [[3]] inci`,
+ slots:['$5$','$4$','$16$','$12$'], extra:['$7$','$80$','$9$'],
+ sol:[R`$4 : 3$ adalah bagian dari tripel $3, 4, 5$, jadi diagonalnya $5$ bagian. || $4 : 3$ is part of the triple $3, 4, 5$, so the diagonal is $5$ parts.`,
+ R`$$k = 20 \div 5 = 4, \qquad \text{lebar} = 4 \times 4 = 16, \qquad \text{tinggi} = 3 \times 4 = 12$$`, R`Cek: $16^2 + 12^2 = 256 + 144 = 400 = 20^2$ ✔ || Check: $256 + 144 = 400 = 20^2$ ✔`]},
+{type:'mcq', q:R`Andi berjalan $300$ m ke timur lalu $400$ m ke utara. Budi berjalan langsung dari titik awal ke tujuan Andi. Berapa meter Andi berjalan lebih jauh daripada Budi? || Andi walks $300$ m east then $400$ m north. Budi walks straight from the start to Andi's destination. How many metres further does Andi walk than Budi?`,
+ opts:['$200$ m','$500$ m','$100$ m','$700$ m'], ans:0,
+ sol:[R`Andi: $300 + 400 = 700$ m. || Andi: $300 + 400 = 700$ m.`, R`$$\text{Budi} = \sqrt{300^2 + 400^2} = \sqrt{90000 + 160000} = \sqrt{250000} = 500 \text{ m}$$`, R`Selisih: $700 - 500 = 200$ m. || Difference: $700 - 500 = 200$ m.`]},
+{type:'cat', q:R`Kelompokkan situasi berikut. || Group the following situations.`,
+ cats:['Membentuk segitiga siku-siku || Forms a right triangle','Tidak membentuk segitiga siku-siku || Does not form a right triangle'],
+ items:[['Tangga bersandar pada dinding tegak || A ladder against an upright wall',0],['Tali dari puncak tiang tegak ke tanah datar || A rope from the top of an upright pole to flat ground',0],['Kapal ke utara lalu ke barat || A ship sails north then west',0],['Atap berbentuk segitiga sama sisi || A roof shaped like an equilateral triangle',1],['Jarum jam pada pukul 04.00 || Clock hands at 4 o\'clock',1],['Dua rel kereta yang sejajar || Two parallel railway tracks',1]],
+ sol:[R`Membentuk segitiga siku-siku jika ada sudut $90^\circ$: dinding ⟂ lantai, tiang ⟂ tanah, utara ⟂ barat. || A right triangle forms if there is a $90^\circ$ angle: wall ⟂ floor, pole ⟂ ground, north ⟂ west.`,
+ R`Segitiga sama sisi semua sudutnya $60^\circ$; jarum jam pukul 04.00 membentuk $120^\circ$; rel sejajar tidak pernah bertemu. || An equilateral triangle has all angles $60^\circ$; clock hands at 4:00 form $120^\circ$; parallel tracks never meet.`]}
+],
+/* ===== TASK 4 ===== */
+t4:[
+{type:'fill', q:R`Tentukan jarak titik $A(2, 3)$ dan $B(14, 8)$. || Find the distance between $A(2, 3)$ and $B(14, 8)$.`, tpl:R`$AB =$ [[0]] satuan (units)`, ans:[13],
+ sol:[R`$$\Delta x = 14 - 2 = 12, \qquad \Delta y = 8 - 3 = 5$$`, R`$$AB = \sqrt{12^2 + 5^2} = \sqrt{144 + 25} = \sqrt{169} = 13$$`]},
+{type:'mcq', q:R`Jarak titik $(-4, -1)$ ke titik $(2, 7)$ adalah ... || The distance from $(-4, -1)$ to $(2, 7)$ is ...`, opts:['$10$','$14$',R`$2\sqrt{5}$`,'$100$'], ans:0,
+ sol:[R`$$\Delta x = 2 - (-4) = 6, \qquad \Delta y = 7 - (-1) = 8$$`, R`$$d = \sqrt{36 + 64} = \sqrt{100} = 10$$`, R`$14 = 6 + 8$ (lupa dikuadratkan) dan $100$ masih $d^2$ (belum diakarkan). Ingat: mengurangi bilangan negatif sama dengan menambah. || $14 = 6 + 8$ (forgot to square) and $100$ is still $d^2$ (not square-rooted). Remember: subtracting a negative number is the same as adding.`]},
+{type:'mcq', q:R`Perhatikan bidang koordinat. Berapa jarak titik $P$ ke $Q$? || Look at the coordinate plane. What is the distance from $P$ to $Q$?`, fig:()=>FIG.grid(1,1,4,5,'P','Q','0'), opts:['$5$','$7$','$25$',R`$\sqrt{7}$`], ans:0,
+ sol:[R`Baca koordinat: $P(1, 1)$, $Q(4, 5)$. || Read the coordinates: $P(1, 1)$, $Q(4, 5)$.`, R`$$\Delta x = 3, \quad \Delta y = 4, \quad PQ = \sqrt{9 + 16} = \sqrt{25} = 5$$`]},
+{type:'multi', q:R`Persegi panjang $ABCD$ berukuran $15$ cm × $8$ cm. Pilih semua pernyataan yang benar. || Rectangle $ABCD$ measures $15$ cm × $8$ cm. Select all true statements.`,
+ opts:['Diagonal $AC = 17$ cm || Diagonal $AC = 17$ cm','Diagonal $AC = 23$ cm || Diagonal $AC = 23$ cm','Keliling $= 46$ cm || Perimeter $= 46$ cm','Luas $= 60$ cm² || Area $= 60$ cm²','Kedua diagonalnya sama panjang || Both diagonals are equal'], ans:[0,2,4],
+ sol:[R`$$AC = \sqrt{15^2 + 8^2} = \sqrt{225 + 64} = \sqrt{289} = 17 \text{ cm} \;\color{#16a34a}{\checkmark}$$`, R`$$K = 2(15 + 8) = 46 \text{ cm} \;\color{#16a34a}{\checkmark}, \qquad L = 15 \times 8 = 120 \text{ cm}^2 \;(\text{bukan } 60)$$`, R`Diagonal persegi panjang selalu sama panjang ✔. $23 = 15 + 8$ ✘. || The diagonals of a rectangle are always equal ✔. $23 = 15 + 8$ ✘.`]},
+{type:'fill', q:R`Belah ketupat memiliki sisi $25$ cm dan salah satu diagonalnya $14$ cm. Berapa panjang diagonal yang lain? || A rhombus has side $25$ cm and one diagonal $14$ cm. How long is the other diagonal?`, fig:()=>FIG.rhombus('?','7','25'), tpl:R`Diagonal lain (other diagonal) $=$ [[0]] cm`, ans:[48],
+ sol:[R`Setengah diagonal yang diketahui $= 7$ cm. Sisi belah ketupat $= 25$ cm adalah sisi miring. || Half of the known diagonal $= 7$ cm. The side $25$ cm is the hypotenuse.`,
+ R`$$x = \sqrt{25^2 - 7^2} = \sqrt{625 - 49} = \sqrt{576} = 24 \text{ cm}$$`, R`$x$ adalah setengah diagonal, jadi diagonal lain $= 2 \times 24 = 48$ cm. || $x$ is half the diagonal, so the other diagonal $= 2 \times 24 = 48$ cm.`]},
+{type:'tf', q:R`Segitiga $ABC$ dengan $A(1, 1)$, $B(4, 1)$, $C(4, 5)$ adalah segitiga siku-siku di $B$ dan $AC = 5$. || Triangle $ABC$ with $A(1, 1)$, $B(4, 1)$, $C(4, 5)$ is right-angled at $B$ and $AC = 5$.`, ans:true,
+ sol:[R`$AB$ mendatar (panjang $3$), $BC$ tegak (panjang $4$), jadi $AB \perp BC$ → siku-siku di $B$. || $AB$ is horizontal (length $3$), $BC$ is vertical (length $4$), so $AB \perp BC$ → right angle at $B$.`, R`$$AC = \sqrt{3^2 + 4^2} = 5$$`, R`Pernyataan <b>Benar</b>. || The statement is <b>True</b>.`]},
+{type:'sort', q:R`Urutkan titik-titik berikut dari yang <b>paling dekat</b> ke titik asal $O(0, 0)$. || Order the points from the <b>closest</b> to the origin $O(0, 0)$.`,
+ items:['$A(3, 4)$','$B(0, -6)$','$C(5, 5)$','$D(-2, 7)$','$E(6, -6)$'],
+ sol:[R`Bandingkan kuadrat jaraknya $x^2 + y^2$: || Compare the squared distances $x^2 + y^2$:`, R`$$A: 9 + 16 = 25, \quad B: 0 + 36 = 36, \quad C: 25 + 25 = 50, \quad D: 4 + 49 = 53, \quad E: 36 + 36 = 72$$`, R`Urutan: $A, B, C, D, E$. || Order: $A, B, C, D, E$.`]},
+{type:'pair', q:R`Jodohkan bangun dengan ukuran yang diminta. || Match each shape with the requested measurement.`,
+ pairs:[['Diagonal persegi bersisi $9$ || Diagonal of a square with side $9$',R`$9\sqrt{2}$`],['Tinggi segitiga sama sisi bersisi $8$ || Height of an equilateral triangle with side $8$',R`$4\sqrt{3}$`],['Diagonal persegi panjang $5 \\times 12$ || Diagonal of a $5 \\times 12$ rectangle','$13$'],['Tinggi segitiga sama kaki $10, 10, 12$ || Height of an isosceles triangle $10, 10, 12$','$8$']],
+ sol:[R`$$\sqrt{81 + 81} = \sqrt{162} = 9\sqrt{2} \qquad \sqrt{8^2 - 4^2} = \sqrt{48} = 4\sqrt{3}$$`, R`$$\sqrt{25 + 144} = 13 \qquad \sqrt{10^2 - 6^2} = \sqrt{64} = 8$$`]},
+{type:'dnd', q:R`Trapesium sama kaki memiliki sisi sejajar $10$ cm dan $22$ cm, serta kaki $10$ cm. Lengkapi perhitungan tinggi dan luasnya. || An isosceles trapezoid has parallel sides $10$ cm and $22$ cm, and legs $10$ cm. Complete the calculation of its height and area.`,
+ tpl:R`Bagian alas di tiap sisi (base part on each side) $= (22 - 10) \div 2 =$ [[0]]; &nbsp; $t = \sqrt{10^2 - 6^2} =$ [[1]]; &nbsp; Luas (area) $= \dfrac{10 + 22}{2} \times 8 =$ [[2]] cm²`,
+ slots:['$6$','$8$','$128$'], extra:['$12$','$256$','$16$'],
+ sol:[R`Tarik dua garis tinggi dari ujung sisi atas. Sisa alas $22 - 10 = 12$ terbagi dua: $6$ cm di kiri dan $6$ cm di kanan. || Draw two heights from the ends of the top side. The leftover base $22 - 10 = 12$ splits into $6$ cm on each side.`,
+ R`$$t = \sqrt{10^2 - 6^2} = \sqrt{64} = 8 \text{ cm}$$`, R`$$L = \frac{10 + 22}{2} \times 8 = 16 \times 8 = 128 \text{ cm}^2$$`]},
+{type:'mcq', q:R`Segitiga dengan titik sudut $P(-2, -1)$, $Q(4, -1)$, $R(4, 7)$. Berapa kelilingnya? || A triangle has vertices $P(-2, -1)$, $Q(4, -1)$, $R(4, 7)$. What is its perimeter?`, opts:['$24$','$14$','$48$','$20$'], ans:0,
+ sol:[R`$$PQ = 4 - (-2) = 6, \qquad QR = 7 - (-1) = 8$$`, R`$$PR = \sqrt{6^2 + 8^2} = 10$$`, R`$$K = 6 + 8 + 10 = 24$$`]}
+],
+/* ===== TASK 5 ===== */
+t5:[
+{type:'mcq', q:R`Kapal berlayar $12$ km ke utara lalu $9$ km ke timur. Berapa jaraknya dari pelabuhan? || A ship sails $12$ km north then $9$ km east. How far is it from the harbour?`, fig:()=>FIG.ship('12 km','9 km','d = ?'), opts:['$15$ km','$21$ km','$13$ km','$17$ km'], ans:0,
+ sol:[R`$$d = \sqrt{12^2 + 9^2} = \sqrt{144 + 81} = \sqrt{225} = 15 \text{ km}$$`]},
+{type:'fill', q:R`Balok berukuran $2$ cm × $3$ cm × $6$ cm. Tentukan panjang diagonal ruangnya. || A cuboid measures $2$ cm × $3$ cm × $6$ cm. Find its space diagonal.`, fig:()=>FIG.box('6 cm','3 cm','2 cm','d'), tpl:R`$d =$ [[0]] cm`, ans:[7],
+ sol:[R`$$d = \sqrt{p^2 + l^2 + t^2} = \sqrt{2^2 + 3^2 + 6^2} = \sqrt{4 + 9 + 36} = \sqrt{49} = 7 \text{ cm}$$`]},
+{type:'fill', q:R`Pesawat terbang $160$ km ke barat lalu $120$ km ke selatan. Berapa jaraknya dari titik awal? || A plane flies $160$ km west then $120$ km south. How far is it from the start?`, tpl:R`$d =$ [[0]] km`, ans:[200],
+ sol:[R`Barat ⟂ selatan, jadi jarak adalah sisi miring. || West ⟂ south, so the distance is the hypotenuse.`, R`$$d = \sqrt{160^2 + 120^2} = \sqrt{25600 + 14400} = \sqrt{40000} = 200 \text{ km}$$`]},
+{type:'tf', q:R`Diagonal ruang kubus dengan rusuk $5$ cm adalah $5\sqrt{3}$ cm. || The space diagonal of a cube with edge $5$ cm is $5\sqrt{3}$ cm.`, ans:true,
+ sol:[R`$$d = \sqrt{5^2 + 5^2 + 5^2} = \sqrt{75} = \sqrt{25 \times 3} = 5\sqrt{3} \text{ cm}$$`, R`Pernyataan <b>Benar</b>. || The statement is <b>True</b>.`]},
+{type:'multi', q:R`Dari pelabuhan yang sama, kapal A berlayar ke utara $15$ km/jam dan kapal B ke timur $20$ km/jam. Setelah $2$ jam, pilih semua pernyataan yang benar. || From the same harbour, ship A sails north at $15$ km/h and ship B sails east at $20$ km/h. After $2$ hours, select all true statements.`,
+ opts:['Kapal A menempuh $30$ km || Ship A has travelled $30$ km','Kapal B menempuh $40$ km || Ship B has travelled $40$ km','Jarak kedua kapal $50$ km || The ships are $50$ km apart','Jarak kedua kapal $70$ km || The ships are $70$ km apart','Jarak kedua kapal $25$ km || The ships are $25$ km apart'], ans:[0,1,2],
+ sol:[R`Jarak tempuh = kecepatan × waktu. || Distance = speed × time.`, R`$$A = 15 \times 2 = 30 \text{ km}, \qquad B = 20 \times 2 = 40 \text{ km}$$`, R`$$\text{jarak} = \sqrt{30^2 + 40^2} = \sqrt{2500} = 50 \text{ km}$$`, R`$70 = 30 + 40$ ✘; $25$ adalah jarak setelah $1$ jam ✘. || $70 = 30 + 40$ ✘; $25$ is the distance after $1$ hour ✘.`]},
+{type:'sort', q:R`Urutkan langkah menghitung diagonal ruang balok $4 \times 3 \times 12$. || Order the steps to compute the space diagonal of a $4 \times 3 \times 12$ cuboid.`,
+ items:[R`$d_b^2 = 4^2 + 3^2 = 25$`,R`$d_b = 5$`,R`$d_r^2 = d_b^2 + 12^2$`,R`$d_r^2 = 25 + 144 = 169$`,R`$d_r = 13$`],
+ sol:[R`Pertama hitung diagonal alas $d_b$, lalu pakai $d_b$ sebagai sisi siku-siku bersama tinggi $12$ untuk mencari diagonal ruang $d_r$. || First compute the base diagonal $d_b$, then use $d_b$ and the height $12$ as legs to find the space diagonal $d_r$.`,
+ R`$$d_b^2 = 25 \to d_b = 5 \to d_r^2 = d_b^2 + 12^2 \to d_r^2 = 169 \to d_r = 13$$`]},
+{type:'pair', q:R`Jodohkan perjalanan dengan jarak lurus dari titik awal. || Match each journey with its straight-line distance from the start.`,
+ pairs:[['$5$ km utara, $12$ km timur || $5$ km north, $12$ km east','$13$ km'],['$8$ km selatan, $15$ km barat || $8$ km south, $15$ km west','$17$ km'],['$20$ km timur, $21$ km utara || $20$ km east, $21$ km north','$29$ km'],['$7$ km barat, $24$ km selatan || $7$ km west, $24$ km south','$25$ km']],
+ sol:[R`$$\sqrt{25 + 144} = 13, \quad \sqrt{64 + 225} = 17, \quad \sqrt{400 + 441} = 29, \quad \sqrt{49 + 576} = 25$$`]},
+{type:'dnd', q:R`Sebuah kotak berukuran $12$ cm × $9$ cm × $8$ cm. Lengkapi perhitungan tongkat terpanjang yang muat (diagonal ruang). || A box measures $12$ cm × $9$ cm × $8$ cm. Complete the calculation of the longest stick that fits (space diagonal).`,
+ fig:()=>FIG.box('12 cm','9 cm','8 cm','d'),
+ tpl:R`Diagonal alas (base diagonal): $d_b^2 = 12^2 + 9^2 =$ [[0]], &nbsp; $d_b =$ [[1]]; &nbsp; diagonal ruang (space diagonal): $d_r^2 = 15^2 + 8^2 =$ [[2]], &nbsp; $d_r =$ [[3]] cm`,
+ slots:['$225$','$15$','$289$','$17$'], extra:['$21$','$29$','$23$'],
+ sol:[R`$$\sqrt{144 + 81} = \sqrt{225} = 15$$`, R`$$\sqrt{15^2 + 8^2} = \sqrt{225 + 64} = \sqrt{289} = 17 \text{ cm}$$`, R`$29 = 12 + 9 + 8$ (salah, hanya dijumlahkan). || $29 = 12 + 9 + 8$ (wrong, just added).`]},
+{type:'mcq', q:R`Rani berjalan $2$ km ke timur, $3$ km ke utara, lalu $2$ km ke timur lagi. Berapa jarak lurus Rani dari titik awal? || Rani walks $2$ km east, $3$ km north, then another $2$ km east. How far is Rani from the start in a straight line?`, opts:['$5$ km','$7$ km',R`$\sqrt{13}$ km`,'$4$ km'], ans:0,
+ sol:[R`Gabungkan arah yang sama: total ke timur $= 2 + 2 = 4$ km, ke utara $= 3$ km. || Combine the same directions: total east $= 2 + 2 = 4$ km, north $= 3$ km.`, R`$$d = \sqrt{4^2 + 3^2} = \sqrt{25} = 5 \text{ km}$$`, R`$\sqrt{13}$ hanya memakai $2$ km timur dan $3$ km utara. || $\sqrt{13}$ only uses $2$ km east and $3$ km north.`]},
+{type:'cat', q:R`Sisi siku-siku segitiga diberikan. Kelompokkan berdasarkan hasil sisi miringnya. || The legs of right triangles are given. Group them by the result of the hypotenuse.`,
+ cats:['Sisi miring bilangan bulat || Hypotenuse is a whole number','Sisi miring bentuk akar (tidak bulat) || Hypotenuse is a surd (not whole)'],
+ items:[['$5$ & $12$',0],['$6$ & $8$',0],['$15$ & $20$',0],['$1$ & $1$',1],['$2$ & $3$',1],['$4$ & $7$',1]],
+ sol:[R`$$\sqrt{25+144} = 13, \qquad \sqrt{36+64} = 10, \qquad \sqrt{225+400} = 25 \quad (\text{bulat / whole})$$`,
+ R`$$\sqrt{1+1} = \sqrt{2}, \qquad \sqrt{4+9} = \sqrt{13}, \qquad \sqrt{16+49} = \sqrt{65} \quad (\text{bentuk akar / surd})$$`]}
+]
+};
+
+/* ---------- follow-up ---------- */
+const FOLLOW = [
+ [R`1. TV $40$ inci memiliki perbandingan lebar : tinggi $= 4 : 3$. Tentukan lebar dan tingginya. || 1. A $40$-inch TV has a width : height ratio of $4 : 3$. Find its width and height.`,
+  [R`$4 : 3 : 5$, faktor $k = 40 \div 5 = 8$. || $4 : 3 : 5$, factor $k = 40 \div 5 = 8$.`, R`$$\text{lebar} = 4 \times 8 = 32 \text{ inci}, \qquad \text{tinggi} = 3 \times 8 = 24 \text{ inci}$$`]],
+ [R`2. Tentukan jarak $A(-3, -2)$ dan $B(5, 4)$. || 2. Find the distance between $A(-3, -2)$ and $B(5, 4)$.`,
+  [R`$$\Delta x = 5 - (-3) = 8, \quad \Delta y = 4 - (-2) = 6, \quad AB = \sqrt{64 + 36} = 10$$`]],
+ [R`3. Tangga $6{,}5$ m bersandar di dinding dengan kaki $2{,}5$ m dari dinding. Berapa tinggi yang dicapai? || 3. A $6{,}5$ m ladder leans on a wall with its foot $2{,}5$ m away. How high does it reach?`,
+  [R`$$t = \sqrt{(6{,}5)^2 - (2{,}5)^2} = \sqrt{42{,}25 - 6{,}25} = \sqrt{36} = 6 \text{ m}$$`]],
+ [R`4. Tentukan diagonal ruang balok $3$ cm × $4$ cm × $12$ cm. || 4. Find the space diagonal of a $3$ cm × $4$ cm × $12$ cm cuboid.`,
+  [R`$$d = \sqrt{9 + 16 + 144} = \sqrt{169} = 13 \text{ cm}$$`]],
+ [R`5. Kapal berlayar $9$ km ke utara lalu $12$ km ke barat. Berapa jaraknya dari titik awal? || 5. A ship sails $9$ km north then $12$ km west. How far is it from the start?`,
+  [R`$$d = \sqrt{81 + 144} = \sqrt{225} = 15 \text{ km}$$`]]
+];
+
+/* ---------- engine ---------- */
+const TYPE = {
+ mcq:['Pilihan Ganda || Multiple Choice','Pilih satu jawaban yang benar. || Choose one correct answer.'],
+ multi:['Pilihan Ganda Kompleks || Multiple Answers','Pilih SEMUA jawaban yang benar (bisa lebih dari satu). || Select ALL correct answers (there may be more than one).'],
+ fill:['Isian Singkat || Fill in the Blank','Ketik angka saja. Desimal boleh pakai koma atau titik. || Type numbers only. Decimals may use a comma or a point.'],
+ tf:['Benar / Salah || True / False','Tentukan apakah pernyataan benar atau salah. || Decide whether the statement is true or false.'],
+ sort:['Mengurutkan || Sorting','Seret item atau gunakan tombol ▲ ▼ untuk mengurutkan. || Drag the items or use the ▲ ▼ buttons to order them.'],
+ pair:['Menjodohkan || Matching','Klik item di kiri, lalu klik pasangannya di kanan. Warna yang sama = berpasangan. || Click an item on the left, then its match on the right. Same colour = paired.'],
+ dnd:['Seret & Lepas || Drag & Drop','Seret kartu ke kotak kosong (atau klik kartu, lalu klik kotak). Klik kartu di kotak untuk mengembalikannya. || Drag a card into a blank (or click a card, then a blank). Click a placed card to return it.'],
+ cat:['Seret & Lepas: Kelompokkan || Drag & Drop: Categorize','Seret setiap kartu ke kelompok yang tepat (atau klik kartu, lalu klik kelompok). || Drag each card into the correct group (or click a card, then a group).']
+};
+const STATE = {};
+const SET_COUNT = {};
+
+function solHTML(arr){ return arr.map(s=> s.includes('||') ? `<p>${B(s)}</p>` : `<div class="mline">${s}</div>`).join(''); }
+
+function mountQ(card,q,key,i,mode){
+ const qid = key+'_'+i;
+ card.className='qcard';
+ let body='';
+ switch(q.type){
+  case 'mcq': case 'tf': {
+   const opts = q.type==='tf' ? ['Benar || True','Salah || False'] : q.opts;
+   body = '<div class="opts">'+shuffleIdx(opts.length).map(k=>`<label class="opt"><input type="radio" name="${qid}" value="${k}"><span>${B(opts[k])}</span></label>`).join('')+'</div>'; break; }
+  case 'multi':
+   body = '<div class="opts">'+shuffleIdx(q.opts.length).map(k=>`<label class="opt"><input type="checkbox" value="${k}"><span>${B(q.opts[k])}</span></label>`).join('')+'</div>'; break;
+  case 'fill':
+   body = `<div class="filltpl">${q.tpl.replace(/\[\[(\d+)\]\]/g,'<input class="blank" data-i="$1" autocomplete="off" inputmode="decimal" placeholder="?">')}</div>`; break;
+  case 'sort':
+   body = '<ul class="sortlist">'+shuffleIdx(q.items.length,true).map(k=>`<li class="sitem" draggable="true" data-k="${k}"><span class="grip">⠿</span><span class="stx">${B(q.items[k])}</span><span class="sbtns"><button type="button" class="up" aria-label="up">▲</button><button type="button" class="dn" aria-label="down">▼</button></span></li>`).join('')+'</ul>'; break;
+  case 'pair': {
+   const L = shuffleIdx(q.pairs.length), Rr = shuffleIdx(q.pairs.length,true);
+   body = '<div class="pairs"><div class="pcol">'+L.map((l,n)=>`<button type="button" class="pbtn pl" data-l="${l}"><span class="pb">${n+1}</span>${B(q.pairs[l][0])}</button>`).join('')+'</div><div class="pcol">'+
+     Rr.map(r=>`<button type="button" class="pbtn pr" data-r="${r}"><span class="pb">?</span>${B(q.pairs[r][1])}</button>`).join('')+'</div></div>'; break; }
+  case 'dnd': {
+   const chips = q.slots.concat(q.extra||[]);
+   body = `<div class="dndtpl">${q.tpl.replace(/\[\[(\d+)\]\]/g,'<span class="slot" data-i="$1"></span>')}</div><div class="bank">`+
+     shuffleIdx(chips.length).map(c=>`<span class="chip" draggable="true" data-c="${c}">${B(chips[c])}</span>`).join('')+'</div>'; break; }
+  case 'cat':
+   body = '<div class="zones">'+q.cats.map((c,z)=>`<div class="zone"><div class="ztitle">${B(c)}</div><div class="zdrop" data-z="${z}"></div></div>`).join('')+'</div><div class="bank">'+
+     shuffleIdx(q.items.length).map(k=>`<span class="chip" draggable="true" data-c="${k}">${B(q.items[k][0])}</span>`).join('')+'</div>'; break;
+ }
+ const fig = q.fig ? `<div class="fig">${q.fig()}</div>` : '';
+ const solTitle = mode==='task' ? '💡 Pembahasan <span class="en">/ Explanation</span>' : '💡 Solusi <span class="en">/ Solution</span>';
+ card.innerHTML = `<div class="qhead"><span class="qnum">${mode==='task'?'Soal':'Latihan'} ${i+1}</span><span class="qtype">${B(TYPE[q.type][0]).replace('<span class="en">','<span class="en"> / ')}</span></div>
+  <div class="qtext">${B(q.q)}</div>${fig}<div class="qhint">ℹ️ ${B(TYPE[q.type][1])}</div>
+  <div class="qbody">${body}</div>
+  <div class="qactions"><button type="button" class="btn check">✔ Periksa<span class="en">Check</span></button><button type="button" class="btn ghost reset">🔀 Acak Ulang<span class="en">Reshuffle</span></button></div>
+  <div class="fb"></div>
+  <details class="sol"><summary>${solTitle}</summary><div class="solbody">${solHTML(q.sol)}</div></details>`;
+ bindQ(card,q,key,i,mode,qid);
+}
+
+function clearMarks(card){ card.classList.remove('ok','no'); card.querySelectorAll('.good,.bad').forEach(e=>e.classList.remove('good','bad')); const fb=card.querySelector('.fb'); fb.className='fb'; fb.innerHTML=''; }
+
+function bindQ(card,q,key,i,mode,qid){
+ const body = card.querySelector('.qbody');
+ body.addEventListener('change',()=>clearMarks(card));
+ body.addEventListener('input',()=>clearMarks(card));
+ if(q.type==='sort') bindSort(card);
+ if(q.type==='pair') bindPair(card);
+ if(q.type==='dnd' || q.type==='cat') bindDnD(card, q.type==='dnd');
+ card.querySelector('.check').onclick = ()=>{
+  clearMarks(card);
+  const r = checkQ(card,q,qid); const fb = card.querySelector('.fb');
+  if(r===null){ fb.className='fb warn'; fb.innerHTML = B('⚠️ Lengkapi jawabanmu dulu. || ⚠️ Please complete your answer first.'); return; }
+  STATE[qid]=r; card.classList.add(r?'ok':'no');
+  fb.className='fb '+(r?'good':'bad');
+  fb.innerHTML = r ? B('✅ Benar! Kerja bagus. || ✅ Correct! Great job.') : B('❌ Belum tepat. Perhatikan tanda merah, coba lagi, atau buka pembahasan. || ❌ Not quite. Look at the red marks, try again, or open the explanation.');
+  updateScore(key);
+ };
+ card.querySelector('.reset').onclick = ()=>{ delete STATE[qid]; mountQ(card,q,key,i,mode); renderMath(card); updateScore(key); };
+}
+
+function checkQ(card,q,qid){
+ switch(q.type){
+  case 'mcq': case 'tf': {
+   const s = card.querySelector(`input[name="${qid}"]:checked`); if(!s) return null;
+   const ans = q.type==='tf' ? (q.ans?0:1) : q.ans; const ok = +s.value===ans;
+   s.closest('.opt').classList.add(ok?'good':'bad'); return ok; }
+  case 'multi': {
+   const ch=[...card.querySelectorAll('.qbody input:checked')]; if(!ch.length) return null;
+   ch.forEach(c=>c.closest('.opt').classList.add(q.ans.includes(+c.value)?'good':'bad'));
+   const sel=ch.map(c=>+c.value).sort().join(','); return sel===q.ans.slice().sort().join(','); }
+  case 'fill': {
+   const ins=[...card.querySelectorAll('input.blank')]; if(ins.some(x=>x.value.trim()==='')) return null;
+   let all=true; ins.forEach(x=>{ const v=parseFloat(x.value.trim().replace(/\s/g,'').replace(',','.')); const a=q.ans[+x.dataset.i]; const ok=!isNaN(v)&&Math.abs(v-a)<=(q.tol||0.001); x.classList.add(ok?'good':'bad'); if(!ok) all=false; }); return all; }
+  case 'sort': {
+   const li=[...card.querySelectorAll('.sitem')]; let all=true;
+   li.forEach((e,p)=>{ const ok=+e.dataset.k===p; e.classList.add(ok?'good':'bad'); if(!ok) all=false; }); return all; }
+  case 'pair': {
+   const map=card._map||{}; if(Object.keys(map).length<q.pairs.length) return null; let all=true;
+   card.querySelectorAll('.pl').forEach(b=>{ const l=+b.dataset.l; const ok=map[l]===l; b.classList.add(ok?'good':'bad'); if(!ok) all=false; }); return all; }
+  case 'dnd': {
+   const slots=[...card.querySelectorAll('.slot')]; if(slots.some(s=>!s.querySelector('.chip'))) return null; let all=true;
+   slots.forEach(s=>{ const ok=s.querySelector('.chip').dataset.c===s.dataset.i; s.classList.add(ok?'good':'bad'); if(!ok) all=false; }); return all; }
+  case 'cat': {
+   if(card.querySelector('.bank .chip')) return null; let all=true;
+   card.querySelectorAll('.zdrop .chip').forEach(c=>{ const ok=+c.parentElement.dataset.z===q.items[+c.dataset.c][1]; c.classList.add(ok?'good':'bad'); if(!ok) all=false; }); return all; }
+ }
+}
+
+function bindSort(card){
+ const list=card.querySelector('.sortlist'); let drag=null;
+ list.addEventListener('click',e=>{ const li=e.target.closest('.sitem'); if(!li) return;
+  if(e.target.classList.contains('up') && li.previousElementSibling){ list.insertBefore(li,li.previousElementSibling); clearMarks(card); }
+  if(e.target.classList.contains('dn') && li.nextElementSibling){ list.insertBefore(li.nextElementSibling,li); clearMarks(card); } });
+ list.addEventListener('dragstart',e=>{ drag=e.target.closest('.sitem'); if(drag){ e.dataTransfer.setData('text/plain','s'); drag.classList.add('dragging'); } });
+ list.addEventListener('dragend',()=>{ if(drag) drag.classList.remove('dragging'); drag=null; clearMarks(card); });
+ list.addEventListener('dragover',e=>{ e.preventDefault(); const t=e.target.closest('.sitem'); if(!drag||!t||t===drag) return;
+  const r=t.getBoundingClientRect(); list.insertBefore(drag, e.clientY>r.top+r.height/2 ? t.nextSibling : t); });
+}
+
+function bindPair(card){
+ card._map={}; let selL=null;
+ const refresh=()=>{
+  card.querySelectorAll('.pbtn').forEach(b=>{ b.className=b.className.replace(/\bpc\d\b/g,'').replace(/\bsel\b/g,'').trim(); });
+  card.querySelectorAll('.pr .pb').forEach(p=>p.textContent='?');
+  const lefts=[...card.querySelectorAll('.pl')];
+  lefts.forEach((b,n)=>{ const l=+b.dataset.l; if(card._map[l]!==undefined){ b.classList.add('pc'+n); const rb=card.querySelector(`.pr[data-r="${card._map[l]}"]`); rb.classList.add('pc'+n); rb.querySelector('.pb').textContent=n+1; } if(selL===l) b.classList.add('sel'); });
+ };
+ card.querySelectorAll('.pl').forEach(b=>b.onclick=()=>{ const l=+b.dataset.l; selL = selL===l?null:l; clearMarks(card); refresh(); });
+ card.querySelectorAll('.pr').forEach(b=>b.onclick=()=>{ if(selL===null) return; const r=+b.dataset.r;
+  for(const k in card._map){ if(card._map[k]===r) delete card._map[k]; }
+  card._map[selL]=r; selL=null; clearMarks(card); refresh(); });
+}
+
+function bindDnD(card,single){
+ let sel=null; const bank=card.querySelector('.bank');
+ const targets=[...card.querySelectorAll(single?'.slot':'.zdrop'), bank];
+ const place=(ch,t)=>{ if(!ch||!t) return;
+  if(single && t.classList.contains('slot')){ const ex=t.querySelector('.chip'); if(ex && ex!==ch) bank.appendChild(ex); }
+  t.appendChild(ch); ch.classList.remove('picked'); sel=null; clearMarks(card); };
+ card.querySelectorAll('.chip').forEach(ch=>{
+  ch.addEventListener('dragstart',e=>{ sel=ch; e.dataTransfer.setData('text/plain','c'); ch.classList.add('dragging'); });
+  ch.addEventListener('dragend',()=>ch.classList.remove('dragging'));
+  ch.addEventListener('click',e=>{ e.stopPropagation();
+   const inTarget = ch.parentElement!==bank;
+   if(sel && sel!==ch){ place(sel, inTarget ? ch.parentElement : bank); return; }
+   if(sel===ch){ ch.classList.remove('picked'); sel=null; return; }
+   if(inTarget && single){ place(ch,bank); return; }
+   card.querySelectorAll('.chip.picked').forEach(c=>c.classList.remove('picked')); sel=ch; ch.classList.add('picked'); });
+ });
+ targets.forEach(t=>{
+  t.addEventListener('dragover',e=>{ e.preventDefault(); t.classList.add('over'); });
+  t.addEventListener('dragleave',()=>t.classList.remove('over'));
+  t.addEventListener('drop',e=>{ e.preventDefault(); t.classList.remove('over'); place(sel,t); });
+  t.addEventListener('click',()=>{ if(sel) place(sel,t); });
+ });
+}
+
+function updateScore(key){
+ const el=document.getElementById('score-'+key); if(!el) return;
+ const n=SET_COUNT[key]; let c=0; for(let i=0;i<n;i++) if(STATE[key+'_'+i]) c++;
+ el.textContent=c; const bar=document.getElementById('bar-'+key); if(bar) bar.style.width=(100*c/n)+'%';
+}
+
+function buildSet(key){
+ const host=document.querySelector(`[data-set="${key}"]`); if(!host) return;
+ const mode = key.startsWith('t') ? 'task' : 'ex';
+ SET_COUNT[key]=SETS[key].length;
+ SETS[key].forEach((q,i)=>{ const card=document.createElement('div'); host.appendChild(card); mountQ(card,q,key,i,mode); });
+}
+
+/* ---------- page setup ---------- */
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('show',p.id===id));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+ try{ history.replaceState(null,'','#'+id); }catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+ // squares table
+ document.getElementById('sqgrid').innerHTML=[...Array(30)].map((_,k)=>`<div>$${k+1}^2 = ${(k+1)*(k+1)}$</div>`).join('');
+ // static figures
+ document.querySelectorAll('[data-fig]').forEach(d=>{ d.innerHTML=FIG[d.dataset.fig](...(d.dataset.args||'').split('|')); });
+ // question sets
+ Object.keys(SETS).forEach(buildSet);
+ // follow-up
+ document.getElementById('followup').innerHTML = FOLLOW.map(f=>`<div class="qcard"><div class="qtext">${B(f[0])}</div><details class="sol"><summary>💡 Pembahasan <span class="en">/ Explanation</span></summary><div class="solbody">${solHTML(f[1])}</div></details></div>`).join('');
+ // pager
+ const order=[...document.querySelectorAll('nav button')].map(b=>b.dataset.p);
+ order.forEach((id,k)=>{ const pg=document.getElementById(id); const d=document.createElement('div'); d.className='pager';
+  d.innerHTML=(k>0?`<button class="btn ghost" data-go="${order[k-1]}">← Sebelumnya<span class="en">Previous</span></button>`:'<span></span>')+
+   (k<order.length-1?`<button class="btn" data-go="${order[k+1]}">Berikutnya →<span class="en">Next</span></button>`:'<span></span>');
+  pg.appendChild(d); });
+ document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g) showPage(g.dataset.go); });
+ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.p));
+ // modal
+ const m=document.getElementById('rulesModal');
+ document.getElementById('openRules').onclick=()=>m.classList.add('show');
+ document.getElementById('closeRules').onclick=()=>m.classList.remove('show');
+ m.onclick=e=>{ if(e.target===m) m.classList.remove('show'); };
+ document.addEventListener('keydown',e=>{ if(e.key==='Escape') m.classList.remove('show'); });
+ // math
+ renderMath(document.body);
+ const start=(location.hash||'').slice(1);
+ showPage(order.includes(start)?start:'p1');
+});
+</script>
+</body>
+</html>
